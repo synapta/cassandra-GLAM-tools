@@ -6,7 +6,8 @@
     "express": "~4.12.3",
     "morgan": "~1.7.0",
     "mongodb": "~2.2.7",
-    "mariasql": "~0.2.6"
+    "mariasql": "~0.2.6",
+    "apikey": "~0.1.2"
   },
   "author": "Alessio Melandri"
 }
