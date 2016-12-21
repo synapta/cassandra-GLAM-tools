@@ -1,3 +1,4 @@
+var cmd = require('node-cmd');
 var MariaClient = require('mariasql');
 var MongoClient = require('mongodb').MongoClient;
 var config = require('./config.js');
@@ -88,6 +89,10 @@ var filesInCat = function (current, callback) {
     });
 }
 
+console.log("Opening the SSH tunnel to WMF...")
+cmd.run(config.SSH_COMMAND);
+console.log("SSH tunnel to WMF established!");
+
 console.log("Opening connection to MongoDB...")
 MongoClient.connect(config.mongoURL, function(err, db) {
     console.log("Connected correctly to the database!");
@@ -98,6 +103,7 @@ MongoClient.connect(config.mongoURL, function(err, db) {
     findCat(config.STARTING_CAT, null, function () {
         console.log("Downloading file info from " + config.STARTING_CAT)
         filesInCat(config.STARTING_CAT, function () {
+            cmd.run('killall ssh');
             process.exit(0);
         });
     });
