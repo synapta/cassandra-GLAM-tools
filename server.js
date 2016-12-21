@@ -25,7 +25,7 @@ MongoClient.connect(config.mongoURL, function(err, db) {
     });
 
     app.get('*', function(req, res){
-      res.send(400);
+        res.sendStatus(400);
     });
 
 
