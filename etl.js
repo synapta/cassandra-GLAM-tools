@@ -1,35 +1,51 @@
-var Client = require('mariasql');
+var MariaClient = require('mariasql');
 var MongoClient = require('mongodb').MongoClient;
 var config = require('./config.js');
 
-var connectionToWMF = new Client({
-  host: '127.0.0.1',
-  user: 'u3175',
-  password: 'oolahaerohdeovei',
-  db: 'commonswiki_p'
-});
+//XXX if loop, can lasts forever
+var findCat = function (current, parent) {
+    console.log("[ADD] category " + current +  " to mongo");
+    categories.update(
+        { page_title: current },
+        { $set: { page_title: current, parent: parent } },
+        { upsert: true },
+        function(err, result) {
+            if (err) {
+                console.log(err);
+                process.exit(1);
+            }
+            console.log("[DONE] category " + current + " in mongo");
+            //console.log(result)
+    })
 
-var DB_NAME = "ETH";
-var STARTING_CAT = "Media_contributed_by_the_ETH-Bibliothek";
 
-var currentFather = STARTING_CAT;
-var findCatChildren = "SELECT page_title \
-                       FROM categorylinks, page \
-                       WHERE cl_to = " + currentFather + " \
-                       AND page_id = cl_from \
-                       AND page_namespace = 14"
+    var findCatChildren = "SELECT page_title \
+                           FROM categorylinks, page \
+                           WHERE cl_to = '" + current + "' \
+                           AND page_id = cl_from \
+                           AND page_namespace = 14"
 
-var url = 'mongodb://localhost:27017/' + DB_NAME;
-MongoClient.connect(url, function(err, db) {
-  console.log("Connected correctly to server");
-  var collection = db.collection('documents');
+    console.log("[ASK] category query");
+    config.connectionToWMF.query(findCatChildren, function(err, rows) {
+        if (err) {
+            console.log(err);
+            process.exit(1);
+        }
+        console.log("[GOT] category results");
+        //console.dir(rows);
 
-  connectionToWMF.query(q, function(err, rows) {
-    if (err)
-    throw err;
-    console.dir(rows);
+        for (var r = 0; r < rows.length; r++) {
+            findCat(rows[r].page_title, current);
+        }
+    });
+}
 
-    collection.insertMany(rows, function(err, result) { console.log(result) });
-    connectionToWMF.end();
-  });
+console.log("Opening connection to MongoDB...")
+MongoClient.connect(config.mongoURL, function(err, db) {
+    console.log("Connected correctly to the database!");
+    categories = db.collection('category');
+    files = db.collection('file');
+
+    //findCat(config.STARTING_CAT);
+    findCat("San_Vitale_(Ravenna)", null);
 });
