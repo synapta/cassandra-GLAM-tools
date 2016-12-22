@@ -1,7 +1,7 @@
 #%RAML 1.0
 title: GLAM tool
 version: v0.1
-baseUri: http://cassandra.synapta.io
+baseUri: http://cassandra.synapta.io/api/{GLAM}
 protocols:
   - HTTP
 types:
@@ -22,9 +22,16 @@ types:
         body:
           application/json:
             example: |
-              {
-                "message" : "Hello World"
-              }
+              [
+                  {
+                      "page_title": "Media_contributed_by_the_ETH-Bibliothek",
+                      "cat_pages": 7565
+                  },
+                  {
+                      "page_title": "ETH-BIB_Mittelholzer-Spitsbergen",
+                      "cat_pages": 96
+                  }
+              ]
 /category/edge:
   description: Lista delle coppie di categorie con una relazione padre-figlio. La categoria d'origine ha parent = null.
   get:
@@ -33,6 +40,43 @@ types:
         body:
           application/json:
             example: |
-              {
-                "message" : "Hello World"
-              }
+              [
+                  {
+                      "page_title": "Media_contributed_by_the_ETH-Bibliothek",
+                      "parent": null
+                  },
+                  {
+                      "page_title": "ETH-BIB_Mittelholzer-Spitsbergen",
+                      "parent": "Media_contributed_by_the_ETH-Bibliothek"
+                  },
+                  {
+                      "page_title": "ETH-BIB_Mittelholzer-Persia",
+                      "parent": "Media_contributed_by_the_ETH-Bibliothek"
+                  }
+              ]
+/file/upload-date:
+  description: Numero di file caricati raggruppati per giorno di caricamento.
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              [
+                  {
+                      "_id": {
+                          "year": 2016,
+                          "month": 5,
+                          "day": 17
+                      },
+                      "count": 1
+                  },
+                  {
+                      "_id": {
+                          "year": 2016,
+                          "month": 5,
+                          "day": 31
+                      },
+                      "count": 341
+                  }
+              ]

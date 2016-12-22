@@ -1,7 +1,8 @@
 {
   "name": "cassandra",
   "version": "0.1.0",
-  "author": "Alessio Melandri",
+  "author": "Alessio Melandri <alessio.melandri@synapta.it> (https://synapta.it/)",
+  "private": true,
   "dependencies": {
     "apicache": "~0.1.5",
     "express": "~4.12.3",
