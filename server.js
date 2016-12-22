@@ -37,6 +37,18 @@ MongoClient.connect(config.mongoURL, function(err, db) {
         }
     });
 
+    app.get('/api/:id/file/upload-date', apicache("1 day"), function (request, response) {
+        if (request.params.id === "ETH") {
+            api.uploadDate(request, response, request.params.id, db);
+        } else {
+            response.sendStatus(400);
+        }
+    });
+
+    app.get('/docs', function(req, res){
+        res.sendFile(__dirname + '/docs.html');
+    });
+
     app.get('*', function(req, res){
         res.sendStatus(400);
     });

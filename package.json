@@ -1,6 +1,7 @@
 {
   "name": "cassandra",
   "version": "0.1.0",
+  "author": "Alessio Melandri",
   "dependencies": {
     "apicache": "~0.1.5",
     "express": "~4.12.3",
@@ -9,5 +10,9 @@
     "mariasql": "~0.2.6",
     "apikey": "~0.1.2"
   },
-  "author": "Alessio Melandri"
+  "scripts": {
+    "preinstall": "raml2html api.raml > docs.html",
+    "run" : "node etl.js",
+    "start" : "sudo node server.js"
+  }
 }

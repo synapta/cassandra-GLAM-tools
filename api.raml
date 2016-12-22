@@ -1,0 +1,38 @@
+#%RAML 1.0
+title: GLAM tool
+version: v0.1
+baseUri: http://cassandra.synapta.io
+protocols:
+  - HTTP
+types:
+  TestType:
+    type: object
+    properties:
+      id: number
+      optional?: string
+      expanded:
+        type: object
+        properties:
+          count: number
+/category/node:
+  description: Lista delle categorie con nome e numero di file presenti.
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {
+                "message" : "Hello World"
+              }
+/category/edge:
+  description: Lista delle coppie di categorie con una relazione padre-figlio. La categoria d'origine ha parent = null.
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {
+                "message" : "Hello World"
+              }

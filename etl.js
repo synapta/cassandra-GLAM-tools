@@ -1,11 +1,11 @@
 var cmd = require('node-cmd');
 var MariaClient = require('mariasql');
-var MongoClient = require('mongodb').MongoClient;
+var MongoClient = require('mongodb').;
 var config = require('./config.js');
 
 //XXX if loop, can lasts forever
 var catCounter = 0;
-var findCat = function (current, parent, pages, callback) {
+var findCat = function (current, parent, pages, ) {
     catCounter++;
     console.log("[ADD] category " + current +  " to mongo");
     categories.update(
@@ -74,7 +74,14 @@ var filesInCat = function (current, callback) {
         for (var f = 0; f < rows.length; f++) {
             files.update(
                 { img_name: rows[f].img_name },
-                { $set: rows[f] },
+                { $set: {img_name: rows[f].img_name,
+                         img_user_text: rows[f].img_user_text,
+                         img_timestamp: new Date(rows[f].img_timestamp
+                           .replace(/^(\d{4})(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)$/,'$4:$5:$6 $2/$3/$1')),
+                         img_size: parseInt(rows[f].img_size),
+                         img_size_KB: Math.ceil((parseInt(rows[f].img_size)/1024)),
+                         cl_to: rows[f].cl_to}
+                },
                 { upsert: true },
                 function(err, result) {
                     fileSaved++;
