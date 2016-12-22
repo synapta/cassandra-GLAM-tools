@@ -5,12 +5,12 @@ var config = require('./config.js');
 
 //XXX if loop, can lasts forever
 var catCounter = 0;
-var findCat = function (current, parent, callback) {
+var findCat = function (current, parent, pages, callback) {
     catCounter++;
     console.log("[ADD] category " + current +  " to mongo");
     categories.update(
         { page_title: current },
-        { $set: { page_title: current, parent: parent } },
+        { $set: { page_title: current, parent: parent, cat_pages: pages } },
         { upsert: true },
         function(err, result) {
             if (err) {
@@ -22,11 +22,12 @@ var findCat = function (current, parent, callback) {
 
             //NEXT!
 
-            var findCatChildren = "SELECT page_title \
-                                   FROM categorylinks, page \
+            var findCatChildren = "SELECT page_title, cat_pages \
+                                   FROM categorylinks, page, category \
                                    WHERE cl_to = '" + current + "' \
                                    AND page_id = cl_from \
-                                   AND page_namespace = 14"
+                                   AND page_namespace = 14 \
+                                   AND page_title = cat_title";
 
             console.log("[ASK] subcategories for " + current);
             config.connectionToWMF.query(findCatChildren, function(err, rows) {
@@ -42,7 +43,7 @@ var findCat = function (current, parent, callback) {
                 }
 
                 for (var r = 0; r < rows.length; r++) {
-                    findCat(rows[r].page_title, current, callback);
+                    findCat(rows[r].page_title, current, rows[r].cat_pages, callback);
                 }
 
                 if (catCounter == 1) {
@@ -53,13 +54,12 @@ var findCat = function (current, parent, callback) {
 }
 
 var filesInCat = function (current, callback) {
-    var query = "SELECT img_name, img_user_text, img_timestamp, img_size \
+    var query = "SELECT img_name, img_user_text, img_timestamp, img_size, cl_to \
                  FROM categorylinks, page, image \
                  WHERE cl_to = '" + current + "' \
                  AND page_id = cl_from \
                  AND page_namespace = 6 \
-                 AND img_name = page_title \
-                 LIMIT 100"; //XXX remove limit
+                 AND img_name = page_title";
 
     console.log("[ASK] files for " + current);
     config.connectionToWMF.query(query, function(err, rows) {
@@ -89,22 +89,42 @@ var filesInCat = function (current, callback) {
     });
 }
 
-console.log("Opening the SSH tunnel to WMF...")
-cmd.run(config.SSH_COMMAND);
-console.log("SSH tunnel to WMF established!");
 
-console.log("Opening connection to MongoDB...")
-MongoClient.connect(config.mongoURL, function(err, db) {
-    console.log("Connected correctly to the database!");
-    categories = db.collection('category');
-    files = db.collection('file');
+var main = function () {
+    console.log("Opening connection to MongoDB...")
+    MongoClient.connect(config.mongoURL, function(err, db) {
+        console.log("Connected correctly to the database!");
+        categories = db.collection('category');
+        files = db.collection('file');
 
-    console.log("Starting collecting subcategories from " + config.STARTING_CAT)
-    findCat(config.STARTING_CAT, null, function () {
-        console.log("Downloading file info from " + config.STARTING_CAT)
-        filesInCat(config.STARTING_CAT, function () {
-            cmd.run('killall ssh');
-            process.exit(0);
+        console.log("Starting collecting subcategories from " + config.STARTING_CAT)
+        findCat(config.STARTING_CAT, null, 7565, function () { //XXX the starting cat haven't pages dimension
+
+            db.collection('category', function(err, collection) {
+                if (!err) {
+                    collection.find({}).toArray(function(err, docs) {
+                        var done = 1;
+                        for (var d = 0; d < docs.length; d++) {
+                            var currentCat = docs[d].page_title;
+                            console.log("Downloading file info from " + currentCat)
+                            filesInCat(currentCat, function () {
+                                done++;
+                                if (done === docs.length) {
+                                    cmd.run('killall ssh'); //XXX breaks all ssh connections
+                                    process.exit(0);
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    console.log(err);
+                    process.exit(1);
+                }
+            });
         });
     });
-});
+}
+
+console.log("Opening the SSH tunnel to WMF...")
+cmd.run(config.SSH_COMMAND);
+setTimeout(main, 5000);
