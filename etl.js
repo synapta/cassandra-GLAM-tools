@@ -10,7 +10,7 @@ var findCat = function (current, parent, pages, callback) {
     console.log("[ADD] category " + current +  " to mongo");
     categories.update(
         { page_title: current },
-        { $set: { page_title: current, parent: parent, cat_pages: pages } },
+        { $set: { page_title: current, parent: parent, cat_pages: parseInt(pages) } },
         { upsert: true },
         function(err, result) {
             if (err) {

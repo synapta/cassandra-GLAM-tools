@@ -3,6 +3,7 @@ var apicache = require('apicache').options({ debug: false }).middleware;
 var morgan = require('morgan');
 var MongoClient = require('mongodb').MongoClient;
 var config = require('./config.js');
+var api = require('./api.js');
 
 
 var app = express();
@@ -20,27 +21,25 @@ function auth (key, fn) {
 MongoClient.connect(config.mongoURL, function(err, db) {
     console.log("Connected correctly to server");
 
-    app.get('/api/:id', apicache("1 day"), function (request, response) {
-      launchMongoQuery(request, response, request.params.id, "application/json");
+    app.get('/api/:id/category/node', apicache("1 day"), function (request, response) {
+        if (request.params.id === "ETH") {
+            api.categoryNode(request, response, request.params.id, db);
+        } else {
+            response.sendStatus(400);
+        }
+    });
+
+    app.get('/api/:id/category/edge', apicache("1 day"), function (request, response) {
+        if (request.params.id === "ETH") {
+            api.categoryEdge(request, response, request.params.id, db);
+        } else {
+            response.sendStatus(400);
+        }
     });
 
     app.get('*', function(req, res){
         res.sendStatus(400);
     });
-
-
-    var launchMongoQuery = function(req, res, id, type) {
-        db.collection('file', function(err, collection) {
-            if (!err) {
-                collection.find({}).toArray(function(err, docs) {
-                    res.send(docs);
-                });
-            } else {
-                console.log(err)
-            }
-        });
-    }
-
 
     var server = app.listen(80, function() {
         var host = server.address().address;
