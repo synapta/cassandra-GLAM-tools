@@ -14,7 +14,7 @@ types:
         type: object
         properties:
           count: number
-/category/node:
+/category:
   description: Lista delle categorie con nome e numero di file presenti.
   get:
     responses:
@@ -22,38 +22,40 @@ types:
         body:
           application/json:
             example: |
-              [
+              {
+                "nodes": [
                   {
-                      "page_title": "Media_contributed_by_the_ETH-Bibliothek",
-                      "cat_pages": 7565
+                      "id": "Media_contributed_by_the_ETH-Bibliothek",
+                      "files": 7565,
+                      "group": 1
                   },
                   {
-                      "page_title": "ETH-BIB_Mittelholzer-Spitsbergen",
-                      "cat_pages": 96
+                      "id": "ETH-BIB_Mittelholzer-Spitsbergen_flight_1923",
+                      "files": 96,
+                      "group": 2
+                  },
+                  {
+                      "id": "ETH-BIB_Mittelholzer-Persia_flight_1924-1925",
+                      "files": 246,
+                      "group": 2
                   }
-              ]
-/category/edge:
-  description: Lista delle coppie di categorie con una relazione padre-figlio. La categoria d'origine ha parent = null.
-  get:
-    responses:
-      200:
-        body:
-          application/json:
-            example: |
-              [
+                ],
+                "edges": [
                   {
-                      "page_title": "Media_contributed_by_the_ETH-Bibliothek",
-                      "parent": null
+                    "target": "Media_contributed_by_the_ETH-Bibliothek",
+                    "source": null
                   },
                   {
-                      "page_title": "ETH-BIB_Mittelholzer-Spitsbergen",
-                      "parent": "Media_contributed_by_the_ETH-Bibliothek"
+                    "target": "ETH-BIB_Mittelholzer-Spitsbergen_flight_1923",
+                    "source": "Media_contributed_by_the_ETH-Bibliothek"
                   },
                   {
-                      "page_title": "ETH-BIB_Mittelholzer-Persia",
-                      "parent": "Media_contributed_by_the_ETH-Bibliothek"
+                    "target": "ETH-BIB_Mittelholzer-Persia_flight_1924-1925",
+                    "source": "Media_contributed_by_the_ETH-Bibliothek"
                   }
-              ]
+                ]
+              }
+
 /file/upload-date:
   description: Numero di file caricati raggruppati per giorno di caricamento.
   get:

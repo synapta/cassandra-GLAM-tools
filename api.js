@@ -1,20 +1,18 @@
-var categoryNode = function(req, res, id, db) {
+var categoryGraph = function(req, res, id, db) {
     db.collection('category', function(err, collection) {
         if (!err) {
-            collection.find({}, {page_title:1, cat_pages:1, _id:0}).toArray(function(err, docs) {
-                res.send(docs);
-            });
-        } else {
-            console.log(err)
-        }
-    });
-}
-
-var categoryEdge = function(req, res, id, db) {
-    db.collection('category', function(err, collection) {
-        if (!err) {
-            collection.find({}, {page_title:1, parent:1, _id:0}).toArray(function(err, docs) {
-                res.send(docs);
+            collection.find({}, {page_title:1, cat_pages:1, level:1, _id:0}).toArray(function(err, nodes) {
+                collection.find({}, {parent:1, page_title:1, _id:0}).toArray(function(err, edges) {
+                    nodes = JSON.parse(JSON.stringify(nodes).split('"page_title":').join('"id":'));
+                    nodes = JSON.parse(JSON.stringify(nodes).split('"cat_pages":').join('"files":'));
+                    nodes = JSON.parse(JSON.stringify(nodes).split('"level":').join('"group":'));
+                    edges = JSON.parse(JSON.stringify(edges).split('"parent":').join('"source":'));
+                    edges = JSON.parse(JSON.stringify(edges).split('"page_title":').join('"target":'));
+                    var o = {};
+                    o["nodes"] = nodes;
+                    o["edges"] = edges;
+                    res.send(o);
+                });
             });
         } else {
             console.log(err)
@@ -35,7 +33,7 @@ var uploadDate = function(req, res, id, db) {
             }},
             { $sort: {
                     '_id.year': 1,
-                    '_id.month': 1, 
+                    '_id.month': 1,
                     '_id.day': 1
             }}]).toArray(function(err, docs) {
                 res.send(docs);
@@ -46,6 +44,5 @@ var uploadDate = function(req, res, id, db) {
     });
 }
 
-exports.categoryNode = categoryNode;
-exports.categoryEdge = categoryEdge;
+exports.categoryGraph = categoryGraph;
 exports.uploadDate = uploadDate;

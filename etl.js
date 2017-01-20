@@ -1,16 +1,16 @@
 var cmd = require('node-cmd');
 var MariaClient = require('mariasql');
-var MongoClient = require('mongodb').;
+var MongoClient = require('mongodb');
 var config = require('./config.js');
 
 //XXX if loop, can lasts forever
 var catCounter = 0;
-var findCat = function (current, parent, pages, ) {
+var findCat = function (current, parent, pages, level, callback) {
     catCounter++;
     console.log("[ADD] category " + current +  " to mongo");
     categories.update(
         { page_title: current },
-        { $set: { page_title: current, parent: parent, cat_pages: parseInt(pages) } },
+        { $set: { page_title: current, parent: parent, level: ++level, cat_pages: parseInt(pages) } },
         { upsert: true },
         function(err, result) {
             if (err) {
@@ -43,7 +43,7 @@ var findCat = function (current, parent, pages, ) {
                 }
 
                 for (var r = 0; r < rows.length; r++) {
-                    findCat(rows[r].page_title, current, rows[r].cat_pages, callback);
+                    findCat(rows[r].page_title, current, rows[r].cat_pages, level, callback);
                 }
 
                 if (catCounter == 1) {
@@ -105,7 +105,7 @@ var main = function () {
         files = db.collection('file');
 
         console.log("Starting collecting subcategories from " + config.STARTING_CAT)
-        findCat(config.STARTING_CAT, null, 7565, function () { //XXX the starting cat haven't pages dimension
+        findCat(config.STARTING_CAT, null, 7565, 0, function () { //XXX the starting cat haven't pages dimension
 
             db.collection('category', function(err, collection) {
                 if (!err) {

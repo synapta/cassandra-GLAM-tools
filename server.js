@@ -21,17 +21,9 @@ function auth (key, fn) {
 MongoClient.connect(config.mongoURL, function(err, db) {
     console.log("Connected correctly to server");
 
-    app.get('/api/:id/category/node', apicache("1 day"), function (request, response) {
+    app.get('/api/:id/category/', apicache("1 day"), function (request, response) {
         if (request.params.id === "ETH") {
-            api.categoryNode(request, response, request.params.id, db);
-        } else {
-            response.sendStatus(400);
-        }
-    });
-
-    app.get('/api/:id/category/edge', apicache("1 day"), function (request, response) {
-        if (request.params.id === "ETH") {
-            api.categoryEdge(request, response, request.params.id, db);
+            api.categoryGraph(request, response, request.params.id, db);
         } else {
             response.sendStatus(400);
         }
