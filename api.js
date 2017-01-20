@@ -26,23 +26,55 @@ var categoryGraph = function(req, res, id, db) {
     });
 }
 
+function pad(num, size) {
+    var s = num+"";
+    while (s.length < size) s = "0" + s;
+    return s;
+}
+
 var uploadDate = function(req, res, id, db) {
     db.collection('file', function(err, collection) {
         if (!err) {
-            collection.aggregate([ {$group: { _id :
-                {
-                    year:{$year:"$img_timestamp"},
-                    month:{$month:"$img_timestamp"},
-                    day:{$dayOfMonth:"$img_timestamp"}
+            collection.aggregate([{"$group" : {
+                _id: {
+                    "user": "$img_user_text",
+                    "year": {"$year":"$img_timestamp"},
+                    "month": {"$month":"$img_timestamp"},
                 },
-                count:{$sum: 1 }
-            }},
-            { $sort: {
-                    '_id.year': 1,
-                    '_id.month': 1,
-                    '_id.day': 1
-            }}]).toArray(function(err, docs) {
-                res.send(docs);
+                count:{$sum:1}
+              }},
+              { $sort: {
+                      '_id.user': 1,
+                      '_id.year': 1,
+                      '_id.month': 1
+              }}
+            ]).toArray(function(err, docs) {
+                var o = {};
+                o["timestamp"] = "2017/01/16" //XXX use a real one
+                o["users"] = [];
+                for (var i = 0; i < docs.length; i++) {
+                  var found = 0;
+                  for (var j = 0; j < o["users"].length; j++) {
+                    if (o["users"][j].user === docs[i]._id.user) {
+                      o["users"][j].files.push({date: docs[i]._id.year.toString() + "/" + pad(docs[i]._id.month,2).toString(), count: docs[i].count});
+                      found = 1
+                      break;
+                    }
+                  }
+                  if (found === 0) { //New user!
+                    o["users"].push({user: docs[i]._id.user, files: [{date: docs[i]._id.year.toString() + "/" + pad(docs[i]._id.month,2).toString(), count: docs[i].count}]})
+                  }
+                }
+
+                //THIS IS FOR MAKE EACH COUNT THE SUM OF ITS PRECS
+                for (var i = 0; i < o["users"].length; i++) {
+                  var sum = 0;
+                  for (var j = 0; j < o["users"][i]["files"].length; j++) {
+                    sum += o["users"][i]["files"][j].count;
+                    o["users"][i]["files"][j].count = sum;
+                  }
+                }
+                res.send(o);
             });
         } else {
             console.log(err)
