@@ -9,11 +9,11 @@ var api = require('./api.js');
 var app = express();
 app.use(morgan('common'));
 
-app.use(require('apikey')(auth, 'my realm'));
+app.use(require('apikey')(auth, 'GLAM tool'));
 
 function auth (key, fn) {
   if ('test' === key)
-    fn(null, { id: '1', name: 'password'})
+    fn(null, { id: '1', name: 'WFe8g9GVt4'})
   else
     fn(null, null)
 }
