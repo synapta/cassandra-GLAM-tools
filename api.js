@@ -10,6 +10,12 @@ var categoryGraph = function(req, res, id, db) {
                     edges = JSON.parse(JSON.stringify(edges).split('"page_title":').join('"target":'));
                     var o = {};
                     o["nodes"] = nodes;
+                    for (var i = 0; i < edges.length; i++) {
+                        if (edges[i].source === null) {
+                            edges.splice(i, 1);
+                            break;
+                        }
+                    }
                     o["edges"] = edges;
                     res.send(o);
                 });
