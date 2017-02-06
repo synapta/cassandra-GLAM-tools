@@ -10,7 +10,7 @@ var findCat = function (current, parent, pages, level, callback) {
     console.log("[ADD] category " + current +  " to mongo");
     categories.update(
         { page_title: current },
-        { $set: { page_title: current, parent: parent, level: ++level, cat_pages: parseInt(pages) } },
+        { $set: { page_title: decode_utf8(current), parent: decode_utf8(parent), level: ++level, cat_pages: parseInt(pages) } },
         { upsert: true },
         function(err, result) {
             if (err) {
@@ -70,17 +70,17 @@ var filesInCat = function (current, callback) {
         console.log("[GOT] files for " + current);
 
         console.log("[ADD] files for " + current +  " to mongo");
-        var fileSaved = 1;
+        var fileSaved = 0;
         for (var f = 0; f < rows.length; f++) {
             files.update(
-                { img_name: rows[f].img_name },
-                { $set: {img_name: rows[f].img_name,
-                         img_user_text: rows[f].img_user_text,
+                { img_name: decode_utf8(rows[f].img_name) },
+                { $set: {img_name: decode_utf8(rows[f].img_name),
+                         img_user_text: decode_utf8(rows[f].img_user_text),
                          img_timestamp: new Date(rows[f].img_timestamp
                            .replace(/^(\d{4})(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)$/,'$4:$5:$6 $2/$3/$1')),
                          img_size: parseInt(rows[f].img_size),
                          img_size_KB: Math.ceil((parseInt(rows[f].img_size)/1024)),
-                         cl_to: rows[f].cl_to}
+                         cl_to: decode_utf8(rows[f].cl_to)}
                 },
                 { upsert: true },
                 function(err, result) {
@@ -97,37 +97,117 @@ var filesInCat = function (current, callback) {
 }
 
 
+var addCat = function (db, callback) {
+  db.collection('category', function(err, collection) {
+      if (!err) {
+          collection.find({}).toArray(function(err, docs) {
+              var done = 0;
+              for (var d = 0; d < docs.length; d++) {
+                  var currentCat = docs[d].page_title;
+                  console.log("Downloading file info from " + currentCat)
+                  filesInCat(currentCat, function () {
+                      done++;
+                      if (done === docs.length) {
+                        callback();
+                      }
+                  });
+              }
+          });
+        } else {
+            console.log(err);
+            process.exit(1);
+        }
+  });
+}
+
+function decode_utf8(s) {
+  return decodeURIComponent(escape(s));
+}
+
+
+var fileUsage = function (current, callback) {
+    var query = "SELECT gil_wiki, gil_page_title, gil_to \
+                 FROM globalimagelinks, categorylinks, page, image \
+                 WHERE cl_to = '" + current + "' \
+                 AND gil_to = img_name \
+                 AND gil_page_namespace_id = '0' \
+                 AND page_id = cl_from \
+                 AND page_namespace = 6 \
+                 AND img_name = page_title";;
+
+    console.log("[ASK] usage for " + current);
+    config.connectionToWMF.query(query, function(err, rows) {
+        if (err) {
+            console.log(err);
+            process.exit(1);
+        }
+        console.log("[GOT] usage for " + current);
+
+        console.log("[ADD] usage for " + current +  " to mongo");
+        var fileSaved = 0;
+        for (var f = 0; f < rows.length; f++) {
+            usage.update(
+                {gil_wiki: rows[f].gil_wiki,
+                 gil_page_title: decode_utf8(rows[f].gil_page_title),
+                 gil_to: decode_utf8(rows[f].gil_to)},
+                { $set: {gil_wiki: rows[f].gil_wiki,
+                         gil_page_title: decode_utf8(rows[f].gil_page_title),
+                         gil_to: decode_utf8(rows[f].gil_to)}
+                },
+                { upsert: true },
+                function(err, result) {
+                    fileSaved++;
+                    if (fileSaved == rows.length) {
+                        console.log("[DONE] usage for " + current +  " in mongo");
+                        callback();
+                    }
+                }
+            );
+        }
+    });
+}
+
+
+var addUsage = function (db, callback) {
+  db.collection('category', function(err, collection) {
+    if (!err) {
+      collection.find({}).toArray(function(err, docs) {
+        var done = 0;
+        for (var d = 0; d < docs.length; d++) {
+          var currentCat = docs[d].page_title;
+          console.log("Downloading file info from " + currentCat);
+          fileUsage(currentCat, function () {
+            done++;
+            if (done === docs.length) {
+              callback();
+            }
+          });
+        }
+      });
+    } else {
+        console.log(err);
+        process.exit(1);
+    }
+  });
+}
+
+
 var main = function () {
     console.log("Opening connection to MongoDB...")
     MongoClient.connect(config.mongoURL, function(err, db) {
         console.log("Connected correctly to the database!");
         categories = db.collection('category');
         files = db.collection('file');
+        usage = db.collection('usage');
 
         console.log("Starting collecting subcategories from " + config.STARTING_CAT)
         findCat(config.STARTING_CAT, null, 7565, 0, function () { //XXX the starting cat haven't pages dimension
-
-            db.collection('category', function(err, collection) {
-                if (!err) {
-                    collection.find({}).toArray(function(err, docs) {
-                        var done = 1;
-                        for (var d = 0; d < docs.length; d++) {
-                            var currentCat = docs[d].page_title;
-                            console.log("Downloading file info from " + currentCat)
-                            filesInCat(currentCat, function () {
-                                done++;
-                                if (done === docs.length) {
-                                    cmd.run('killall ssh'); //XXX breaks all ssh connections
-                                    process.exit(0);
-                                }
-                            });
-                        }
-                    });
-                } else {
-                    console.log(err);
-                    process.exit(1);
-                }
-            });
+          addCat(db, function () {
+            addUsage(db, function () {
+              cmd.run('killall ssh'); //XXX breaks all ssh connections
+              process.exit(0);
+            })
+          })
         });
     });
 }
