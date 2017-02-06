@@ -5,8 +5,8 @@ var toollabs_host = "tools-dev.wmflabs.org";
 var toollabs_DB_host = "itwiki.labsdb";
 var toollabs_DB_port = 3306;
 
-var DB_NAME = "ETH";
-var STARTING_CAT = "Media_contributed_by_the_ETH-Bibliothek";
+var DB_NAME = "ZU";
+var STARTING_CAT = "Historical_images_of_buildings_in_the_canton_of_Zürich";
 var mongoURL = 'mongodb://localhost:27017/' + DB_NAME;
 
 var SSH_COMMAND = 'ssh -fN alessio@tools-dev.wmflabs.org -L 3306:itwiki.labsdb:3306';

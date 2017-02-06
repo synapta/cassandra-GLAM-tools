@@ -9,7 +9,7 @@ var findCat = function (current, parent, pages, level, callback) {
     catCounter++;
     console.log("[ADD] category " + current +  " to mongo");
     categories.update(
-        { page_title: current },
+        { page_title: decode_utf8(current) },
         { $set: { page_title: decode_utf8(current), parent: decode_utf8(parent), level: ++level, cat_pages: parseInt(pages) } },
         { upsert: true },
         function(err, result) {
@@ -18,13 +18,12 @@ var findCat = function (current, parent, pages, level, callback) {
                 process.exit(1);
             }
             console.log("[DONE] category " + current + " in mongo");
-            //console.log(result)
 
             //NEXT!
 
             var findCatChildren = "SELECT page_title, cat_pages \
                                    FROM categorylinks, page, category \
-                                   WHERE cl_to = '" + current + "' \
+                                   WHERE cl_to = '" + decode_utf8(current) + "' \
                                    AND page_id = cl_from \
                                    AND page_namespace = 14 \
                                    AND page_title = cat_title";
@@ -36,17 +35,12 @@ var findCat = function (current, parent, pages, level, callback) {
                     process.exit(1);
                 }
                 console.log("[GOT] subcategories for " + current);
-                //console.dir(rows);
-
-                if (rows.length == 0) {
-                    catCounter--;
-                }
 
                 for (var r = 0; r < rows.length; r++) {
                     findCat(rows[r].page_title, current, rows[r].cat_pages, level, callback);
                 }
 
-                if (catCounter == 1) {
+                if (--catCounter == 0) {
                     callback();
                 }
             });
@@ -68,6 +62,12 @@ var filesInCat = function (current, callback) {
             process.exit(1);
         }
         console.log("[GOT] files for " + current);
+
+        if (rows.length === 0) {
+            console.log("[DONE] files for " + current +  " in mongo");
+            callback();
+            return;
+        }
 
         console.log("[ADD] files for " + current +  " to mongo");
         var fileSaved = 0;
@@ -121,7 +121,11 @@ var addCat = function (db, callback) {
 }
 
 function decode_utf8(s) {
-  return decodeURIComponent(escape(s));
+  try {
+    return decodeURIComponent(escape(s));
+  } catch (e) {
+    return s;
+  }
 }
 
 
@@ -143,8 +147,15 @@ var fileUsage = function (current, callback) {
         }
         console.log("[GOT] usage for " + current);
 
+        if (rows.length === 0) {
+            console.log("[DONE] usage for " + current +  " in mongo");
+            callback();
+            return;
+        }
+
         console.log("[ADD] usage for " + current +  " to mongo");
         var fileSaved = 0;
+
         for (var f = 0; f < rows.length; f++) {
             usage.update(
                 {gil_wiki: rows[f].gil_wiki,
@@ -173,6 +184,12 @@ var addUsage = function (db, callback) {
     if (!err) {
       collection.find({}).toArray(function(err, docs) {
         var done = 0;
+
+        if (docs.length === 0) {
+          console.log("No categories found!")
+          callback();
+        }
+
         for (var d = 0; d < docs.length; d++) {
           var currentCat = docs[d].page_title;
           console.log("Downloading file info from " + currentCat);
@@ -203,6 +220,7 @@ var main = function () {
         console.log("Starting collecting subcategories from " + config.STARTING_CAT)
         findCat(config.STARTING_CAT, null, 7565, 0, function () { //XXX the starting cat haven't pages dimension
           addCat(db, function () {
+            console.log("Starting collecting usage for files...");
             addUsage(db, function () {
               cmd.run('killall ssh'); //XXX breaks all ssh connections
               process.exit(0);
