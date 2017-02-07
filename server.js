@@ -12,8 +12,8 @@ app.use(morgan('common'));
 app.use(require('apikey')(auth, 'GLAM tool'));
 
 function auth (key, fn) {
-  if ('test' === key)
-    fn(null, { id: '1', name: 'WFe8g9GVt4'})
+  if (config.SERVICE_USER === key)
+    fn(null, { id: '1', name: config.SERVICE_PASSWORD})
   else
     fn(null, null)
 }
@@ -21,16 +21,16 @@ function auth (key, fn) {
 MongoClient.connect(config.mongoURL, function(err, db) {
     console.log("Connected correctly to server");
 
-    app.get('/api/:id/category/', apicache("1 day"), function (request, response) {
-        if (request.params.id === "ETH") {
+    app.get('/api/:id/category/', apicache("1 hour"), function (request, response) {
+        if (request.params.id === config.DB_NAME) {
             api.categoryGraph(request, response, request.params.id, db);
         } else {
             response.sendStatus(400);
         }
     });
 
-    app.get('/api/:id/file/upload-date', apicache("1 day"), function (request, response) {
-        if (request.params.id === "ETH") {
+    app.get('/api/:id/file/upload-date', apicache("1 hour"), function (request, response) {
+        if (request.params.id === config.DB_NAME) {
             api.uploadDate(request, response, request.params.id, db);
         } else {
             response.sendStatus(400);

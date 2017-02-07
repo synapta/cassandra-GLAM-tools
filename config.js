@@ -18,7 +18,13 @@ var connectionToWMF = new MariaClient({
   db: 'commonswiki_p'
 });
 
+var SERVICE_USER = "test";
+var SERVICE_PASSWORD = "WFe8g9GVt4";
+
 exports.SSH_COMMAND = SSH_COMMAND;
 exports.connectionToWMF = connectionToWMF;
 exports.STARTING_CAT = STARTING_CAT;
 exports.mongoURL = mongoURL;
+exports.DB_NAME = DB_NAME;
+exports.SERVICE_USER = SERVICE_USER;
+exports.SERVICE_PASSWORD = SERVICE_PASSWORD;
