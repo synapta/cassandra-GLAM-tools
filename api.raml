@@ -1,20 +1,13 @@
 #%RAML 1.0
 title: GLAM tool
-version: v0.1
-baseUri: http://cassandra.synapta.io/api/{GLAM}
+version: v1
+baseUri: http://cassandra.synapta.io/api{version}/{GLAM}
 protocols:
   - HTTP
-types:
-  TestType:
-    type: object
-    properties:
-      id: number
-      optional?: string
-      expanded:
-        type: object
-        properties:
-          count: number
+  - HTTPS
+mediaType: application/json
 /category:
+  displayName: Category tree
   description: Lista delle categorie con nome e numero di file presenti.
   get:
     responses:
@@ -57,28 +50,55 @@ types:
               }
 
 /file/upload-date:
+  displayName: Uploads
   description: Numero di file caricati raggruppati per giorno di caricamento.
   get:
+    queryParameters:
+      start:
+        displayName: Start month
+        type: string
+        description: Filtro per mese di inizio
+        example: "2015/01"
+        required: false
+      end:
+        displayName: End month
+        type: string
+        description: Filtro per mese di fine
+        example: "2016/01"
+        required: false
     responses:
       200:
         body:
           application/json:
             example: |
-              [
-                  {
-                      "_id": {
-                          "year": 2016,
-                          "month": 5,
-                          "day": 17
+              {
+                  "timestamp": "2017/01/16",
+                  "users": [
+                      {
+                          "user": "ALH",
+                          "files": [
+                              {
+                                  "date": "2013/08",
+                                  "count": 1
+                              }
+                          ]
                       },
-                      "count": 1
-                  },
-                  {
-                      "_id": {
-                          "year": 2016,
-                          "month": 5,
-                          "day": 31
-                      },
-                      "count": 341
-                  }
-              ]
+                      {
+                          "user": "Abderitestatos",
+                          "files": [
+                              {
+                                  "date": "2009/01",
+                                  "count": 1
+                              },
+                              {
+                                  "date": "2009/09",
+                                  "count": 1
+                              },
+                              {
+                                  "date": "2011/07",
+                                  "count": 1
+                              }
+                           ]
+                      }
+                  ]
+              }

@@ -31,7 +31,7 @@ MongoClient.connect(config.mongoURL, function(err, db) {
 
     app.get('/api/:id/file/upload-date', apicache("1 hour"), function (request, response) {
         if (request.params.id === config.DB_NAME) {
-            api.uploadDate(request, response, request.params.id, db);
+            api.uploadDate(request, response, request.params.id, request.query.start, request.query.end, db);
         } else {
             response.sendStatus(400);
         }

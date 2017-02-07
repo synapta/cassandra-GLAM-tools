@@ -160,7 +160,7 @@
         font-size: 13px;
         line-height: 1.42857143;
       }
-    </style></head><body data-spy="scroll" data-target="#sidebar"><div class="container"><div class="row"><div class="col-md-9" role="main"><div class="page-header"><h1>GLAM tool API documentation <small>version v0.1</small></h1><p>http://cassandra.synapta.io/api/{GLAM}</p><ul><li><strong>GLAM</strong>: <em>required (string)</em></li></ul></div><div class="panel panel-default"><div class="panel-heading"><h3 id="category" class="panel-title">/category</h3></div><div class="panel-body"><div class="top-resource-description"><p>Lista delle categorie con nome e numero di file presenti.</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_category"><span class="parent"></span>/category</a> <span class="methods"><a href="#category_get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_category" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#category_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="category_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent"></span>/category</h4></div><div class="modal-body"><ul class="nav nav-tabs"><li class="active"><a href="#category_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="category_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
+    </style></head><body data-spy="scroll" data-target="#sidebar"><div class="container"><div class="row"><div class="col-md-9" role="main"><div class="page-header"><h1>GLAM tool API documentation <small>version v1</small></h1><p>http://cassandra.synapta.io/api{version}/{GLAM}</p><ul><li><strong>version</strong>: <em>required (v1)</em></li><li><strong>GLAM</strong>: <em>required (string)</em></li></ul></div><div class="panel panel-default"><div class="panel-heading"><h3 id="category" class="panel-title">Category tree</h3></div><div class="panel-body"><div class="top-resource-description"><p>Lista delle categorie con nome e numero di file presenti.</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_category"><span class="parent"></span>/category</a> <span class="methods"><a href="#category_get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_category" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#category_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="category_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent"></span>/category</h4></div><div class="modal-body"><ul class="nav nav-tabs"><li class="active"><a href="#category_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="category_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
   "nodes": [
     {
         "id": "Media_contributed_by_the_ETH-Bibliothek",
@@ -193,22 +193,35 @@
     }
   ]
 }
-</code></pre></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="file_upload_date" class="panel-title">/file/upload-date</h3></div><div class="panel-body"><div class="top-resource-description"><p>Numero di file caricati raggruppati per giorno di caricamento.</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_file_upload_date"><span class="parent"></span>/file/upload-date</a> <span class="methods"><a href="#file_upload_date_get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_file_upload_date" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#file_upload_date_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="file_upload_date_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent"></span>/file/upload-date</h4></div><div class="modal-body"><ul class="nav nav-tabs"><li class="active"><a href="#file_upload_date_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="file_upload_date_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[
-    {
-        "_id": {
-            "year": 2016,
-            "month": 5,
-            "day": 17
+</code></pre></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="file_upload_date" class="panel-title">Uploads</h3></div><div class="panel-body"><div class="top-resource-description"><p>Numero di file caricati raggruppati per giorno di caricamento.</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_file_upload_date"><span class="parent"></span>/file/upload-date</a> <span class="methods"><a href="#file_upload_date_get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_file_upload_date" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#file_upload_date_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="file_upload_date_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent"></span>/file/upload-date</h4></div><div class="modal-body"><ul class="nav nav-tabs"><li class="active"><a href="#file_upload_date_get_request" data-toggle="tab">Request</a></li><li><a href="#file_upload_date_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="file_upload_date_get_request"><h3>Query Parameters</h3><ul><li><strong>start</strong>: <em>(string)</em><p>Filtro per mese di inizio</p><p><strong>Examples</strong>:</p><pre>2015/01</pre></li><li><strong>end</strong>: <em>(string)</em><p>Filtro per mese di fine</p><p><strong>Examples</strong>:</p><pre>2016/01</pre></li></ul></div><div class="tab-pane" id="file_upload_date_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
+    "timestamp": "2017/01/16",
+    "users": [
+        {
+            "user": "ALH",
+            "files": [
+                {
+                    "date": "2013/08",
+                    "count": 1
+                }
+            ]
         },
-        "count": 1
-    },
-    {
-        "_id": {
-            "year": 2016,
-            "month": 5,
-            "day": 31
-        },
-        "count": 341
-    }
-]
-</code></pre></div></div></div></div></div></div></div></div></div></div></div><div class="col-md-3"><div id="sidebar" class="hidden-print affix" role="complementary"><ul class="nav nav-pills nav-stacked"><li><a href="#category">/category</a></li><li><a href="#file_upload_date">/file/upload-date</a></li></ul></div></div></div></div></body></html>
+        {
+            "user": "Abderitestatos",
+            "files": [
+                {
+                    "date": "2009/01",
+                    "count": 1
+                },
+                {
+                    "date": "2009/09",
+                    "count": 1
+                },
+                {
+                    "date": "2011/07",
+                    "count": 1
+                }
+             ]
+        }
+    ]
+}
+</code></pre></div></div></div></div></div></div></div></div></div></div></div><div class="col-md-3"><div id="sidebar" class="hidden-print affix" role="complementary"><ul class="nav nav-pills nav-stacked"><li><a href="#category">Category tree</a></li><li><a href="#file_upload_date">Uploads</a></li></ul></div></div></div></div></body></html>

@@ -32,7 +32,7 @@ function pad(num, size) {
     return s;
 }
 
-var uploadDate = function(req, res, id, db) {
+var uploadDate = function(req, res, id, start, end, db) {
     db.collection('file', function(err, collection) {
         if (!err) {
             collection.aggregate([{"$group" : {
@@ -56,24 +56,30 @@ var uploadDate = function(req, res, id, db) {
                   var found = 0;
                   for (var j = 0; j < o["users"].length; j++) {
                     if (o["users"][j].user === docs[i]._id.user) {
-                      o["users"][j].files.push({date: docs[i]._id.year.toString() + "/" + pad(docs[i]._id.month,2).toString(), count: docs[i].count});
-                      found = 1
-                      break;
+                      var currentDate = docs[i]._id.year.toString() + "/" + pad(docs[i]._id.month,2).toString();
+                      if ((start === undefined || start <= currentDate) && (end === undefined || end >= currentDate)) {
+                        o["users"][j].files.push({date: currentDate, count: docs[i].count});
+                        found = 1
+                        break;
+                      }
                     }
                   }
                   if (found === 0) { //New user!
-                    o["users"].push({user: docs[i]._id.user, files: [{date: docs[i]._id.year.toString() + "/" + pad(docs[i]._id.month,2).toString(), count: docs[i].count}]})
+                    var currentDate = docs[i]._id.year.toString() + "/" + pad(docs[i]._id.month,2).toString();
+                    if ((start === undefined || start <= currentDate) && (end === undefined || end >= currentDate)) {
+                      o["users"].push({user: docs[i]._id.user, files: [{date: currentDate, count: docs[i].count}]})
+                    }
                   }
                 }
 
                 //THIS IS FOR MAKE EACH COUNT THE SUM OF ITS PRECS
-                for (var i = 0; i < o["users"].length; i++) {
+                /*for (var i = 0; i < o["users"].length; i++) {
                   var sum = 0;
                   for (var j = 0; j < o["users"][i]["files"].length; j++) {
                     sum += o["users"][i]["files"][j].count;
                     o["users"][i]["files"][j].count = sum;
                   }
-                }
+                }*/
                 res.send(o);
             });
         } else {
