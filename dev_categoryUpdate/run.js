@@ -23,8 +23,11 @@ var usagindex=0;
 var Finalize=function()
 {
     wikiCaller.end();
-    config.storage.end();
-    console.log("\nProcess fully completed!")
+    config.storage.query("select * from doMaintenance();",function(err,res){
+        config.storage.end();
+        console.log("\nProcess fully completed!");
+        return;
+    });    
     return 0;
 }
 var SearchCatQueue=function(page)
@@ -136,7 +139,7 @@ var LoadImages=function()
 {
     if(catHead>=catFreeTail)
     {
-        console.log(images);
+        //console.log(images);
         afterImages();
         return;
     }  
@@ -236,8 +239,22 @@ var LoadUsages=function()
 }
 var afterUsages=function()
 {
-    console.log(usages);
-    Finalize();
+    let i=0;
+    storage_query="";
+    while(i<usagindex)
+    {
+        let temp="";
+        let use=usages[i];
+        temp+="select * from addUsage('"+use.gil_wiki+"','"+use.gil_page_title.replace(/'/g,"''")+"','"+use.gil_to.replace(/'/g,"''")+"');\r\n"
+        storage_query+=temp;
+        i++;
+    }
+    //console.log(storage_query);
+    config.storage.query(storage_query,function(err,res){
+        console.log("Completed!");
+        Finalize();
+    });   
+    
 }
 var BuildUsageQuery=function(RQ)
 {

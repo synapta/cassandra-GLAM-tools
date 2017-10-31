@@ -34,7 +34,23 @@ end if;
 else
 insert into images(img_name,img_user_text,img_timestamp,img_size,cl_to,is_alive) values(_name,_user,_timestamp,size,t,true);
 end if;
+EXCEPTION
+    WHEN others THEN
+        RAISE NOTICE 'Error on %',title;
 end;
 $$language plpgsql;
 
 
+create or replace function AddUsage(_wiki varchar(20),_page varchar(255) ,_to varchar(255))
+returns void as $$
+declare
+appeared date;
+begin
+SELECT first_seen into appeared FROM usages WHERE gil_page_title = _page and gil_to=_to and gil_wiki=_wiki and is_alive=true;
+IF FOUND THEN
+update usages set last_seen=CURRENT_DATE where gil_page_title=_page and gil_to=_to and gil_wiki=_wiki and first_seen=appeared;
+else
+insert into usages(gil_wiki,gil_page_title,gil_to,first_seen,last_seen,is_alive) values(_wiki,_page,_to,CURRENT_DATE,CURRENT_DATE,true);
+end if;
+end;
+$$language plpgsql;
