@@ -4,19 +4,26 @@ var utf8 = require('utf8');
 var MariaClient = require('mariasql');
 var config = require('./config.js');
 //CONSTANTS
-const CONST_ITEMS_PER_QUERY = 25;
+const CONST_CAT_PER_QUERY = 40;
+const CONST_IMG_PER_QUERY = 30;
+const CONST_USE_PER_QUERY = 10;
 //GLOBALS
 var configDataObj;
 var dbAccess;
 var Categories;
 var wikiCaller;
+var images;
 var catQueue;
 var catHead=0;
+var imgIndex;
 var catFreeTail=0;
+var usages;
+var usagindex=0;
 //FUNCTIONS
 var Finalize=function()
 {
     wikiCaller.end();
+    config.storage.end();
     console.log("\nProcess fully completed!")
     return 0;
 }
@@ -65,7 +72,7 @@ var GetLevelChilds = function ()
     console.log("At " + catHead + " of " + catFreeTail);
     var RQ="";
     var originalHead=catHead;
-    while(catHead<catFreeTail&&catHead<(originalHead+CONST_ITEMS_PER_QUERY))
+    while(catHead<catFreeTail&&catHead<(originalHead+CONST_CAT_PER_QUERY))
     {
         if(catHead>originalHead)
             RQ+=",";
@@ -100,27 +107,157 @@ var GetLevelChilds = function ()
 }
 var afterCategories=function()
 {
-    console.log(catQueue);
+    //console.log(catQueue);
     //Load in postgres the data
-    let storage_query="delete categories; insert into categories(page_title,cat_subcats,cat_files,cl_to,cat_level) values ";
+    let storage_query="delete from categories; ";
     let i=0;
     while(i<catFreeTail)
     {
         let temp="";
         let Cat=catQueue[i];
-        if(i>0)
-            temp=",";
-        temp+="('"+Cat.page_title.replace(/'/g,"''")+"',"+Cat.cat_subcats+","+Cat.cat_files+",'"+
-            Cat.father.replace(/'/g,"''")+"',"+Cat.level+")";
+        temp+="select * from addCategory('"+Cat.page_title.replace(/'/g,"''")+"',"+Cat.cat_subcats+","+Cat.cat_files+",'"+
+            Cat.father.replace(/'/g,"''")+"',"+Cat.level+");\r\n";
         storage_query+=temp;
         i++;
     }
-    config.storage.connect();
-    console.log(storage_query);
+    
+    //console.log(storage_query);
     config.storage.query(storage_query,function(err,res){
-        config.storage.end();
-        Finalize();
+        console.log("Completed!");
+        console.log("===========================================");
+        console.log("Now loading images...");   
+        catHead=0;
+        imgIndex=0;
+        images=[];
+        LoadImages();
     });   
+}
+var LoadImages=function()
+{
+    if(catHead>=catFreeTail)
+    {
+        console.log(images);
+        afterImages();
+        return;
+    }  
+    console.log("At " + catHead + " of " + catFreeTail);
+    var RQ="";
+    var originalHead=catHead;
+    while(catHead<catFreeTail&&catHead<(originalHead+CONST_IMG_PER_QUERY))
+    {
+        if(catHead>originalHead)
+            RQ+=",";
+        RQ+="'"+catQueue[catHead].page_title.replace(/'/g,"''")+"'"
+        catHead++;
+    }
+
+    var query = BuildImageQuery(RQ);
+    wikiCaller.query(query, function (err, rows) 
+    {
+        if (err)
+            throw err;
+        for (var k = 0; k < rows.length; k++) 
+        {
+            images[imgIndex]=new Object();
+            images[imgIndex].img_name=utf8.decode(rows[k].img_name);
+            images[imgIndex].img_user_text=utf8.decode(rows[k].img_user_text);
+            images[imgIndex].img_timestamp=ConvertTimestamp(rows[k].img_timestamp);
+            images[imgIndex].img_size=rows[k].img_size;
+            images[imgIndex].cl_to=utf8.decode(rows[k].cl_to);
+            imgIndex++;
+        }
+        LoadImages();
+    });
+
+}
+var ConvertTimestamp=function(TS)
+{
+    let retval=TS.substring(0,4)+"-"+TS.substring(4,6)+"-"+TS.substring(6,8)+" "+TS.substring(8,10)+":"+TS.substring(10,12)+":"+TS.substring(12,14);
+    return retval;
+}
+var afterImages=function()
+{
+    let storage_query="update images set is_alive=false;";
+    let i=0;
+    while(i<imgIndex)
+    {
+        let temp="";
+        let img=images[i];
+        temp+="select * from addImage('"+img.img_name.replace(/'/g,"''")+"','"
+            +img.img_user_text.replace(/'/g,"''")+"','"+img.img_timestamp+"',"+img.img_size+",'"+img.cl_to.replace(/'/g,"''")+"');\r\n";
+        storage_query+=temp;
+        i++;
+    }
+    
+    config.storage.query(storage_query,function(err,res){
+        console.log("Completed!");
+        console.log("===========================================");
+        console.log("Loading usages...");
+        usages=[];
+        usagindex=0;
+        catHead=0;
+        LoadUsages();
+    });   
+}
+var LoadUsages=function()
+{
+    if(catHead>=catFreeTail)
+    {
+        afterUsages();
+        return;
+    }  
+    console.log("At " + catHead + " of " + catFreeTail);
+    var RQ="";
+    var originalHead=catHead;
+    while(catHead<catFreeTail&&catHead<(originalHead+CONST_USE_PER_QUERY))
+    {
+        if(catHead>originalHead)
+            RQ+=",";
+        RQ+="'"+catQueue[catHead].page_title.replace(/'/g,"''")+"'"
+        catHead++;
+    }
+
+    var query = BuildUsageQuery(RQ);
+    wikiCaller.query(query, function (err, rows) 
+    {
+        if (err)
+            throw err;
+        for (var k = 0; k < rows.length; k++) 
+        {
+            usages[usagindex]=new Object();
+            usages[usagindex].gil_wiki=rows[k].gil_wiki;
+            usages[usagindex].gil_page_title=utf8.decode(rows[k].gil_page_title);
+            usages[usagindex].gil_to=utf8.decode(rows[k].gil_to);
+            usagindex++;
+        }
+        LoadUsages();
+    });
+
+}
+var afterUsages=function()
+{
+    console.log(usages);
+    Finalize();
+}
+var BuildUsageQuery=function(RQ)
+{
+    return `SELECT gil_wiki, gil_page_title, gil_to 
+    FROM globalimagelinks, categorylinks, page, image 
+    WHERE cl_to IN (${RQ}) 
+    AND gil_to = img_name 
+    AND gil_page_namespace_id = '0' 
+    AND page_id = cl_from 
+    AND page_namespace = 6 
+    AND img_name = page_title`;
+}
+var BuildImageQuery=function(RQ)
+{
+    return `SELECT img_name, img_user_text, img_timestamp, img_size, cl_to 
+    FROM categorylinks, page, image 
+    WHERE cl_to IN(${RQ}) 
+    AND page_id = cl_from 
+    AND page_namespace = 6 
+    AND img_name = page_title`;
 }
 var BuildCategoryQuery = function (RQ) 
 {
@@ -135,4 +272,5 @@ var BuildCategoryQuery = function (RQ)
 
 //ENTRY POINT
 console.log("Application launched...");
+config.storage.connect();
 WikiOpen();
