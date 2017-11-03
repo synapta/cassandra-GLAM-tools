@@ -1,24 +1,48 @@
 var util = require('util');
+function arrayMin(arr) {
+    var len = arr.length, min = Infinity;
+    while (len--) {
+      if (arr[len] < min) {
+        min = arr[len];
+      }
+    }
+    return min;
+};
 var categoryGraph = function(req, res, id, db) 
 {
-    query={text:'SELECT * from categories',rowMode: 'array'};
-    db.query(query, (err, dbres) => {
-        var result=Object();
-        result.nodes=[];
-        i=0;
-        while(i<dbres.rows.length)
+    db.query('SELECT page_title,cat_files,cl_to[0:10],cat_level[0:10] from categories', (err, dbres) => {
+        if(!err)
         {
-            node=Object();
-            /*node.id=dbres.rows[i].page_title;
-            node.files=dbres.rows[i].cat_files;*/
-            //console.log("1: "+dbres.rows[i].cat_level[0]);
-            //console.log("2: "+dbres.rows[i].cat_level[1]);
-            console.log(util.inspect(dbres, {showHidden: true, depth: null}))
-            //node.group=dbres.rows[i].cat_level;
-            result.nodes[i]=node;
-            i++;
+            var result=Object();
+            result.nodes=[];
+            result.edges=[];
+            i=0;
+            while(i<dbres.rows.length)
+            {
+                node=Object();
+                node.id=dbres.rows[i].page_title;
+                node.files=dbres.rows[i].cat_files;
+                node.group=arrayMin(dbres.rows[i].cat_level);
+                j=0;
+                while(j<dbres.rows[i].cl_to.length)
+                {
+                    edge=Object();
+                    edge.target=dbres.rows[i].page_title;
+                    edge.source=dbres.rows[i].cl_to[j];
+                    result.edges[result.edges.length]=edge;
+                    if(edge.source=="ROOT")
+                        edge.source=null;
+                    j++;
+                }
+                result.nodes[i]=node;
+                
+                i++;
+            }
+            res.json(result);
+        }else {
+            console.log(err)
         }
-        res.json(result);
+
     })
     
 }
@@ -29,60 +53,46 @@ function pad(num, size) {
     return s;
 }
 
-var uploadDate = function(req, res, id, start, end, db) {
-    db.collection('file', function(err, collection) {
-        if (!err) {
-            collection.aggregate([{"$group" : {
-                _id: {
-                    "user": "$img_user_text",
-                    "year": {"$year":"$img_timestamp"},
-                    "month": {"$month":"$img_timestamp"},
-                },
-                count:{$sum:1}
-              }},
-              { $sort: {
-                      '_id.user': 1,
-                      '_id.year': 1,
-                      '_id.month': 1
-              }}
-            ]).toArray(function(err, docs) {
-                var o = {};
-                o["timestamp"] = "2017/01/16" //XXX use a real one
-                o["users"] = [];
-                for (var i = 0; i < docs.length; i++) {
-                  var found = 0;
-                  for (var j = 0; j < o["users"].length; j++) {
-                    if (o["users"][j].user === docs[i]._id.user) {
-                      var currentDate = docs[i]._id.year.toString() + "/" + pad(docs[i]._id.month,2).toString();
-                      if ((start === undefined || start <= currentDate) && (end === undefined || end >= currentDate)) {
-                        o["users"][j].files.push({date: currentDate, count: docs[i].count});
-                        found = 1
-                        break;
-                      }
-                    }
-                  }
-                  if (found === 0) { //New user!
-                    var currentDate = docs[i]._id.year.toString() + "/" + pad(docs[i]._id.month,2).toString();
-                    if ((start === undefined || start <= currentDate) && (end === undefined || end >= currentDate)) {
-                      o["users"].push({user: docs[i]._id.user, files: [{date: currentDate, count: docs[i].count}]})
-                    }
-                  }
+var uploadDate = function(req, res, id, start, end, db)
+{
+    query='select count(*) as img_count, img_user_text, to_char(img_timestamp, \'YYYY/MM\') as img_time from images group by img_user_text, img_time order by img_user_text';
+    console.log(start);
+    console.log(end);
+    if(start!=null)//start and end are defined, convert them to timestamp and append
+    {
+        console.log("gatto");
+    }
+    if(end!=null)
+    {
+        
+    }
+    db.query(query, (err, dbres) => {
+        if(!err)
+        {
+            result=new Object();
+            result.users=[];
+            i=0;
+            while(i<dbres.rows.length)
+            {
+                user=Object();
+                user.user=dbres.rows[i].img_user_text;
+                user.files=[];
+                while(i<dbres.rows.length&&user.user==dbres.rows[i].img_user_text)
+                {
+                    file=Object();
+                    file.date=dbres.rows[i].img_time;
+                    file.count=dbres.rows[i].img_count;
+                    user.files[user.files.length]=file;
+                    i++;
                 }
-
-                //THIS IS FOR MAKE EACH COUNT THE SUM OF ITS PRECS
-                /*for (var i = 0; i < o["users"].length; i++) {
-                  var sum = 0;
-                  for (var j = 0; j < o["users"][i]["files"].length; j++) {
-                    sum += o["users"][i]["files"][j].count;
-                    o["users"][i]["files"][j].count = sum;
-                  }
-                }*/
-                res.send(o);
-            });
-        } else {
+                result.users[result.users.length]=user;                
+            }
+            res.json(result);
+        }else {
             console.log(err)
         }
-    });
+
+    })
 }
 
 exports.categoryGraph = categoryGraph;

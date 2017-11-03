@@ -30,7 +30,7 @@ function getIndexOfDb(id,arr)
 function getDatabase(id){
     index=getIndexOfDb(id,DBConnections);
     if(index!=-1)
-        return DBConnections.connection;
+        return DBConnections[index].connection;
     else
     {
         index=getIndexOfDb(id,config.DBs);

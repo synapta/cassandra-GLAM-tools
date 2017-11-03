@@ -60,9 +60,18 @@ var WikiOpen = function ()
     let temp_query="select cat_subcats, cat_files from category where cat_title='"+config.STARTING_CAT+"'";
     wikiCaller.query(temp_query, function (err, rows) 
     {
-        catQueue[0].cat_subcats=rows[0].cat_subcats;
-        catQueue[0].cat_files=rows[0].cat_files;
-        GetLevelChilds();
+        if(!err)
+        {
+            catQueue[0].cat_subcats=rows[0].cat_subcats;
+            catQueue[0].cat_files=rows[0].cat_files;
+            GetLevelChilds();
+        }
+        else
+        {
+            console.log("Cannot complete daily update due to error: ");
+            console.log(err);
+            return;
+        }
     });
 }
 var GetLevelChilds = function () 
@@ -87,7 +96,11 @@ var GetLevelChilds = function ()
     wikiCaller.query(query, function (err, rows) 
     {
         if (err)
-            throw err;
+        {
+            console.log("Cannot complete daily update due to error: ");
+            console.log(err);
+            return;
+        }
         for (var k = 0; k < rows.length; k++) 
         {
             var newPage=utf8.decode(rows[k].page_title);
@@ -158,7 +171,11 @@ var LoadImages=function()
     wikiCaller.query(query, function (err, rows) 
     {
         if (err)
-            throw err;
+        {
+            console.log("Cannot complete daily update due to error: ");
+            console.log(err);
+            return;
+        }
         for (var k = 0; k < rows.length; k++) 
         {
             images[imgIndex]=new Object();
@@ -224,7 +241,11 @@ var LoadUsages=function()
     wikiCaller.query(query, function (err, rows) 
     {
         if (err)
-            throw err;
+        {
+            console.log("Cannot complete daily update due to error: ");
+            console.log(err);
+            return;
+        }
         for (var k = 0; k < rows.length; k++) 
         {
             usages[usagindex]=new Object();
