@@ -1,9 +1,9 @@
 var {Pool, Client} = require('pg');
   var DB = new Client({
-        user: 'cassandra',
+        user: 'Cassandra',
         host: '127.0.0.1',
         database: 'CassandraTEST',
-        password: 'cassandra',
+        password: 'Cassandra',
         port: 5432
       });
 
