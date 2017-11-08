@@ -55,17 +55,24 @@ function pad(num, size) {
 
 var uploadDate = function(req, res, id, start, end, db)
 {
-    query='select count(*) as img_count, img_user_text, to_char(img_timestamp, \'YYYY/MM\') as img_time from images group by img_user_text, img_time order by img_user_text';
-    console.log(start);
-    console.log(end);
+    query='select count(*) as img_count, img_user_text, to_char(img_timestamp, \'YYYY/MM\') as img_time from images';
     if(start!=null)//start and end are defined, convert them to timestamp and append
     {
-        console.log("gatto");
+        splitted=start.split('/');
+        start_timestamp="'"+splitted[0]+"-"+splitted[1]+"-1 00:00:00'";
+        query+=" where img_timestamp>="+start_timestamp;
     }
     if(end!=null)
     {
-        
+        splitted=end.split('/');
+        end_timestamp="'"+splitted[0]+"-"+splitted[1]+"-1 00:00:00'";
+        if(start==null)
+            query+=" where ";
+        else
+            query+=" and ";
+        query+="img_timestamp<="+end_timestamp;
     }
+    query+=" group by img_user_text, img_time order by img_user_text";
     db.query(query, (err, dbres) => {
         if(!err)
         {
@@ -94,6 +101,38 @@ var uploadDate = function(req, res, id, start, end, db)
 
     })
 }
+var usage = function(req, res, id, db) 
+{
+    db.query('select gil_to,gil_wiki,gil_page_title from usages where is_alive=true order by gil_to', (err, dbres) => {
+        if(!err)
+        {
+            result=[];
+            dbindex=0;
+            resindex=0;
+            while(dbindex<dbres.rows.length)
+            {
+                result[resindex]=new Object();
+                result[resindex].image=dbres.rows[dbindex].gil_to;
+                page=dbres.rows[dbindex].gil_to;
+                result[resindex].pages=[];
+                j=0;
+                while(dbindex<dbres.rows.length&&page==dbres.rows[dbindex].gil_to)
+                {
+                    result[resindex].pages[j]=new Object();
+                    result[resindex].pages[j].wiki=dbres.rows[dbindex].gil_wiki;
+                    result[resindex].pages[j].title=dbres.rows[dbindex].gil_page_title;
+                    j++;
+                    dbindex++;
+                }
+                resindex++;
 
+            }
+            res.json(result);
+        }
+        else
+            console.log(err);
+    });
+}
 exports.categoryGraph = categoryGraph;
 exports.uploadDate = uploadDate;
+exports.usage = usage;
