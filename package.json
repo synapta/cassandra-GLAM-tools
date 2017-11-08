@@ -9,7 +9,9 @@
     "morgan": "~1.7.0",
     "mongodb": "~2.2.7",
     "mariasql": "~0.2.6",
-    "apikey": "~0.1.2"
+    "apikey": "~0.1.2",
+    "pg":"~7.4.0",
+    "utf8":"~2.1.2"
   },
   "scripts": {
     "preinstall": "raml2html api.raml > docs.html",

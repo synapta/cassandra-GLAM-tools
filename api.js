@@ -1,29 +1,51 @@
-var categoryGraph = function(req, res, id, db) {
-    db.collection('category', function(err, collection) {
-        if (!err) {
-            collection.find({}, {page_title:1, cat_pages:1, level:1, _id:0}).toArray(function(err, nodes) {
-                collection.find({}, {parent:1, page_title:1, _id:0}).toArray(function(err, edges) {
-                    nodes = JSON.parse(JSON.stringify(nodes).split('"page_title":').join('"id":'));
-                    nodes = JSON.parse(JSON.stringify(nodes).split('"cat_pages":').join('"files":'));
-                    nodes = JSON.parse(JSON.stringify(nodes).split('"level":').join('"group":'));
-                    edges = JSON.parse(JSON.stringify(edges).split('"parent":').join('"source":'));
-                    edges = JSON.parse(JSON.stringify(edges).split('"page_title":').join('"target":'));
-                    var o = {};
-                    o["nodes"] = nodes;
-                    for (var i = 0; i < edges.length; i++) {
-                        if (edges[i].source === null) {
-                            edges.splice(i, 1);
-                            break;
-                        }
-                    }
-                    o["edges"] = edges;
-                    res.send(o);
-                });
-            });
-        } else {
-            console.log(err)
+var util = require('util');
+function arrayMin(arr) {
+    var len = arr.length, min = Infinity;
+    while (len--) {
+      if (arr[len] < min) {
+        min = arr[len];
+      }
+    }
+    return min;
+};
+var categoryGraph = function(req, res, id, db) 
+{
+    db.query('SELECT page_title,cat_files,cl_to[0:10],cat_level[0:10] from categories', (err, dbres) => {
+        if(!err)
+        {
+            var result=Object();
+            result.nodes=[];
+            result.edges=[];
+            i=0;
+            while(i<dbres.rows.length)
+            {
+                node=Object();
+                node.id=dbres.rows[i].page_title;
+                node.files=dbres.rows[i].cat_files;
+                node.group=arrayMin(dbres.rows[i].cat_level);
+                j=0;
+                while(j<dbres.rows[i].cl_to.length)
+                {
+                    edge=Object();
+                    edge.target=dbres.rows[i].page_title;
+                    edge.source=dbres.rows[i].cl_to[j];
+                    result.edges[result.edges.length]=edge;
+                    if(edge.source=="ROOT")
+                        edge.source=null;
+                    j++;
+                }
+                result.nodes[i]=node;
+                
+                i++;
+            }
+            res.json(result);
+        }else {
+            console.log(err);
+            res.sendStatus(400);
         }
-    });
+
+    })
+    
 }
 
 function pad(num, size) {
@@ -32,61 +54,134 @@ function pad(num, size) {
     return s;
 }
 
-var uploadDate = function(req, res, id, start, end, db) {
-    db.collection('file', function(err, collection) {
-        if (!err) {
-            collection.aggregate([{"$group" : {
-                _id: {
-                    "user": "$img_user_text",
-                    "year": {"$year":"$img_timestamp"},
-                    "month": {"$month":"$img_timestamp"},
-                },
-                count:{$sum:1}
-              }},
-              { $sort: {
-                      '_id.user': 1,
-                      '_id.year': 1,
-                      '_id.month': 1
-              }}
-            ]).toArray(function(err, docs) {
-                var o = {};
-                o["timestamp"] = "2017/01/16" //XXX use a real one
-                o["users"] = [];
-                for (var i = 0; i < docs.length; i++) {
-                  var found = 0;
-                  for (var j = 0; j < o["users"].length; j++) {
-                    if (o["users"][j].user === docs[i]._id.user) {
-                      var currentDate = docs[i]._id.year.toString() + "/" + pad(docs[i]._id.month,2).toString();
-                      if ((start === undefined || start <= currentDate) && (end === undefined || end >= currentDate)) {
-                        o["users"][j].files.push({date: currentDate, count: docs[i].count});
-                        found = 1
-                        break;
-                      }
-                    }
-                  }
-                  if (found === 0) { //New user!
-                    var currentDate = docs[i]._id.year.toString() + "/" + pad(docs[i]._id.month,2).toString();
-                    if ((start === undefined || start <= currentDate) && (end === undefined || end >= currentDate)) {
-                      o["users"].push({user: docs[i]._id.user, files: [{date: currentDate, count: docs[i].count}]})
-                    }
-                  }
+var uploadDate = function(req, res, id, start, end, db)
+{
+    query='select count(*) as img_count, img_user_text, to_char(img_timestamp, \'YYYY/MM\') as img_time from images';
+    if(start!=null)//start and end are defined, convert them to timestamp and append
+    {
+        splitted=start.split('/');
+        start_timestamp="'"+splitted[0]+"-"+splitted[1]+"-1 00:00:00'";
+        query+=" where img_timestamp>="+start_timestamp;
+    }
+    if(end!=null)
+    {
+        splitted=end.split('/');
+        end_timestamp="'"+splitted[0]+"-"+splitted[1]+"-1 00:00:00'";
+        if(start==null)
+            query+=" where ";
+        else
+            query+=" and ";
+        query+="img_timestamp<="+end_timestamp;
+    }
+    query+=" group by img_user_text, img_time order by img_user_text";
+    db.query(query, (err, dbres) => {
+        if(!err)
+        {
+            result=new Object();
+            result.users=[];
+            i=0;
+            while(i<dbres.rows.length)
+            {
+                user=Object();
+                user.user=dbres.rows[i].img_user_text;
+                user.files=[];
+                while(i<dbres.rows.length&&user.user==dbres.rows[i].img_user_text)
+                {
+                    file=Object();
+                    file.date=dbres.rows[i].img_time;
+                    file.count=dbres.rows[i].img_count;
+                    user.files[user.files.length]=file;
+                    i++;
                 }
+                result.users[result.users.length]=user;                
+            }
+            res.json(result);
+        }else {
+            console.log(err);
+            res.sendStatus(400);
+        }
 
-                //THIS IS FOR MAKE EACH COUNT THE SUM OF ITS PRECS
-                /*for (var i = 0; i < o["users"].length; i++) {
-                  var sum = 0;
-                  for (var j = 0; j < o["users"][i]["files"].length; j++) {
-                    sum += o["users"][i]["files"][j].count;
-                    o["users"][i]["files"][j].count = sum;
-                  }
-                }*/
-                res.send(o);
-            });
-        } else {
-            console.log(err)
+    })
+}
+var usage = function(req, res, id, db) 
+{
+    db.query('select gil_to,gil_wiki,gil_page_title from usages where is_alive=true order by gil_to', (err, dbres) => {
+        if(!err)
+        {
+            result=[];
+            dbindex=0;
+            resindex=0;
+            while(dbindex<dbres.rows.length)
+            {
+                result[resindex]=new Object();
+                result[resindex].image=dbres.rows[dbindex].gil_to;
+                page=dbres.rows[dbindex].gil_to;
+                result[resindex].pages=[];
+                j=0;
+                while(dbindex<dbres.rows.length&&page==dbres.rows[dbindex].gil_to)
+                {
+                    result[resindex].pages[j]=new Object();
+                    result[resindex].pages[j].wiki=dbres.rows[dbindex].gil_wiki;
+                    result[resindex].pages[j].title=dbres.rows[dbindex].gil_page_title;
+                    j++;
+                    dbindex++;
+                }
+                resindex++;
+
+            }
+            res.json(result);
+        }
+        else
+        {
+            console.log(err);
+            res.sendStatus(400);
+        }
+    });
+}
+var viewsAll = function(req, res, id, db) 
+{
+    db.query('select sum(accesses) from visualizations', (err, dbres) => {
+        if(!err)
+        {
+            res.json(dbres.rows[0]);
+        }
+        else
+        {
+            console.log(err);
+            res.sendStatus(400);
+        }
+    });
+}
+Date.prototype.addHours = function(h) {    
+    this.setTime(this.getTime() + (h*60*60*1000)); 
+    return this;   
+ }
+var viewsByDate = function(req, res, id, db) 
+{
+    db.query('select sum(accesses) as sum,access_date from visualizations group by access_date', (err, dbres) => {
+        if(!err)
+        {
+            result=[];
+            i=0;
+            while(i<dbres.rows.length)
+            {
+                result[i]=new Object;
+                result[i].date=dbres.rows[i].access_date.addHours(1).toISOString().substring(0,10);//necessario aggiungere un'ora perchè lo vede con tempo +0, e quindi sottrae un ora (andando quindi nel giorno prima) alla data +1 di postgres
+                result[i].views=dbres.rows[i].sum;
+                i++;
+            }
+            res.json(result);
+        }
+        else
+        {
+            console.log(err);
+            res.sendStatus(400);
         }
     });
 }
 
+exports.viewsByDate = viewsByDate;
+exports.viewsAll = viewsAll;
 exports.categoryGraph = categoryGraph;
 exports.uploadDate = uploadDate;
+exports.usage = usage;
