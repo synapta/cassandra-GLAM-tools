@@ -94,7 +94,8 @@ app.get('/api/:id/file/upload-date', apicache("1 hour"), function (request, resp
 });
 
 app.get('/docs', function(req, res){
-    res.sendFile(__dirname + '/docs.html');
+    var path = require('path');
+    res.sendFile(path.resolve('../docs/docs.html'));
 });
 
 app.get('*', function(req, res){
