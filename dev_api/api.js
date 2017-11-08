@@ -40,7 +40,8 @@ var categoryGraph = function(req, res, id, db)
             }
             res.json(result);
         }else {
-            console.log(err)
+            console.log(err);
+            res.sendStatus(400);
         }
 
     })
@@ -96,7 +97,8 @@ var uploadDate = function(req, res, id, start, end, db)
             }
             res.json(result);
         }else {
-            console.log(err)
+            console.log(err);
+            res.sendStatus(400);
         }
 
     })
@@ -130,9 +132,56 @@ var usage = function(req, res, id, db)
             res.json(result);
         }
         else
+        {
             console.log(err);
+            res.sendStatus(400);
+        }
     });
 }
+var viewsAll = function(req, res, id, db) 
+{
+    db.query('select sum(accesses) from visualizations', (err, dbres) => {
+        if(!err)
+        {
+            res.json(dbres.rows[0]);
+        }
+        else
+        {
+            console.log(err);
+            res.sendStatus(400);
+        }
+    });
+}
+Date.prototype.addHours = function(h) {    
+    this.setTime(this.getTime() + (h*60*60*1000)); 
+    return this;   
+ }
+var viewsByDate = function(req, res, id, db) 
+{
+    db.query('select sum(accesses) as sum,access_date from visualizations group by access_date', (err, dbres) => {
+        if(!err)
+        {
+            result=[];
+            i=0;
+            while(i<dbres.rows.length)
+            {
+                result[i]=new Object;
+                result[i].date=dbres.rows[i].access_date.addHours(1).toISOString().substring(0,10);//necessario aggiungere un'ora perchè lo vede con tempo +0, e quindi sottrae un ora (andando quindi nel giorno prima) alla data +1 di postgres
+                result[i].views=dbres.rows[i].sum;
+                i++;
+            }
+            res.json(result);
+        }
+        else
+        {
+            console.log(err);
+            res.sendStatus(400);
+        }
+    });
+}
+
+exports.viewsByDate = viewsByDate;
+exports.viewsAll = viewsAll;
 exports.categoryGraph = categoryGraph;
 exports.uploadDate = uploadDate;
 exports.usage = usage;
