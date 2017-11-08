@@ -1,0 +1,78 @@
+Utilizzo per numero di wiki
+
+db.getCollection('usage').aggregate([
+    {
+        $match: {
+            keywords: { $not: {$size: 0} }
+        }
+    },
+    { $unwind: "$gil_wiki" },
+    {
+        $group: {
+            _id: {$toLower: '$gil_wiki'},
+            count: { $sum: 1 }
+        }
+    },
+    {
+        $match: {
+            count: { $gte: 0 }
+        }
+    },
+    { $sort : { count : -1} },
+    { $limit : 100 }
+]);
+
+
+Immagini utilizzate più di una volta
+
+db.getCollection('usage').aggregate([
+    {
+        $match: {
+            keywords: { $not: {$size: 0} }
+        }
+    },
+    { $unwind: "$gil_to" },
+    {
+        $group: {
+            _id: {$toLower: '$gil_to'},
+            count: { $sum: 1 }
+        }
+    },
+    {
+        $match: {
+            count: { $gte: 1 }
+        }
+    },
+    { $sort : { count : -1} },
+    { $limit : 100 }
+]);
+
+
+Pagine di Wiki* con il maggior numero delle immagini presenti nella categoria
+
+db.getCollection('usage').aggregate([
+    {
+        $match: {
+            keywords: { $not: {$size: 0} }
+        }
+    },
+    { $unwind: "$gil_page_title" },
+    {
+        $group: {
+            _id: '$gil_page_title',
+            count: { $sum: 1 }
+        }
+    },
+    {
+        $match: {
+            count: { $gte: 1 }
+        }
+    },
+    { $sort : { count : -1} },
+    { $limit : 100 }
+]);
+
+
+Perché un file è molto utilizzato? Perché è vecchio? Perché è di buona dimensione? Perché è ben categorizzato su commons? Perché ha un bel nome? (file + usage)
+
+Future work analizzare le pagine in cui è presente su Wiki* per inferire categorie o data una categoria di Wiki se lì ci finisce qualcosa.

@@ -30,7 +30,7 @@ function getIndexOfDb(id,arr)
 function getDatabase(id){
     index=getIndexOfDb(id,DBConnections);
     if(index!=-1)
-        return DBConnections.connection;
+        return DBConnections[index].connection;
     else
     {
         index=getIndexOfDb(id,config.DBs);
@@ -60,7 +60,30 @@ app.get('/api/:id/category/', apicache("1 hour"), function (request, response) {
         response.sendStatus(400);
     }
 });
-
+app.get('/api/:id/views/by-date', apicache("1 hour"), function (request, response) {
+    var db=getDatabase(request.params.id);
+    if (db!=null) {
+        api.viewsByDate(request, response, request.params.id, db);
+    } else {
+        response.sendStatus(400);
+    }
+});
+app.get('/api/:id/views/all', apicache("1 hour"), function (request, response) {
+    var db=getDatabase(request.params.id);
+    if (db!=null) {
+        api.viewsAll(request, response, request.params.id, db);
+    } else {
+        response.sendStatus(400);
+    }
+});
+app.get('/api/:id/usage/', apicache("1 hour"), function (request, response) {
+    var db=getDatabase(request.params.id);
+    if (db!=null) {
+        api.usage(request, response, request.params.id, db);
+    } else {
+        response.sendStatus(400);
+    }
+});
 app.get('/api/:id/file/upload-date', apicache("1 hour"), function (request, response) {
     var db=getDatabase(request.params.id);
     if (db!=null) {

@@ -1,7 +1,7 @@
 {
   "name": "cassandra",
-  "version": "0.1.0",
-  "author": "Alessio Melandri <alessio.melandri@synapta.it> (https://synapta.it/)",
+  "version": "0.2.0",
+  "author": "Alessio Melandri <alessio.melandri@synapta.it> (https://synapta.it/), Dario Salza <dsalza@hotmail.it> (https://synapta.it/)",
   "private": true,
   "dependencies": {
     "apicache": "~0.1.5",
@@ -9,11 +9,12 @@
     "morgan": "~1.7.0",
     "mongodb": "~2.2.7",
     "mariasql": "~0.2.6",
-    "apikey": "~0.1.2"
+    "apikey": "~0.1.2",
+    "pg": "~7.4.0",
+    "utf8": "~2.1.2"
   },
   "scripts": {
-    "preinstall": "raml2html api.raml > docs.html",
-    "run" : "node etl.js",
-    "start" : "sudo node server.js"
+    "preinstall": "raml2html ./docs/api.raml > ./docs/docs.html",
+    "start": "sudo node app/server.js"
   }
 }

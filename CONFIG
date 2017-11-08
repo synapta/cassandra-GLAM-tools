@@ -1,7 +1,0 @@
-ssh -N alessio@tools-dev.wmflabs.org -L 3306:itwiki.labsdb:3306
-mongo:alessio:FuoriPioveMongoLadro
-
-== TODO ==
-categoria/username da prendere in input
-user per ssh
-user e pw per mongo

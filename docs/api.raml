@@ -102,3 +102,77 @@ mediaType: application/json
                       }
                   ]
               }
+/views/by-date:
+  displayName: Views by date
+  description: Lista del numero complessivo di visualizzazioni dei file per giorno.
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example:  |
+              {
+                [
+                  {
+                      "date":"2017-01-01",
+                      "views":9810
+                  },
+                  {
+                      "date":"2017-01-02",
+                      "views":4521
+                  }
+                ]
+              }
+/views/all:
+  displayName: All views
+  description: Numero complessivo di visualizzazioni dei file dall'inizio del tracking (??/??/????).
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example:  |
+              {
+                  "sum":9812
+              }
+/usage:
+  displayName: Pages using files
+  description: Lista delle pagine in cui viene utilizzato ogni file.
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example:  |
+              {
+                [
+                  {
+                      "image":"photoX.png",
+                      "pages":
+                      [
+                          {
+                              "wiki":"enwiki",
+                              "title":"Page using the photoX"
+                          },
+                          {
+                              "wiki":"itwiki",
+                              "title":"Another page using the photoX"
+                          }
+                      ]
+                  },
+                  {
+                      "image":"photoY.png",
+                      "pages":
+                      [
+                          {
+                              "wiki":"dewiki",
+                              "title":"Page using the photoY"
+                          },
+                          {
+                              "wiki":"itwiki",
+                              "title":"Another page using the photoX"
+                          }
+                      ]
+                  }
+                ]
+              }

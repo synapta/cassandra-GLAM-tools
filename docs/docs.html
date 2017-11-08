@@ -224,4 +224,51 @@
         }
     ]
 }
-</code></pre></div></div></div></div></div></div></div></div></div></div></div><div class="col-md-3"><div id="sidebar" class="hidden-print affix" role="complementary"><ul class="nav nav-pills nav-stacked"><li><a href="#category">Category tree</a></li><li><a href="#file_upload_date">Uploads</a></li></ul></div></div></div></div></body></html>
+</code></pre></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="views_by_date" class="panel-title">Views by date</h3></div><div class="panel-body"><div class="top-resource-description"><p>Lista del numero complessivo di visualizzazioni dei file per giorno.</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_views_by_date"><span class="parent"></span>/views/by-date</a> <span class="methods"><a href="#views_by_date_get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_views_by_date" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#views_by_date_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="views_by_date_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent"></span>/views/by-date</h4></div><div class="modal-body"><ul class="nav nav-tabs"><li class="active"><a href="#views_by_date_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="views_by_date_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
+  [
+    {
+        "date":"2017-01-01",
+        "views":9810
+    },
+    {
+        "date":"2017-01-02",
+        "views":4521
+    }
+  ]
+}
+</code></pre></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="views_all" class="panel-title">All views</h3></div><div class="panel-body"><div class="top-resource-description"><p>Numero complessivo di visualizzazioni dei file dall&#39;inizio del tracking (??/??/????).</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_views_all"><span class="parent"></span>/views/all</a> <span class="methods"><a href="#views_all_get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_views_all" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#views_all_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="views_all_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent"></span>/views/all</h4></div><div class="modal-body"><ul class="nav nav-tabs"><li class="active"><a href="#views_all_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="views_all_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
+    "sum":9812
+}
+</code></pre></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="usage" class="panel-title">Pages using files</h3></div><div class="panel-body"><div class="top-resource-description"><p>Lista delle pagine in cui viene utilizzato ogni file.</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_usage"><span class="parent"></span>/usage</a> <span class="methods"><a href="#usage_get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_usage" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#usage_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="usage_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent"></span>/usage</h4></div><div class="modal-body"><ul class="nav nav-tabs"><li class="active"><a href="#usage_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="usage_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
+  [
+    {
+        "image":"photoX.png",
+        "pages":
+        [
+            {
+                "wiki":"enwiki",
+                "title":"Page using the photoX"
+            },
+            {
+                "wiki":"itwiki",
+                "title":"Another page using the photoX"
+            }
+        ]
+    },
+    {
+        "image":"photoY.png",
+        "pages":
+        [
+            {
+                "wiki":"dewiki",
+                "title":"Page using the photoY"
+            },
+            {
+                "wiki":"itwiki",
+                "title":"Another page using the photoX"
+            }
+        ]
+    }
+  ]
+}
+</code></pre></div></div></div></div></div></div></div></div></div></div></div><div class="col-md-3"><div id="sidebar" class="hidden-print affix" role="complementary"><ul class="nav nav-pills nav-stacked"><li><a href="#category">Category tree</a></li><li><a href="#file_upload_date">Uploads</a></li><li><a href="#views_by_date">Views by date</a></li><li><a href="#views_all">All views</a></li><li><a href="#usage">Pages using files</a></li></ul></div></div></div></div></body></html>
