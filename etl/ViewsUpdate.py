@@ -115,7 +115,7 @@ def init(argdate):
     global cursors
     global date
     global conn
-    pgconnection = psycopg2.connect("dbname=CassandraTEST user=cassandra password=cassandra")
+    pgconnection = psycopg2.connect("dbname=cassandradb user=cassandra password=cassandra")
     #print pgconnection.encoding
     pgconnection.autocommit = True
     conn=pgconnection

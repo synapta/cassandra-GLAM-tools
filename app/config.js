@@ -1,11 +1,11 @@
 var {Pool, Client} = require('pg');
   var DBs = [
     {
-      name:"CassandraTEST",
+      name:"cassandra",
       connection:new Client({
         user: 'cassandra',
         host: '127.0.0.1',
-        database: 'CassandraTEST',
+        database: 'cassandradb',
         password: 'cassandra',
         port: 5432
       })

@@ -1,4 +1,4 @@
-CREATE DATABASE "Cassandra"
+CREATE DATABASE "cassandradb"
   WITH OWNER = postgres
        ENCODING = 'UTF8'
        TABLESPACE = pg_default

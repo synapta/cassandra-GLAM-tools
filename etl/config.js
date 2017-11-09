@@ -12,7 +12,7 @@ var connectionToWMF = new MariaClient({
   const storage=new Client({
     user: 'cassandra',
     host: '127.0.0.1',
-    database: 'CassandraTEST',
+    database: 'cassandradb',
     password: 'cassandra',
     port: 5432,
   });
