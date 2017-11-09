@@ -62,7 +62,7 @@ def process(date):
     day, month, year=date.split("/")
     global watched
     watched = set()
-    curse=conn.cursor();
+    curse=conn.cursor()
     curse.execute("SELECT img_name FROM images;")
     w=0
     while w<curse.rowcount:
@@ -117,7 +117,7 @@ def init(argdate):
     global cursors
     global date
     global conn
-    pgconnection = psycopg2.connect("dbname=cassandradb user=cassandra password=cassandra")
+    pgconnection = psycopg2.connect("dbname=cassandradb user=cassandra password=cassandra host=localhost")
     #print pgconnection.encoding
     pgconnection.autocommit = True
     conn=pgconnection
