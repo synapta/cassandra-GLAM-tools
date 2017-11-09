@@ -1,4 +1,5 @@
 import sys
+import os
 import getopt
 import bz2
 import urllib
@@ -110,6 +111,7 @@ def process(date):
     while i<NTHREADS:
         threads[i].join()
         i=i+1
+    os.remove(filename)
 
 def init(argdate):
     global cursors
