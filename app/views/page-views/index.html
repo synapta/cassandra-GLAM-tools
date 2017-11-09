@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>GLAM Visual Tool | Page views</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta charset="utf-8">
+		<meta http-equiv="Access-Control-Allow-Origin" content="*"/>
+		<link rel="stylesheet" href="../assets/style/style.css"/>
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700" rel="stylesheet">
+	</head>
+	<body class="overflow_hidden">
+		<header id="topbar" class="top_bar">
+			<div><!-- class="container" -->
+				<h1>
+					<a href="../">GLAM Visual Tool</a>
+				</h1>
+			</div>
+		</header>
+		<div id="sub_header" class="top_bar">
+			<span><!-- class="container" -->
+				<a href="../">
+					&larr; back
+				</a>
+			</span>
+			<span>
+				<a href="https://commons.wikimedia.org/w/index.php?title=Category:Media_contributed_by_the_ETH-Bibliothek" title="Media contributed by the ETH-Bibiothek" target="_blank">
+					Media contributed by the ETH-Bibliothek
+				</a>
+			</span>
+			<span>
+				Page views
+			</span>
+		</div>
+		<div id="sub_header" class="sub_top_bar">
+			<div>
+				<a href="../">
+					&larr; back
+				</a>
+			</div>
+			<div>
+				<div class="label">
+					Category
+				</div>
+				<div>
+					<a href="https://commons.wikimedia.org/w/index.php?title=Category:Media_contributed_by_the_ETH-Bibliothek" title="Media contributed by the ETH-Bibiothek" target="_blank">
+						Media contributed by the ETH-Bibliothek
+					</a>
+				</div>
+			</div>
+			<div>
+				<div class="label">
+					Chart
+				</div>
+				<div>
+					<select id="switch_page">
+						<option value="page-views">Page views</option>
+						<option value="user-contributions">User contributions</option>
+						<option value="category_network">Category network</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<main id="visualizations">
+			<section id="dataviz" class="v_noscore">
+				<div id="settings">
+					<!--<div style="float:left;">
+						< Settings >
+					</div>-->
+					<div id="how_to_read_button" style="float:right; text-decoration: underline;">
+						How to read the visualization
+					</div>
+				</div>
+				<div id="page_views_container" style="background-color: white;" class="with_score"></div>
+			</section>
+			<section id="left_sidebar">
+				<div id="sidebar_box">
+					<div  id="sorting_options">
+						<span style="font-size:0.6em; cursor:pointer;" id="desc_order">
+							by total
+						</span>
+						/
+						<!--<span style="font-size:0.6em; cursor:pointer;" id="asc_order" class="underline">
+							asc. order
+						</span> / -->
+						<span style="font-size:0.6em; cursor:pointer;" id="by_name" class="underline">
+							by name
+						</span>
+					</div>
+					<div id="sidebar"></div>
+				</div>
+			</section>
+		</main>
+		<script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
+		<script type="text/javascript" src="../bower_components/d3/d3.min.js"></script>
+		<script type="text/javascript" src="../assets/scripts/handlebars-v4.0.5.js"></script>
+		<script type="text/javascript" src="functions.js"></script>
+	</body>
+</html>

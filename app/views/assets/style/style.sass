@@ -1,0 +1,322 @@
+@import "../../bower_components/neat/app/assets/stylesheets/_neat.scss"
+
+// variables
+// ----------------------------------------
+$font_l: 2em
+$font_m: 1em
+$font_s: 0.8em
+$font_xs: 0.6em
+
+$x: 1em
+
+$mobile: new-breakpoint(max-width 500px)
+$tablet: new-breakpoint(max-width 768px)
+
+$main_color: #0D6FF6
+$cover_background: #e2e2e2
+$dataviz: gray
+$sub_header: #dcdcdc
+$black: black
+$white: #fdfdfd
+$line: gray
+$sidebar: #f1f1f1
+
+
+// helper
+// ----------------------------------------
+
+.hide
+	display: none
+
+.show
+	display: block !important
+
+.clear
+	clear: both
+
+.underline
+	text-decoration: underline
+
+.overflow_hidden
+	overflow: hidden
+	height: 100%
+
+// general layout
+// ----------------------------------------
+
+body
+	font-family: 'Open Sans', Arial, sans-serif
+	margin: 0
+	padding: 0
+	background-color: $white
+	color: $black
+
+.container
+	+outer-container(70%)
+
+	div
+		@include span-columns(12)
+
+.top_bar
+	min-height: $x * 3
+	padding: 0 ($x * 0.5)
+	position: fixed
+	top: 0
+	width: 100%
+
+#topbar
+	background-color: $main_color
+
+	a
+		color: white
+		margin-top: 0
+		text-decoration: none
+		font-size: $font_s
+
+#sub_header
+	//@include outer-container
+	background-color: $sub_header
+	position: fixed
+	top: $x * 3
+	width: 100%
+	min-height: $x * 3
+
+	> div
+		padding: ($x * 0.3) 0 ($x * 0.3) 0
+		float: left
+		margin-left: $x / 2
+		margin-right: $x * 5
+
+	> div:last-child
+		margin-right: 0
+
+	a, a:visited 
+		text-decoration: none
+
+.label 
+	font-size: $font_xs
+
+footer
+	min-height: $x * 3
+	padding: 0.5em
+
+.footer_home
+	position: absolute
+	bottom: 0
+	width: 100%
+	background-color: gray
+	min-height: $x * 3
+
+	a
+		color: white
+		text-decoration: none
+	
+.footer_bar
+	//background-color: $sub_header
+	position: absolute
+	bottom: 0
+	width: 80%
+
+	a
+		text-decoration: none
+
+// layout homepage
+// ----------------------------------------
+#cover
+	height: $x * 30
+	display: flex
+	align-items: center
+	background: -moz-linear-gradient(top,  #e2e2e2 0%, #dbdbdb 50%, #d1d1d1 51%, #e0e0e0 100%)
+	background: -webkit-linear-gradient(top,  #e2e2e2 0%,#dbdbdb 50%,#d1d1d1 51%,#e0e0e0 100%)
+	background: linear-gradient(to bottom,  #e2e2e2 0%,#dbdbdb 50%,#d1d1d1 51%,#e0e0e0 100%)
+
+	h2
+		@include outer-container
+		align-self: flex-start
+		text-align: center
+		font-size: $font_l
+		font-weight: normal
+
+#category
+	@include outer-container
+	margin-top: $x * 2
+
+// layout internal pages
+// ----------------------------------------
+#data_visualizations
+	@include outer-container
+	padding: 0
+	overflow: hidden
+
+	li
+		display: flex
+		@include span-columns(4)
+		@include omega(3n)
+		background-color: $dataviz
+		height: $x * 10
+		align-self: center
+		padding: $x
+		margin-bottom: 10px
+
+		@include media($tablet)
+			@include span-columns(6)
+			@include omega(2n)
+
+		@include media($mobile)
+			@include span-columns(12)
+			@include omega(1n)
+		
+		a
+			display: block
+			color: white
+			text-decoration: none
+
+#visualizations
+	+outer-container(100%)
+	//height: 100%
+	//overflow: hidden
+	margin-top: $x * 6
+
+	#dataviz
+		//padding: $x 0 0 $x
+		//@include span-columns(9)
+		//margin-right: 0
+		height: 90vh // 85vh
+		width: 80%
+		float: left
+
+	#left_sidebar
+		//@include span-columns(3)
+		//border-left: 1px solid gray
+		//overflow: scroll
+		height: 100%
+		background-color: $sidebar
+		padding-left: 0
+		width: 20%
+		float: left
+
+	#sidebar_box
+		height: 100%
+
+	#sidebar
+		overflow-y: auto
+		overflow-x: hidden
+		height: 90vh // calc(100% - 50px) 100vh
+
+#settings
+	margin: 0
+	//padding: ($x * 0.5) $x ($x * 0.5)
+	//padding: 1em
+	cursor: pointer
+	height: 2.5em
+	border-bottom: 1px dotted #e3e1e1
+
+#how_to_read_button
+	margin: ($x * 0.4)
+	font-size: $font_s
+
+.how_to_read
+	display: none
+	position: absolute
+	width: 75%
+	margin: $x
+	background-color: white
+	border: 1px dotted #e3e1e1
+	padding: $x * 3
+	font-size: $font_s
+
+#sidebar 
+	display: block
+	position: relative
+
+	ul
+		margin: 0
+		padding: 0
+		list-style: none
+
+	.list_item
+		//padding: $x
+		//margin-bottom: $x * 3
+		display: block
+		border-bottom: 1px solid $white
+		padding: $x * 0.5
+		cursor: pointer
+
+	.list_item:last-child
+		margin-bottom: 60px
+			
+		.item
+			width: 80%
+			float: left
+
+		.link
+			width: 20%
+			float: right
+
+
+// tipography
+// ----------------------------------------
+h1
+	font-size: $font_l
+	margin: 0
+
+h2
+	font-size: $font_m
+
+#category span
+	font-size: $font_l
+	font-weight: lighter
+	text-decoration: none
+
+// dataviz
+// ----------------------------------------
+
+#category_network_container
+	height: 80%
+	overflow-y: hidden
+
+	.edges 
+		stroke: #999
+		stroke-opacity: 0.6
+		fill: red
+
+	.nodes g
+		cursor: pointer
+
+	.nodes > g //:hover
+		z-index: 2
+
+	.nodes g text
+		opacity: 0.4
+
+	.nodes g:hover text
+		opacity: 1
+		transform: scale(1.5,1.5)
+
+#user_contributions_container
+	overflow-x: scroll
+
+.svg_container
+	width: 100%
+
+.with_score
+	height: 90%
+
+#score
+	height: 10%
+
+#sorting_options
+	font-size: $font_m
+	padding: $x * 0.5
+	border-bottom: 1px solid gray
+	height: $x * 3
+
+// category network
+// ----------------------------------------
+	
+.selected_circle
+	stroke: red
+	stroke-width: 3px
+
+.selected_list_item
+	color: red

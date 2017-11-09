@@ -27,11 +27,10 @@ var categoryGraph = function(req, res, id, db)
                 while(j<dbres.rows[i].cl_to.length)
                 {
                     edge=Object();
-                    edge.target=dbres.rows[i].page_title;
-                    edge.source=dbres.rows[i].cl_to[j];
-                    result.edges[result.edges.length]=edge;
-                    if(edge.source=="ROOT")
-                        edge.source=null;
+                    edge.target=dbres.rows[i].cl_to[j];
+                    edge.source=dbres.rows[i].page_title;
+                    if(edge.target!="ROOT")
+                        result.edges[result.edges.length]=edge;
                     j++;
                 }
                 result.nodes[i]=node;
@@ -47,7 +46,22 @@ var categoryGraph = function(req, res, id, db)
     })
     
 }
+var rootCategory = function(req, res, id, db) 
+{
+    db.query('SELECT page_title from categories where cat_level[0]=0', (err, dbres) => {
+        if(!err)
+        {
+            var result=Object();
+            result.id=dbres.rows[0].page_title;
+            res.json(result);
+        }else {
+            console.log(err);
+            res.sendStatus(400);
+        }
 
+    })
+    
+}
 function pad(num, size) {
     var s = num+"";
     while (s.length < size) s = "0" + s;
@@ -179,7 +193,7 @@ var viewsByDate = function(req, res, id, db)
         }
     });
 }
-
+exports.rootCategory = rootCategory;
 exports.viewsByDate = viewsByDate;
 exports.viewsAll = viewsAll;
 exports.categoryGraph = categoryGraph;

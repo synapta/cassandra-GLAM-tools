@@ -1,3 +1,4 @@
+var express = require('express');
 var api = require('./api.js');
 var config = require('./config.js');
 
@@ -36,11 +37,19 @@ function getDatabase(id){
 }
 
 module.exports = function(app, apicache) {
-
+	app.use('/:id/',express.static('./views'));
 	app.get('/api/:id/category/', apicache("1 hour"), function (request, response) {
 	    var db=getDatabase(request.params.id);
 	    if (db!=null) {
 		api.categoryGraph(request, response, request.params.id, db);
+	    } else {
+		response.sendStatus(400);
+	    }
+	});
+	app.get('/api/:id/rootcategory/', apicache("1 hour"), function (request, response) {
+	    var db=getDatabase(request.params.id);
+	    if (db!=null) {
+		api.rootCategory(request, response, request.params.id, db);
 	    } else {
 		response.sendStatus(400);
 	    }
@@ -82,9 +91,9 @@ module.exports = function(app, apicache) {
 	    var path = require('path');
 	    res.sendFile(path.resolve('../docs/docs.html'));
 	});
-
+	
 	app.get('*', function(req, res){
-	    res.sendStatus(400);
+	    res.sendStatus(404);
 	});
 
 }

@@ -1,0 +1,26 @@
+{
+  "name": "GLAM visual tool",
+  "homepage": "https://giovannipro.github.io/glam-visual-tool/",
+  "description": "Testing GLAM visual tool",
+  "version": "0.0.0",
+  "authors": [
+    "Giovanni Profeta"
+  ],
+  "main": "index.html",
+  "private": true,
+  "dependencies": {
+    "jquery": "#3.1.1",
+    "requirejs": "2.3.2",
+    "d3": "4.4.0",
+    "neat": "latest",
+    "sigma.js": "latest"
+  },
+  "keywords": [
+    "GLAM"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "bower_components"
+  ]
+}
