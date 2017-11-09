@@ -6,7 +6,7 @@
 			</span>
 			<br>
 			<span>
-				{{files}} files
+				level {{group}}, {{files}} files
 			</span>
 		</div>
 		<div class="link" style="font-size:0.6em;">

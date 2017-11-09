@@ -5,6 +5,16 @@ function getUrl()
 	var db=window.location.href.toString().split('/')[3];
 	return "../../api/"+db+"/file/upload-date";
 }
+function setCategory()
+{
+	var db=window.location.href.toString().split('/')[3];
+	var jsonurl= "../../api/"+db+"/rootcategory";
+	$.getJSON(jsonurl, function(d) {
+	$('#cat_url').text(decodeURIComponent(d.id).replace(/_/g," "));
+	$("#cat_url").attr("href", "https://commons.wikimedia.org/w/index.php?title=Category:"+d.id);
+	$("#cat_url").attr("title", decodeURIComponent(d.id).replace(/_/g," "));
+	});
+}
 function dataviz(){
 	container = "#user_contributions_container";
 	data_source = getUrl(); // user_contributions user_contributions_api
@@ -462,6 +472,7 @@ var baseurl = document.location.href;
 }
 
 $(document).ready(function(){
+	setCategory();//N.B. questa funzione setta il titolo categoria
 	dataviz();
 	how_to_read();
 	sidebar();

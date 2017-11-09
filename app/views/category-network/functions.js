@@ -411,7 +411,10 @@ function sidebar(order) {
 			}
 			if (order == "by_name"){
 				d.nodes.sort( function(a,b) { 
-					return a.id - b.id; 
+					res= a.group - b.group;
+					if(res==0) 
+						res=b.files-a.files;
+					return res;
 				});		
 			}
 			//console.log(d);
