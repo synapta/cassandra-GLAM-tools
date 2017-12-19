@@ -99,7 +99,7 @@ footer {
     text-decoration: none; }
 
 #cover {
-  height: 30em;
+  height: 20em;
   display: flex;
   align-items: center;
   background: -moz-linear-gradient(top, #e2e2e2 0%, #dbdbdb 50%, #d1d1d1 51%, #e0e0e0 100%);
@@ -195,20 +195,20 @@ footer {
     display: block; }
   #visualizations #dataviz {
     height: 90vh;
-    width: 80%;
+    width: 70%;
     float: left; }
   #visualizations #left_sidebar {
     height: 100%;
     background-color: #f1f1f1;
     padding-left: 0;
-    width: 20%;
+    width: 30%;
     float: left; }
   #visualizations #sidebar_box {
     height: 100%; }
   #visualizations #sidebar {
     overflow-y: auto;
     overflow-x: hidden;
-    height: 90vh; }
+    height: 80vh; }
 
 #settings {
   margin: 0;
@@ -223,7 +223,7 @@ footer {
 .how_to_read {
   display: none;
   position: absolute;
-  width: 75%;
+  width: 65%;
   margin: 1em;
   background-color: white;
   border: 1px dotted #e3e1e1;

@@ -13,6 +13,12 @@ cd setup
 node run.js
 ```
 
+Install bower dependencies:
+```
+cd app/views
+bower install
+```
+
 ## Get data
 Open the SSH tunnel to the WMF databases:
 ```
@@ -29,6 +35,5 @@ cd etl
 
 ## Run webservices
 ```
-cd app
 npm start
 ```

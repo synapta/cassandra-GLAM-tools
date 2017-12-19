@@ -33,11 +33,12 @@ function getDatabase(id){
             DBConnections[DBConnections.length] = conn;
             return conn.connection;
         }
-    }    
+    }
 }
 
 module.exports = function(app, apicache) {
-	app.use('/:id/',express.static('./views'));
+	app.use('/:id/',express.static(__dirname + '/views'));
+
 	app.get('/api/:id/category/', apicache("1 hour"), function (request, response) {
 	    var db=getDatabase(request.params.id);
 	    if (db!=null) {
@@ -91,7 +92,7 @@ module.exports = function(app, apicache) {
 	    var path = require('path');
 	    res.sendFile(path.resolve('../docs/docs.html'));
 	});
-	
+
 	app.get('*', function(req, res){
 	    res.sendStatus(404);
 	});
