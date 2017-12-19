@@ -119,7 +119,7 @@ def init(argdate):
     global conn
     if not os.path.exists("temp"):
         os.makedirs("temp")
-    pgconnection = psycopg2.connect("dbname=cassandradb user=cassandra password=cassandra host=localhost")
+    pgconnection = psycopg2.connect("dbname=cassandradb user=postgres password=postgres host=localhost")
     #print pgconnection.encoding
     pgconnection.autocommit = True
     conn=pgconnection
