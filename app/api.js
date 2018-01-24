@@ -8,7 +8,7 @@ function arrayMin(arr) {
     }
     return min;
 };
-var categoryGraph = function(req, res, id, db) 
+var categoryGraph = function(req, res, id, db)
 {
     db.query('SELECT page_title,cat_files,cl_to[0:10],cat_level[0:10] from categories', (err, dbres) => {
         if(!err)
@@ -34,7 +34,7 @@ var categoryGraph = function(req, res, id, db)
                     j++;
                 }
                 result.nodes[i]=node;
-                
+
                 i++;
             }
             res.json(result);
@@ -44,24 +44,23 @@ var categoryGraph = function(req, res, id, db)
         }
 
     })
-    
+
 }
-var rootCategory = function(req, res, id, db) 
-{
-    db.query('SELECT page_title from categories where cat_level[0]=0', (err, dbres) => {
-        if(!err)
-        {
-            var result=Object();
-            result.id=dbres.rows[0].page_title;
+
+var rootCategory = function(req, res, id, db) {
+    //db.query('SELECT page_title from categories where cat_level[0]=0', (err, dbres) => {
+    db.query('SELECT page_title from categories limit 1', (err, dbres) => {
+        if(!err) {
+            var result = {};
+            result.id = dbres.rows[0].page_title;
             res.json(result);
-        }else {
+        } else {
             console.log(err);
             res.sendStatus(400);
         }
-
     })
-    
 }
+
 function pad(num, size) {
     var s = num+"";
     while (s.length < size) s = "0" + s;
@@ -107,7 +106,7 @@ var uploadDate = function(req, res, id, start, end, db)
                     user.files[user.files.length]=file;
                     i++;
                 }
-                result.users[result.users.length]=user;                
+                result.users[result.users.length]=user;
             }
             res.json(result);
         }else {
@@ -117,7 +116,7 @@ var uploadDate = function(req, res, id, start, end, db)
 
     })
 }
-var usage = function(req, res, id, db) 
+var usage = function(req, res, id, db)
 {
     db.query('select gil_to,gil_wiki,gil_page_title from usages where is_alive=true order by gil_to', (err, dbres) => {
         if(!err)
@@ -152,7 +151,7 @@ var usage = function(req, res, id, db)
         }
     });
 }
-var viewsAll = function(req, res, id, db) 
+var viewsAll = function(req, res, id, db)
 {
     db.query('select sum(accesses) from visualizations', (err, dbres) => {
         if(!err)
@@ -166,11 +165,11 @@ var viewsAll = function(req, res, id, db)
         }
     });
 }
-Date.prototype.addHours = function(h) {    
-    this.setTime(this.getTime() + (h*60*60*1000)); 
-    return this;   
+Date.prototype.addHours = function(h) {
+    this.setTime(this.getTime() + (h*60*60*1000));
+    return this;
  }
-var viewsByDate = function(req, res, id, db) 
+var viewsByDate = function(req, res, id, db)
 {
     db.query('select sum(accesses) as sum,access_date from visualizations group by access_date', (err, dbres) => {
         if(!err)

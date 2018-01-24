@@ -1,6 +1,7 @@
 var express = require('express');
 var api = require('./api.js');
 var config = require('./config.js');
+var path = require('path');
 
 //GLOBALS
 var DBConnections=[];
@@ -37,60 +38,65 @@ function getDatabase(id){
 }
 
 module.exports = function(app, apicache) {
-	app.use('/:id/',express.static(__dirname + '/views'));
+  app.use('/',express.static(__dirname + '/pages'));
+
+  app.use('/:id',express.static(__dirname + '/pages/views'));
 
 	app.get('/api/:id/category/', apicache("1 hour"), function (request, response) {
-	    var db=getDatabase(request.params.id);
-	    if (db!=null) {
-		api.categoryGraph(request, response, request.params.id, db);
+	    let db = getDatabase(request.params.id);
+	    if (db !== null) {
+		      api.categoryGraph(request, response, request.params.id, db);
 	    } else {
-		response.sendStatus(400);
+		      response.sendStatus(400);
 	    }
 	});
 	app.get('/api/:id/rootcategory/', apicache("1 hour"), function (request, response) {
-	    var db=getDatabase(request.params.id);
-	    if (db!=null) {
-		api.rootCategory(request, response, request.params.id, db);
+      let db = getDatabase(request.params.id);
+      if (db !== null) {
+		      api.rootCategory(request, response, request.params.id, db);
 	    } else {
-		response.sendStatus(400);
+		      response.sendStatus(400);
 	    }
 	});
 	app.get('/api/:id/views/by-date', apicache("1 hour"), function (request, response) {
-	    var db=getDatabase(request.params.id);
-	    if (db!=null) {
-		api.viewsByDate(request, response, request.params.id, db);
+      let db = getDatabase(request.params.id);
+      if (db !== null) {
+		      api.viewsByDate(request, response, request.params.id, db);
 	    } else {
-		response.sendStatus(400);
+		      response.sendStatus(400);
 	    }
 	});
 	app.get('/api/:id/views/all', apicache("1 hour"), function (request, response) {
-	    var db=getDatabase(request.params.id);
-	    if (db!=null) {
-		api.viewsAll(request, response, request.params.id, db);
+      let db = getDatabase(request.params.id);
+      if (db !== null) {
+		      api.viewsAll(request, response, request.params.id, db);
 	    } else {
-		response.sendStatus(400);
+		      response.sendStatus(400);
 	    }
 	});
 	app.get('/api/:id/usage/', apicache("1 hour"), function (request, response) {
-	    var db=getDatabase(request.params.id);
-	    if (db!=null) {
-		api.usage(request, response, request.params.id, db);
+      let db = getDatabase(request.params.id);
+      if (db !== null) {
+		      api.usage(request, response, request.params.id, db);
 	    } else {
-		response.sendStatus(400);
+		      response.sendStatus(400);
 	    }
 	});
 	app.get('/api/:id/file/upload-date', apicache("1 hour"), function (request, response) {
-	    var db=getDatabase(request.params.id);
-	    if (db!=null) {
-		api.uploadDate(request, response, request.params.id, request.query.start, request.query.end, db);
+      let db = getDatabase(request.params.id);
+      if (db !== null) {
+		      api.uploadDate(request, response, request.params.id, request.query.start, request.query.end, db);
 	    } else {
-		response.sendStatus(400);
+		      response.sendStatus(400);
 	    }
 	});
 
 	app.get('/docs', function(req, res){
-	    var path = require('path');
 	    res.sendFile(path.resolve('../docs/docs.html'));
+	});
+
+  app.get('/', function(req, res){
+	    res.sendFile(__dirname + '/pages/index.html');
 	});
 
 	app.get('*', function(req, res){
