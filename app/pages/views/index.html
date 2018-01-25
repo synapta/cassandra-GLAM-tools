@@ -5,6 +5,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta charset="utf-8">
 		<meta http-equiv="Access-Control-Allow-Origin" content="*"/>
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
 		<link rel="stylesheet" href="../assets/style/style.css"/>
 		<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
 		<style>
@@ -28,33 +30,92 @@
 
 		<main>
 			<section>
-				<div class="container">
-					<p id="category">
-						Category in Commons:
-						<br>
-						<span>
-							<a href="https://commons.wikimedia.org/w/index.php?title=Category:Historical_images_of_buildings_in_the_canton_of_Z%C3%BCrich" title="Historical images of buildings in the canton of Zürich" target="_blank">
-							Historical images of buildings in the canton of Zürich
-							</a>
-						</span>
-					</p>
-					<ul id="data_visualizations">
-						<li>
-							<a href="category-network" title="See the network of category and subcategories">
-								Category network
-							</a>
-						</li>
-						<li>
-							<a href="user-contributions" title="See the contributions to the category overtime">
-								User contributions
-							</a>
-						</li>
-						<li>
-							<a href="page-views" title="See how much the files are visualized">
-								Page views
-							</a>
-						</li>
-					</ul>
+				<div class="container" style="padding-top:2em;">
+					<div class="row">
+						<div class="col-sm-8">
+							<div class="row">
+								<div class="col-sm-6">
+									<a href="category-network" class="nodeca">
+										<div class="w3-border w3-hover-shadow">
+											<div class="w3-container w3-grey">
+			                  Category network
+			                </div>
+											<div class="w3-container boxDashboardTitle">
+												<img src="../assets/img/graph.png" width="100%"/>
+											</div>
+					          </div>
+									</a>
+								</div>
+
+								<div class="col-sm-6">
+									<a href="user-contributions" class="nodeca">
+										<div class="w3-border w3-hover-shadow">
+											<div class="w3-container w3-grey">
+			                  User contribution
+			                </div>
+											<div class="w3-container boxDashboardTitle">
+												<img src="../assets/img/users.png" width="100%"/>
+											</div>
+					          </div>
+									</a>
+								</div>
+							</div>
+
+							<br>
+
+							<div class="row">
+								<div class="col-sm-6">
+									<a href="usage" class="nodeca">
+										<div class="w3-border w3-hover-shadow">
+											<div class="w3-container w3-grey">
+												Usage
+											</div>
+											<div class="w3-container boxDashboardTitle">
+												img
+											</div>
+										</div>
+									</a>
+								</div>
+
+								<div class="col-sm-6">
+									<a href="page-views" class="nodeca">
+										<div class="w3-border w3-hover-shadow">
+											<div class="w3-container w3-grey">
+												Views
+											</div>
+											<div class="w3-container boxDashboardTitle">
+												img
+											</div>
+										</div>
+									</a>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-4">
+							<div class="w3-border">
+								<div class="w3-container" style="padding:0">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Herrliberger_Elgg_1740.jpg/640px-Herrliberger_Elgg_1740.jpg" width="100%"/>
+                </div>
+								<div class="w3-container boxDashboardTitle">
+									<br>
+									<h1>Canton of Zürich</h1>
+									<br>
+									<small>Category in Commons:</small>
+									<br>
+									<a href="https://commons.wikimedia.org/w/index.php?title=Category:Historical_images_of_buildings_in_the_canton_of_Z%C3%BCrich" title="Historical images of buildings in the canton of Zürich" target="_blank">
+										Historical images of buildings in the canton of Zürich
+									</a>
+									<br><br>
+									<small>Total media in Commons:</small>&nbsp;&nbsp;&nbsp;
+									<span class="round-btn" style="margin: 0 auto;">
+										1234
+									</span>
+									<br><br>
+								</div>
+							</div>
+						</div>
+				  </div>
 				</div>
 			</section>
 		</main>
