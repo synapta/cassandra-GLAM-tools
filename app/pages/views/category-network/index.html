@@ -5,16 +5,18 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta charset="utf-8">
 		<meta http-equiv="Access-Control-Allow-Origin" content="*"/>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
 		<link rel="stylesheet" href="../../assets/style/style.css"/>
-		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
 	</head>
 	<body class="overflow_hidden">
 		<header id="topbar" class="top_bar">
-			<div><!-- class="container" -->
-				<h1>
-					<a href="../">GLAM Visual Tool</a>
-				</h1>
-			</div>
+			<h1>
+				<a href="/">GLAM Visual Tool</a>
+			</h1>
+			<h2>
+				<a href="..">Canton of Zürich</a>
+			</h2>
 		</header>
 
 		<div id="sub_header" class="sub_top_bar">
@@ -33,14 +35,17 @@
 				</div>
 				<div>
 					<select id="switch_page">
-						<option value="category_network">Category network</option>
+						<option value="category-network">Category network</option>
 						<option value="user-contributions">User contributions</option>
 						<option value="page-views">Page views</option>
 					</select>
 				</div>
 			</div>
 			<div>
-				<div id="how_to_read_button" style="float:right; text-decoration: underline; font-size:1em;">
+				<div class="label">
+					Help
+				</div>
+				<div id="how_to_read_button">
 					How to read the visualization
 				</div>
 			</div>
@@ -48,19 +53,30 @@
 
 		<main id="visualizations">
 			<section id="dataviz" class="v_noscore">
-				<div class="how_to_read" style="float:right;">
-					The visualizations shows the subcategories belonging to the main category. The bubblue size shows the amount of files within every category.
+				<div class="how_to_read">
+					<span onclick='$(".how_to_read").toggleClass("show");' style="float:right; cursor:pointer">X</span>
+					<h5>Description</h5>
+					This graph chart shows the subcategories' topology belonging to the main category.<br>
+					Having just one category (or level) is a bad practise on Wikimedia Commons because makes difficult
+					to the community to find and use files. Instead a multilevel and articulated categorization permits
+					a better reuse of the uploaded media.
+					<br><br>
+					<h5>How to read it</h5>
+				  Each node represents a category, while the edges are the relations. Categories at the same level share the color.
+					The bubble size is proportional to the amount of files within every category.
+					<br><br>
+					<h5>How to use it</h5>
+					On the right menu you can order categories by level or by number of files. If you click into a category name the
+					correspondant node will highlight (and viceversa).
 				</div>
 				<div id="category_network_container" class="svg_container"></div>
 				<footer class="footer_bar">
-					<!--<div style="float:left;">
-						< score >
-					</div>-->
 					<div style="float:left;">
 						<span id="download_dataset" style="cursor:pointer;"></span>
 					</div>
 				</footer>
 			</section>
+
 			<section id="left_sidebar">
 				<div id="sidebar_box">
 					<div  id="sorting_options">
@@ -74,7 +90,6 @@
 					</div>
 					<div id="sidebar"></div>
 				</div>
-				<!--<div id="test"></div>-->
 			</section>
 		</main>
 		<style>

@@ -26,6 +26,7 @@ body {
   padding: 0;
   background-color: #fdfdfd;
   color: black;
+  line-height: 1.2;
 }
 
 a {
@@ -59,19 +60,20 @@ a {
 
 #sub_header {
   background-color: #dcdcdc;
-  position: fixed;
-  top: 3em;
-  width: 100%;
-  min-height: 3em; }
-  #sub_header > div {
-    padding: 0.3em 0 0.3em 0;
-    float: left;
-    margin-left: 0.5em;
-    margin-right: 5em; }
-  #sub_header > div:last-child {
-    margin-right: 0; }
-  #sub_header a, #sub_header a:visited {
-    text-decoration: none; }
+  min-height: 3em;
+  padding-left: 1.5em;
+}
+#sub_header > div {
+  padding: 0.3em 0 0.3em 0;
+  float: left;
+  margin-right: 5em;
+}
+#sub_header > div:last-child {
+  margin-right: 0;
+}
+#sub_header a, #sub_header a:visited {
+  text-decoration: none;
+}
 
 .label {
   font-size: 0.6em;
@@ -99,7 +101,7 @@ a {
 footer {
   flex-shrink: 0;
   min-height: 3em;
-  padding: 0.5em;
+  padding: 0 0.5em 0.5em 1.5em;
 }
 
 .footer_home {
@@ -117,9 +119,10 @@ footer {
 
 .footer_bar {
   bottom: 0;
-  width: 80%; }
-  .footer_bar a {
-    text-decoration: none; }
+}
+.footer_bar a {
+  text-decoration: none;
+}
 
 #cover {
   padding-top: 2em;
@@ -203,11 +206,15 @@ footer {
       color: white;
       text-decoration: none; }
 
+#switch_page {
+  font-size: 0.8em;
+}
+
 #visualizations {
-  max-width: 100%;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 6em; }
+}
+
   #visualizations::after {
     clear: both;
     content: "";
@@ -236,39 +243,42 @@ footer {
   border-bottom: 1px dotted #e3e1e1; }
 
 #how_to_read_button {
-  margin: 0.4em;
-  font-size: 0.8em; }
+  text-decoration: underline;
+}
+
+#how_to_read_button:hover {
+  cursor: pointer;
+}
 
 .how_to_read {
   display: none;
   position: absolute;
-  width: 65%;
-  margin: 1em;
+  margin: 1.5em;
   background-color: white;
-  border: 1px dotted #e3e1e1;
+  border: 3px dotted #DCDCDC;
   padding: 3em;
-  font-size: 0.8em; }
+  font-size: 0.8em;
+  width: calc(70% - 3em);
+}
 
 #sidebar {
   display: block;
-  position: relative; }
-  #sidebar ul {
-    margin: 0;
-    padding: 0;
-    list-style: none; }
-  #sidebar .list_item {
-    display: block;
-    border-bottom: 1px solid #fdfdfd;
-    padding: 0.5em;
-    cursor: pointer; }
-  #sidebar .list_item:last-child {
-    margin-bottom: 60px; }
-    #sidebar .list_item:last-child .item {
-      width: 80%;
-      float: left; }
-    #sidebar .list_item:last-child .link {
-      width: 20%;
-      float: right; }
+  position: relative;
+}
+#sidebar ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+#sidebar .list_item {
+  display: block;
+  border-bottom: 1px solid #fdfdfd;
+  padding: 0.5em;
+  cursor: pointer;
+}
+#sidebar .list_item:last-child {
+  margin-bottom: 20px;
+}
 
 h1 {
   font-size: 2em;
@@ -315,7 +325,7 @@ h2 {
   font-size: 1em;
   padding: 0.5em;
   border-bottom: 1px solid gray;
-  height: 3em; }
+}
 
 .selected_circle {
   stroke: red;

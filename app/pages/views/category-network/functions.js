@@ -1,6 +1,3 @@
-// main variables
-// ----------------------------------------
-
 var w = window;
 var width = 900, ///w.outerWidth,
 height = Math.round(width - (width / 3));
@@ -13,13 +10,13 @@ var baseurl = document.location.href;
 var h = baseurl.split("/")
 var h_1 = h[h.length-2]
 var home = baseurl.replace(h_1 + "/","")
-function getUrl()
-{
+
+function getUrl() {
 	var db=window.location.href.toString().split('/')[3];
 	return "../../api/"+db+"/category";
 }
-function setCategory()
-{
+
+function setCategory() {
 	var db=window.location.href.toString().split('/')[3];
 	var jsonurl= "../../api/"+db+"/rootcategory";
 	$.getJSON(jsonurl, function(d) {
@@ -29,29 +26,21 @@ function setCategory()
 	});
 }
 
-// dataviz
-// ----------------------------------------
-
-function dataviz(){
+function dataviz() {
 
 	var container = "#category_network_container";
-	var data_source = getUrl();  // category_network  zurich
+	var data_source = getUrl();
 
-	var width = $("#category_network_container").width(), //1000, //document.getElementById("#dataviz").width,
-		height = $("#category_network_container").height(); //height = 1000;
-		//console.log(width)
+	var width = $("#category_network_container").width(),
+		height = $("#category_network_container").height();
 
 	var svg = d3.select(container)
 		.append("svg")
-		//.attr("width",width)
-		//.attr("height",height)
 		.attr("viewBox", "0 0 " + width + " " + height)
 
 	var plot = svg.append("g")
 		.attr("id", "d3_plot")
-		//.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-	var parseTime = d3.timeParse("%Y/%m/%d");
 	var color = d3.scaleOrdinal(d3.schemeCategory20);
 
 	d3.json(data_source, function(error, data) {
@@ -65,17 +54,8 @@ function dataviz(){
 			);
 		})
 
-		// replace "_" with " "
-		$.each(data.nodes, function(i,v) {
-			v.id = v.id//.replace(/_/g," ")
-			//console.log(id)
-			//return id
-		})
-
 		var max_file = d3.max(files),
-			node_lenght = data.nodes.length,
-			circle_size = ((width / (max_file * 2)) / (node_lenght * 0.5) );
-			//console.log(circle_size)
+			circle_size = width / max_file / data.nodes.length;
 
 		var simulation = d3.forceSimulation()
 			.force("link", d3.forceLink().id(function(d) {
@@ -116,17 +96,7 @@ function dataviz(){
 
 		var node_circle = nodes.append("circle")
 			.attr("r", function(d,i){
-				if (d.files == 0 || d.files == undefined ){
-					return 10
-				}
-				else {
-					if (d.files < (max_file/5) ) { //200
-						return (d.files * circle_size) * 1.5 //5
-					}
-					else {
-						return (d.files  * circle_size) * 1
-					}
-				}
+				return 3 + (d.files  * circle_size)
 			})
 			.attr("fill", function(d) {
 				return  color(d.group);
@@ -179,43 +149,31 @@ function dataviz(){
 	})
 }
 
-function how_to_read(){
-	box = $("#how_to_read .how_to_read")
-	button = $("#how_to_read > p")
-
-	button.click(function(){
-		//console.log("click")
-		box.toggleClass("show");
-	});
-}
-
 function sorting_sidebar(){
-
 	$("#desc_order").on("click", function(){
-		//console.log("asc_order");
-		//var button = $("#asc_order");
-
 		if ($("#desc_order").hasClass("underline") ) {
-			$("#desc_order").removeClass("underline");
-			$("#by_name").toggleClass("underline");
-			$(".list > li").removeClass("selected_list_item");
-			$("#category_network_container").find(".circle").removeClass("selected_circle");
 			//console.log("già selezionato")
+		} else {
+			$("#by_name").toggleClass("underline");
+			$("#desc_order").toggleClass("underline");
+			$("#category_network_container").find(".circle").removeClass("selected_circle");
+			sidebar("desc_order");
+			$("#desc_order").css("cursor","default");
+			$("#by_name").css("cursor","pointer");
 		}
-		else{
-			//console.log("non selezionato")
-		}
-		sidebar("desc_order")
 	})
 
 	$("#by_name").on("click", function(){
 		if ($("#by_name").hasClass("underline") ) {
-			$("#by_name").removeClass("underline");
-			$("#asc_order").toggleClass("underline");
+      //console.log("già selezionato")
+		} else {
+			$("#by_name").toggleClass("underline");
 			$("#desc_order").toggleClass("underline");
 			$("#category_network_container").find(".circle").removeClass("selected_circle");
+			sidebar("by_name");
+			$("#by_name").css("cursor","default");
+			$("#desc_order").css("cursor","pointer");
 		}
-		sidebar("by_name")
 	})
 }
 
@@ -290,6 +248,10 @@ function sidebar(order) {
 				});
 			}
 
+			for (var i = 0; i < d.nodes.length; i++) {
+				  d.nodes[i].name = d.nodes[i].id.replace(/_/g," ");
+			}
+
 
 			var template = Handlebars.compile(tpl);
 			$(target).html(template(d));
@@ -302,7 +264,7 @@ function sidebar(order) {
 }
 
 function switch_page() {
-var baseurl = document.location.href;
+  var baseurl = document.location.href;
 	var h = baseurl.split("/")
 	var h_1 = h[h.length-2]
 	var home = baseurl.replace(h_1 + "/","")
@@ -320,36 +282,19 @@ var baseurl = document.location.href;
 	});
 }
 
-function download(){
-	var baseurl = document.location.href;
-	var h = baseurl.split("/")
-	var h_1 = h[h.length-2]
-	var home = baseurl.replace(h_1 + "/","")
+function download() {
 	var dataset_location = home + getUrl();
-
-	// download json
-	$.getJSON(dataset_location, function(d) {
-		var dataset = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(d));
-		$('<a href="data:' + dataset + '" download="' + "category_network.json" + '">Download dataset</a>').appendTo('#download_dataset');
-	})
+	$('<a href="' + dataset_location + '" download="' + "category_network.json" + '">Download dataset</a>').appendTo('#download_dataset');
 }
 
-function how_to_read(){
-	button = $("#how_to_read_button");
-	box = $(".how_to_read");
-
-	$("#how_to_read_button").click(function(){
-		box.toggleClass("show");
-		// console.log("click")
-	});
-};
+$("#how_to_read_button").click(function(){
+	$(".how_to_read").toggleClass("show");
+});
 
 $(document).ready(function(){
 	setCategory();//N.B. questa funzione setta il titolo categoria
 	dataviz();
 	switch_page();
-	sidebar("desc_order");
-	how_to_read();
+	sidebar("by_name");
 	download();
-
 })
