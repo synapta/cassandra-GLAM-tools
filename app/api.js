@@ -1,4 +1,8 @@
-var util = require('util');
+Date.prototype.addHours = function(h) {
+    this.setTime(this.getTime() + (h*60*60*1000));
+    return this;
+}
+
 function arrayMin(arr) {
     var len = arr.length, min = Infinity;
     while (len--) {
@@ -8,24 +12,27 @@ function arrayMin(arr) {
     }
     return min;
 };
-var categoryGraph = function(req, res, id, db)
-{
+
+function pad(num, size) {
+    var s = num+"";
+    while (s.length < size) s = "0" + s;
+    return s;
+};
+
+var categoryGraph = function(req, res, id, db) {
     db.query('SELECT page_title,cat_files,cl_to[0:10],cat_level[0:10] from categories', (err, dbres) => {
-        if(!err)
-        {
+        if(!err) {
             var result=Object();
             result.nodes=[];
             result.edges=[];
             i=0;
-            while(i<dbres.rows.length)
-            {
+            while(i<dbres.rows.length) {
                 node=Object();
                 node.id=dbres.rows[i].page_title;
                 node.files=dbres.rows[i].cat_files;
                 node.group=arrayMin(dbres.rows[i].cat_level);
                 j=0;
-                while(j<dbres.rows[i].cl_to.length)
-                {
+                while(j<dbres.rows[i].cl_to.length) {
                     edge=Object();
                     edge.target=dbres.rows[i].cl_to[j];
                     edge.source=dbres.rows[i].page_title;
@@ -38,13 +45,11 @@ var categoryGraph = function(req, res, id, db)
                 i++;
             }
             res.json(result);
-        }else {
+        } else {
             console.log(err);
             res.sendStatus(400);
         }
-
     })
-
 }
 
 var rootCategory = function(req, res, id, db) {
@@ -61,45 +66,36 @@ var rootCategory = function(req, res, id, db) {
     })
 }
 
-function pad(num, size) {
-    var s = num+"";
-    while (s.length < size) s = "0" + s;
-    return s;
-}
-
-var uploadDate = function(req, res, id, start, end, db)
-{
+var uploadDate = function(req, res, id, start, end, db) {
     query='select count(*) as img_count, img_user_text, to_char(img_timestamp, \'YYYY/MM\') as img_time from images';
-    if(start!=null)//start and end are defined, convert them to timestamp and append
-    {
+
+    //start and end are defined, convert them to timestamp and append
+    if (start !== undefined) {
         splitted=start.split('/');
         start_timestamp="'"+splitted[0]+"-"+splitted[1]+"-1 00:00:00'";
         query+=" where img_timestamp>="+start_timestamp;
     }
-    if(end!=null)
-    {
+    if (end !== undefined) {
         splitted=end.split('/');
         end_timestamp="'"+splitted[0]+"-"+splitted[1]+"-1 00:00:00'";
-        if(start==null)
+        if (start == undefined)
             query+=" where ";
         else
             query+=" and ";
         query+="img_timestamp<="+end_timestamp;
     }
     query+=" group by img_user_text, img_time order by img_user_text";
+
     db.query(query, (err, dbres) => {
-        if(!err)
-        {
+        if (!err) {
             result=new Object();
             result.users=[];
             i=0;
-            while(i<dbres.rows.length)
-            {
+            while (i<dbres.rows.length) {
                 user=Object();
                 user.user=dbres.rows[i].img_user_text;
                 user.files=[];
-                while(i<dbres.rows.length&&user.user==dbres.rows[i].img_user_text)
-                {
+                while (i<dbres.rows.length&&user.user==dbres.rows[i].img_user_text) {
                     file=Object();
                     file.date=dbres.rows[i].img_time;
                     file.count=dbres.rows[i].img_count;
@@ -109,30 +105,42 @@ var uploadDate = function(req, res, id, start, end, db)
                 result.users[result.users.length]=user;
             }
             res.json(result);
-        }else {
+        } else {
             console.log(err);
             res.sendStatus(400);
         }
-
     })
 }
-var usage = function(req, res, id, db)
-{
+
+var uploadDateAll = function(req, res, id, db) {
+    let query = `select count(*) as count, to_char(img_timestamp, 'YYYY/MM') as date
+                 from images
+                 group by date
+                 order by date`;
+
+    db.query(query, (err, dbres) => {
+       if (!err) {
+           res.json(dbres.rows);
+       } else {
+           console.log(err);
+           res.sendStatus(400);
+       }
+    })
+}
+
+var usage = function(req, res, id, db) {
     db.query('select gil_to,gil_wiki,gil_page_title from usages where is_alive=true order by gil_to', (err, dbres) => {
-        if(!err)
-        {
+        if(!err) {
             result=[];
             dbindex=0;
             resindex=0;
-            while(dbindex<dbres.rows.length)
-            {
+            while (dbindex<dbres.rows.length) {
                 result[resindex]=new Object();
                 result[resindex].image=dbres.rows[dbindex].gil_to;
                 page=dbres.rows[dbindex].gil_to;
                 result[resindex].pages=[];
                 j=0;
-                while(dbindex<dbres.rows.length&&page==dbres.rows[dbindex].gil_to)
-                {
+                while (dbindex<dbres.rows.length&&page==dbres.rows[dbindex].gil_to) {
                     result[resindex].pages[j]=new Object();
                     result[resindex].pages[j].wiki=dbres.rows[dbindex].gil_wiki;
                     result[resindex].pages[j].title=dbres.rows[dbindex].gil_page_title;
@@ -140,61 +148,49 @@ var usage = function(req, res, id, db)
                     dbindex++;
                 }
                 resindex++;
-
             }
             res.json(result);
-        }
-        else
-        {
+        } else {
             console.log(err);
             res.sendStatus(400);
         }
     });
 }
-var viewsAll = function(req, res, id, db)
-{
+
+var viewsAll = function(req, res, id, db) {
     db.query('select sum(accesses) from visualizations', (err, dbres) => {
-        if(!err)
-        {
+        if(!err) {
             res.json(dbres.rows[0]);
-        }
-        else
-        {
+        } else {
             console.log(err);
             res.sendStatus(400);
         }
     });
 }
-Date.prototype.addHours = function(h) {
-    this.setTime(this.getTime() + (h*60*60*1000));
-    return this;
- }
-var viewsByDate = function(req, res, id, db)
-{
+
+var viewsByDate = function(req, res, id, db) {
     db.query('select sum(accesses) as sum,access_date from visualizations group by access_date', (err, dbres) => {
-        if(!err)
-        {
+        if(!err) {
             result=[];
             i=0;
-            while(i<dbres.rows.length)
-            {
+            while (i<dbres.rows.length) {
                 result[i]=new Object;
                 result[i].date=dbres.rows[i].access_date.addHours(1).toISOString().substring(0,10);//necessario aggiungere un'ora perchè lo vede con tempo +0, e quindi sottrae un ora (andando quindi nel giorno prima) alla data +1 di postgres
                 result[i].views=dbres.rows[i].sum;
                 i++;
             }
             res.json(result);
-        }
-        else
-        {
+        } else {
             console.log(err);
             res.sendStatus(400);
         }
     });
 }
+
 exports.rootCategory = rootCategory;
 exports.viewsByDate = viewsByDate;
 exports.viewsAll = viewsAll;
 exports.categoryGraph = categoryGraph;
 exports.uploadDate = uploadDate;
+exports.uploadDateAll = uploadDateAll;
 exports.usage = usage;

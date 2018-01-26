@@ -1,27 +1,25 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>GLAM Visual Tool | Category network</title>
+		<title>GLAM Visual Tool | User contributions</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta charset="utf-8">
 		<meta http-equiv="Access-Control-Allow-Origin" content="*"/>
-		<link rel="stylesheet" href="../assets/style/style.css"/>
-		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700" rel="stylesheet">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+		<link rel="stylesheet" href="../../assets/style/style.css"/>
+		<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
 	</head>
 	<body class="overflow_hidden">
 		<header id="topbar" class="top_bar">
-			<div>
-				<h1>
-					<a href="../">GLAM Visual Tool</a>
-				</h1>
-			</div>
+			<h1>
+				<a href="/">GLAM Visual Tool</a>
+			</h1>
+			<h2>
+				<a href="..">Canton of Zürich</a>
+			</h2>
 		</header>
+
 		<div id="sub_header" class="sub_top_bar">
-			<div>
-				<a href="../">
-					&larr; back
-				</a>
-			</div>
 			<div>
 				<div class="label">
 					Category
@@ -37,51 +35,56 @@
 				</div>
 				<div>
 					<select id="switch_page">
-						<option value="user-contributions">User contributions</option>
 						<option value="category-network">Category network</option>
+						<option value="user-contributions">User contributions</option>
 						<option value="page-views">Page views</option>
 					</select>
 				</div>
 			</div>
+			<div>
+				<div class="label">
+					Help
+				</div>
+				<div id="how_to_read_button">
+					How to read the visualization
+				</div>
+			</div>
 		</div>
+
 		<main id="visualizations">
 			<section id="dataviz" class="v_noscore">
-				<div id="settings">
-					<!--<div style="float:left;">
-						< Settings >
-					</div>-->
-					<div id="how_to_read_button" style="float:right; text-decoration: underline;">
-						How to read the visualization
-					</div>
+				<div class="how_to_read">
+					<span onclick='$(".how_to_read").toggleClass("show");' style="float:right; cursor:pointer">X</span>
+					<h5>Description</h5>
+					This graph chart shows the subcategories' topology belonging to the main category.<br>
+					Having just one category (or level) is a bad practise on Wikimedia Commons because makes difficult
+					to the community to find and use files. Instead a multilevel and articulated categorization permits
+					a better reuse of the uploaded media.
+					<br><br>
+					<h5>How to read it</h5>
+				  Each node represents a category, while the edges are the relations. Categories at the same level share the color.
+					The bubble size is proportional to the amount of files within every category.
+					<br><br>
+					<h5>How to use it</h5>
+					On the right menu you can order categories by level or by number of files. If you click into a category name the
+					correspondant node will highlight (and viceversa).
 				</div>
-				<div class="how_to_read" style="float:right;">
-					The visualizations shows the number of media uploaded by user overtime.
-				</div>
-				<div id="user_contributions_container" class="svg_container"></div>
-				<footer>
-					<!--<div style="float:left;">
-						< score >
-					</div>-->
-					<div style="float:right;">
-						<span id="download_dataviz" style="cursor:pointer;">
-							Download dataviz
-						</span>
-						&bull;
+				<div id="user_contributions_container"></div>
+				<footer class="footer_bar">
+					<div style="float:left;">
 						<span id="download_dataset" style="cursor:pointer;"></span>
 					</div>
 				</footer>
 			</section>
+
 			<section id="left_sidebar">
 				<div id="sidebar_box">
 					<div  id="sorting_options">
-						<span style="font-size:0.6em; cursor:pointer;" id="desc_order">
+						<span style="font-size:0.8em; cursor:pointer;" id="desc_order">
 							by total
 						</span>
 						/
-						<!--<span style="font-size:0.6em; cursor:pointer;" id="asc_order" class="underline">
-							asc. order
-						</span> / -->
-						<span style="font-size:0.6em; cursor:pointer;" id="by_name" class="underline">
+						<span style="font-size:0.8em; cursor:pointer;" id="by_name" class="underline">
 							by name
 						</span>
 					</div>
@@ -91,9 +94,9 @@
 		</main>
 		<style>
 			#visualizations #dataviz{
-				overflow-y: auto; 
+				overflow-y: auto;
 				overflow-x: hidden;
-				/*height: 100%; 
+				/*height: 100%;
 				height: 80vh;*/
 			}
 			#user_contributions_container{
@@ -105,9 +108,8 @@
 		</style>
 		<script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
 		<script type="text/javascript" src="../bower_components/d3/d3.min.js"></script>
-		<script type="text/javascript" src="../assets/scripts/handlebars-v4.0.5.js"></script>
-		<script type="text/javascript" src="../assets/scripts/FileSaver.js"></script>
-		<!--<script type="text/javascript" src="../assets/scripts/main.js"></script>-->
+		<script type="text/javascript" src="../../assets/scripts/handlebars-v4.0.5.js"></script>
+		<script type="text/javascript" src="../../assets/scripts/FileSaver.js"></script>
 		<script type="text/javascript" src="functions.js"></script>
 	</body>
 </html>

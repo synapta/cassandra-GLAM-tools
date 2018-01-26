@@ -90,6 +90,14 @@ module.exports = function(app, apicache) {
 		      response.sendStatus(400);
 	    }
 	});
+  app.get('/api/:id/file/upload-date-all', apicache("1 hour"), function (request, response) {
+      let db = getDatabase(request.params.id);
+      if (db !== null) {
+          api.uploadDateAll(request, response, request.params.id, db);
+      } else {
+          response.sendStatus(400);
+      }
+  });
 
 	app.get('/docs', function(req, res){
 	    res.sendFile(path.resolve('../docs/docs.html'));
