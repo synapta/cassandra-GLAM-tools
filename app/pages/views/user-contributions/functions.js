@@ -1,12 +1,12 @@
-// dataviz
-// ----------------------------------------
-function getUrl()
-{
+function getUrl(){
 	var db=window.location.href.toString().split('/')[3];
 	return "../../api/"+db+"/file/upload-date";
 }
-function setCategory()
-{
+function getUrlAll(){
+	var db=window.location.href.toString().split('/')[3];
+	return "../../api/"+db+"/file/upload-date-all";
+}
+function setCategory() {
 	var db=window.location.href.toString().split('/')[3];
 	var jsonurl= "../../api/"+db+"/rootcategory";
 	$.getJSON(jsonurl, function(d) {
@@ -15,245 +15,89 @@ function setCategory()
 	$("#cat_url").attr("title", decodeURIComponent(d.id).replace(/_/g," "));
 	});
 }
+
+function barChart(data, div) {
+	var margin = {top: 20, right: 20, bottom: 70, left: 40};
+    width = Math.round( $("#user_contributions_container").outerWidth() ) - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+
+	// Parse the date / time
+	var	parseDate = d3.isoParse
+	var x = d3.scaleBand().rangeRound([0, width], .05).padding(0.1);
+	var y = d3.scaleLinear().range([height, 0]);
+	var xAxis = d3.axisBottom()
+	    .scale(x)
+	    .tickFormat(d3.timeFormat("%Y-%m-%d"));
+	var yAxis = d3.axisLeft()
+	    .scale(y)
+	    .ticks(10);
+
+	var svg = d3.select(div).append("svg")
+	    .attr("width", width + margin.left + margin.right)
+	    .attr("height", height + margin.top + margin.bottom)
+	  .append("g")
+	    .attr("transform",
+	          "translate(" + margin.left + "," + margin.top + ")");
+
+  data.forEach(function(d) {
+      d.date = parseDate(d.date.replace("/","-"));
+      d.value = +d.count;
+  });
+
+  x.domain(data.map(function(d) { return d.date; }));
+  y.domain([0, d3.max(data, function(d) { return d.value; })]);
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+    .selectAll("text")
+      .style("text-anchor", "end")
+      .attr("dx", "-.8em")
+      .attr("dy", "-.55em")
+      .attr("transform", "rotate(-90)" );
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Value");
+  svg.selectAll("bar")
+      .data(data)
+    .enter().append("rect")
+      .style("fill", "steelblue")
+      .attr("x", function(d) { return x(d.date); })
+      .attr("width", x.bandwidth())
+      .attr("y", function(d) { return y(d.value); })
+      .attr("height", function(d) { return height - y(d.value); });
+}
+
 function dataviz(){
-	container = "#user_contributions_container";
-	data_source = getUrl();
+	  d3.json(getUrlAll(), function(error, data) {
+				if (error)
+						window.location.replace('404');
 
-	//var w = window;
-	var width = Math.round( $("#user_contributions_container").outerWidth() ),
-		height = Math.round( $("#user_contributions_container").outerHeight() / 3 - 10);
-	var margin = {top: 60, right: 60, bottom: 60, left: 60},
-		nomargin_w = width - (margin.left + margin.right),
-		nomargin_h = height - (margin.top + margin.bottom);
+				barChart(data, "#user_contributions_container");
 
-	d3.json(data_source, function(error, data) {
-		if (error)
-			window.location.replace('404');
+				$("#user_contributions_container").append("<br><hr><br><h2>Users</h2>")
 
-		users = data.users
-		files = data.users[0].files
+				d3.json(getUrl(), function(error, data) {
+						if (error)
+								window.location.replace('404');
 
-		timespan = 12;
-
-		var height =  300,
-			nomargin_h = height - (margin.top + margin.bottom);
-
-		var parseTime = d3.timeParse("%Y/%m")
-
-		users = data.users;
-		test = data.users;
-
-		users.forEach(function(user) {
-			var files = user.files
-			var total_files = 0
-			var months = files.length
-
-			files.forEach(function(file) {
-				//console.log(file)
-
-				for ( var i = 0; i < months; i++ ) { // 12 months
-					total_files += file.count
-					//console.log(file.count)
-				}
-
-				user.user = user.user;
-				file.count = +file.count;
-				file.date = parseTime(file.date);
-			})
-			//console.log(total_files)
-			files.total = total_files;
-		});
-		users.sort(function(x,y){
-			return d3.descending(x.files.total, y.files.total); // descending ascending
-			//console.log(users[0].files.total)
+						data.users.forEach(function(user) {
+							  $("#user_contributions_container").append("<h3>" + user.user + "</h3>")
+								barChart(user.files, "#user_contributions_container");
+						});
+				})
 		})
-		console.log(users);
-
-		test = users;
-		var nested = d3.nest()
-		.key(function(d) {
-			return d.user;
-		})
-		.sortValues(function(a,b) {
-			return (a - b)
-		})
-		.entries(test);
-		//console.log(test)
-
-		var svg = d3.select(container).selectAll("svg")
-			.data(users)
-			.enter()
-			.append("svg")
-			.attr("width",width)
-			.attr("height",height)
-			.attr("viewBox", "0 0 " + width + " " + height)
-
-		var plot = svg.append("g")
-			.attr("id", "d3_plot")
-			.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-
-		var user = plot.append("text")
-			.text(function (d,i){
-				return d.user
-			})
-			.attr("x",10)
-			.attr("y",-10)
-
-		// range
-		var x = d3.scaleTime()
-			.rangeRound([0, nomargin_w])
-
-		var y = d3.scaleLinear()
-			.rangeRound([nomargin_h, 0]);
-
-		var date_string = (users[0].files[users[0].files.length - 1].date).toString()
-		var date_split = date_string.split(" ")
-		var year = parseInt(date_split.slice(3,4))
-		var month = parseInt(date_split.slice(2,3))
-
-		if (month == 12){
-			var month = 1;
-			var year = parseInt(date_split.slice(3,4) + 1);
-		}
-		else {
-			var my_year = year + 1;
-			var my_month = month;
-		}
-
-		var new_date = new Date(my_year + "," + my_month);
-		console.log(my_year + "," + my_month)
-		console.log(new_date + 3)
-
-		x.domain([
-			/*
-			users.map(function(file) {
-				return file.files[0].date
-			})
-			*/
-			d3.min(users, function(file) {
-				return file.files[0].date;
-			}),
-			d3.max(users, function(file) {
-				return new_date // file.files[file.files.length - 1].date;
-			})
-
-		]);
-		//console.log(users[0].files[users[0].files.length - 1].date)
-
-		var max_y = d3.max(users, function(d) {
-			return d3.max(d.files, function(a) {
-				return a.count;
-			})
-		})
-		//console.log(max_y)
-
-		// da 0 a max
-		y.domain([0,max_y]);
 
 
-		//console.log(users[1].files[1].count)
-
-		plot.append("g")
-			.attr("class", "axis axis-x")
-			.attr("transform", "translate(0," + (nomargin_h) + ")") // (margin.left * 4) )
-			.call(d3.axisBottom(x))
-			.selectAll("text")
-				.attr("y", 25)
-				.attr("x", 5)
-				.style("text-anchor", "start")
-
-		// y axis
-		plot.append("g")
-			.attr("class", "axis axis-y")
-			.call(d3.axisLeft(y))
-
-		d3.selectAll(".tick > text")
-			.style("font-family", "verdana");
-
-
-		// bars
-		var bars_group = plot.append("g")
-			.attr("class", function(d,i){
-				return d.user + " bars"
-			})
-			.attr("y",0)
-			.attr("x",0)
-
-
-		bars_group.selectAll(".bar")
-			//.data(users)
-			//.data(nested[0].values)
-			.data(function(d) {
-				return d.files;
-			})
-			.enter()
-			.append("rect")
-			.attr("class", function(d,i){
-				return d.count + " bar"
-			})
-			.attr("width", function(d,i) {
-				return nomargin_w / timespan
-			})
-			.attr("height", function(d,i) {
-				return nomargin_h - y(d.count)
-			})
-			.attr("y", function(d,i) {
-				return y(d.count)
-			})
-			.attr("x", function(d,i) {
-				return x(d.date)
-			})
-			.style("fill", "steelblue")
-			//console.log(users[0].files + 1)
-
-		/*
-		var interpolation = d3.curveStepAfter; // curveLinear curveStep curveStepBefore curveStepAfter
-
-		var starting_area = d3.area()
-			.x(function(d) { return x(d.date)})
-			.y0(nomargin_h)
-			.y1(function(d) {return y(0);})
-			.curve(interpolation)
-
-		var area = d3.area()
-			.x(function(d) { return x(d.date); })
-			.y0(nomargin_h)
-			.y1(function(d) {return y(d.count); })
-			.curve(interpolation)
-
-		var line = d3.line()
-			.x(function(d) {
-				return x(d.date);
-			})
-			.y(function(d) {
-				return y(d.count); // here
-			});
-
-		// area
-		var area_group = plot.append("g")
-			.attr("class", function(d,i){
-				return d.user + " area"
-			})
-			.attr("y",0)
-			.attr("x",0)
-
-		area_group.append("path")
-			.attr("class", "area")
-			.datum(function(d) {
-				return d.files // .files;
-			})
-			.attr("fill","steelblue")
-			.attr("d", starting_area)
-			.transition()
-			.duration(400)
-			.attr("d", area)
-			//console.log(22)
-		*/
-	})
 }
 
 function sidebar(){
-
 	var template_source = "tpl/user-contributions.tpl";
 	var data_source = getUrl();
 	var target = "#sidebar";
