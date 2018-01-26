@@ -51,7 +51,7 @@ mediaType: application/json
 
 /file/upload-date:
   displayName: Uploads
-  description: Numero di file caricati raggruppati per giorno di caricamento.
+  description: Numero di file caricati raggruppati per giorno di caricamento e utente.
   get:
     queryParameters:
       start:
@@ -102,6 +102,20 @@ mediaType: application/json
                       }
                   ]
               }
+
+/file/upload-date-all:
+  displayName: Uploads
+  description: Numero di file caricati raggruppati per giorno di caricamento.
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {
+                  [{"count":"1","date":"2005/12"},{"count":"1","date":"2006/01"}]
+              }
+
 /views/by-date:
   displayName: Views by date
   description: Lista del numero complessivo di visualizzazioni dei file per giorno.
