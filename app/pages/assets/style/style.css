@@ -147,6 +147,18 @@ footer {
   display: block;
 }
 
+.rect {
+  min-width: 20px;
+  height: 20px;
+  float: left;
+  margin-right: 5px;
+}
+
+.text {
+  float: left;
+  margin-right: 20px;
+}
+
 #data_visualizations {
   max-width: 1200px;
   margin-left: auto;
@@ -312,9 +324,6 @@ h2 {
 #user_contributions_container {
   overflow-x: scroll; }
 
-.svg_container {
-  width: 100%; }
-
 .with_score {
   height: 90%; }
 
@@ -328,10 +337,12 @@ h2 {
 }
 
 .selected_circle {
-  stroke: red;
-  stroke-width: 3px; }
+  stroke: black;
+  stroke-width: 3px;
+}
 
 .selected_list_item {
-  color: red; }
+  font-weight: 600;
+}
 
 /*# sourceMappingURL=style.css.map */

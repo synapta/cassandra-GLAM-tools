@@ -27,14 +27,12 @@ function setCategory() {
 }
 
 function dataviz() {
-
-	var container = "#category_network_container";
 	var data_source = getUrl();
 
 	var width = $("#category_network_container").width(),
 		height = $("#category_network_container").height();
 
-	var svg = d3.select(container)
+	var svg = d3.select("#category_network_container")
 		.append("svg")
 		.attr("viewBox", "0 0 " + width + " " + height)
 
@@ -48,11 +46,37 @@ function dataviz() {
 			window.location.replace('404');
 
 		var files = [];
+		var levels = [];
 		data.nodes.forEach(function(node) {
 			files.push(
 				node.files
 			);
+			levels.push(
+				node.group
+			);
 		})
+
+		var max_level = d3.max(levels);
+		var dataLegend = [];
+		for (var j = 0; j <= max_level; j++) {
+				dataLegend.push(j);
+		}
+
+		var legendDiv = d3.select("#legend");
+
+		var legendRow = legendDiv.selectAll("test")
+		    .data(dataLegend)
+		    .enter()
+		    .append("div")
+		    .style("margin-bottom", "2px");
+
+		legendRow.append("div")
+		    .html("&nbsp")
+		    .attr("class", "rect")
+		    .style("background-color", (d, i) => color(i));
+
+		legendRow.append("div")
+		    .html(d=> "lv. " + d);
 
 		var max_file = d3.max(files),
 			circle_size = width / max_file / data.nodes.length;
@@ -185,44 +209,44 @@ function sidebar(order) {
 
 	function highlight(){
 
-		// from Sidebar to Dataviz
+		// from Sidebar to Graph
 		$(".list_item").on("click", ".item" , function(){
-			element = $(this).find(".id").attr("id"); //.text() //.toString();
-			//console.log(element);
+			element = $(this).find(".id").attr("id");
 
 			// reset Sidebar - Dataviz
-			$("#sidebar .id").removeClass("selected_list_item"); // .list > li
+			$("#sidebar .id").removeClass("selected_list_item");
 			$("#category_network_container").find(".circle").removeClass("selected_circle");
 
-			// highlight Dataviz
+			// highlight Graph
 			node_selected = $("#category_network_container").find("." + element).children(".circle")
 			node_selected.toggleClass("selected_circle");
 
 			// highlight Sidebar
 			selected = $(this).find(".id");
 			selected.toggleClass("selected_list_item");
-			//console.log("." + element)
 		});
 
-		// from Dataviz to Graph
+		// from Graph to Sidebar
 		$(".node").on("click", function(){
 			e = $(this).attr("class");
-			element = e.split(" ",1)//.toString();
-			//console.log(element)
+			element = e.split(" ",1)
 
 			// reset Sidebar - Dataviz
 			$("#sidebar .id").removeClass("selected_list_item");
 			$("#category_network_container").find(".circle").removeClass("selected_circle");
 
-			// highlight Dataviz
+			// highlight Graph
 			node_selected = $(this).children(".circle")
 			node_selected.toggleClass("selected_circle");
-			//console.log(element)
 
 			// highlight Sidebar
 			selected = $("#sidebar").find("#" + element)
 			selected.toggleClass("selected_list_item");
-			//console.log(selected)
+			document.getElementById(element).scrollIntoView({
+			    behavior: "smooth",
+			    block: "start"
+			});
+			document.getElementById('topbar').scrollIntoView();
 		})
 	}
 
