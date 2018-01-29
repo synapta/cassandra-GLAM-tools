@@ -129,15 +129,31 @@ function dataviz(){
 						if (error)
 								window.location.replace('404');
 
+						data.users.forEach(function (d){
+							let items = d.files
+							let total = 0;
+
+							items.forEach(function (d){
+								total += +d.count
+							})
+							d.total = total;
+						})
+
+						data.users = data.users.sort(function(a,b){
+							return b.total - a.total;
+						});
+
+						console.log(data.users)
+
 						data.users.forEach(function(user) {
-							  $("#user_contributions_container").append("<h2 style='margin-left:1.5em'>" + user.user + "</h2>")
+							  $("#user_contributions_container").append("<h2 style='margin-left:1.5em' id='"+ user.user+ "_viz'>" + user.user + "</h2>")
 								barChart(user.files, minDate, maxDate, maxValue, "#user_contributions_container");
 						});
 				});
 		});
 }
 
-function sidebar(){
+function sidebar(type){
 	var template_source = "tpl/user-contributions.tpl";
 	var data_source = getUrl();
 	var target = "#sidebar";
@@ -154,18 +170,44 @@ function sidebar(){
 				d.total = total;
 			})
 
-			/*
-			data.nodes.sort( function(a,b) {
-				return b.total - a.total;
-			});
-			*/
+      if (type === "by_num") {
+					data.users = data.users.sort(function(a,b){
+						return b.total - a.total;
+					});
+			}
 
 			var template = Handlebars.compile(tpl);
 			$(target).html(template(data));
 
-			//highlight()
+			highlight()
 		});
 	});
+}
+
+function sorting_sidebar(){
+	$("#by_num").on("click", function(){
+		if ($("#by_num").hasClass("underline") ) {
+			//console.log("già selezionato")
+		} else {
+			$("#by_name").toggleClass("underline");
+			$("#by_num").toggleClass("underline");
+			sidebar("by_num");
+			$("#by_num").css("cursor","default");
+			$("#by_name").css("cursor","pointer");
+		}
+	})
+
+	$("#by_name").on("click", function(){
+		if ($("#by_name").hasClass("underline") ) {
+			//console.log("già selezionato")
+		} else {
+			$("#by_name").toggleClass("underline");
+			$("#by_num").toggleClass("underline");
+			sidebar("by_name");
+			$("#by_name").css("cursor","default");
+			$("#by_num").css("cursor","pointer");
+		}
+	})
 }
 
 function download(){
@@ -226,11 +268,31 @@ var baseurl = document.location.href;
 	});
 }
 
+function highlight(){
+	$(".list_item").on("click", ".item" , function(){
+		var element = $(this).attr("id");
+
+		// reset Sidebar - Dataviz
+		$("#sidebar .id").removeClass("selected_list_item");
+
+		// highlight Sidebar
+		$(this).toggleClass("selected_list_item");
+
+		// highlight Graph
+		document.getElementById(element+"_viz").scrollIntoView({
+				behavior: "smooth",
+				block: "start"
+		});
+		document.getElementById('topbar').scrollIntoView();
+	});
+}
+
 $(document).ready(function(){
 	setCategory();
 	dataviz();
 	how_to_read();
-	sidebar();
+	sidebar("by_num");
 	download();
 	switch_page();
+	sorting_sidebar();
 })
