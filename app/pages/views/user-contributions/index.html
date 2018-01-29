@@ -35,8 +35,8 @@
 				</div>
 				<div>
 					<select id="switch_page">
-						<option value="category-network">Category network</option>
 						<option value="user-contributions">User contributions</option>
+						<option value="category-network">Category network</option>
 						<option value="page-views">Page views</option>
 					</select>
 				</div>
@@ -52,7 +52,7 @@
 		</div>
 
 		<main id="visualizations">
-			<section id="dataviz" class="v_noscore">
+			<section id="dataviz" class="v_noscore" style="overflow: unset;">
 				<div class="how_to_read">
 					<span onclick='$(".how_to_read").toggleClass("show");' style="float:right; cursor:pointer">X</span>
 					<h5>Description</h5>
@@ -69,6 +69,7 @@
 					On the right menu you can order categories by level or by number of files. If you click into a category name the
 					correspondant node will highlight (and viceversa).
 				</div>
+				<div id="main_contributions_container"></div>
 				<div id="user_contributions_container"></div>
 				<footer class="footer_bar">
 					<div style="float:left;">

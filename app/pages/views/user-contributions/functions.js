@@ -16,21 +16,66 @@ function setCategory() {
 	});
 }
 
-function barChart(data, div) {
-	var margin = {top: 20, right: 20, bottom: 70, left: 40};
-    width = Math.round( $("#user_contributions_container").outerWidth() ) - margin.left - margin.right,
-    height = 300 - margin.top - margin.bottom;
+function pad (str, max) {
+  str = str.toString();
+  return str.length < max ? pad("0" + str, max) : str;
+}
 
+function barChart(data, minDate, maxDate, maxValue, div) {
 	// Parse the date / time
 	var	parseDate = d3.isoParse
+	let minY = minDate.substring(0, 4);
+	let maxY = maxDate.substring(0, 4);
+
+	for (var year = minY; year <= maxY; year++) {
+		  for (var month = 1; month <= 12; month++) {
+				  var currentDate = year+"/"+pad(month,2);
+					var found = 0;
+				  for (var k = 0; k < data.length; k++) {
+						  if (data[k].date === currentDate) {
+						  		found = 1;
+							}
+					}
+					if (!found) {
+						  obj = {};
+							obj.count = 0;
+							obj.date = currentDate;
+						  data.push(obj);
+					}
+			}
+	}
+
+	data.forEach(function(d) {
+			d.date = parseDate(d.date.replace("/","-"));
+			d.value = +d.count;
+	});
+
+	data = data.sort(function(a,b){
+		return new Date(a.date) - new Date(b.date);
+	});
+
+	var margin = {top: 20, right: 30, bottom: 70, left: 50};
+    width = Math.round( $("#user_contributions_container").outerWidth() ) - margin.left - margin.right,
+    height = $("#main_contributions_container").outerHeight()*0.8  - margin.top - margin.bottom;
+
 	var x = d3.scaleBand().rangeRound([0, width], .05).padding(0.1);
 	var y = d3.scaleLinear().range([height, 0]);
+	x.domain(data.map(function(d) { return d.date; }));
+	y.domain([0, maxValue]);
+
 	var xAxis = d3.axisBottom()
 	    .scale(x)
-	    .tickFormat(d3.timeFormat("%Y-%m-%d"));
+	    .tickFormat(d3.timeFormat("%Y-%m"))
+			.ticks(10);
 	var yAxis = d3.axisLeft()
 	    .scale(y)
-	    .ticks(10);
+	    .tickValues(y.ticks(3).concat(y.domain()));
+
+	var tickValues = x
+   .domain()
+	 .filter(function(d, i) { return (i % 3) === 0 });
+   //.filter(function(d, i) { return !((i + 1) % Math.floor(x.domain().length / 20)); });
+
 
 	var svg = d3.select(div).append("svg")
 	    .attr("width", width + margin.left + margin.right)
@@ -39,17 +84,10 @@ function barChart(data, div) {
 	    .attr("transform",
 	          "translate(" + margin.left + "," + margin.top + ")");
 
-  data.forEach(function(d) {
-      d.date = parseDate(d.date.replace("/","-"));
-      d.value = +d.count;
-  });
-
-  x.domain(data.map(function(d) { return d.date; }));
-  y.domain([0, d3.max(data, function(d) { return d.value; })]);
   svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
-      .call(xAxis)
+      .call(xAxis.tickValues(tickValues))
     .selectAll("text")
       .style("text-anchor", "end")
       .attr("dx", "-.8em")
@@ -79,22 +117,24 @@ function dataviz(){
 				if (error)
 						window.location.replace('404');
 
-				barChart(data, "#user_contributions_container");
+				var minDate = data[0].date;
+				var maxDate = data[data.length-1].date;
+				var maxValue = d3.max(data, function(d) { return +d.count; });
 
-				$("#user_contributions_container").append("<br><hr><br><h2>Users</h2>")
+				barChart(data, minDate, maxDate, maxValue, "#main_contributions_container");
+
+				$("#main_contributions_container").append("<hr>")
 
 				d3.json(getUrl(), function(error, data) {
 						if (error)
 								window.location.replace('404');
 
 						data.users.forEach(function(user) {
-							  $("#user_contributions_container").append("<h3>" + user.user + "</h3>")
-								barChart(user.files, "#user_contributions_container");
+							  $("#user_contributions_container").append("<h2 style='margin-left:1.5em'>" + user.user + "</h2>")
+								barChart(user.files, minDate, maxDate, maxValue, "#user_contributions_container");
 						});
-				})
-		})
-
-
+				});
+		});
 }
 
 function sidebar(){

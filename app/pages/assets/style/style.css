@@ -246,7 +246,8 @@ footer {
   #visualizations #sidebar {
     overflow-y: auto;
     overflow-x: hidden;
-    height: 80vh; }
+    height: 80vh;
+  }
 
 #settings {
   margin: 0;
@@ -321,8 +322,15 @@ h2 {
     opacity: 1;
     transform: scale(1.5, 1.5); }
 
+#main_contributions_container {
+  height: 40vh;
+}
+
 #user_contributions_container {
-  overflow-x: scroll; }
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 50vh;
+}
 
 .with_score {
   height: 90%; }

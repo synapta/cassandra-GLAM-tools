@@ -23,14 +23,6 @@
 			</div>
 		</div>
 
-		<div>
-		{{#each files}}
-			<p>
-				{{date}} - {{count}}
-			</p>
-		{{/each}}
-		</div>
-
 		<div class="clear"></div>
 		</div>
 	</div>
