@@ -252,9 +252,23 @@ var viewsByDate = function(req, res, id, db) {
     });
 }
 
+var viewsSidebar = function(req, res, id, db) {
+    let query = `select i.img_name, sum(v.accesses) as tot, avg(v.accesses) as av
+                  from images as i, visualizations as v
+                  where i.media_id = v.media_id
+                  and i.is_alive = true
+                  group by i.img_name
+                  order by tot desc`
+    db.query(query, (err, dbres) => {
+        if(!err) {
+            res.json(dbres.rows);
+        } else {
+            console.log(err);
+            res.sendStatus(400);
+        }
+    });
+}
 exports.rootCategory = rootCategory;
-exports.viewsByDate = viewsByDate;
-exports.viewsAll = viewsAll;
 exports.categoryGraph = categoryGraph;
 exports.uploadDate = uploadDate;
 exports.uploadDateAll = uploadDateAll;
@@ -262,3 +276,6 @@ exports.usage = usage;
 exports.usageStat = usageStat;
 exports.usageTop = usageTop;
 exports.usageSidebar = usageSidebar;
+exports.viewsByDate = viewsByDate;
+exports.viewsAll = viewsAll;
+exports.viewsSidebar = viewsSidebar;

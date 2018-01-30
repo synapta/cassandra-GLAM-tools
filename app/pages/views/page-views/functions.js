@@ -1,18 +1,10 @@
-function getUrl(){
-	var db=window.location.href.toString().split('/')[3];
-	return "../../api/"+db+"/usage";
-}
 function getUrlAll(){
 	var db=window.location.href.toString().split('/')[3];
 	return "../../api/"+db+"/views/by-date";
 }
-function getUrlTop20(){
-	var db=window.location.href.toString().split('/')[3];
-	return "../../api/"+db+"/usage/top";
-}
 function getUrlSidebar(){
 	var db=window.location.href.toString().split('/')[3];
-	return "../../api/"+db+"/usage/sidebar";
+	return "../../api/"+db+"/views/sidebar";
 }
 function setCategory() {
 	var db=window.location.href.toString().split('/')[3];
@@ -24,68 +16,30 @@ function setCategory() {
 	});
 }
 
-function dataviz(){
-	  d3.json(getUrl(), function(error, data) {
-				if (error)
-						window.location.replace('404');
-
-				/*data.users = data.users.sort(function(a,b){
-					return b.total - a.total;
-				});*/
-
-				data.forEach(function(file) {
-					  $("#file_usage_container").append("<br><br><h2 style='margin-left:1.5em' id='" + file.image + "_viz'>" + file.image.replace(/_/g, " ") + "</h2>")
-						let currentWiki = null;
-						let entry = "";
-						entry += "<table>";
-						for (let i = 0; i < file.pages.length; i++) {
-							  if (currentWiki !== file.pages[i].wiki && currentWiki !== null) {
-									  entry += "</td></tr>";
-								}
-							  if (currentWiki !== file.pages[i].wiki) {
-									  currentWiki = file.pages[i].wiki;
-										entry += "<tr>";
-										entry += "<td>";
-										entry += "<span style='margin-left:3em;font-size:0.7em;text-decoration:underline'>" + currentWiki + "</span>";
-										entry += "</td><td>";
-								}
-								//XXX doesn't work with wikidata or wikisource
-							  entry += "<a href='https://" + currentWiki.replace("wiki","") + ".wikipedia.org/w/index.php?title=" +
-								  file.pages[i].title +"' style='font-size:0.9em;margin-left:2em'>" + file.pages[i].title.replace(/_/g, " ") + "</a>";
-						}
-						$("#file_usage_container").append(entry);
-				});
-		});
-}
-
 function sidebar(type){
-	var template_source = "tpl/usage.tpl";
+	var template_source = "tpl/views.tpl";
 	var data_source = getUrlSidebar();
 	var target = "#sidebar";
 
 	$.get( template_source , function(tpl) {
 		$.getJSON( data_source , function(data) {
 
+			if (type === "by_num") {
+					data = data.sort(function(a,b){
+						return b.tot - a.tot;
+					});
+			}
+
 			for (let i = 0; i < data.length; i++) {
-				  data[i].gil_to_name = data[i].gil_to.replace(/_/g," ");
-			}
-
-      if (type === "by_num") {
-					data = data.sort(function(a,b){
-						return b.n - a.n;
-					});
-			}
-
-			if (type === "by_proj") {
-					data = data.sort(function(a,b){
-						return b.wiki - a.wiki;
-					});
+				  data[i].img_name_text = data[i].img_name.replace(/_/g," ");
+					data[i].tot = nFormatter(+data[i].tot);
+					data[i].av = nFormatter(+data[i].av);
 			}
 
 			if (type === "by_name") {
 					data = data.sort(function(a,b){
-						if(a.gil_to < b.gil_to) return -1;
-				    if(a.gil_to > b.gil_to) return 1;
+						if(a.img_name < b.img_name) return -1;
+				    if(a.img_name > b.img_name) return 1;
 				    return 0;
 					});
 			}
@@ -149,7 +103,7 @@ function download(){
 	var h = baseurl.split("/")
 	var h_1 = h[h.length-2]
 	var home = baseurl.replace(h_1 + "/","")
-	var dataset_location = home + getUrl();
+	var dataset_location = home + getUrlAll();
 
 	$('<a href="' + dataset_location + '" download="' + "usage.json" + '">Download dataset</a>').appendTo('#download_dataset');
 }
@@ -237,7 +191,6 @@ function statDraw() {
 
 $(document).ready(function(){
 	setCategory();
-	dataviz();
 	how_to_read();
 	sidebar("by_num");
 	download();

@@ -74,6 +74,14 @@ module.exports = function(app, apicache) {
 		      response.sendStatus(400);
 	    }
 	});
+  app.get('/api/:id/views/sidebar', apicache("1 hour"), function (request, response) {
+      let db = getDatabase(request.params.id);
+      if (db !== null) {
+          api.viewsSidebar(request, response, request.params.id, db);
+      } else {
+          response.sendStatus(400);
+      }
+  });
 	app.get('/api/:id/usage/', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {
