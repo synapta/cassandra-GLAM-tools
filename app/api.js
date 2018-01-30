@@ -234,7 +234,7 @@ var viewsAll = function(req, res, id, db) {
 }
 
 var viewsByDate = function(req, res, id, db) {
-    db.query('select sum(accesses) as sum,access_date from visualizations group by access_date', (err, dbres) => {
+    db.query('select sum(accesses) as sum,access_date from visualizations group by access_date order by access_date', (err, dbres) => {
         if(!err) {
             result=[];
             i=0;
