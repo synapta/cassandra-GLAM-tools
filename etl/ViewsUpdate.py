@@ -59,7 +59,7 @@ def reporter(first,second,third):
         print "Progress in the download: "+str(first*second*100/third)+"%"
 
 def process(date):
-    day, month, year=date.split("/")
+    year, month, day=date.split("-")
     global watched
     watched = set()
     curse=conn.cursor()
@@ -77,7 +77,7 @@ def process(date):
     baseurl="https://dumps.wikimedia.org/other/mediacounts/daily/"
     finalurl=baseurl+year+"/"+"mediacounts."+year+"-"+month+"-"+day+".v00.tsv.bz2"
     print ("Retrieving "+finalurl+"...")
-    filename,headers=urllib.urlretrieve(finalurl,'temp/temp.tsv.bz2',reporter)#!!
+    filename,headers=urllib.urlretrieve(finalurl,'temp/temp'+date+'.tsv.bz2',reporter)#!!
     print "Download completed."
     print filename#!!
     source_file = bz2.BZ2File(filename, "r")

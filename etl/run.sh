@@ -1,3 +1,3 @@
 node etl.js
-now=$(date --date="yesterday" '+%d/%m/%Y')
+now=$(date --date="yesterday" '+%Y-%m-%d')
 python ViewsUpdate.py $now
