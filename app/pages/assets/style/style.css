@@ -326,7 +326,7 @@ h2 {
   height: 40vh;
 }
 
-#user_contributions_container {
+#user_contributions_container, #file_usage_container {
   overflow-y: auto;
   overflow-x: hidden;
   height: 50vh;

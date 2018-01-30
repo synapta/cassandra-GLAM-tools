@@ -276,7 +276,6 @@ function sidebar(order) {
 				  d.nodes[i].name = d.nodes[i].id.replace(/_/g," ");
 			}
 
-
 			var template = Handlebars.compile(tpl);
 			$(target).html(template(d));
 

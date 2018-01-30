@@ -23,7 +23,7 @@ var donutChartDraw = function(div, query) {
 function donutChart() {
     var width,
         height,
-        margin = {top: 10, right: 10, bottom: 10, left: 10},
+        margin = {top: 10, right: 10, bottom: 0, left: 10},
         colour = d3.scaleOrdinal(d3.schemeCategory20c), // colour scheme
         variable, // value in data that will dictate proportions on chart
         category, // compare data by
@@ -126,7 +126,7 @@ function donutChart() {
               .attr('x', legendRectSize + legendSpacing)
               .attr('y', legendRectSize - legendSpacing/2)
               .style('font-size', '0.7rem')
-              .text(function(d,i) { return data[i].tipo.replace(/wiki$/,"") + " - " + data[i].n; });
+              .text(function(d,i) { return data[i].tipo.replace(/wiki$/,"").toUpperCase() + " - " + data[i].n; });
             // ===========================================================================================
             // Functions
 

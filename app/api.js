@@ -129,7 +129,7 @@ var uploadDateAll = function(req, res, id, db) {
 }
 
 var usage = function(req, res, id, db) {
-    db.query('select gil_to,gil_wiki,gil_page_title from usages where is_alive=true order by gil_to', (err, dbres) => {
+    db.query('select gil_to,gil_wiki,gil_page_title from usages where is_alive=true order by gil_to, gil_wiki, gil_page_title', (err, dbres) => {
         if(!err) {
             result=[];
             dbindex=0;
@@ -158,10 +158,10 @@ var usage = function(req, res, id, db) {
 }
 
 var usageStat = function(req, res, id, db) {
-    let totalUsageQuery = `select count(*) as c
-                           from usages
-                           where is_alive = true`;
-    let totalProjectsQuery = `select count(distinct gil_wiki) as c
+    let totalUsageQuery = `select count(*) as c, count(distinct gil_to) as d
+                            from usages
+                            where is_alive = true`;
+    let totalProjectsQuery = `select count(distinct gil_wiki) as c, count(gil_to) as p
                               from usages
                               where is_alive = true`;
 
@@ -171,7 +171,9 @@ var usageStat = function(req, res, id, db) {
                 if(!err) {
                     let result = {};
                     result.totalUsage = totalUsage.rows[0].c;
+                    result.totalImagesUsed = totalUsage.rows[0].d;
                     result.totalProjects = totalProjects.rows[0].c;
+                    result.totalPages = totalProjects.rows[0].p;
                     res.json(result);
                 } else {
                     console.log(err);
@@ -196,6 +198,23 @@ var usageTop = function(req, res, id, db) {
     db.query(topProjectsQuery, (err, top20Projects) => {
         if(!err) {
             res.json(top20Projects.rows);
+        } else {
+            console.log(err);
+            res.sendStatus(400);
+        }
+    });
+}
+
+var usageSidebar = function(req, res, id, db) {
+    let usage = `select gil_to, count(distinct gil_wiki) as wiki, count(*) as u
+                 from usages
+                 where is_alive = true
+                 group by gil_to
+                 order by u desc, wiki desc`;
+
+    db.query(usage, (err, dbres) => {
+        if(!err) {
+            res.json(dbres.rows);
         } else {
             console.log(err);
             res.sendStatus(400);
@@ -242,3 +261,4 @@ exports.uploadDateAll = uploadDateAll;
 exports.usage = usage;
 exports.usageStat = usageStat;
 exports.usageTop = usageTop;
+exports.usageSidebar = usageSidebar;

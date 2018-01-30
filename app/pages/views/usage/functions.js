@@ -10,6 +10,10 @@ function getUrlTop20(){
 	var db=window.location.href.toString().split('/')[3];
 	return "../../api/"+db+"/usage/top";
 }
+function getUrlSidebar(){
+	var db=window.location.href.toString().split('/')[3];
+	return "../../api/"+db+"/usage/sidebar";
+}
 function setCategory() {
 	var db=window.location.href.toString().split('/')[3];
 	var jsonurl= "../../api/"+db+"/rootcategory";
@@ -20,168 +24,76 @@ function setCategory() {
 	});
 }
 
-function pad (str, max) {
-  str = str.toString();
-  return str.length < max ? pad("0" + str, max) : str;
-}
-
-function barChart(data, minDate, maxDate, maxValue, div) {
-	// Parse the date / time
-	var	parseDate = d3.isoParse
-	let minY = minDate.substring(0, 4);
-	let maxY = maxDate.substring(0, 4);
-
-	for (var year = minY; year <= maxY; year++) {
-		  for (var month = 1; month <= 12; month++) {
-				  var currentDate = year+"/"+pad(month,2);
-					var found = 0;
-				  for (var k = 0; k < data.length; k++) {
-						  if (data[k].date === currentDate) {
-						  		found = 1;
-							}
-					}
-					if (!found) {
-						  obj = {};
-							obj.count = 0;
-							obj.date = currentDate;
-						  data.push(obj);
-					}
-			}
-	}
-
-	data.forEach(function(d) {
-			d.date = parseDate(d.date.replace("/","-"));
-			d.value = +d.count;
-	});
-
-	data = data.sort(function(a,b){
-		return new Date(a.date) - new Date(b.date);
-	});
-
-	var margin = {top: 20, right: 30, bottom: 70, left: 50};
-    width = Math.round( $("#user_contributions_container").outerWidth() ) - margin.left - margin.right,
-    height = $("#main_contributions_container").outerHeight()*0.8  - margin.top - margin.bottom;
-
-	var x = d3.scaleBand().rangeRound([0, width], .05).padding(0.1);
-	var y = d3.scaleLinear().range([height, 0]);
-	x.domain(data.map(function(d) { return d.date; }));
-	y.domain([0, maxValue]);
-
-	var xAxis = d3.axisBottom()
-	    .scale(x)
-	    .tickFormat(d3.timeFormat("%Y-%m"))
-			.ticks(10);
-	var yAxis = d3.axisLeft()
-	    .scale(y)
-	    .tickValues(y.ticks(3).concat(y.domain()));
-
-	var tickValues = x
-   .domain()
-	 .filter(function(d, i) { return (i % 3) === 0 });
-   //.filter(function(d, i) { return !((i + 1) % Math.floor(x.domain().length / 20)); });
-
-
-	var svg = d3.select(div).append("svg")
-	    .attr("width", width + margin.left + margin.right)
-	    .attr("height", height + margin.top + margin.bottom)
-	  .append("g")
-	    .attr("transform",
-	          "translate(" + margin.left + "," + margin.top + ")");
-
-  svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis.tickValues(tickValues))
-    .selectAll("text")
-      .style("text-anchor", "end")
-      .attr("dx", "-.8em")
-      .attr("dy", "-.55em")
-      .attr("transform", "rotate(-90)" );
-  svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis)
-    .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("Value");
-  svg.selectAll("bar")
-      .data(data)
-    .enter().append("rect")
-      .style("fill", "steelblue")
-      .attr("x", function(d) { return x(d.date); })
-      .attr("width", x.bandwidth())
-      .attr("y", function(d) { return y(d.value); })
-      .attr("height", function(d) { return height - y(d.value); });
-}
-
 function dataviz(){
-	  d3.json(getUrlAll(), function(error, data) {
+	  d3.json(getUrl(), function(error, data) {
 				if (error)
 						window.location.replace('404');
 
-				var minDate = data[0].date;
-				var maxDate = data[data.length-1].date;
-				var maxValue = d3.max(data, function(d) { return +d.count; });
+				/*data.users = data.users.sort(function(a,b){
+					return b.total - a.total;
+				});*/
 
-				barChart(data, minDate, maxDate, maxValue, "#main_contributions_container");
-
-				$("#main_contributions_container").append("<hr>")
-
-				d3.json(getUrl(), function(error, data) {
-						if (error)
-								window.location.replace('404');
-
-						data.users.forEach(function (d){
-							let items = d.files
-							let total = 0;
-
-							items.forEach(function (d){
-								total += +d.count
-							})
-							d.total = total;
-						})
-
-						data.users = data.users.sort(function(a,b){
-							return b.total - a.total;
-						});
-
-						console.log(data.users)
-
-						data.users.forEach(function(user) {
-							  $("#user_contributions_container").append("<h2 style='margin-left:1.5em' id='"+ user.user+ "_viz'>" + user.user + "</h2>")
-								barChart(user.files, minDate, maxDate, maxValue, "#user_contributions_container");
-						});
+				data.forEach(function(file) {
+					  $("#file_usage_container").append("<br><br><h2 style='margin-left:1.5em' id='" + file.image + "_viz'>" + file.image.replace(/_/g, " ") + "</h2>")
+						let currentWiki = null;
+						let entry = "";
+						entry += "<table>";
+						for (let i = 0; i < file.pages.length; i++) {
+							  if (currentWiki !== file.pages[i].wiki && currentWiki !== null) {
+									  entry += "</td></tr>";
+								}
+							  if (currentWiki !== file.pages[i].wiki) {
+									  currentWiki = file.pages[i].wiki;
+										entry += "<tr>";
+										entry += "<td>";
+										entry += "<span style='margin-left:3em;font-size:0.7em;text-decoration:underline'>" + currentWiki + "</span>";
+										entry += "</td><td>";
+								}
+								//XXX doesn't work with wikidata or wikisource
+							  entry += "<a href='https://" + currentWiki.replace("wiki","") + ".wikipedia.org/w/index.php?title=" +
+								  file.pages[i].title +"' style='font-size:0.9em;margin-left:2em'>" + file.pages[i].title.replace(/_/g, " ") + "</a>";
+						}
+						$("#file_usage_container").append(entry);
 				});
 		});
 }
 
 function sidebar(type){
-	var template_source = "tpl/user-contributions.tpl";
-	var data_source = getUrl();
+	var template_source = "tpl/usage.tpl";
+	var data_source = getUrlSidebar();
 	var target = "#sidebar";
 
 	$.get( template_source , function(tpl) {
 		$.getJSON( data_source , function(data) {
-			data.users.forEach(function (d){
-				let items = d.files
-				let total = 0;
 
-				items.forEach(function (d){
-					total += +d.count
-				})
-				d.total = total;
-			})
+			for (let i = 0; i < data.length; i++) {
+				  data[i].gil_to_name = data[i].gil_to.replace(/_/g," ");
+			}
 
       if (type === "by_num") {
-					data.users = data.users.sort(function(a,b){
-						return b.total - a.total;
+					data = data.sort(function(a,b){
+						return b.n - a.n;
 					});
 			}
 
+			if (type === "by_proj") {
+					data = data.sort(function(a,b){
+						return b.wiki - a.wiki;
+					});
+			}
+
+			if (type === "by_name") {
+					data = data.sort(function(a,b){
+						if(a.gil_to < b.gil_to) return -1;
+				    if(a.gil_to > b.gil_to) return 1;
+				    return 0;
+					});
+			}
+
+			var obj = {};
+			obj.files = data;
 			var template = Handlebars.compile(tpl);
-			$(target).html(template(data));
+			$(target).html(template(obj));
 
 			highlight()
 		});
@@ -193,11 +105,27 @@ function sorting_sidebar(){
 		if ($("#by_num").hasClass("underline") ) {
 			//console.log("già selezionato")
 		} else {
-			$("#by_name").toggleClass("underline");
-			$("#by_num").toggleClass("underline");
+			$("#by_name").removeClass("underline");
+			$("#by_num").addClass("underline");
+			$("#by_proj").removeClass("underline");
 			sidebar("by_num");
 			$("#by_num").css("cursor","default");
 			$("#by_name").css("cursor","pointer");
+			$("#by_proj").css("cursor","pointer");
+		}
+	})
+
+	$("#by_proj").on("click", function(){
+		if ($("#by_proj").hasClass("underline") ) {
+			//console.log("già selezionato")
+		} else {
+			$("#by_name").removeClass("underline");
+			$("#by_num").removeClass("underline");
+			$("#by_proj").addClass("underline");
+			sidebar("by_proj");
+			$("#by_name").css("cursor","pointer");
+			$("#by_num").css("cursor","pointer");
+			$("#by_proj").css("cursor","default");
 		}
 	})
 
@@ -205,11 +133,13 @@ function sorting_sidebar(){
 		if ($("#by_name").hasClass("underline") ) {
 			//console.log("già selezionato")
 		} else {
-			$("#by_name").toggleClass("underline");
-			$("#by_num").toggleClass("underline");
+			$("#by_name").addClass("underline");
+			$("#by_num").removeClass("underline");
+			$("#by_proj").removeClass("underline");
 			sidebar("by_name");
 			$("#by_name").css("cursor","default");
 			$("#by_num").css("cursor","pointer");
+			$("#by_proj").css("cursor","pointer");
 		}
 	})
 }
@@ -221,7 +151,7 @@ function download(){
 	var home = baseurl.replace(h_1 + "/","")
 	var dataset_location = home + getUrl();
 
-	$('<a href="' + dataset_location + '" download="' + "user_contributions.json" + '">Download dataset</a>').appendTo('#download_dataset');
+	$('<a href="' + dataset_location + '" download="' + "usage.json" + '">Download dataset</a>').appendTo('#download_dataset');
 }
 
 function switch_page() {
@@ -297,9 +227,11 @@ function statDraw() {
 				  window.location.href('/404');
 			}
 			$("#usage_stat").append("<br><br>");
-			$("#usage_stat").append("Total media usage: " + data.totalUsage);
+			$("#usage_stat").append("Distinct media used: <b>" + data.totalImagesUsed + "</b>");
 			$("#usage_stat").append("<br><br>");
-			$("#usage_stat").append("Total projects touched: " + data.totalProjects);
+			$("#usage_stat").append("Total projects touched: <b>" + data.totalProjects + "</b>");
+			$("#usage_stat").append("<br><br>");
+			$("#usage_stat").append("Total pages enhanced: <b>" + data.totalPages + "</b>");
 	});
 }
 

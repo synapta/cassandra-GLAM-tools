@@ -98,6 +98,14 @@ module.exports = function(app, apicache) {
 		      response.sendStatus(400);
 	    }
 	});
+  app.get('/api/:id/usage/sidebar', apicache("1 hour"), function (request, response) {
+      let db = getDatabase(request.params.id);
+      if (db !== null) {
+          api.usageSidebar(request, response, request.params.id, db);
+      } else {
+          response.sendStatus(400);
+      }
+  });
 	app.get('/api/:id/file/upload-date', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {
