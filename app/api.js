@@ -157,6 +157,52 @@ var usage = function(req, res, id, db) {
     });
 }
 
+var usageStat = function(req, res, id, db) {
+    let totalUsageQuery = `select count(*) as c
+                           from usages
+                           where is_alive = true`;
+    let totalProjectsQuery = `select count(distinct gil_wiki) as c
+                              from usages
+                              where is_alive = true`;
+
+    db.query(totalUsageQuery, (err, totalUsage) => {
+        if(!err) {
+            db.query(totalProjectsQuery, (err, totalProjects) => {
+                if(!err) {
+                    let result = {};
+                    result.totalUsage = totalUsage.rows[0].c;
+                    result.totalProjects = totalProjects.rows[0].c;
+                    res.json(result);
+                } else {
+                    console.log(err);
+                    res.sendStatus(400);
+                }
+            });
+        } else {
+            console.log(err);
+            res.sendStatus(400);
+        }
+    });
+}
+
+var usageTop = function(req, res, id, db) {
+    let topProjectsQuery = `select gil_wiki as tipo, count(*) as n
+                              from usages
+                              where is_alive = true
+                              group by gil_wiki
+                              order by n desc
+                              limit 10`;
+
+    db.query(topProjectsQuery, (err, top20Projects) => {
+        if(!err) {
+            res.json(top20Projects.rows);
+        } else {
+            console.log(err);
+            res.sendStatus(400);
+        }
+    });
+}
+
 var viewsAll = function(req, res, id, db) {
     db.query('select sum(accesses) from visualizations', (err, dbres) => {
         if(!err) {
@@ -194,3 +240,5 @@ exports.categoryGraph = categoryGraph;
 exports.uploadDate = uploadDate;
 exports.uploadDateAll = uploadDateAll;
 exports.usage = usage;
+exports.usageStat = usageStat;
+exports.usageTop = usageTop;

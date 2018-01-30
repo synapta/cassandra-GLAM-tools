@@ -1,0 +1,17 @@
+/* Add shadow effect to chart. If you don't like it, get rid of it. */
+svg {
+    -webkit-filter: drop-shadow( 0px 3px 3px rgba(0,0,0,.3) );
+    filter: drop-shadow( 0px 3px 3px rgba(0,0,0,.25) );
+}
+
+/* Make the percentage on the text labels bold*/
+.labelName tspan {
+    font-style: normal;
+    font-weight: 700;
+}
+
+/* In biology we generally italicise species names. */
+.labelName {
+    font-size: 0.9em;
+    font-style: italic;
+}

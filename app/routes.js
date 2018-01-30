@@ -82,6 +82,22 @@ module.exports = function(app, apicache) {
 		      response.sendStatus(400);
 	    }
 	});
+  app.get('/api/:id/usage/stat', apicache("1 hour"), function (request, response) {
+      let db = getDatabase(request.params.id);
+      if (db !== null) {
+		      api.usageStat(request, response, request.params.id, db);
+	    } else {
+		      response.sendStatus(400);
+	    }
+	});
+  app.get('/api/:id/usage/top', apicache("1 hour"), function (request, response) {
+      let db = getDatabase(request.params.id);
+      if (db !== null) {
+		      api.usageTop(request, response, request.params.id, db);
+	    } else {
+		      response.sendStatus(400);
+	    }
+	});
 	app.get('/api/:id/file/upload-date', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {

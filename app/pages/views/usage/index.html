@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>GLAM Visual Tool | User contributions</title>
+		<title>GLAM Visual Tool | Usage</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta charset="utf-8">
 		<meta http-equiv="Access-Control-Allow-Origin" content="*"/>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+		<link rel="stylesheet" href="../../assets/style/donut.css"/>
 		<link rel="stylesheet" href="../../assets/style/style.css"/>
 		<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
 	</head>
@@ -35,9 +36,9 @@
 				</div>
 				<div>
 					<select id="switch_page">
-						<option value="user-contributions">User contributions</option>
-						<option value="category-network">Category network</option>
 						<option value="usage">Usage</option>
+						<option value="category-network">Category network</option>
+						<option value="user-contributions">User contributions</option>
 						<option value="page-views">Page views</option>
 					</select>
 				</div>
@@ -70,7 +71,10 @@
 					On the right menu you can order categories by level or by number of files. If you click into a category name the
 					correspondant node will highlight (and viceversa).
 				</div>
-				<div id="main_contributions_container"></div>
+				<div id="main_usage_container" class="row">
+					<div id="usage_donut" class="col-6" style="text-align:center"></div>
+					<div id="usage_stat" class="col-6"></div>
+				</div>
 				<div id="user_contributions_container"></div>
 				<footer class="footer_bar">
 					<div style="float:left;">
@@ -111,7 +115,7 @@
 		<script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
 		<script type="text/javascript" src="../bower_components/d3/d3.min.js"></script>
 		<script type="text/javascript" src="../../assets/scripts/handlebars-v4.0.5.js"></script>
-		<script type="text/javascript" src="../../assets/scripts/FileSaver.js"></script>
+		<script type="text/javascript" src="../../assets/scripts/donut.js"></script>
 		<script type="text/javascript" src="functions.js"></script>
 	</body>
 </html>
