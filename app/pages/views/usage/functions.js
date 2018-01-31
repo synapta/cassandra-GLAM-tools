@@ -14,15 +14,6 @@ function getUrlSidebar(){
 	var db=window.location.href.toString().split('/')[3];
 	return "../../api/"+db+"/usage/sidebar";
 }
-function setCategory() {
-	var db=window.location.href.toString().split('/')[3];
-	var jsonurl= "../../api/"+db+"/rootcategory";
-	$.getJSON(jsonurl, function(d) {
-	$('#cat_url').text(decodeURIComponent(d.id).replace(/_/g," "));
-	$("#cat_url").attr("href", "https://commons.wikimedia.org/w/index.php?title=Category:"+d.id);
-	$("#cat_url").attr("title", decodeURIComponent(d.id).replace(/_/g," "));
-	});
-}
 
 function dataviz(){
 	  d3.json(getUrl(), function(error, data) {
@@ -34,7 +25,7 @@ function dataviz(){
 				});*/
 
 				data.forEach(function(file) {
-					  $("#file_usage_container").append("<br><br><h2 style='margin-left:1.5em' id='" + file.image + "_viz'>" + file.image.replace(/_/g, " ") + "</h2>")
+					  $("#file_usage_container").append("<h2 style='margin-left:1.5em' id='" + file.image + "_viz'>" + file.image.replace(/_/g, " ") + "</h2>")
 						let currentWiki = null;
 						let entry = "";
 						entry += "<table>";
@@ -47,12 +38,13 @@ function dataviz(){
 										entry += "<tr>";
 										entry += "<td>";
 										entry += "<span style='margin-left:3em;font-size:0.7em;text-decoration:underline'>" + currentWiki + "</span>";
-										entry += "</td><td>";
+										entry += "</td><td style='padding-left:2em'>";
 								}
 								//XXX doesn't work with wikidata or wikisource
 							  entry += "<a href='https://" + currentWiki.replace("wiki","") + ".wikipedia.org/w/index.php?title=" +
-								  file.pages[i].title +"' style='font-size:0.9em;margin-left:2em'>" + file.pages[i].title.replace(/_/g, " ") + "</a>";
+								  file.pages[i].title +"' style='font-size:0.9em;margin-right:2em'>" + file.pages[i].title.replace(/_/g, " ") + "</a>";
 						}
+						entry += "</table><br><br>";
 						$("#file_usage_container").append(entry);
 				});
 		});
@@ -227,9 +219,9 @@ function statDraw() {
 				  window.location.href('/404');
 			}
 			$("#usage_stat").append("<br><br>");
-			$("#usage_stat").append("Distinct media used: <b>" + data.totalImagesUsed + "</b>");
+			$("#usage_stat").append("Distinct media used: <b>" + data.totalImagesUsed + "</b> / <span id='totalMediaNum'></span>");
 			$("#usage_stat").append("<br><br>");
-			$("#usage_stat").append("Total projects touched: <b>" + data.totalProjects + "</b>");
+			$("#usage_stat").append("Total projects involved: <b>" + data.totalProjects + "</b>");
 			$("#usage_stat").append("<br><br>");
 			$("#usage_stat").append("Total pages enhanced: <b>" + data.totalPages + "</b>");
 	});
@@ -245,4 +237,5 @@ $(document).ready(function(){
 	sorting_sidebar();
 	donutChartDraw("usage_donut", getUrlTop20());
 	statDraw();
+	setTotalMediaNum();
 })

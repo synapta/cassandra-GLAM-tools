@@ -37,11 +37,11 @@
 								<div class="col-sm-6">
 									<a href="category-network" class="nodeca">
 										<div class="w3-border w3-hover-shadow">
-											<div class="w3-container w3-grey">
+											<div class="w3-container w3-grey menu_title">
 			                  Category network
 			                </div>
-											<div class="w3-container boxDashboardTitle">
-												<img src="../assets/img/graph.png" width="100%"/>
+											<div class="w3-container boxDashboardTitle" style="text-align:center">
+												<img src="../assets/img/graph.png" height="200px"/>
 											</div>
 					          </div>
 									</a>
@@ -50,11 +50,11 @@
 								<div class="col-sm-6">
 									<a href="user-contributions" class="nodeca">
 										<div class="w3-border w3-hover-shadow">
-											<div class="w3-container w3-grey">
+											<div class="w3-container w3-grey menu_title">
 			                  User contribution
 			                </div>
-											<div class="w3-container boxDashboardTitle">
-												<img src="../assets/img/users.png" width="100%"/>
+											<div class="w3-container boxDashboardTitle" style="text-align:center">
+												<img src="../assets/img/users.png" height="200px"/>
 											</div>
 					          </div>
 									</a>
@@ -67,11 +67,11 @@
 								<div class="col-sm-6">
 									<a href="usage" class="nodeca">
 										<div class="w3-border w3-hover-shadow">
-											<div class="w3-container w3-grey">
+											<div class="w3-container w3-grey menu_title">
 												Usage
 											</div>
-											<div class="w3-container boxDashboardTitle">
-												img
+											<div class="w3-container boxDashboardTitle" style="text-align:center">
+												<img src="../assets/img/usage.png" height="200px"/>
 											</div>
 										</div>
 									</a>
@@ -80,11 +80,11 @@
 								<div class="col-sm-6">
 									<a href="page-views" class="nodeca">
 										<div class="w3-border w3-hover-shadow">
-											<div class="w3-container w3-grey">
+											<div class="w3-container w3-grey menu_title">
 												Views
 											</div>
-											<div class="w3-container boxDashboardTitle">
-												img
+											<div class="w3-container boxDashboardTitle" style="text-align:center">
+												<img src="../assets/img/views.png" height="200px"/>
 											</div>
 										</div>
 									</a>
@@ -108,9 +108,7 @@
 									</a>
 									<br><br>
 									<small>Total media in Commons:</small>&nbsp;&nbsp;&nbsp;
-									<span class="round-btn" style="margin: 0 auto;">
-										1234
-									</span>
+									<span id="totalMediaNum" class="round-btn" style="margin: 0 auto;"></span>
 									<br><br>
 								</div>
 							</div>
@@ -136,5 +134,11 @@
 				</span>
 			</section>
 		</footer>
+
+		<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+		<script type="text/javascript" src="../assets/scripts/utils.js"></script>
+		<script>
+			setTotalMediaNum();
+		</script>
 	</body>
 </html>

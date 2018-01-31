@@ -58,6 +58,14 @@ module.exports = function(app, apicache) {
 		      response.sendStatus(400);
 	    }
 	});
+  app.get('/api/:id/totalMediaNum/', apicache("1 hour"), function (request, response) {
+      let db = getDatabase(request.params.id);
+      if (db !== null) {
+		      api.totalMediaNum(request, response, request.params.id, db);
+	    } else {
+		      response.sendStatus(400);
+	    }
+	});
 	app.get('/api/:id/views/by-date', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {

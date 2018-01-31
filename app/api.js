@@ -66,6 +66,17 @@ var rootCategory = function(req, res, id, db) {
     })
 }
 
+var totalMediaNum = function(req, res, id, db) {
+    db.query('SELECT COUNT(*) as num from images where is_alive = true', (err, dbres) => {
+        if(!err) {
+            res.json(dbres.rows[0]);
+        } else {
+            console.log(err);
+            res.sendStatus(400);
+        }
+    })
+}
+
 var uploadDate = function(req, res, id, start, end, db) {
     query='select count(*) as img_count, img_user_text, to_char(img_timestamp, \'YYYY/MM\') as img_time from images';
 
@@ -269,6 +280,7 @@ var viewsSidebar = function(req, res, id, db) {
     });
 }
 exports.rootCategory = rootCategory;
+exports.totalMediaNum = totalMediaNum;
 exports.categoryGraph = categoryGraph;
 exports.uploadDate = uploadDate;
 exports.uploadDateAll = uploadDateAll;

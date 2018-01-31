@@ -16,3 +16,23 @@ function nFormatter(num) {
     }
     return formatter(num.toFixed(1).replace(/\.0$/, ''));
 }
+
+function setTotalMediaNum() {
+  	var db = window.location.href.toString().split('/')[3];
+  	var jsonurl= "/api/"+db+"/totalMediaNum";
+
+  	$.getJSON(jsonurl, function(d) {
+  	    $('#totalMediaNum').text(formatter(d.num));
+  	});
+}
+
+function setCategory() {
+  	var db = window.location.href.toString().split('/')[3];
+  	var jsonurl = "/api/"+db+"/rootcategory";
+
+  	$.getJSON(jsonurl, function(d) {
+      	$('#cat_url').text(decodeURIComponent(d.id).replace(/_/g," "));
+      	$("#cat_url").attr("href", "https://commons.wikimedia.org/wiki/Category:"+d.id);
+      	$("#cat_url").attr("title", decodeURIComponent(d.id).replace(/_/g," "));
+  	});
+}
