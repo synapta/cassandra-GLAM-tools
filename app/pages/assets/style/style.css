@@ -322,7 +322,7 @@ h2 {
     opacity: 1;
     transform: scale(1.5, 1.5); }
 
-#main_contributions_container {
+#main_contributions_container, #main_views_container {
   height: 40vh;
 }
 

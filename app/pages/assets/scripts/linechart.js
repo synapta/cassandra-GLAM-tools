@@ -11,14 +11,14 @@ var lineChartDraw = function(div, query) {
 }
 
 function lineChart(div, data) {
-    var margin = {top: 20, right: 20, bottom: 30, left: 50},
-        width = 960 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;
+    var margin = {top: 20, right: 20, bottom: 30, left: 70},
+        width = Math.round( $("#" + div).outerWidth() ) - margin.left - margin.right,
+        height = $("#" + div).outerHeight()*0.8  - margin.top - margin.bottom;
 
     var parseTime = d3.isoParse;
 
     var x = d3.scaleTime().range([0, width]);
-    var y = d3.scaleLinear().range([height, 0]);
+    var y = d3.scaleLog().range([height, 0]);
 
     var svg = d3.select("#"+div).append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -50,7 +50,7 @@ function lineChart(div, data) {
         //.curve(d3.curveStepBefore);
 
     x.domain(d3.extent(data, function(d) { return d.date; }));
-    y.domain([0, d3.max(data, function(d) { return d.views; })]);
+    y.domain([d3.min(data, function(d) { return d.views; }), d3.max(data, function(d) { return d.views; })]);
 
     svg.append("g")
         .attr("class", "grid")
@@ -77,5 +77,8 @@ function lineChart(div, data) {
         .call(d3.axisBottom(x));
 
     svg.append("g")
-        .call(d3.axisLeft(y));
+        .call(d3.axisLeft(y)
+            .ticks(2)
+            .tickFormat(d3.formatPrefix(".0", 1))
+        );
 }
