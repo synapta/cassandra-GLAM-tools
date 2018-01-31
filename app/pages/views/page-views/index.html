@@ -64,18 +64,16 @@
 				<div class="how_to_read">
 					<span onclick='$(".how_to_read").toggleClass("show");' style="float:right; cursor:pointer">X</span>
 					<h5>Description</h5>
-					This graph chart shows the subcategories' topology belonging to the main category.<br>
-					Having just one category (or level) is a bad practise on Wikimedia Commons because makes difficult
-					to the community to find and use files. Instead a multilevel and articulated categorization permits
-					a better reuse of the uploaded media.
+					This line chart shows the sum of the views for the files thats belong to the main category with a 24h span.<br>
+					Generally is quite visible the difference of visits between workdays and weekends. Sometimes some spikes could lead
+					to a popular event. A growing trend is not always equals to a growing popularity of the category because of file additions.
 					<br><br>
 					<h5>How to read it</h5>
-				  Each node represents a category, while the edges are the relations. Categories at the same level share the color.
-					The bubble size is proportional to the amount of files within every category.
+				  On the orizontal axis we have time, with one day precision. On the vertical axis the total views performed by all files in
+					the category. This axis has logarithmic scale.
 					<br><br>
 					<h5>How to use it</h5>
-					On the right menu you can order categories by level or by number of files. If you click into a category name the
-					correspondant node will highlight (and viceversa).
+					On the right menu you can order files by views, by median or by name.
 				</div>
 				<div id="main_views_container"></div>
 			</section>

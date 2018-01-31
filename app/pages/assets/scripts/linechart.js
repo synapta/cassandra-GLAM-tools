@@ -11,7 +11,7 @@ var lineChartDraw = function(div, query) {
 }
 
 function lineChart(div, data) {
-    var margin = {top: 20, right: 20, bottom: 30, left: 70},
+    var margin = {top: 30, right: 20, bottom: 30, left: 70},
         width = Math.round( $("#" + div).outerWidth() ) - margin.left - margin.right,
         height = $("#" + div).outerHeight()*0.8  - margin.top - margin.bottom;
 

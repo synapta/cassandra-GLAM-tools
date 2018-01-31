@@ -116,7 +116,7 @@ function download(){
 	var home = baseurl.replace(h_1 + "/","")
 	var dataset_location = home + getUrlAll();
 
-	$('<a href="' + dataset_location + '" download="' + "usage.json" + '">Download dataset</a>').appendTo('#download_dataset');
+	$('<a href="' + dataset_location + '" download="' + "views.json" + '">Download dataset</a>').appendTo('#download_dataset');
 }
 
 function switch_page() {
