@@ -90,6 +90,14 @@ module.exports = function(app, apicache) {
           response.sendStatus(400);
       }
   });
+  app.get('/api/:id/views/files', apicache("1 hour"), function (request, response) {
+      let db = getDatabase(request.params.id);
+      if (db !== null) {
+          api.viewsByFiles(request, response, request.params.id, db);
+      } else {
+          response.sendStatus(400);
+      }
+  });
 	app.get('/api/:id/usage/', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {

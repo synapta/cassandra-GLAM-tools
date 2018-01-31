@@ -263,8 +263,25 @@ var viewsByDate = function(req, res, id, db) {
     });
 }
 
+var viewsByFiles = function(req, res, id, db) {
+    let query = `select img_name, sum(accesses) as sum,access_date
+                  from visualizations, images
+                  where images.is_alive = true
+                  and images.media_id = visualizations.media_id
+                  group by img_name, access_date
+                  order by img_name, access_date`
+    db.query(query, (err, dbres) => {
+        if(!err) {
+            res.json(dbres.rows);
+        } else {
+            console.log(err);
+            res.sendStatus(400);
+        }
+    });
+}
+
 var viewsSidebar = function(req, res, id, db) {
-    let query = `select i.img_name, sum(v.accesses) as tot, avg(v.accesses) as av
+    let query = `select i.img_name, sum(v.accesses) as tot, avg(v.accesses) as av, PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER by v.accesses) as median
                   from images as i, visualizations as v
                   where i.media_id = v.media_id
                   and i.is_alive = true
@@ -289,5 +306,6 @@ exports.usageStat = usageStat;
 exports.usageTop = usageTop;
 exports.usageSidebar = usageSidebar;
 exports.viewsByDate = viewsByDate;
+exports.viewsByFiles = viewsByFiles;
 exports.viewsAll = viewsAll;
 exports.viewsSidebar = viewsSidebar;

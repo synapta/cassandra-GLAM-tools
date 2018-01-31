@@ -2,6 +2,10 @@ function getUrlAll(){
 	var db=window.location.href.toString().split('/')[3];
 	return "../../api/"+db+"/views/by-date";
 }
+function getUrlFiles(){
+	var db=window.location.href.toString().split('/')[3];
+	return "../../api/"+db+"/views/files";
+}
 function getUrlSidebar(){
 	var db=window.location.href.toString().split('/')[3];
 	return "../../api/"+db+"/views/sidebar";
@@ -30,10 +34,17 @@ function sidebar(type){
 					});
 			}
 
+			if (type === "by_median") {
+					data = data.sort(function(a,b){
+						return b.median - a.median;
+					});
+			}
+
 			for (let i = 0; i < data.length; i++) {
 				  data[i].img_name_text = data[i].img_name.replace(/_/g," ");
 					data[i].tot = nFormatter(+data[i].tot);
 					data[i].av = nFormatter(+data[i].av);
+					data[i].median = nFormatter(+data[i].median);
 			}
 
 			if (type === "by_name") {
@@ -61,25 +72,25 @@ function sorting_sidebar(){
 		} else {
 			$("#by_name").removeClass("underline");
 			$("#by_num").addClass("underline");
-			$("#by_proj").removeClass("underline");
+			$("#by_median").removeClass("underline");
 			sidebar("by_num");
 			$("#by_num").css("cursor","default");
 			$("#by_name").css("cursor","pointer");
-			$("#by_proj").css("cursor","pointer");
+			$("#by_median").css("cursor","pointer");
 		}
 	})
 
-	$("#by_proj").on("click", function(){
-		if ($("#by_proj").hasClass("underline") ) {
+	$("#by_median").on("click", function(){
+		if ($("#by_median").hasClass("underline") ) {
 			//console.log("già selezionato")
 		} else {
 			$("#by_name").removeClass("underline");
 			$("#by_num").removeClass("underline");
-			$("#by_proj").addClass("underline");
-			sidebar("by_proj");
+			$("#by_median").addClass("underline");
+			sidebar("by_median");
 			$("#by_name").css("cursor","pointer");
 			$("#by_num").css("cursor","pointer");
-			$("#by_proj").css("cursor","default");
+			$("#by_median").css("cursor","default");
 		}
 	})
 
@@ -89,11 +100,11 @@ function sorting_sidebar(){
 		} else {
 			$("#by_name").addClass("underline");
 			$("#by_num").removeClass("underline");
-			$("#by_proj").removeClass("underline");
+			$("#by_median").removeClass("underline");
 			sidebar("by_name");
 			$("#by_name").css("cursor","default");
 			$("#by_num").css("cursor","pointer");
-			$("#by_proj").css("cursor","pointer");
+			$("#by_median").css("cursor","pointer");
 		}
 	})
 }

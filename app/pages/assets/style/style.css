@@ -334,8 +334,12 @@ h2 {
   height: 40vh;
 }
 
-#main_usage_container, #main_views_container {
+#main_usage_container {
   height: 30vh;
+}
+
+#main_views_container {
+  height: 100vh;
 }
 
 #user_contributions_container {

@@ -28,6 +28,14 @@
 						{{av}}
 					</div>
 				</div>
+				<div class="row">
+					<div class="col-2">
+						<span style="font-size: 0.6em; text-transform: uppercase;">median</span>
+					</div>
+					<div class="col-8" style="font-family: 'Lato', sans-serif; text-align:right; display:inline">
+						{{median}}
+					</div>
+				</div>
 			</div>
 		</div>
 
