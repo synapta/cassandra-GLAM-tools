@@ -61,21 +61,21 @@
 
 		<main id="visualizations">
 			<section id="dataviz" class="v_noscore" style="overflow: unset;">
-				<div class="how_to_read">
+				<div class="how_to_read" style="z-index:999">
 					<span onclick='$(".how_to_read").toggleClass("show");' style="float:right; cursor:pointer">X</span>
 					<h5>Description</h5>
-					This graph chart shows the subcategories' topology belonging to the main category.<br>
-					Having just one category (or level) is a bad practise on Wikimedia Commons because makes difficult
-					to the community to find and use files. Instead a multilevel and articulated categorization permits
-					a better reuse of the uploaded media.
+					This section show the usage of the media of the main category in Wikimedia projects.<br>
+					Every time a media is used in a Wikipedia article in any language or in any other sister projects like
+					Wikidata, Wikisource, etc. it counts 1 here. In this page you can investigate about how many files are
+					really used, in which projects and which are the most popular ones.
 					<br><br>
 					<h5>How to read it</h5>
-				  Each node represents a category, while the edges are the relations. Categories at the same level share the color.
-					The bubble size is proportional to the amount of files within every category.
+				  On the top left a donut chart show the top ten projects that are currently using these files. On the bottom
+					instead each file is detailed with a link to each page in which is used.
 					<br><br>
 					<h5>How to use it</h5>
-					On the right menu you can order categories by level or by number of files. If you click into a category name the
-					correspondant node will highlight (and viceversa).
+					On the right menu you can order files by usage or by number of distinct projects or by name.
+					If you click into a file name the correspondant detail will scroll up.
 				</div>
 				<div id="main_usage_container" class="row">
 					<div id="usage_donut" class="col-6" style="text-align:center"></div>

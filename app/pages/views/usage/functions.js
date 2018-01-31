@@ -224,6 +224,8 @@ function statDraw() {
 			$("#usage_stat").append("Total projects involved: <b>" + data.totalProjects + "</b>");
 			$("#usage_stat").append("<br><br>");
 			$("#usage_stat").append("Total pages enhanced: <b>" + data.totalPages + "</b>");
+
+			setTotalMediaNum();
 	});
 }
 
@@ -237,5 +239,4 @@ $(document).ready(function(){
 	sorting_sidebar();
 	donutChartDraw("usage_donut", getUrlTop20());
 	statDraw();
-	setTotalMediaNum();
 })
