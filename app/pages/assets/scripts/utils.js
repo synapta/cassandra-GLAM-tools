@@ -36,3 +36,11 @@ function setCategory() {
       	$("#cat_url").attr("title", decodeURIComponent(d.id).replace(/_/g," "));
   	});
 }
+
+function how_to_read(){
+  	box = $(".how_to_read");
+
+  	$("#how_to_read_button").click(function(){
+  		  box.toggleClass("show");
+  	});
+};

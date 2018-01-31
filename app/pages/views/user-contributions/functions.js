@@ -6,15 +6,6 @@ function getUrlAll(){
 	var db=window.location.href.toString().split('/')[3];
 	return "../../api/"+db+"/file/upload-date-all";
 }
-function setCategory() {
-	var db=window.location.href.toString().split('/')[3];
-	var jsonurl= "../../api/"+db+"/rootcategory";
-	$.getJSON(jsonurl, function(d) {
-	$('#cat_url').text(decodeURIComponent(d.id).replace(/_/g," "));
-	$("#cat_url").attr("href", "https://commons.wikimedia.org/w/index.php?title=Category:"+d.id);
-	$("#cat_url").attr("title", decodeURIComponent(d.id).replace(/_/g," "));
-	});
-}
 
 function pad (str, max) {
   str = str.toString();
@@ -22,21 +13,20 @@ function pad (str, max) {
 }
 
 function barChart(data, minDate, maxDate, maxValue, div) {
-	// Parse the date / time
 	var	parseDate = d3.isoParse
 	let minY = minDate.substring(0, 4);
 	let maxY = maxDate.substring(0, 4);
 
+  //TODO quite slow...
+	let tempDates = [];
+	for (var k = 0; k < data.length; k++) {
+		  tempDates[data[k].date] = true;
+	}
 	for (var year = minY; year <= maxY; year++) {
 		  for (var month = 1; month <= 12; month++) {
-				  var currentDate = year+"/"+pad(month,2);
-					var found = 0;
-				  for (var k = 0; k < data.length; k++) {
-						  if (data[k].date === currentDate) {
-						  		found = 1;
-							}
-					}
-					if (!found) {
+				  let currentDate = year+"/"+pad(month,2);
+
+					if (tempDates[currentDate] === undefined) {
 						  obj = {};
 							obj.count = 0;
 							obj.date = currentDate;
@@ -54,7 +44,7 @@ function barChart(data, minDate, maxDate, maxValue, div) {
 		return new Date(a.date) - new Date(b.date);
 	});
 
-	var margin = {top: 20, right: 30, bottom: 70, left: 50};
+	var margin = {top: 30, right: 30, bottom: 70, left: 50};
     width = Math.round( $("#user_contributions_container").outerWidth() ) - margin.left - margin.right,
     height = $("#main_contributions_container").outerHeight()*0.8  - margin.top - margin.bottom;
 
@@ -112,7 +102,7 @@ function barChart(data, minDate, maxDate, maxValue, div) {
       .attr("height", function(d) { return height - y(d.value); });
 }
 
-function dataviz(){
+function dataviz() {
 	  d3.json(getUrlAll(), function(error, data) {
 				if (error)
 						window.location.replace('404');
@@ -143,45 +133,41 @@ function dataviz(){
 							return b.total - a.total;
 						});
 
-						console.log(data.users)
-
-						data.users.forEach(function(user) {
-							  $("#user_contributions_container").append("<h2 style='margin-left:1.5em' id='"+ user.user+ "_viz'>" + user.user + "</h2>")
-								barChart(user.files, minDate, maxDate, maxValue, "#user_contributions_container");
-						});
+						for (let i = 0; i < data.users.length; i++) {
+							  $("#user_contributions_container").append("<h2 style='margin-left:1.5em' id='"+ data.users[i].user+ "_viz'>" + data.users[i].user + "</h2>")
+								barChart(data.users[i].files, minDate, maxDate, maxValue, "#user_contributions_container");
+						}
 				});
 		});
 }
 
 function sidebar(type){
-	var template_source = "tpl/user-contributions.tpl";
-	var data_source = getUrl();
-	var target = "#sidebar";
+		var template_source = "tpl/user-contributions.tpl";
+		var target = "#sidebar";
 
-	$.get( template_source , function(tpl) {
-		$.getJSON( data_source , function(data) {
-			data.users.forEach(function (d){
-				let items = d.files
-				let total = 0;
+		$.get(template_source, function(tpl) {
+				$.getJSON(getUrl(), function(data) {
+						data.users.forEach(function (d) {
+								let total = 0;
 
-				items.forEach(function (d){
-					total += +d.count
-				})
-				d.total = total;
-			})
+								d.files.forEach(function (d) {
+										total += +d.count
+								})
+								d.total = total;
+						})
 
-      if (type === "by_num") {
-					data.users = data.users.sort(function(a,b){
-						return b.total - a.total;
-					});
-			}
+			      if (type === "by_num") {
+								data.users = data.users.sort(function(a,b){
+									return b.total - a.total;
+								});
+						}
 
-			var template = Handlebars.compile(tpl);
-			$(target).html(template(data));
+						var template = Handlebars.compile(tpl);
+						$(target).html(template(data));
 
-			highlight()
+						highlight()
+				});
 		});
-	});
 }
 
 function sorting_sidebar(){
@@ -225,41 +211,10 @@ function switch_page() {
 	var h = baseurl.split("/")
 	var h_1 = h[h.length-2]
 	var home = baseurl.replace(h_1 + "/","")
-	//console.log(home)
 
 	$('#switch_page').change(function(){
 		var page = $(this).val();
 		var url = home + page;
-		console.log(url);
-
-		if (url != '') {
-			window.location = url;
-		}
-		return false;
-	});
-}
-
-function how_to_read(){
-	button = $("#how_to_read_button");
-	box = $(".how_to_read");
-
-	$("#how_to_read_button").click(function(){
-		box.toggleClass("show");
-		// console.log("click")
-	});
-};
-
-function switch_page() {
-var baseurl = document.location.href;
-	var h = baseurl.split("/")
-	var h_1 = h[h.length-2]
-	var home = baseurl.replace(h_1 + "/","")
-	//console.log(home)
-
-	$('#switch_page').change(function(){
-		var page = $(this).val();
-		var url = home + page;
-		console.log(url);
 
 		if (url != '') {
 			window.location = url;
@@ -288,11 +243,11 @@ function highlight(){
 }
 
 $(document).ready(function(){
-	setCategory();
-	dataviz();
-	how_to_read();
-	sidebar("by_num");
-	download();
-	switch_page();
-	sorting_sidebar();
+		setCategory();
+		sidebar("by_num");
+		dataviz();
+		how_to_read();
+		download();
+		switch_page();
+		sorting_sidebar();
 })
