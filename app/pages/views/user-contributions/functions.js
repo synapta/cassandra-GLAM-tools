@@ -162,6 +162,10 @@ function sidebar(type){
 								});
 						}
 
+						data.users.forEach(function (d) {
+								d.total = nFormatter(d.total);
+						})
+
 						var template = Handlebars.compile(tpl);
 						$(target).html(template(data));
 

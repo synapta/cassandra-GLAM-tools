@@ -274,6 +274,7 @@ function sidebar(order) {
 
 			for (var i = 0; i < d.nodes.length; i++) {
 				  d.nodes[i].name = d.nodes[i].id.replace(/_/g," ");
+					d.nodes[i].files = nFormatter(d.nodes[i].files);
 			}
 
 			var template = Handlebars.compile(tpl);

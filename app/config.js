@@ -9,6 +9,16 @@ var {Pool, Client} = require('pg');
         password: 'postgres',
         port: 5432
       })
+    },
+    {
+      name:"ETH",
+      connection:new Client({
+        user: 'postgres',
+        host: '127.0.0.1',
+        database: 'eth',
+        password: 'postgres',
+        port: 5432
+      })
     }
   ];
   var SERVICE_USER = "test";
