@@ -243,7 +243,7 @@ function sidebar(order) {
 			selected = $("#sidebar").find("#" + element)
 			selected.toggleClass("selected_list_item");
 			document.getElementById(element).scrollIntoView({
-			    behavior: "smooth",
+			    //behavior: "smooth",
 			    block: "start"
 			});
 			document.getElementById('topbar').scrollIntoView();

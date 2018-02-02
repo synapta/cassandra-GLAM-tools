@@ -239,7 +239,7 @@ function highlight(){
 
 		// highlight Graph
 		document.getElementById(element+"_viz").scrollIntoView({
-				behavior: "smooth",
+				//behavior: "smooth",
 				block: "start"
 		});
 		document.getElementById('topbar').scrollIntoView();
