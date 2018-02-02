@@ -2,7 +2,7 @@
 	<div class="list_item">
 		<div class="row">
 			<div class="item col-9">
-				<span class="id" id="{{id}}">
+				<span class="id" id="{{id_encoded}}">
 					{{name}}
 				</span>
 				<div class="link" style="font-size:0.6em;">

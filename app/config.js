@@ -1,7 +1,7 @@
 var {Pool, Client} = require('pg');
   var DBs = [
     {
-      name:"cassandradb",
+      name:"ZU",
       connection:new Client({
         user: 'postgres',
         host: '127.0.0.1',
@@ -16,6 +16,36 @@ var {Pool, Client} = require('pg');
         user: 'postgres',
         host: '127.0.0.1',
         database: 'eth',
+        password: 'postgres',
+        port: 5432
+      })
+    },
+    {
+      name:"SNL",
+      connection:new Client({
+        user: 'postgres',
+        host: '127.0.0.1',
+        database: 'snl',
+        password: 'postgres',
+        port: 5432
+      })
+    },
+    {
+      name:"SBB",
+      connection:new Client({
+        user: 'postgres',
+        host: '127.0.0.1',
+        database: 'sbb',
+        password: 'postgres',
+        port: 5432
+      })
+    },
+    {
+      name:"BUL",
+      connection:new Client({
+        user: 'postgres',
+        host: '127.0.0.1',
+        database: 'bul',
         password: 'postgres',
         port: 5432
       })

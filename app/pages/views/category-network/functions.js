@@ -110,7 +110,7 @@ function dataviz() {
 			.enter()
 			.append("g")
 			.attr("class",function(d,i){
-				return d.id + " node" //.replace(/_/g," ")
+				return d.id.hashCode() + " node"
 			})
 			.call(d3.drag()
 				.on("start", dragstarted)
@@ -230,7 +230,7 @@ function sidebar(order) {
 		$(".node").on("click", function(){
 			e = $(this).attr("class");
 			element = e.split(" ",1)
-
+ //.replace(/_/g," ")
 			// reset Sidebar - Dataviz
 			$("#sidebar .id").removeClass("selected_list_item");
 			$("#category_network_container").find(".circle").removeClass("selected_circle");
@@ -275,6 +275,7 @@ function sidebar(order) {
 			for (var i = 0; i < d.nodes.length; i++) {
 				  d.nodes[i].name = d.nodes[i].id.replace(/_/g," ");
 					d.nodes[i].files = nFormatter(d.nodes[i].files);
+					d.nodes[i].id_encoded = d.nodes[i].id.hashCode();
 			}
 
 			var template = Handlebars.compile(tpl);
