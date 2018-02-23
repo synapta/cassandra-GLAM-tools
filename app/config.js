@@ -49,6 +49,46 @@ var {Pool, Client} = require('pg');
         password: 'postgres',
         port: 5432
       })
+    },
+    {
+      name:"SFA",
+      connection:new Client({
+        user: 'postgres',
+        host: '127.0.0.1',
+        database: 'sfa',
+        password: 'postgres',
+        port: 5432
+      })
+    },
+    {
+      name:"CLS",
+      connection:new Client({
+        user: 'postgres',
+        host: '127.0.0.1',
+        database: 'cls',
+        password: 'postgres',
+        port: 5432
+      })
+    },
+    {
+      name:"ZBZ",
+      connection:new Client({
+        user: 'postgres',
+        host: '127.0.0.1',
+        database: 'zbz',
+        password: 'postgres',
+        port: 5432
+      })
+    },
+    {
+      name:"WMCH",
+      connection:new Client({
+        user: 'postgres',
+        host: '127.0.0.1',
+        database: 'wmch',
+        password: 'postgres',
+        port: 5432
+      })
     }
   ];
   var SERVICE_USER = "test";
