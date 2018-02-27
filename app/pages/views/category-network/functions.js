@@ -18,16 +18,6 @@ function getUrl() {
 		return "../../api/"+db+"/category";
 }
 
-function setCategory() {
-		var db=window.location.href.toString().split('/')[3];
-		var jsonurl= "../../api/"+db+"/rootcategory";
-		$.getJSON(jsonurl, function(d) {
-				$('#cat_url').text(decodeURIComponent(d.id).replace(/_/g," "));
-				$("#cat_url").attr("href", "https://commons.wikimedia.org/w/index.php?title=Category:"+d.id);
-				$("#cat_url").attr("title", decodeURIComponent(d.id).replace(/_/g," "));
-		});
-}
-
 function dataviz() {
 		var data_source = getUrl();
 
@@ -175,7 +165,6 @@ function dataviz() {
 
 					nodes
 						.attr("transform", function(d,i) {
-							console.log(d.files)
 							let radius = Math.min(100, 3 + (d.files  * circle_size));
 							d.x = Math.max(radius, Math.min(width - radius, d.x));
 							d.y = Math.max(radius, Math.min(height - radius, d.y));
@@ -350,9 +339,9 @@ $("#how_to_read_button").click(function(){
 });
 
 $(document).ready(function(){
-	setCategory();//N.B. questa funzione setta il titolo categoria
 	dataviz();
 	switch_page();
 	sidebar("by_name");
 	download();
+	setCategory();
 })

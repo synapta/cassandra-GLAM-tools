@@ -24,7 +24,7 @@
 				<a href="/">GLAM Visual Tool</a>
 			</h1>
 			<h2>
-				<a href="index.html">Canton of Zürich</a>
+				<a href="index.html" class="glamName"></a>
 			</h2>
 		</header>
 
@@ -95,17 +95,15 @@
 						<div class="col-sm-4">
 							<div class="w3-border">
 								<div class="w3-container" style="padding:0">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Herrliberger_Elgg_1740.jpg/640px-Herrliberger_Elgg_1740.jpg" width="100%"/>
+                  <!--<img src="image.jpg" width="100%"/>-->
                 </div>
 								<div class="w3-container boxDashboardTitle">
 									<br>
-									<h1>Canton of Zürich</h1>
+									<h1 class="glamName"></h1>
 									<br>
 									<small>Category in Commons:</small>
 									<br>
-									<a href="https://commons.wikimedia.org/w/index.php?title=Category:Historical_images_of_buildings_in_the_canton_of_Z%C3%BCrich" title="Historical images of buildings in the canton of Zürich" target="_blank">
-										Historical images of buildings in the canton of Zürich
-									</a>
+									<a id="cat_url" target="_blank"></a>
 									<br><br>
 									<small>Total media in Commons:</small>&nbsp;&nbsp;&nbsp;
 									<span id="totalMediaNum" class="round-btn" style="margin: 0 auto;"></span>
@@ -139,6 +137,7 @@
 		<script type="text/javascript" src="../assets/scripts/utils.js"></script>
 		<script>
 			setTotalMediaNum();
+			setCategory();
 		</script>
 	</body>
 </html>

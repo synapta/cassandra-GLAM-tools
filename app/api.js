@@ -1,3 +1,5 @@
+var config = require('./config.js');
+
 Date.prototype.addHours = function(h) {
     this.setTime(this.getTime() + (h*60*60*1000));
     return this;
@@ -53,11 +55,11 @@ var categoryGraph = function(req, res, id, db) {
 }
 
 var rootCategory = function(req, res, id, db) {
-    //db.query('SELECT page_title from categories where cat_level[0]=0', (err, dbres) => {
     db.query('SELECT page_title from categories limit 1', (err, dbres) => {
-        if(!err) {
-            var result = {};
-            result.id = dbres.rows[0].page_title;
+        if (!err) {
+            let result = {};
+            result.name = config.DBs[config.getIndexOfDb(id, config.DBs)].fullname;
+            result.category = config.DBs[config.getIndexOfDb(id, config.DBs)].category;
             res.json(result);
         } else {
             console.log(err);

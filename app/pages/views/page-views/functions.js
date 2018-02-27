@@ -10,15 +10,6 @@ function getUrlSidebar(){
 	var db=window.location.href.toString().split('/')[3];
 	return "../../api/"+db+"/views/sidebar";
 }
-function setCategory() {
-	var db=window.location.href.toString().split('/')[3];
-	var jsonurl= "../../api/"+db+"/rootcategory";
-	$.getJSON(jsonurl, function(d) {
-	$('#cat_url').text(decodeURIComponent(d.id).replace(/_/g," "));
-	$("#cat_url").attr("href", "https://commons.wikimedia.org/w/index.php?title=Category:"+d.id);
-	$("#cat_url").attr("title", decodeURIComponent(d.id).replace(/_/g," "));
-	});
-}
 
 function sidebar(type){
 	var template_source = "tpl/views.tpl";

@@ -31,9 +31,10 @@ function setCategory() {
   	var jsonurl = "/api/"+db+"/rootcategory";
 
   	$.getJSON(jsonurl, function(d) {
-      	$('#cat_url').text(decodeURIComponent(d.id).replace(/_/g," "));
-      	$("#cat_url").attr("href", "https://commons.wikimedia.org/wiki/Category:"+d.id);
-      	$("#cat_url").attr("title", decodeURIComponent(d.id).replace(/_/g," "));
+      	$('#cat_url').text(decodeURIComponent(d.category).replace("Category:",""));
+      	$("#cat_url").attr("href", "https://commons.wikimedia.org/wiki/"+d.category);
+      	$("#cat_url").attr("title", decodeURIComponent(d.category));
+        $(".glamName").text(d.name);
   	});
 }
 
