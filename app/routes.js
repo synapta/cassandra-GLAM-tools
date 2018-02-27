@@ -1,7 +1,6 @@
 var express = require('express');
 var api = require('./api.js');
 var config = require('./config.js');
-var path = require('path');
 var auth = require('http-auth');
 
 var basic = auth.basic({
@@ -33,7 +32,12 @@ function getDatabase(id){
 }
 
 module.exports = function(app, apicache) {
+
   app.use('/',express.static(__dirname + '/pages'));
+
+  app.get('/docs', function(req, res){
+      res.sendFile(__dirname + '/pages/docs.html');
+  });
 
   app.use('/:id', auth.connect(basic), express.static(__dirname + '/pages/views'));
 
@@ -141,14 +145,6 @@ module.exports = function(app, apicache) {
           response.sendStatus(400);
       }
   });
-
-	app.get('/docs', function(req, res){
-	    res.sendFile(path.resolve('../docs/docs.html'));
-	});
-
-  app.get('/', function(req, res){
-	    res.sendFile(__dirname + '/pages/index.html');
-	});
 
 	app.get('*', function(req, res){
 	    res.sendStatus(404);
