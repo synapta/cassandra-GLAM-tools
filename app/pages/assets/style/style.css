@@ -315,7 +315,9 @@ h2 {
 
 #category_network_container {
   height: 80%;
-  overflow-y: hidden; }
+  overflow-y: hidden;
+  padding: 1em;
+}
   #category_network_container .edges {
     stroke: #999;
     stroke-opacity: 0.6;
