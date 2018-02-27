@@ -274,10 +274,10 @@ footer {
 .how_to_read {
   display: none;
   position: absolute;
-  margin: 1.5em;
+  margin: 1em;
   background-color: white;
   border: 3px dotted #DCDCDC;
-  padding: 3em;
+  padding: 2em;
   font-size: 0.8em;
   width: calc(70% - 3em);
 }
