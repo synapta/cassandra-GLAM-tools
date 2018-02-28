@@ -1,9 +1,0 @@
-.DS_Store
-**/.DS_Store
-**/.sass-cache
-style.css.map
-
-bower_components
-upload.json
-.sassbuilder-config.json
-credentials.json

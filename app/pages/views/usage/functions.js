@@ -1,24 +1,24 @@
 function getUrl(){
 	var db=window.location.href.toString().split('/')[3];
-	return "../../api/"+db+"/usage";
+	return "/api/"+db+"/usage";
 }
 function getUrlAll(){
 	var db=window.location.href.toString().split('/')[3];
-	return "../../api/"+db+"/usage/stat";
+	return "/api/"+db+"/usage/stat";
 }
 function getUrlTop20(){
 	var db=window.location.href.toString().split('/')[3];
-	return "../../api/"+db+"/usage/top";
+	return "/api/"+db+"/usage/top";
 }
 function getUrlSidebar(){
 	var db=window.location.href.toString().split('/')[3];
-	return "../../api/"+db+"/usage/sidebar";
+	return "/api/"+db+"/usage/sidebar";
 }
 
 function dataviz(){
 	  d3.json(getUrl(), function(error, data) {
 				if (error)
-						window.location.replace('404');
+						window.location.replace('/500');
 
 				/*data.users = data.users.sort(function(a,b){
 					return b.total - a.total;
@@ -51,7 +51,7 @@ function dataviz(){
 }
 
 function sidebar(type){
-	var template_source = "tpl/usage.tpl";
+	var template_source = "/views/usage/tpl/usage.tpl";
 	var data_source = getUrlSidebar();
 	var target = "#sidebar";
 
@@ -137,32 +137,7 @@ function sorting_sidebar(){
 }
 
 function download(){
-	var baseurl = document.location.href;
-	var h = baseurl.split("/")
-	var h_1 = h[h.length-2]
-	var home = baseurl.replace(h_1 + "/","")
-	var dataset_location = home + getUrl();
-
-	$('<a href="' + dataset_location + '" download="' + "usage.json" + '">Download dataset</a>').appendTo('#download_dataset');
-}
-
-function switch_page() {
-  var baseurl = document.location.href;
-	var h = baseurl.split("/")
-	var h_1 = h[h.length-2]
-	var home = baseurl.replace(h_1 + "/","")
-	//console.log(home)
-
-	$('#switch_page').change(function(){
-		var page = $(this).val();
-		var url = home + page;
-		console.log(url);
-
-		if (url != '') {
-			window.location = url;
-		}
-		return false;
-	});
+	$('<a href="' + getUrl() + '" download="' + "usage.json" + '">Download dataset</a>').appendTo('#download_dataset');
 }
 
 function how_to_read(){
@@ -174,25 +149,6 @@ function how_to_read(){
 		// console.log("click")
 	});
 };
-
-function switch_page() {
-var baseurl = document.location.href;
-	var h = baseurl.split("/")
-	var h_1 = h[h.length-2]
-	var home = baseurl.replace(h_1 + "/","")
-	//console.log(home)
-
-	$('#switch_page').change(function(){
-		var page = $(this).val();
-		var url = home + page;
-		console.log(url);
-
-		if (url != '') {
-			window.location = url;
-		}
-		return false;
-	});
-}
 
 function highlight(){
 	$(".list_item").on("click", ".item" , function(){
@@ -216,7 +172,7 @@ function highlight(){
 function statDraw() {
 	d3.json(getUrlAll(), function (error, data) {
 		  if (error) {
-				  window.location.href('/404');
+				  window.location.href('/500');
 			}
 			$("#usage_stat").append("<br><br>");
 			$("#usage_stat").append("Distinct media used: <b>" + data.totalImagesUsed + "</b> / <span id='totalMediaNum'></span>");

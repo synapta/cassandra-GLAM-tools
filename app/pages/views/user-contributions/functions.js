@@ -1,10 +1,10 @@
 function getUrl(){
 	var db=window.location.href.toString().split('/')[3];
-	return "../../api/"+db+"/file/upload-date";
+	return "/api/"+db+"/file/upload-date";
 }
 function getUrlAll(){
 	var db=window.location.href.toString().split('/')[3];
-	return "../../api/"+db+"/file/upload-date-all";
+	return "/api/"+db+"/file/upload-date-all";
 }
 
 function pad (str, max) {
@@ -105,7 +105,7 @@ function barChart(data, minDate, maxDate, maxValue, div) {
 function dataviz() {
 	  d3.json(getUrlAll(), function(error, data) {
 				if (error)
-						window.location.replace('404');
+						window.location.replace('/500');
 
 				var minDate = data[0].date;
 				var maxDate = data[data.length-1].date;
@@ -117,7 +117,7 @@ function dataviz() {
 
 				d3.json(getUrl(), function(error, data) {
 						if (error)
-								window.location.replace('404');
+								window.location.replace('/500');
 
 						data.users.forEach(function (d){
 							let items = d.files
@@ -142,7 +142,7 @@ function dataviz() {
 }
 
 function sidebar(type){
-		var template_source = "tpl/user-contributions.tpl";
+		var template_source = "/views/user-contributions/tpl/user-contributions.tpl";
 		var target = "#sidebar";
 
 		$.get(template_source, function(tpl) {
@@ -201,30 +201,7 @@ function sorting_sidebar(){
 }
 
 function download(){
-	var baseurl = document.location.href;
-	var h = baseurl.split("/")
-	var h_1 = h[h.length-2]
-	var home = baseurl.replace(h_1 + "/","")
-	var dataset_location = home + getUrl();
-
-	$('<a href="' + dataset_location + '" download="' + "user_contributions.json" + '">Download dataset</a>').appendTo('#download_dataset');
-}
-
-function switch_page() {
-  var baseurl = document.location.href;
-	var h = baseurl.split("/")
-	var h_1 = h[h.length-2]
-	var home = baseurl.replace(h_1 + "/","")
-
-	$('#switch_page').change(function(){
-		var page = $(this).val();
-		var url = home + page;
-
-		if (url != '') {
-			window.location = url;
-		}
-		return false;
-	});
+	$('<a href="' + getUrl() + '" download="' + "user_contributions.json" + '">Download dataset</a>').appendTo('#download_dataset');
 }
 
 function highlight(){

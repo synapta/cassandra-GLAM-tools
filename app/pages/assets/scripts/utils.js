@@ -36,6 +36,11 @@ function setCategory() {
       	$("#cat_url").attr("title", decodeURIComponent(d.category));
         $(".glamName").text(d.name);
   	});
+
+    //XXX needed for correct urls
+    let baseUrl = window.location.href + "/";
+    baseUrl = baseUrl.replace(/\/\/$/,"/");
+    $("#basebase").attr("href", baseUrl);
 }
 
 function how_to_read(){
@@ -43,6 +48,23 @@ function how_to_read(){
 
   	$("#how_to_read_button").click(function(){
   		  box.toggleClass("show");
+  	});
+};
+
+function switch_page() {
+    var baseurl = document.location.href;
+  	var h = baseurl.split("/")
+  	var h_1 = h[h.length-1]
+  	var home = baseurl.replace(h_1,"")
+
+  	$('#switch_page').change(function(){
+    		var page = $(this).val();
+    		var url = home + page;
+
+    		if (url != '') {
+    			   window.location = url;
+    		}
+    		return false;
   	});
 };
 

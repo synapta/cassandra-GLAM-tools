@@ -39,7 +39,59 @@ module.exports = function(app, apicache) {
       res.sendFile(__dirname + '/pages/docs.html');
   });
 
-  app.use('/:id', auth.connect(basic), express.static(__dirname + '/pages/views'));
+  app.get('/404', function(req, res){
+	    res.sendStatus(404);
+	});
+
+  app.get('/500', function(req, res){
+	    res.sendStatus(500);
+	});
+
+  //VIEWS
+
+  app.get('/:id', auth.connect(basic), apicache("1 hour"), function (request, response) {
+      let db = getDatabase(request.params.id);
+      if (db !== null) {
+          response.sendFile(__dirname + '/pages/views/index.html');
+      } else {
+          response.sendStatus(400);
+      }
+  });
+
+  app.get('/:id/category-network', auth.connect(basic), apicache("1 hour"), function (request, response) {
+      let db = getDatabase(request.params.id);
+      if (db !== null) {
+          response.sendFile(__dirname + '/pages/views/category-network/index.html');
+      } else {
+          response.sendStatus(400);
+      }
+  });
+  app.get('/:id/user-contributions', auth.connect(basic), apicache("1 hour"), function (request, response) {
+      let db = getDatabase(request.params.id);
+      if (db !== null) {
+          response.sendFile(__dirname + '/pages/views/user-contributions/index.html');
+      } else {
+          response.sendStatus(400);
+      }
+  });
+  app.get('/:id/usage', auth.connect(basic), apicache("1 hour"), function (request, response) {
+      let db = getDatabase(request.params.id);
+      if (db !== null) {
+          response.sendFile(__dirname + '/pages/views/usage/index.html');
+      } else {
+          response.sendStatus(400);
+      }
+  });
+  app.get('/:id/page-views', auth.connect(basic), apicache("1 hour"), function (request, response) {
+      let db = getDatabase(request.params.id);
+      if (db !== null) {
+          response.sendFile(__dirname + '/pages/views/page-views/index.html');
+      } else {
+          response.sendStatus(400);
+      }
+  });
+
+  //API
 
 	app.get('/api/:id/category/', auth.connect(basic), apicache("1 hour"), function (request, response) {
 	    let db = getDatabase(request.params.id);
@@ -145,6 +197,8 @@ module.exports = function(app, apicache) {
           response.sendStatus(400);
       }
   });
+
+  //NOT FOUND
 
 	app.get('*', function(req, res){
 	    res.sendStatus(404);

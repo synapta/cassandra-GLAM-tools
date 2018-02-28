@@ -15,7 +15,7 @@ node run.js
 
 Install bower dependencies:
 ```
-cd app/views
+cd app/assets
 bower install
 ```
 

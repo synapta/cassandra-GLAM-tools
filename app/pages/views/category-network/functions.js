@@ -15,7 +15,7 @@ var home = baseurl.replace(h_1 + "/","")
 
 function getUrl() {
 		var db=window.location.href.toString().split('/')[3];
-		return "../../api/"+db+"/category";
+		return "/api/"+db+"/category";
 }
 
 function dataviz() {
@@ -35,7 +35,7 @@ function dataviz() {
 
 		d3.json(data_source, function(error, data) {
 				if (error)
-					window.location.replace('404');
+					window.location.replace('/500');
 
 				var levels = [];
 				data.nodes.forEach(function(node) {
@@ -225,7 +225,7 @@ function sorting_sidebar(){
 
 function sidebar(order) {
 
-	var template_source = "tpl/category-network.tpl";
+	var template_source = "/views/category-network/tpl/category-network.tpl";
 	var data_source = getUrl();
 	var target = "#sidebar";
 
@@ -310,28 +310,8 @@ function sidebar(order) {
 	});
 }
 
-function switch_page() {
-  var baseurl = document.location.href;
-	var h = baseurl.split("/")
-	var h_1 = h[h.length-2]
-	var home = baseurl.replace(h_1 + "/","")
-	//console.log(home)
-
-	$('#switch_page').change(function(){
-		var page = $(this).val();
-		var url = home + page;
-		console.log(url);
-
-		if (url != '') {
-			window.location = url;
-		}
-		return false;
-	});
-}
-
 function download() {
-	var dataset_location = home + getUrl();
-	$('<a href="' + dataset_location + '" download="' + "category_network.json" + '">Download dataset</a>').appendTo('#download_dataset');
+	$('<a href="' + getUrl() + '" download="' + "category_network.json" + '">Download dataset</a>').appendTo('#download_dataset');
 }
 
 $("#how_to_read_button").click(function(){
