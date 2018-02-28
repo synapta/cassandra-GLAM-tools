@@ -47,9 +47,23 @@ module.exports = function(app, apicache) {
 	    res.sendStatus(500);
 	});
 
+  app.use(function(req, res, next) {
+      if (req.path === "/WMCH" ||
+          req.path.startsWith('/api/WMCH/') ||
+          req.path.startsWith('/WMCH/') ||
+          req.path === "/ZU" ||
+          req.path.startsWith('/api/ZU/') ||
+          req.path.startsWith('/ZU/'))
+      {
+          next();
+      } else {
+          (auth.connect(basic))(req, res, next);
+      }
+  });
+
   //VIEWS
 
-  app.get('/:id', auth.connect(basic), apicache("1 hour"), function (request, response) {
+  app.get('/:id', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {
           response.sendFile(__dirname + '/pages/views/index.html');
@@ -57,8 +71,7 @@ module.exports = function(app, apicache) {
           response.sendStatus(400);
       }
   });
-
-  app.get('/:id/category-network', auth.connect(basic), apicache("1 hour"), function (request, response) {
+  app.get('/:id/category-network', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {
           response.sendFile(__dirname + '/pages/views/category-network/index.html');
@@ -66,7 +79,7 @@ module.exports = function(app, apicache) {
           response.sendStatus(400);
       }
   });
-  app.get('/:id/user-contributions', auth.connect(basic), apicache("1 hour"), function (request, response) {
+  app.get('/:id/user-contributions', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {
           response.sendFile(__dirname + '/pages/views/user-contributions/index.html');
@@ -74,7 +87,7 @@ module.exports = function(app, apicache) {
           response.sendStatus(400);
       }
   });
-  app.get('/:id/usage', auth.connect(basic), apicache("1 hour"), function (request, response) {
+  app.get('/:id/usage', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {
           response.sendFile(__dirname + '/pages/views/usage/index.html');
@@ -82,7 +95,7 @@ module.exports = function(app, apicache) {
           response.sendStatus(400);
       }
   });
-  app.get('/:id/page-views', auth.connect(basic), apicache("1 hour"), function (request, response) {
+  app.get('/:id/page-views', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {
           response.sendFile(__dirname + '/pages/views/page-views/index.html');
@@ -93,7 +106,7 @@ module.exports = function(app, apicache) {
 
   //API
 
-	app.get('/api/:id/category/', auth.connect(basic), apicache("1 hour"), function (request, response) {
+	app.get('/api/:id/category/', apicache("1 hour"), function (request, response) {
 	    let db = getDatabase(request.params.id);
 	    if (db !== null) {
 		      api.categoryGraph(request, response, request.params.id, db);
@@ -101,7 +114,7 @@ module.exports = function(app, apicache) {
 		      response.sendStatus(400);
 	    }
 	});
-	app.get('/api/:id/rootcategory/', auth.connect(basic), apicache("1 hour"), function (request, response) {
+	app.get('/api/:id/rootcategory/', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {
 		      api.rootCategory(request, response, request.params.id, db);
@@ -109,7 +122,7 @@ module.exports = function(app, apicache) {
 		      response.sendStatus(400);
 	    }
 	});
-  app.get('/api/:id/totalMediaNum/', auth.connect(basic), apicache("1 hour"), function (request, response) {
+  app.get('/api/:id/totalMediaNum/', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {
 		      api.totalMediaNum(request, response, request.params.id, db);
@@ -117,7 +130,7 @@ module.exports = function(app, apicache) {
 		      response.sendStatus(400);
 	    }
 	});
-	app.get('/api/:id/views/by-date', auth.connect(basic), apicache("1 hour"), function (request, response) {
+	app.get('/api/:id/views/by-date', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {
 		      api.viewsByDate(request, response, request.params.id, db);
@@ -125,7 +138,7 @@ module.exports = function(app, apicache) {
 		      response.sendStatus(400);
 	    }
 	});
-	app.get('/api/:id/views/all', auth.connect(basic), apicache("1 hour"), function (request, response) {
+	app.get('/api/:id/views/all', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {
 		      api.viewsAll(request, response, request.params.id, db);
@@ -133,7 +146,7 @@ module.exports = function(app, apicache) {
 		      response.sendStatus(400);
 	    }
 	});
-  app.get('/api/:id/views/sidebar', auth.connect(basic), apicache("1 hour"), function (request, response) {
+  app.get('/api/:id/views/sidebar', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {
           api.viewsSidebar(request, response, request.params.id, db);
@@ -141,7 +154,7 @@ module.exports = function(app, apicache) {
           response.sendStatus(400);
       }
   });
-  app.get('/api/:id/views/files', auth.connect(basic), apicache("1 hour"), function (request, response) {
+  app.get('/api/:id/views/files', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {
           api.viewsByFiles(request, response, request.params.id, db);
@@ -149,7 +162,7 @@ module.exports = function(app, apicache) {
           response.sendStatus(400);
       }
   });
-	app.get('/api/:id/usage/', auth.connect(basic), apicache("1 hour"), function (request, response) {
+	app.get('/api/:id/usage/', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {
 		      api.usage(request, response, request.params.id, db);
@@ -157,7 +170,7 @@ module.exports = function(app, apicache) {
 		      response.sendStatus(400);
 	    }
 	});
-  app.get('/api/:id/usage/stat', auth.connect(basic), apicache("1 hour"), function (request, response) {
+  app.get('/api/:id/usage/stat', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {
 		      api.usageStat(request, response, request.params.id, db);
@@ -165,7 +178,7 @@ module.exports = function(app, apicache) {
 		      response.sendStatus(400);
 	    }
 	});
-  app.get('/api/:id/usage/top', auth.connect(basic), apicache("1 hour"), function (request, response) {
+  app.get('/api/:id/usage/top', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {
 		      api.usageTop(request, response, request.params.id, db);
@@ -173,7 +186,7 @@ module.exports = function(app, apicache) {
 		      response.sendStatus(400);
 	    }
 	});
-  app.get('/api/:id/usage/sidebar', auth.connect(basic), apicache("1 hour"), function (request, response) {
+  app.get('/api/:id/usage/sidebar', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {
           api.usageSidebar(request, response, request.params.id, db);
@@ -181,7 +194,7 @@ module.exports = function(app, apicache) {
           response.sendStatus(400);
       }
   });
-	app.get('/api/:id/file/upload-date', auth.connect(basic), apicache("1 hour"), function (request, response) {
+	app.get('/api/:id/file/upload-date', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {
 		      api.uploadDate(request, response, request.params.id, request.query.start, request.query.end, db);
@@ -189,7 +202,7 @@ module.exports = function(app, apicache) {
 		      response.sendStatus(400);
 	    }
 	});
-  app.get('/api/:id/file/upload-date-all', auth.connect(basic), apicache("1 hour"), function (request, response) {
+  app.get('/api/:id/file/upload-date-all', apicache("1 hour"), function (request, response) {
       let db = getDatabase(request.params.id);
       if (db !== null) {
           api.uploadDateAll(request, response, request.params.id, db);

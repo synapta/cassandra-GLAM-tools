@@ -99,7 +99,7 @@ var {Pool, Client} = require('pg');
     {
       name:"WMCH",
       fullname:"Supported by Wikimedia CH",
-      category:"Category:Supported_by_Wikimedia_CH",
+      category:"Category:Supported by Wikimedia CH",
       connection:new Client({
         user: 'postgres',
         host: '127.0.0.1',
