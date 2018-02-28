@@ -154,15 +154,11 @@ var LoadImages = function() {
         });
         return;
     }
+
+    //TODO can be optimized looking for files number and merging little cats calls
     console.log("At " + catHead + " of " + catFreeTail);
-    var RQ = "";
-    var originalHead = catHead;
-    while (catHead < catFreeTail && catHead < (originalHead+CONST_IMG_PER_QUERY)) {
-        if (catHead > originalHead)
-            RQ += ",";
-        RQ += "'" + catQueue[catHead].page_title.replace(/'/g,"''") + "'"
-        catHead++;
-    }
+    var RQ = "'" + catQueue[catHead].page_title.replace(/'/g,"''") + "'";
+    catHead++;
 
     imgIndex=0;
     images=[];
