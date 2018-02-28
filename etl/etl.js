@@ -1,4 +1,3 @@
-var fs = require('fs');
 var utf8 = require('utf8');
 var MariaClient = require('mariasql');
 var config = require('./config.js');
@@ -7,9 +6,6 @@ const CONST_CAT_PER_QUERY = 40;
 const CONST_IMG_PER_QUERY = 30;
 const CONST_USE_PER_QUERY = 10;
 
-var configDataObj;
-var dbAccess;
-var Categories;
 var wikiCaller;
 var images;
 var catQueue;
@@ -20,13 +16,22 @@ var usages;
 var usagindex=0;
 
 var Finalize=function() {
-    wikiCaller.end();
-    config.storage.query("select * from doMaintenance();",function(err,res){
-        config.storage.end();
-        console.log("\nProcess fully completed!");
-        return;
+    console.log("===========================================");
+    console.log("Do maintenance on Postgres data...");
+    config.DBs[INDEX].connection.query("select * from doMaintenance();",function(err,res){
+        config.DBs[INDEX].connection.end();
+        console.log("Process fully completed!\n");
+
+        if (++INDEX < config.DBs.length) {
+            console.log("Working for " + config.DBs[INDEX].fullname);
+            config.DBs[INDEX].connection.connect();
+            WikiOpen(config.DBs[INDEX].category.replace(/ /g,"_"));
+        } else {
+            wikiCaller.end();
+            console.log("\nAll processes fully completed!");
+            return;
+        }
     });
-    return 0;
 }
 
 var SearchCatQueue=function(page) {
@@ -41,20 +46,20 @@ var SearchCatQueue=function(page) {
     return i;
 }
 
-var WikiOpen = function () {
+var WikiOpen = function (starting_cat) {
     catQueue=[];
     catFreeTail=1;
     catHead=0;
     catQueue[0] = new Object();
-    catQueue[0].page_title=config.STARTING_CAT;
+    catQueue[0].page_title = starting_cat;
     catQueue[0].level=0;
     catQueue[0].cat_subcats=0;
     catQueue[0].cat_files=0;
     catQueue[0].father="ROOT";
     console.log("===========================================");
     console.log("Loading categories...");
-    wikiCaller = config.connectionToWMF;
-    let temp_query="select cat_subcats, cat_files from category where cat_title='"+config.STARTING_CAT+"'";
+
+    let temp_query="select cat_subcats, cat_files from category where cat_title='" + starting_cat + "'";
     wikiCaller.query(temp_query, function (err, rows) {
         if(!err) {
             catQueue[0].cat_subcats=rows[0].cat_subcats;
@@ -122,8 +127,12 @@ var afterCategories = function() {
         i++;
     }
 
-    //console.log(storage_query);
-    config.storage.query(storage_query,function(err,res){
+    console.log("Updating Postgres data...");
+    config.DBs[INDEX].connection.query(storage_query,function(err,res){
+        if (err) {
+            console.error(err);
+            process.exit(1);
+        }
         console.log("Completed!");
         console.log("===========================================");
         console.log("Now loading images...");
@@ -135,8 +144,14 @@ var afterCategories = function() {
 
 var LoadImages = function() {
     if (catHead >= catFreeTail) {
-        //console.log(images);
-        afterImages();
+        loadImagesIntoDB(function() {
+            console.log("===========================================");
+            console.log("Loading usages...");
+            usages=[];
+            usagindex=0;
+            catHead=0;
+            LoadUsages();
+        });
         return;
     }
     console.log("At " + catHead + " of " + catFreeTail);
@@ -168,7 +183,9 @@ var LoadImages = function() {
             images[imgIndex].cl_to=utf8.decode(rows[k].cl_to);
             imgIndex++;
         }
-        LoadImages();
+        loadImagesIntoDB(function() {
+            LoadImages();
+        });
     });
 }
 
@@ -177,7 +194,7 @@ var ConvertTimestamp = function(TS) {
     return retval;
 }
 
-var afterImages = function() {
+var loadImagesIntoDB = function(callback) {
     let storage_query="update images set is_alive=false;";
     let i=0;
     while(i<imgIndex) {
@@ -189,14 +206,10 @@ var afterImages = function() {
         i++;
     }
 
-    config.storage.query(storage_query,function(err,res){
+    console.log("Updating Postgres data...");
+    config.DBs[INDEX].connection.query(storage_query,function(err,res){
         console.log("Completed!");
-        console.log("===========================================");
-        console.log("Loading usages...");
-        usages=[];
-        usagindex=0;
-        catHead=0;
-        LoadUsages();
+        callback();
     });
 }
 
@@ -243,8 +256,9 @@ var afterUsages = function() {
         storage_query+=temp;
         i++;
     }
-    //console.log(storage_query);
-    config.storage.query(storage_query,function(err,res){
+
+    console.log("Updating Postgres data...");
+    config.DBs[INDEX].connection.query(storage_query,function(err,res){
         console.log("Completed!");
         Finalize();
     });
@@ -281,5 +295,10 @@ var BuildCategoryQuery = function (RQ) {
 
 //ENTRY POINT
 console.log("Application launched...");
-config.storage.connect();
-WikiOpen();
+wikiCaller = config.connectionToWMF;
+
+INDEX = 0;
+
+console.log("Working for " + config.DBs[INDEX].fullname);
+config.DBs[INDEX].connection.connect();
+WikiOpen(config.DBs[INDEX].category.replace(/ /g,"_"));

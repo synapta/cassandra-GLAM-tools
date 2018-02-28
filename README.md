@@ -1,3 +1,8 @@
+The purpose of this project is to Support GLAMs in monitoring and evaluating
+their cooperation with Wikimedia projects. Starting from a Wikimedia Commons
+category this tool collects data about usage, views, contributors and topology
+of the files inside.
+
 ## Init
 Install nodejs dependencies:
 ```
@@ -25,7 +30,7 @@ Open the SSH tunnel to the WMF databases:
 ssh -fN user@tools-dev.wmflabs.org -L 3306:itwiki.analytics.db.svc.eqiad.wmflabs:3306
 ```
 
-Config the `STARTING_CAT` in `etl/config.js`.
+If needed add projects in `etl/config.js` with a starting category.
 
 Run the data gathering!
 ```
