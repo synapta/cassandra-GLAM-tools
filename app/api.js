@@ -142,7 +142,11 @@ var uploadDateAll = function(req, res, id, db) {
 }
 
 var usage = function(req, res, id, db) {
-    db.query('select gil_to,gil_wiki,gil_page_title from usages where is_alive=true order by gil_to, gil_wiki, gil_page_title', (err, dbres) => {
+    let usageQuery = `select gil_to,gil_wiki,gil_page_title
+                      from usages where is_alive=true
+                      order by gil_to, gil_wiki, gil_page_title
+                      limit 10000`
+    db.query(usageQuery, (err, dbres) => {
         if(!err) {
             result=[];
             dbindex=0;
@@ -223,7 +227,8 @@ var usageSidebar = function(req, res, id, db) {
                  from usages
                  where is_alive = true
                  group by gil_to
-                 order by u desc, wiki desc`;
+                 order by u desc, wiki desc
+                 limit 10000`;
 
     db.query(usage, (err, dbres) => {
         if(!err) {
@@ -271,7 +276,8 @@ var viewsByFiles = function(req, res, id, db) {
                   where images.is_alive = true
                   and images.media_id = visualizations.media_id
                   group by img_name, access_date
-                  order by img_name, access_date`
+                  order by img_name, access_date
+                  limit 10000`
     db.query(query, (err, dbres) => {
         if(!err) {
             res.json(dbres.rows);
@@ -288,7 +294,8 @@ var viewsSidebar = function(req, res, id, db) {
                   where i.media_id = v.media_id
                   and i.is_alive = true
                   group by i.img_name
-                  order by tot desc`
+                  order by tot desc
+                  limit 10000`
     db.query(query, (err, dbres) => {
         if(!err) {
             res.json(dbres.rows);
