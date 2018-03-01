@@ -69,7 +69,7 @@ var rootCategory = function(req, res, id, db) {
 }
 
 var totalMediaNum = function(req, res, id, db) {
-    db.query('SELECT COUNT(*) as num from images where is_alive = true', (err, dbres) => {
+    db.query('SELECT COUNT(*) as num from images', (err, dbres) => {
         if(!err) {
             res.json(dbres.rows[0]);
         } else {
