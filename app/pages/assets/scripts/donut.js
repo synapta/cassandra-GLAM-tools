@@ -1,6 +1,6 @@
 var donutChartDraw = function(div, query) {
     var donut = donutChart(div)
-        .width(300)
+        .width(400)
         .height(200)
         .cornerRadius(3) // sets how rounded the corners are on each slice
         .padAngle(0.015) // effectively dictates the gap between slices
@@ -126,7 +126,7 @@ function donutChart() {
               .attr('x', legendRectSize + legendSpacing)
               .attr('y', legendRectSize - legendSpacing/2)
               .style('font-size', '0.7rem')
-              .text(function(d,i) { return data[i].tipo.replace(/wiki$/,"").toUpperCase() + " - " + data[i].n; });
+              .text(function(d,i) { return data[i].tipo.replace(/wiki$/,"").toUpperCase() + " - " + formatter(data[i].n); });
             // ===========================================================================================
             // Functions
 
@@ -186,8 +186,8 @@ function donutChart() {
 
                     // leave off 'dy' attr for first tspan so the 'dy' attr on text element works. The 'dy' attr on
                     // tspan effectively imitates a line break.
-                    if (i === 0) tip += '<tspan x="0">' + value + '</tspan>';
-                    else tip += '<tspan x="0" dy="1.2em">' + value + '</tspan>';
+                    if (i === 0) tip += '<tspan x="0">' + formatter(value) + '</tspan>';
+                    else tip += '<tspan x="0" dy="1.2em">' + formatter(value) + '</tspan>';
                     i++;
                 }
 

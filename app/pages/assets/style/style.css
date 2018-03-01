@@ -50,7 +50,7 @@ a {
 }
 #topbar h1 {
   display:inline;
-  padding: 0 0.5em;
+  padding-left: 0.5em;
 }
 #topbar h2 {
   display:inline;

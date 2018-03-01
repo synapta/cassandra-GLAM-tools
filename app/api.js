@@ -79,8 +79,11 @@ var totalMediaNum = function(req, res, id, db) {
     })
 }
 
+// USER CONTRIBUTIONS
+
 var uploadDate = function(req, res, id, start, end, db) {
-    query='select count(*) as img_count, img_user_text, to_char(img_timestamp, \'YYYY/MM\') as img_time from images';
+    query = `select count(*) as img_count, img_user_text, to_char(img_timestamp, \'YYYY/MM\') as img_time
+             from images`;
 
     //start and end are defined, convert them to timestamp and append
     if (start !== undefined) {
@@ -97,7 +100,7 @@ var uploadDate = function(req, res, id, start, end, db) {
             query+=" and ";
         query+="img_timestamp<="+end_timestamp;
     }
-    query+=" group by img_user_text, img_time order by img_user_text";
+    query+=" group by img_user_text, img_time order by img_user_text limit 1000";
 
     db.query(query, (err, dbres) => {
         if (!err) {
@@ -141,11 +144,13 @@ var uploadDateAll = function(req, res, id, db) {
     })
 }
 
+// USAGE
+
 var usage = function(req, res, id, db) {
     let usageQuery = `select gil_to,gil_wiki,gil_page_title
                       from usages where is_alive=true
                       order by gil_to, gil_wiki, gil_page_title
-                      limit 10000`
+                      limit 1000`
     db.query(usageQuery, (err, dbres) => {
         if(!err) {
             result=[];
@@ -228,7 +233,7 @@ var usageSidebar = function(req, res, id, db) {
                  where is_alive = true
                  group by gil_to
                  order by u desc, wiki desc
-                 limit 10000`;
+                 limit 1000`;
 
     db.query(usage, (err, dbres) => {
         if(!err) {
@@ -239,6 +244,8 @@ var usageSidebar = function(req, res, id, db) {
         }
     });
 }
+
+// VIEWS
 
 var viewsAll = function(req, res, id, db) {
     db.query('select sum(accesses) from visualizations', (err, dbres) => {

@@ -3,8 +3,8 @@ var {Pool, Client} = require('pg');
 
 var connectionToWMF = new MariaClient({
     host: '127.0.0.1',
-    user: 'u3175',
-    password: 'oolahaerohdeovei',
+    user: 'uxxxx', //PUT HERE YOUR USER
+    password: 'xxxx', //PUT HERE YOUR PWD
     db: 'commonswiki_p'
 });
 

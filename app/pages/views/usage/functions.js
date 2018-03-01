@@ -175,11 +175,11 @@ function statDraw() {
 				  window.location.href('/500');
 			}
 			$("#usage_stat").append("<br><br>");
-			$("#usage_stat").append("Distinct media used: <b>" + data.totalImagesUsed + "</b> / <span id='totalMediaNum'></span>");
+			$("#usage_stat").append("Distinct media used: <b>" + formatter(data.totalImagesUsed) + "</b> / <span id='totalMediaNum'></span>");
 			$("#usage_stat").append("<br><br>");
-			$("#usage_stat").append("Total projects involved: <b>" + data.totalProjects + "</b>");
+			$("#usage_stat").append("Total projects involved: <b>" + formatter(data.totalProjects) + "</b>");
 			$("#usage_stat").append("<br><br>");
-			$("#usage_stat").append("Total pages enhanced: <b>" + data.totalPages + "</b>");
+			$("#usage_stat").append("Total pages enhanced: <b>" + formatter(data.totalPages) + "</b>");
 
 			setTotalMediaNum();
 	});
