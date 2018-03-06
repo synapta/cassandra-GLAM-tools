@@ -1,4 +1,4 @@
-var Config=require("../config.js");
+var Config=require("../config/config.js");
 var fs=require("fs");
 var i=0;
 var DB;
