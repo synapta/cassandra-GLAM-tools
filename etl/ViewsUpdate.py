@@ -132,7 +132,7 @@ def init(argdate):
     if not os.path.exists("temp"):
         os.makedirs("temp")
     #leggi settings
-    data = json.load(open('config.json'))
+    data = json.load(open('../config.json'))
     #cicla
     k=0
     date = argdate

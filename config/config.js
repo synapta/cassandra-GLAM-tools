@@ -8,7 +8,7 @@ var connectionToWMF = new MariaClient({
     password: 'xxxx', //PUT HERE YOUR PWD
     db: 'commonswiki_p'
 });
-var conf=fs.readFileSync("config.json");
+var conf=fs.readFileSync("../config.json");
 var credentials=JSON.parse(conf);
 var DBs = [
   {
