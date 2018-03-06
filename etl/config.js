@@ -1,5 +1,6 @@
 var MariaClient = require('mariasql');
 var {Pool, Client} = require('pg');
+var fs=require('fs');
 
 var connectionToWMF = new MariaClient({
     host: '127.0.0.1',
@@ -7,7 +8,8 @@ var connectionToWMF = new MariaClient({
     password: 'xxxx', //PUT HERE YOUR PWD
     db: 'commonswiki_p'
 });
-var credentials=JSON.parse(config.json);
+var conf=fs.readFileSync("config.json");
+var credentials=JSON.parse(conf);
 var DBs = [
   {
     name:"ZU",
