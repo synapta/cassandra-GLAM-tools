@@ -7,103 +7,61 @@ var connectionToWMF = new MariaClient({
     password: 'xxxx', //PUT HERE YOUR PWD
     db: 'commonswiki_p'
 });
-
+var credentials=JSON.parse(config.json);
 var DBs = [
-  /*{
+  {
     name:"ZU",
     fullname: "Canton of Zürich",
     category:"Historical images of buildings in the canton of Zürich",
-    connection:new Client({
-      user: 'postgres',
-      host: '127.0.0.1',
-      database: 'cassandradb',
-      password: 'postgres',
-      port: 5432
-    })
-  },*/
+    connection:new Client(credentials["ALL"])
+  },
   {
     name:"ETH",
     fullname: "ETH Library of Zurich",
     category:"Media contributed by the ETH-Bibliothek",
-    connection:new Client({
-      user: 'postgres',
-      host: '127.0.0.1',
-      database: 'eth',
-      password: 'postgres',
-      port: 5432
-    })
+    connection:new Client(credentials["eth"])
   },
   {
     name:"SNL",
     fullname: "Swiss National Library",
     category:"Media contributed by the Swiss National Library",
-    connection:new Client({
-      user: 'postgres',
-      host: '127.0.0.1',
-      database: 'snl',
-      password: 'postgres',
-      port: 5432
-    })
+    connection:new Client(credentials["snl"])
+
   },
   {
     name:"SBB",
     fullname:"SBB Historic",
     category:"SBB Historic",
-    connection:new Client({
-      user: 'postgres',
-      host: '127.0.0.1',
-      database: 'sbb',
-      password: 'postgres',
-      port: 5432
-    })
+    connection:new Client(credentials["sbb"])
+
   },
   {
     name:"BUL",
     fullname: "University Library of Basel",
     category:"Media contributed by the Basel University Library",
-    connection:new Client({
-      user: 'postgres',
-      host: '127.0.0.1',
-      database: 'bul',
-      password: 'postgres',
-      port: 5432
-    })
+    connection:new Client(credentials["bul"])
+
   },
   {
     name:"SFA",
     fullname: "Swiss Federal Archives",
     category:"Media contributed by the Swiss Federal Archives",
-    connection:new Client({
-      user: 'postgres',
-      host: '127.0.0.1',
-      database: 'sfa',
-      password: 'postgres',
-      port: 5432
-    })
+    connection:new Client(credentials["sfa"])
+
   },
   {
     name:"CLS",
     fullname : "Central Library Solothurn",
     category:"Media contributed by Zentralbibliothek Solothurn",
-    connection:new Client({
-      user: 'postgres',
-      host: '127.0.0.1',
-      database: 'cls',
-      password: 'postgres',
-      port: 5432
-    })
+    connection:new Client(credentials["cls"])
+
   },
   {
     name:"ZBZ",
     fullname: "Zentralbibliothek Zürich",
     category:"Media contributed by Zentralbibliothek Zürich",
-    connection:new Client({
-      user: 'postgres',
-      host: '127.0.0.1',
-      database: 'zbz',
-      password: 'postgres',
-      port: 5432
-    })
+    connection:new Client(credentials["zbz"])
+
   }/*,
   {
     name:"WMCH",

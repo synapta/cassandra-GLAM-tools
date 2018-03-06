@@ -132,13 +132,13 @@ def init(argdate):
     if not os.path.exists("temp"):
         os.makedirs("temp")
     #leggi settings
-    data = json.load(open('data.json'))
+    data = json.load(open('config.json'))
     #cicla
     k=0
     date = argdate
     downloadFile(date)
     while k<data.DBs.lenght:
-        pgconnection = psycopg2.connect("dbname="+data.DBs[k].connection.database+" user="+data.DBs[k].connection.user+" password="+data.DBs[k].connection.password+" host="+data.DBs[k].connection.host)
+        pgconnection = psycopg2.connect("dbname="+data[data['ALL'][k]].database+" user="+data[data['ALL'][k]].user+" password="+data[data['ALL'][k]].password+" host="+data[data['ALL'][k]].host)
         #print pgconnection.encoding
         pgconnection.autocommit = True
         conn=pgconnection

@@ -1,0 +1,59 @@
+{
+    "ALL":["eth","snl","sbb","bull","sfa","cls","zbz"],
+    "zu":{
+        "user": "postgres",
+        "host": "127.0.0.1",
+        "database": "cassandradb",
+        "password": "postgres",
+        "port": 5432
+    },
+    "eth":{
+        "user": "postgres",
+        "host": "127.0.0.1",
+        "database": "eth",
+        "password": "postgres",
+        "port": 5432
+    },
+    "snl":{
+        "user": "postgres",
+        "host": "127.0.0.1",
+        "database": "snl",
+        "password": "postgres",
+        "port": 5432
+    },
+    "sbb":{
+        "user": "postgres",
+        "host": "127.0.0.1",
+        "database": "sbb",
+        "password": "postgres",
+        "port": 5432
+    },
+    "bul":{
+        "user": "postgres",
+        "host": "127.0.0.1",
+        "database": "bul",
+        "password": "postgres",
+        "port": 5432
+    },
+    "sfa":{
+        "user": "postgres",
+        "host": "127.0.0.1",
+        "database": "sfa",
+        "password": "postgres",
+        "port": 5432
+    },
+    "cls":{
+        "user": "postgres",
+        "host": "127.0.0.1",
+        "database": "cls",
+        "password": "postgres",
+        "port": 5432
+    },
+    "zbz":{
+        "user": "postgres",
+        "host": "127.0.0.1",
+        "database": "zbz",
+        "password": "postgres",
+        "port": 5432
+    }
+}
