@@ -1,4 +1,4 @@
-var Config=require("./etl/config.js");
+var Config=require("../etl/config.js");
 var fs=require("fs");
 var i=0;
 var DB;
