@@ -15,7 +15,7 @@ var DBs = [
     name:"ZU",
     fullname: "Canton of Zürich",
     category:"Historical images of buildings in the canton of Zürich",
-    connection:new Client(credentials["ALL"])
+    connection:new Client(credentials["zu"])
   },
   {
     name:"ETH",
