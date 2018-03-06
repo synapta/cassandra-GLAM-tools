@@ -6,6 +6,7 @@ import urllib
 import threading
 import Queue
 import psycopg2 #postgres driver
+import json
 date=""
 conn=None
 watched=None
@@ -16,6 +17,7 @@ q = Queue.Queue(BUF_SIZE)
 isOver=False
 counter=0
 counterLock=threading.Lock()
+filename=""
 
 class ConsumerThread(threading.Thread):
     def __init__(self, group=None, target=None, name=None,
@@ -59,7 +61,7 @@ def reporter(first,second,third):
         print "Progress in the download: "+str(first*second*100/third)+"%"
 
 def process(date):
-    year, month, day=date.split("-")
+
     global watched
     watched = set()
     curse=conn.cursor()
@@ -74,14 +76,8 @@ def process(date):
     global itemN
     itemN=w
     curse.close()
-    baseurl="https://dumps.wikimedia.org/other/mediacounts/daily/"
-    finalurl=baseurl+year+"/"+"mediacounts."+year+"-"+month+"-"+day+".v00.tsv.bz2"
-    print ("Retrieving "+finalurl+"...")
-    filename,headers=urllib.urlretrieve(finalurl,'temp/temp'+date+'.tsv.bz2',reporter)#!!
-    print "Download completed."
-    print filename#!!
     source_file = bz2.BZ2File(filename, "r")
-    print "Loading visualizations... this may take several minutes"
+    print "Loading visualizations from"+filename+"... this may take several minutes"
     #crea thread
     threads=[]
     i=0
@@ -111,22 +107,46 @@ def process(date):
     while i<NTHREADS:
         threads[i].join()
         i=i+1
-    os.remove(filename)
+
+
+def downloadFile(date):
+    global filename
+    year, month, day = date.split("-")
+    baseurl = "https://dumps.wikimedia.org/other/mediacounts/daily/"
+    finalurl = baseurl + year + "/" + "mediacounts." + year + "-" + month + "-" + day + ".v00.tsv.bz2"
+    print ("Retrieving " + finalurl + "...")
+    filename, headers = urllib.urlretrieve(finalurl, 'temp/temp' + date + '.tsv.bz2', reporter)  # !!
+    print "Download completed."
+    print filename  # !!
 
 def init(argdate):
     global cursors
     global date
     global conn
+    global isOver
+    global counter
+    global q
+    q=Queue.Queue(BUF_SIZE)
+    counter=0
+    isOver=False
     if not os.path.exists("temp"):
         os.makedirs("temp")
-    pgconnection = psycopg2.connect("dbname=cassandradb user=postgres password=postgres host=localhost")
-    #print pgconnection.encoding
-    pgconnection.autocommit = True
-    conn=pgconnection
+    #leggi settings
+    data = json.load(open('data.json'))
+    #cicla
+    k=0
     date = argdate
-    print "Script running with following parameters: "+date
-    process(date)
-    pgconnection.close()
+    downloadFile(date)
+    while k<data.DBs.lenght:
+        pgconnection = psycopg2.connect("dbname="+data.DBs[k].connection.database+" user="+data.DBs[k].connection.user+" password="+data.DBs[k].connection.password+" host="+data.DBs[k].connection.host)
+        #print pgconnection.encoding
+        pgconnection.autocommit = True
+        conn=pgconnection
+        print "Script running with following parameters: "+date+", "+dbname
+        process(date)
+        pgconnection.close()
+        k+=1
+    os.remove(filename)
     print "Process ended"
 
 def main():

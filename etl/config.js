@@ -9,7 +9,7 @@ var connectionToWMF = new MariaClient({
 });
 
 var DBs = [
-  {
+  /*{
     name:"ZU",
     fullname: "Canton of Zürich",
     category:"Historical images of buildings in the canton of Zürich",
@@ -20,7 +20,7 @@ var DBs = [
       password: 'postgres',
       port: 5432
     })
-  },
+  },*/
   {
     name:"ETH",
     fullname: "ETH Library of Zurich",
@@ -104,7 +104,7 @@ var DBs = [
       password: 'postgres',
       port: 5432
     })
-  },
+  }/*,
   {
     name:"WMCH",
     fullname:"Supported by Wikimedia CH",
@@ -116,7 +116,7 @@ var DBs = [
       password: 'postgres',
       port: 5432
     })
-  }
+  }*/
 ];
 
 exports.connectionToWMF = connectionToWMF;
