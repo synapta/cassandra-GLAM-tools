@@ -1,4 +1,4 @@
-﻿create or replace function AddCategory(title varchar(255),subcats int ,files int,_to varchar(255),_level int)
+create or replace function AddCategory(title varchar(255),subcats int ,files int,_to varchar(255),_level int)
 returns void as $$
 declare
 t varchar(255)[];

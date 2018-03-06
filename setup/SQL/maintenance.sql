@@ -1,4 +1,4 @@
-﻿create table if not exists dailyImageUsage(img_name varchar(255),count_date date, count bigint, primary key (img_name, count_date));
+create table if not exists dailyImageUsage(img_name varchar(255),count_date date, count bigint, primary key (img_name, count_date));
 create or replace function doMaintenance()
 returns void as $$
 begin

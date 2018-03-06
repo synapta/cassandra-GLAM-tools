@@ -28,7 +28,7 @@ var ProcessQuery=function()
     console.log(filetoRead);
     fs.readFile(filetoRead,'ascii',function(err,read){
         console.log("Executing: ");
-        read=read.toString('ascii').substring(3);
+        read=read.toString('ascii');
         console.log(read);
         DB.query(read,function(err2,b)
         {

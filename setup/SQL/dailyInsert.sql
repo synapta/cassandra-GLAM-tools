@@ -1,4 +1,4 @@
-﻿create or replace function dailyInsert(text, date,integer, integer, integer)
+create or replace function dailyInsert(text, date,integer, integer, integer)
 returns integer as $$
 declare id integer;
 begin
