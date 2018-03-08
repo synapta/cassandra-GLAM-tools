@@ -1,5 +1,5 @@
 {
-    "ALL":["eth","snl","sbb","bull","sfa","cls","zbz"],
+    "ALL":["eth","snl","sbb","bul","sfa","cls","zbz"],
     "zu":{
         "user": "postgres",
         "host": "127.0.0.1",

@@ -1,3 +1,5 @@
-ssh -fN ilario@tools-dev.wmflabs.org -L 3306:itwiki.analytics.db.svc.eqiad.wmflabs:3306 -i /home/wikim/.ssh/pk-valdelli.ppk
 pip install pyscopg2
 node run.js #sarebbe simpatico fargli creare anche database e user....
+#sh ./../etl/firstRun.sh
+#path=/???/etl/run.sh
+#crontab -l | { cat; echo "@daily $path"; } | crontab -
