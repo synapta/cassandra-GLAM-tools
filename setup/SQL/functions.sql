@@ -36,7 +36,7 @@ insert into images(img_name,img_user_text,img_timestamp,img_size,cl_to,is_alive)
 end if;
 EXCEPTION
     WHEN others THEN
-        RAISE NOTICE 'Error on %',title;
+        RAISE NOTICE 'Error on %',_name;
 end;
 $$language plpgsql;
 
