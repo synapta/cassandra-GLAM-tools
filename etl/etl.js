@@ -116,7 +116,7 @@ var GetLevelChilds = function () {
 };
 
 var afterCategories = function() {
-    let storage_query="delete from categories; ";
+    let storage_query="delete from categories; update images set is_alive=false; ";
     let i=0;
     while(i<catFreeTail) {
         let temp="";
@@ -191,7 +191,7 @@ var ConvertTimestamp = function(TS) {
 }
 
 var loadImagesIntoDB = function(callback) {
-    let storage_query="update images set is_alive=false;";
+    let storage_query="";//"update images set is_alive=false;";
     let i=0;
     while(i<imgIndex) {
         let temp="";
