@@ -2,7 +2,7 @@ sh ./run.sh
 now=$(date --date="3 days ago" '+%Y-%m-%d')
 echo $now
 
-d=2017-08-28
+d=2017-06-29
 while [ "$d" != "$now" ]; do
   echo $d
   d=$(date -I -d "$d + 1 day")
