@@ -2,13 +2,7 @@ var express = require('express');
 var api = require('./api.js');
 var config = require('./config.js');
 var auth = require('http-auth');
-
-var basic = auth.basic({
-        realm: "GLAM tools"
-    }, function (username, password, callback) { // Custom authentication method.
-        callback(username === config.SERVICE_USER && password === config.SERVICE_PASSWORD);
-    }
-);
+var auths = require('./auth.js');
 
 var DBConnections=[];
 
@@ -56,8 +50,41 @@ module.exports = function(app, apicache) {
           req.path.startsWith('/ZU/'))
       {
           next();
-      } else {
-          (auth.connect(basic))(req, res, next);
+      } else if (req.path === "/ETH" ||
+          req.path.startsWith('/api/ETH/') ||
+          req.path.startsWith('/ETH/') )
+      {
+          (auth.connect(auths.authETH))(req, res, next);
+      } else if (req.path === "/SBB" ||
+          req.path.startsWith('/api/SBB/') ||
+          req.path.startsWith('/SBB/') )
+      {
+          (auth.connect(auths.authSBB))(req, res, next);
+      } else if (req.path === "/SFA" ||
+          req.path.startsWith('/api/SFA/') ||
+          req.path.startsWith('/SFA/') )
+      {
+          (auth.connect(auths.authSFA))(req, res, next);
+      } else if (req.path === "/BUL" ||
+          req.path.startsWith('/api/BUL/') ||
+          req.path.startsWith('/BUL/') )
+      {
+          (auth.connect(auths.authBUL))(req, res, next);
+      } else if (req.path === "/SNL" ||
+          req.path.startsWith('/api/SNL/') ||
+          req.path.startsWith('/SNL/') )
+      {
+          (auth.connect(auths.authSNL))(req, res, next);
+      } else if (req.path === "/ZBZ" ||
+          req.path.startsWith('/api/ZBZ/') ||
+          req.path.startsWith('/ZBZ/') )
+      {
+          (auth.connect(auths.authZBZ))(req, res, next);
+      } else if (req.path === "/CLS" ||
+          req.path.startsWith('/api/CLS/') ||
+          req.path.startsWith('/CLS/') )
+      {
+          (auth.connect(auths.authCLS))(req, res, next);
       }
   });
 

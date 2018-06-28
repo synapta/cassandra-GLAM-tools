@@ -110,9 +110,6 @@ var {Pool, Client} = require('pg');
     }
   ];
 
-  var SERVICE_USER = "test";
-  var SERVICE_PASSWORD = "test";
-
   function getIndexOfDb(id,arr) {
       var i = 0;
       while (i < arr.length) {
@@ -126,6 +123,4 @@ var {Pool, Client} = require('pg');
   }
 
   exports.DBs = DBs;
-  exports.SERVICE_USER = SERVICE_USER;
-  exports.SERVICE_PASSWORD = SERVICE_PASSWORD;
   exports.getIndexOfDb = getIndexOfDb;
