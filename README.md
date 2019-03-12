@@ -10,7 +10,8 @@ npm install
 ```
 
 Create a PostgreSQL database and a user. You can find the `CREATE` query in
-`setup/SQL/db_create.sql`. Then you need to update `setup/config.js`.
+`setup/SQL/db_create.sql`. Then you need to update `config/config.js`,
+`config/config.json` and `app/config.js`.
 
 Finally run the table installation:
 ```
@@ -20,7 +21,7 @@ node run.js
 
 Install bower dependencies:
 ```
-cd app/assets
+cd app/pages/assets
 bower install
 ```
 
@@ -29,8 +30,6 @@ Open the SSH tunnel to the WMF databases:
 ```
 ssh -fN user@tools-dev.wmflabs.org -L 3306:itwiki.analytics.db.svc.eqiad.wmflabs:3306
 ```
-
-If needed add projects in `etl/config.js` with a starting category.
 
 Run the data gathering!
 ```
