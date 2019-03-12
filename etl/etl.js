@@ -1,9 +1,7 @@
 var utf8 = require('utf8');
-var MariaClient = require('mariasql');
 var config = require('../config/config.js');
 
 const CONST_CAT_PER_QUERY = 40;
-const CONST_IMG_PER_QUERY = 30;
 const CONST_USE_PER_QUERY = 10;
 
 var wikiCaller;

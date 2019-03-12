@@ -2,7 +2,6 @@ var express = require('express');
 var api = require('./api.js');
 var config = require('./config.js');
 var auth = require('http-auth');
-var auths = require('./auth.js');
 
 var DBConnections=[];
 
@@ -25,6 +24,15 @@ function getDatabase(id){
     }
 }
 
+function getIdFromPath(path) {
+    let exploded = path.split('/')
+    if (path.startsWith('/api/')) {
+        return exploded[2];
+    } else {
+        return exploded[1];
+    }
+}
+
 module.exports = function(app, apicache) {
 
   app.use('/',express.static(__dirname + '/pages'));
@@ -42,50 +50,23 @@ module.exports = function(app, apicache) {
 	});
 
   app.use(function(req, res, next) {
-      if (req.path === "/WMCH" ||
-          req.path.startsWith('/api/WMCH/') ||
-          req.path.startsWith('/WMCH/') ||
-          req.path === "/ZU" ||
-          req.path.startsWith('/api/ZU/') ||
-          req.path.startsWith('/ZU/'))
-      {
-          next();
-      } else if (req.path === "/ETH" ||
-          req.path.startsWith('/api/ETH/') ||
-          req.path.startsWith('/ETH/') )
-      {
-          (auth.connect(auths.authETH))(req, res, next);
-      } else if (req.path === "/SBB" ||
-          req.path.startsWith('/api/SBB/') ||
-          req.path.startsWith('/SBB/') )
-      {
-          (auth.connect(auths.authSBB))(req, res, next);
-      } else if (req.path === "/SFA" ||
-          req.path.startsWith('/api/SFA/') ||
-          req.path.startsWith('/SFA/') )
-      {
-          (auth.connect(auths.authSFA))(req, res, next);
-      } else if (req.path === "/BUL" ||
-          req.path.startsWith('/api/BUL/') ||
-          req.path.startsWith('/BUL/') )
-      {
-          (auth.connect(auths.authBUL))(req, res, next);
-      } else if (req.path === "/SNL" ||
-          req.path.startsWith('/api/SNL/') ||
-          req.path.startsWith('/SNL/') )
-      {
-          (auth.connect(auths.authSNL))(req, res, next);
-      } else if (req.path === "/ZBZ" ||
-          req.path.startsWith('/api/ZBZ/') ||
-          req.path.startsWith('/ZBZ/') )
-      {
-          (auth.connect(auths.authZBZ))(req, res, next);
-      } else if (req.path === "/CLS" ||
-          req.path.startsWith('/api/CLS/') ||
-          req.path.startsWith('/CLS/') )
-      {
-          (auth.connect(auths.authCLS))(req, res, next);
-      }
+    let id = getIdFromPath(req.path);
+    let index = config.getIndexOfDb(id, config.DBs);
+
+    if (index === -1) {
+        next();
+    } else if (config.DBs[index].hasOwnProperty('http-auth') === false) {
+        next();
+    } else {
+        let auth_config = config.DBs[index]['http-auth'];
+        let auth_basic = auth.basic({
+            realm: auth_config['realm']
+        }, function (username, password, callback) {
+            callback(username === auth_config['username']
+                && password === auth_config['password']);
+        });
+        (auth.connect(auth_basic))(req, res, next);
+    }
   });
 
   //VIEWS

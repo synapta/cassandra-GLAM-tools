@@ -37,7 +37,7 @@ def process(date):
             print 'Breaked'
             break
         arr = line.split("\t")
-        keysX = arr[0].split("/");
+        keysX = arr[0].split("/")
         key = keysX[len(keysX) - 1]
         key = urllib.unquote(key).decode('utf8')
         if key in watched:
@@ -82,13 +82,13 @@ def init(argdate):
     global AllConnections
     if not os.path.exists("temp"):
         os.makedirs("temp")
-        # leggi settings
-    data = json.load(open('../config/config.json'))
+    # leggi settings
+    categories = json.load(open('../config/categories.json'))
     k = 0
     date = argdate
     print "Script running with following parameters: "+date
-    while k < len(data['ALL']):
-        connstring="dbname=" + data[data['ALL'][k]]['database'] + " user=" + data[data['ALL'][k]]['user'] + " password=" + data[data['ALL'][k]]['password'] + " host=" + data[data['ALL'][k]]['host']
+    for category in categories:
+        connstring="dbname=" + category['connection']['database'] + " user=" + category['connection']['user'] + " password=" + category['connection']['password'] + " host=" + category['connection']['host']
         pgconnection = psycopg2.connect(connstring)
         #print pgconnection.encoding
         pgconnection.autocommit = True

@@ -10,8 +10,8 @@ npm install
 ```
 
 Create a PostgreSQL database and a user. You can find the `CREATE` query in
-`setup/SQL/db_create.sql`. Then you need to update `config/config.js`,
-`config/config.json` and `app/config.js`.
+`setup/SQL/db_create.sql`. Then you may need to update `config/categories.json`
+ and `config/wmflabs.json`.
 
 Finally run the table installation:
 ```
