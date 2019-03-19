@@ -4,6 +4,7 @@
             "name": "ZU",
             "fullname": "Canton of Zürich",
             "category": "Historical images of buildings in the canton of Zürich",
+            "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Herrliberger_Elgg_1740.jpg/640px-Herrliberger_Elgg_1740.jpg",
             "connection": {
                 "user": "postgres",
                 "host": "127.0.0.1",
@@ -16,6 +17,7 @@
             "name": "ETH",
             "fullname": "ETH Library of Zurich",
             "category": "Media contributed by the ETH-Bibliothek",
+            "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Aettenschwil_1953.jpg/640px-Aettenschwil_1953.jpg",
             "http-auth": {
                 "realm": "ETH stats",
                 "username": "eth",
@@ -33,6 +35,7 @@
             "name": "SNL",
             "fullname": "Swiss National Library",
             "category": "Media contributed by the Swiss National Library",
+            "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/CH-NB-Guida_da_Milano_a_Ginevra_pel_Sempione_con_40_vedute_ed_una_carta_geografica-19443-page036.tif/lossy-page1-640px-CH-NB-Guida_da_Milano_a_Ginevra_pel_Sempione_con_40_vedute_ed_una_carta_geografica-19443-page036.tif.jpg",
             "http-auth": {
                 "realm": "SNL stats",
                 "username": "snl",
@@ -50,6 +53,7 @@
             "name": "SBB",
             "fullname": "SBB Historic",
             "category": "SBB Historic",
+            "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/SBB_Be_6-8_III_13302_and_Facc_Weiacher_Kies.JPG/640px-SBB_Be_6-8_III_13302_and_Facc_Weiacher_Kies.JPG",
             "http-auth": {
                 "realm": "SBB stats",
                 "username": "sbb",
@@ -67,6 +71,7 @@
             "name": "BUL",
             "fullname": "University Library of Basel",
             "category": "Media contributed by the Basel University Library",
+            "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Heberling_e-codices_ubb-AN-II-0003_0085r_large.jpg/640px-Heberling_e-codices_ubb-AN-II-0003_0085r_large.jpg",
             "http-auth": {
                 "realm": "BUL stats",
                 "username": "bul",
@@ -84,6 +89,7 @@
             "name": "SFA",
             "fullname": "Swiss Federal Archives",
             "category": "Media contributed by the Swiss Federal Archives",
+            "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Artillerie_beim_Defilee_vor_der_Armeef%C3%BChrung_-_CH-BAR_-_3238234.tif/lossy-page1-640px-Artillerie_beim_Defilee_vor_der_Armeef%C3%BChrung_-_CH-BAR_-_3238234.tif.jpg",
             "http-auth": {
                 "realm": "SFA stats",
                 "username": "sfa",
@@ -101,6 +107,7 @@
             "name": "CLS",
             "fullname": "Central Library Solothurn",
             "category": "Media contributed by Zentralbibliothek Solothurn",
+            "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Franziska_Moellinger_GA_II_46_15_giessbach.tif/lossy-page1-640px-Franziska_Moellinger_GA_II_46_15_giessbach.tif.jpg",
             "http-auth": {
                 "realm": "CLS stats",
                 "username": "cls",
@@ -118,6 +125,7 @@
             "name": "ZBZ",
             "fullname": "Zentralbibliothek Zürich",
             "category": "Media contributed by Zentralbibliothek Zürich",
+            "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Zentralbibliothek_Z%C3%BCrich_-_Die_Eiserne_Thurbr%C3%BCcke_Ansicht_von_Osten_gegen_Andelfingen_-_000010346.tif/lossy-page1-640px-Zentralbibliothek_Z%C3%BCrich_-_Die_Eiserne_Thurbr%C3%BCcke_Ansicht_von_Osten_gegen_Andelfingen_-_000010346.tif.jpg",
             "http-auth": {
                 "realm": "ZBZ stats",
                 "username": "zbz",

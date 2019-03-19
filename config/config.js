@@ -12,6 +12,7 @@ config['categories'].forEach(element => {
     'name': element['name'],
     'fullname': element['fullname'],
     'category': element['category'],
+    'image': element['image'],
     connection: new Client(element['connection'])
   };
 
