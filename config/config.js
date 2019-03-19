@@ -13,11 +13,18 @@ config['categories'].forEach(element => {
     'fullname': element['fullname'],
     'category': element['category'],
     'image': element['image'],
-    connection: new Client(element['connection'])
+    connection: new Client({
+      'user': config['postgres']['user'],
+      'password': config['postgres']['password'],
+      'host': config['postgres']['hos'],
+      'port': config['postgres']['port'],
+      'database': element['database']
+    })
   };
 
   if (element.hasOwnProperty('http-auth')) {
     db['http-auth'] = element['http-auth'];
+    db['http-auth']['realm'] = element['name'] + " stats";
   }
 
   DBs.push(db);

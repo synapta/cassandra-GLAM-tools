@@ -93,15 +93,15 @@ def main():
 
     # read settings
     try:
-        category = json.load(open('../config/config.json')
-                             )['categories'][args.cat]
+        config = json.load(open('../config/config.json'))
+        category = config['categories'][args.cat]
     except IndexError:
         print("Unknown category", args.cat)
         sys.exit(1)
 
-    connstring = "dbname=" + category['connection']['database'] + " user=" + category['connection']['user'] + \
-        " password=" + category['connection']['password'] + \
-        " host=" + category['connection']['host']
+    connstring = "dbname=" + category['database'] + " user=" + config['postgres']['user'] + \
+        " password=" + config['postgres']['password'] + \
+        " host=" + config['postgres']['host']
     pgconnection = psycopg2.connect(connstring)
     # print(pgconnection.encoding)
     pgconnection.autocommit = True

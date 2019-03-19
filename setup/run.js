@@ -36,12 +36,14 @@ var ProcessQuery = function () {
 };
 
 if (process.argv.length != 3) {
+    console.log('Missing category index');
     process.exit(1);
 }
 
 var INDEX = parseInt(process.argv[2]);
 
 if (INDEX === undefined) {
+    console.log('Wrong category index');
     process.exit(1);
 }
 
