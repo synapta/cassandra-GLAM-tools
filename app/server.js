@@ -1,7 +1,6 @@
 var express = require('express');
 var apicache = require('apicache').options({ debug: false }).middleware;
 var morgan = require('morgan');
-var config = require('./config.js');
 
 var app = express();
 app.use(morgan('common'));

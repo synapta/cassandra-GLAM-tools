@@ -83,7 +83,7 @@ def init(argdate):
     if not os.path.exists("temp"):
         os.makedirs("temp")
     # leggi settings
-    categories = json.load(open('../config/categories.json'))
+    categories = json.load(open('../config/config.json'))['categories']
     k = 0
     date = argdate
     print "Script running with following parameters: "+date

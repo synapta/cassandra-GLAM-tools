@@ -1,4 +1,4 @@
-var config = require('./config.js');
+var config = require('../config/config.js');
 
 Date.prototype.addHours = function(h) {
     this.setTime(this.getTime() + (h*60*60*1000));
@@ -59,7 +59,7 @@ var rootCategory = function(req, res, id, db) {
         if (!err) {
             let result = {};
             result.name = config.DBs[config.getIndexOfDb(id, config.DBs)].fullname;
-            result.category = config.DBs[config.getIndexOfDb(id, config.DBs)].category;
+            result.category = 'Category:' + config.DBs[config.getIndexOfDb(id, config.DBs)].category;
             res.json(result);
         } else {
             console.log(err);

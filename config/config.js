@@ -2,22 +2,38 @@ var MariaClient = require('mariasql');
 var { Pool, Client } = require('pg');
 var fs = require('fs');
 
-var wmflabs = fs.readFileSync("../config/wmflabs.json");
-var connectionToWMF = new MariaClient(JSON.parse(wmflabs));
-
-var categories = JSON.parse(fs.readFileSync("../config/categories.json"));
+var config = JSON.parse(fs.readFileSync("../config/config.json"));
+var connectionToWMF = new MariaClient(config['wmflabs']);
 
 var DBs = [];
 
-categories.forEach(element => {
+config['categories'].forEach(element => {
   let db = {
     'name': element['name'],
     'fullname': element['fullname'],
     'category': element['category'],
     connection: new Client(element['connection'])
   };
+
+  if (element.hasOwnProperty('http-auth')) {
+    db['http-auth'] = element['http-auth'];
+  }
+
   DBs.push(db);
 });
 
+function getIndexOfDb(id, arr) {
+  var i = 0;
+  while (i < arr.length) {
+    if (arr[i].name === id)
+      break;
+    i++;
+  }
+  if (i === arr.length)
+    i = -1;
+  return i;
+}
+
+exports.getIndexOfDb = getIndexOfDb;
 exports.connectionToWMF = connectionToWMF;
 exports.DBs = DBs;

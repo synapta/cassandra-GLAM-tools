@@ -1,6 +1,6 @@
 var express = require('express');
 var api = require('./api.js');
-var config = require('./config.js');
+var config = require('../config/config.js');
 var auth = require('http-auth');
 
 var DBConnections=[];
