@@ -1,8 +1,8 @@
 var utf8 = require('utf8');
 var config = require('../config/config.js');
 
-const CONST_CAT_PER_QUERY = 40;
 const CONST_USE_PER_QUERY = 10;
+const CONST_CAT_PER_QUERY = 40;
 
 var wikiCaller;
 var images;
@@ -19,16 +19,7 @@ var Finalize=function() {
     config.DBs[INDEX].connection.query("select * from doMaintenance();",function(err,res){
         config.DBs[INDEX].connection.end();
         console.log("Process fully completed!\n");
-
-        if (++INDEX < config.DBs.length) {
-            console.log("Working for " + config.DBs[INDEX].fullname);
-            config.DBs[INDEX].connection.connect();
-            WikiOpen(config.DBs[INDEX].category.replace(/ /g,"_"));
-        } else {
-            wikiCaller.end();
-            console.log("\nAll processes fully completed!");
-            return;
-        }
+        process.exit(0);
     });
 }
 
@@ -288,10 +279,18 @@ var BuildCategoryQuery = function (RQ) {
 
 
 //ENTRY POINT
+if (process.argv.length != 3) {
+    process.exit(1);
+}
+
+INDEX = parseInt(process.argv[2]);
+
+if (INDEX === undefined) {
+    process.exit(1);
+}
+
 console.log("Application launched...");
 wikiCaller = config.connectionToWMF;
-
-INDEX = 0;
 
 console.log("Working for " + config.DBs[INDEX].fullname);
 config.DBs[INDEX].connection.connect();
