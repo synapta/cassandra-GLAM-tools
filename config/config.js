@@ -1,3 +1,4 @@
+var MongoClient = require('mongodb').MongoClient;
 var MariaClient = require('mariasql');
 var { Pool, Client } = require('pg');
 var fs = require('fs');
@@ -7,27 +8,38 @@ var connectionToWMF = new MariaClient(config['wmflabs']);
 
 var DBs = [];
 
-config['categories'].forEach(element => {
-  let db = {
-    'name': element['name'],
-    'fullname': element['fullname'],
-    'category': element['category'],
-    'image': element['image'],
-    connection: new Client({
-      'user': config['postgres']['user'],
-      'password': config['postgres']['password'],
-      'host': config['postgres']['hos'],
-      'port': config['postgres']['port'],
-      'database': element['database']
-    })
-  };
+var client = new MongoClient(config['mongodb']['url'], { useNewUrlParser: true });
 
-  if (element.hasOwnProperty('http-auth')) {
-    db['http-auth'] = element['http-auth'];
-    db['http-auth']['realm'] = element['name'] + " stats";
-  }
+client.connect(function(err) {
+  var db = client.db(config['mongodb']['database']);
+  var collection = db.collection(config['mongodb']['collection']);
 
-  DBs.push(db);
+  collection.find({}).toArray(function(err, docs) {
+    docs.forEach(function(element) {
+      let cat = {
+        'name': element['name'],
+        'fullname': element['fullname'],
+        'category': element['category'],
+        'image': element['image'],
+        connection: new Client({
+          'user': config['postgres']['user'],
+          'password': config['postgres']['password'],
+          'host': config['postgres']['hos'],
+          'port': config['postgres']['port'],
+          'database': element['database']
+        })
+      };
+    
+      if (element.hasOwnProperty('http-auth')) {
+        cat['http-auth'] = element['http-auth'];
+        cat['http-auth']['realm'] = element['name'] + " stats";
+      }
+    
+      DBs.push(cat);
+    });
+    exports.DBs = DBs;
+    client.close();
+  });
 });
 
 function getIndexOfDb(id, arr) {
@@ -44,4 +56,3 @@ function getIndexOfDb(id, arr) {
 
 exports.getIndexOfDb = getIndexOfDb;
 exports.connectionToWMF = connectionToWMF;
-exports.DBs = DBs;

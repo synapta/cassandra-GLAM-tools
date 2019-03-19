@@ -6,7 +6,8 @@ import sys
 import urllib.parse
 import urllib.request
 
-import psycopg2  # postgres driver
+import psycopg2
+import pymongo
 
 watched = set()
 
@@ -87,15 +88,18 @@ def loadImages(conn):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('cat', type=int)
+    parser.add_argument('cat', type=str)
     parser.add_argument('date', type=str)
     args = parser.parse_args()
 
     # read settings
-    try:
-        config = json.load(open('../config/config.json'))
-        category = config['categories'][args.cat]
-    except IndexError:
+    config = json.load(open('../config/config.json'))
+    client = pymongo.MongoClient(config['mongodb']['url'])
+    db = client[config['mongodb']['database']]
+    collection = db[config['mongodb']['collection']]
+    category = collection.find_one({"name": args.cat})
+
+    if category == None:
         print("Unknown category", args.cat)
         sys.exit(1)
 
