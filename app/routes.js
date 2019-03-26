@@ -31,15 +31,7 @@ module.exports = function (app, apicache) {
             }
         }
 
-        let id = getId(req.path);
-        let glam = config.glams[id];
-
-        if (glam === undefined) {
-            next();
-        } else if (glam.hasOwnProperty('http-auth') === false) {
-            next();
-        } else {
-            let auth_config = glam['http-auth'];
+        function auth_create(auth_config) {
             let auth_basic = auth.basic({
                 realm: auth_config['realm']
             }, function (username, password, callback) {
@@ -47,6 +39,22 @@ module.exports = function (app, apicache) {
                     && password === auth_config['password']);
             });
             (auth.connect(auth_basic))(req, res, next);
+        }
+
+        let id = getId(req.path);
+
+        if (id === 'admin') {
+            auth_create(config.admin);
+        } else {
+            let glam = config.glams[id];
+
+            if (glam === undefined) {
+                next();
+            } else if (glam.hasOwnProperty('http-auth') === false) {
+                next();
+            } else {
+                auth_create(glam['http-auth']);
+            }
         }
     });
 

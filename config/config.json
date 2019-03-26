@@ -16,5 +16,9 @@
         "user": "",
         "password": "",
         "db": "commonswiki_p"
+    },
+    "admin": {
+        "username": "admin",
+        "password": "PASSWORD"
     }
 }

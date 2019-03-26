@@ -6,6 +6,9 @@ var fs = require('fs');
 var config = JSON.parse(fs.readFileSync("../config/config.json"));
 exports.connectionToWMF = new MariaClient(config['wmflabs']);
 
+config.admin['realm'] = 'Admin area';
+exports.admin = config.admin;
+
 const client = new MongoClient(config['mongodb']['url'], { useNewUrlParser: true });
 
 var glams = {};
