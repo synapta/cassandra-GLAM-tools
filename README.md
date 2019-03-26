@@ -4,12 +4,23 @@ category this tool collects data about usage, views, contributors and topology
 of the files inside.
 
 ## Init
-Install nodejs dependencies:
+Install Node.js global dependencies:
+```
+sudo npm install -g bower
+sudo npm install -g forever
+```
+
+Install Node.js project dependencies:
 ```
 npm install
 ```
 
-Install bower dependencies:
+Install Python dependencies:
+```
+pip3 install -r requirements.txt
+```
+
+Install Bower dependencies:
 ```
 cd app/pages/assets
 bower install
@@ -35,9 +46,19 @@ The provided MongoDB collection must contain documents with the following format
 The field `http-auth` is optional and may be omitted if no password is required.
 
 ## Get data
+Create the file `.ssh/config`:
+```
+Host wmflabs
+   HostName      tools-dev.wmflabs.org
+   User          <user>
+   Port          22
+   IdentityFile  ~/.ssh/<key>
+   LocalForward  3306 itwiki.analytics.db.svc.eqiad.wmflabs:3306
+```
+
 Open the SSH tunnel to the WMF databases:
 ```
-autossh -Nf -L 3306:itwiki.analytics.db.svc.eqiad.wmflabs:3306 user@tools-dev.wmflabs.org
+autossh -f -N wmflabs
 ```
 
 Run the data gathering!
@@ -48,5 +69,11 @@ python3 run.py
 
 ## Run webservices
 ```
-npm start
+cd app
+sudo nodejs server
+```
+
+```
+cd app
+sudo forever start server.js
 ```

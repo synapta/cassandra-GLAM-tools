@@ -16,6 +16,5 @@
   },
   "scripts": {
     "postinstall": "raml2html ./docs/api.raml > ./app/pages/docs.html",
-    "start": "sudo node app/server.js"
   }
 }
