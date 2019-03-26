@@ -18,7 +18,7 @@ var Finalize=function() {
     console.log("===========================================");
     console.log("Do maintenance on Postgres data...");
     glam.connection.query("select * from doMaintenance();",function(err,res){
-        console.log("Process fully completed!\n");
+        console.log("Process fully completed!");
         process.exit(0);
     });
 }

@@ -24,6 +24,11 @@ def update(collection, glam):
                           '$set': {'lastrun': datetime.utcnow()}})
 
 
+def views_date():
+    date = datetime.utcnow() - timedelta(days=2)
+    return date.strftime("%Y-%m-%d")
+
+
 def setup(name):
     logging.info('Running setup.js for %s', name)
     subprocess.run(['nodejs', 'setup.js', name], check=True)
@@ -42,7 +47,7 @@ def views(name, date):
     logging.info('Subprocess views.py completed')
 
 
-def process(collection, glam):
+def process_glam(collection, glam):
     if datetime.utcnow() < glam['lastrun'] + timedelta(days=1):
         logging.info('No need to run %s', glam['name'])
         return
@@ -58,11 +63,8 @@ def process(collection, glam):
         logging.error('Subprocess etl.js failed')
 
     # Run views.py
-    date = datetime.utcnow() - timedelta(days=2)
-    date_str = date.strftime("%Y-%m-%d")
-
     try:
-        views(glam['name'], date_str)
+        views(glam['name'], views_date())
     except SubprocessError:
         success = False
         logging.error('Subprocess views.py failed')
@@ -75,16 +77,56 @@ def process(collection, glam):
 
 
 def clean_downloads():
-    for f in os.listdir(views_dir):
-        path = os.path.join(views_dir, f)
+    for f_name in os.listdir(views_dir):
+        path = os.path.join(views_dir, f_name)
         if os.path.isfile(path):
             try:
-                date = datetime.strptime(f[:10], '%Y-%m-%d')
+                date = datetime.strptime(f_name[:10], '%Y-%m-%d')
                 if date < datetime.utcnow() - timedelta(days=10):
-                    logging.info('Deleting file %s', f)
+                    logging.info('Deleting file %s', f_name)
                     os.remove(path)
             except ValueError:
                 pass
+
+
+def create_database(config, database):
+    connstring = "dbname=template1 user=" + config['postgres']['user'] + \
+        " password=" + config['postgres']['password'] + \
+        " host=" + config['postgres']['host']
+    conn = psycopg2.connect(connstring)
+    conn.autocommit = True
+    curse = conn.cursor()
+    try:
+        curse.execute("CREATE DATABASE " + database + " WITH OWNER = postgres " + \
+            "ENCODING = 'UTF8' TABLESPACE = pg_default LC_COLLATE = 'it_IT.UTF-8' " + \
+            "LC_CTYPE = 'it_IT.UTF-8' CONNECTION LIMIT = -1 TEMPLATE template0;")
+    except ProgrammingError:
+        # the database is already available
+        pass
+    finally:
+        conn.close()
+
+
+def initial_views(name):
+    date_str = views_date()
+
+    # for all the files available
+    for f_name in os.listdir(views_dir):
+        path = os.path.join(views_dir, f_name)
+        if os.path.isfile(path):
+            try:
+                date = datetime.strptime(f_name[:10], '%Y-%m-%d')
+                if date_str == date.strftime("%Y-%m-%d"):
+                    # we have already processed this date
+                    continue
+            except ValueError:
+                # the file name is invalid
+                continue
+
+            try:
+                views(name, f_name[:10])
+            except SubprocessError:
+                logging.error('Subprocess views.py failed')
 
 
 def main():
@@ -94,50 +136,23 @@ def main():
     collection = db[config['mongodb']['collection']]
 
     for glam in collection.find():
-        if 'lastrun' not in glam:
+        if 'lastrun' in glam:
+            process_glam(collection, glam)
+        else:
             # this is the first run
             glam['lastrun'] = datetime.fromtimestamp(0)
-            logging.info('Running scheduler for %s for the first time', glam['name'])
 
-            # create the database
-            connstring = "dbname=template1 user=" + config['postgres']['user'] + \
-                " password=" + config['postgres']['password'] + \
-                " host=" + config['postgres']['host']
-            conn = psycopg2.connect(connstring)
-            conn.autocommit = True
-            curse = conn.cursor()
-            try:
-                curse.execute("CREATE DATABASE " + glam['database'])
-            except ProgrammingError:
-                # the database is already available
-                pass
-            finally:
-                conn.close()
+            create_database(config, glam['database'])
 
-            # run the setup
             try:
                 setup(glam['name'])
             except SubprocessError:
                 logging.error('Subprocess setup.py failed')
 
-            # for all the dates available
-            for f in os.listdir(views_dir):
-                path = os.path.join(views_dir, f)
-                if os.path.isfile(path):
-                    try:
-                        date = datetime.strptime(f[:10], '%Y-%m-%d')
-                    except ValueError:
-                        continue
+            process_glam(collection, glam)
 
-                    try:
-                        views(glam['name'], f[:10])
-                    except SubprocessError:
-                        logging.error('Subprocess views.py failed')
+            initial_views(glam['name'])
 
-        # process the glam
-        process(collection, glam)
-
-    # clean expired downloads
     clean_downloads()
 
 
