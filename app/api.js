@@ -1,5 +1,3 @@
-var config = require('../config/config.js');
-
 Date.prototype.addHours = function (h) {
     this.setTime(this.getTime() + (h * 60 * 60 * 1000));
     return this;
@@ -21,7 +19,7 @@ function pad(num, size) {
     return s;
 };
 
-var categoryGraph = function (req, res, id, db) {
+var categoryGraph = function (req, res, db) {
     db.query('SELECT page_title,cat_files,cl_to[0:10],cat_level[0:10] from categories', (err, dbres) => {
         if (!err) {
             var result = Object();
@@ -54,28 +52,30 @@ var categoryGraph = function (req, res, id, db) {
     })
 }
 
-var index = function (req, res) {
+var index = function (req, res, glams) {
     let result = [];
 
-    config.DBs.forEach(element => {
-        let category = {
-            'name': element['name'],
-            'fullname': element['fullname'],
-            'category': "Category:" + element['category'],
-            'image': element['image']
-        };
-        result.push(category);
-    });
+    for (var id in glams) {
+        if (!glams.hasOwnProperty(id))
+            continue;
 
+        let glam = {
+            'name': glams[id]['name'],
+            'fullname': glams[id]['fullname'],
+            'category': "Category:" + glams[id]['category'],
+            'image': glams[id]['image']
+        };
+        result.push(glam);
+    }
     res.json(result);
 }
 
-var rootCategory = function (req, res, id, db) {
-    db.query('SELECT page_title from categories limit 1', (err, dbres) => {
+var rootCategory = function (req, res, cat) {
+    cat.connection.query('SELECT page_title from categories limit 1', (err, dbres) => {
         if (!err) {
             let result = {};
-            result.name = config.DBs[config.getIndexOfDb(id, config.DBs)].fullname;
-            result.category = 'Category:' + config.DBs[config.getIndexOfDb(id, config.DBs)].category;
+            result.name = cat.fullname;
+            result.category = 'Category:' + cat.category;
             res.json(result);
         } else {
             console.log(err);
@@ -84,7 +84,7 @@ var rootCategory = function (req, res, id, db) {
     })
 }
 
-var totalMediaNum = function (req, res, id, db) {
+var totalMediaNum = function (req, res, db) {
     db.query('SELECT COUNT(*) as num from images', (err, dbres) => {
         if (!err) {
             res.json(dbres.rows[0]);
@@ -96,7 +96,7 @@ var totalMediaNum = function (req, res, id, db) {
 }
 
 // USER CONTRIBUTIONS
-var uploadDate = function (req, res, id, start, end, db) {
+var uploadDate = function (req, res, start, end, db) {
     query = `select count(*) as img_count, img_user_text, to_char(img_timestamp, \'YYYY/MM\') as img_time
              from images`;
 
@@ -143,7 +143,7 @@ var uploadDate = function (req, res, id, start, end, db) {
     })
 }
 
-var uploadDateAll = function (req, res, id, db) {
+var uploadDateAll = function (req, res, db) {
     let query = `select count(*) as count, to_char(img_timestamp, 'YYYY/MM') as date
                  from images
                  group by date
@@ -160,7 +160,7 @@ var uploadDateAll = function (req, res, id, db) {
 }
 
 // USAGE
-var usage = function (req, res, id, db) {
+var usage = function (req, res, db) {
     let usageQuery = `select gil_to,gil_wiki,gil_page_title
                       from usages where is_alive=true
                       order by gil_to, gil_wiki, gil_page_title
@@ -193,7 +193,7 @@ var usage = function (req, res, id, db) {
     });
 }
 
-var usageStat = function (req, res, id, db) {
+var usageStat = function (req, res, db) {
     let totalUsageQuery = `select count(*) as c, count(distinct gil_to) as d
                             from usages
                             where is_alive = true`;
@@ -223,7 +223,7 @@ var usageStat = function (req, res, id, db) {
     });
 }
 
-var usageTop = function (req, res, id, db) {
+var usageTop = function (req, res, db) {
     let topProjectsQuery = `select gil_wiki as tipo, count(*) as n
                               from usages
                               where is_alive = true
@@ -241,7 +241,7 @@ var usageTop = function (req, res, id, db) {
     });
 }
 
-var usageSidebar = function (req, res, id, db) {
+var usageSidebar = function (req, res, db) {
     let usage = `select gil_to, count(distinct gil_wiki) as wiki, count(*) as u
                  from usages
                  where is_alive = true
@@ -260,7 +260,7 @@ var usageSidebar = function (req, res, id, db) {
 }
 
 // VIEWS
-var viewsAll = function (req, res, id, db) {
+var viewsAll = function (req, res, db) {
     db.query('select sum(accesses) from visualizations', (err, dbres) => {
         if (!err) {
             res.json(dbres.rows[0]);
@@ -271,7 +271,7 @@ var viewsAll = function (req, res, id, db) {
     });
 }
 
-var viewsByDate = function (req, res, id, db) {
+var viewsByDate = function (req, res, db) {
     db.query('select sum(accesses) as sum,access_date from visualizations group by access_date order by access_date', (err, dbres) => {
         if (!err) {
             result = [];
@@ -290,7 +290,7 @@ var viewsByDate = function (req, res, id, db) {
     });
 }
 
-var viewsByFiles = function (req, res, id, db) {
+var viewsByFiles = function (req, res, db) {
     let query = `select img_name, sum(accesses) as sum,access_date
                   from visualizations, images
                   where images.is_alive = true
@@ -308,7 +308,7 @@ var viewsByFiles = function (req, res, id, db) {
     });
 }
 
-var viewsSidebar = function (req, res, id, db) {
+var viewsSidebar = function (req, res, db) {
     let query = `select i.img_name, sum(v.accesses) as tot, avg(v.accesses) as av, PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER by v.accesses) as median
                   from images as i, visualizations as v
                   where i.media_id = v.media_id

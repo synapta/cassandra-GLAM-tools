@@ -1,34 +1,30 @@
-var Config = require("../config/config.js");
+var config = require("../config/config.js");
 var fs = require("fs");
-var i = 0;
-var DB;
 
-var EndSetup = function () {
-    DB.end();
+var endSetup = function () {
     console.log("Setup ended");
     process.exit(0);
 };
 
-var ProcessQuery = function () {
-    if (step >= installationFiles.length) {
-        EndSetup();
+var processQuery = function (db, files, step) {
+    if (step >= files.length) {
+        endSetup();
         return;
     }
-    filetoRead = "SQL/" + installationFiles[step];
+    filetoRead = "SQL/" + files[step];
     console.log(filetoRead);
     fs.readFile(filetoRead, 'ascii', function (_, read) {
         // console.log("Executing: ");
         read = read.toString('ascii');
         // console.log(read);
-        DB.query(read, function (err, b) {
+        db.query(read, function (err, b) {
             if (!err) {
-                step++;
-                ProcessQuery();
+                processQuery(db, files, step+1);
             }
             else {
                 console.log("Error in step " + step);
                 console.log(err);
-                EndSetup();
+                endSetup();
                 return;
             }
         })
@@ -36,21 +32,20 @@ var ProcessQuery = function () {
 };
 
 if (process.argv.length != 3) {
-    console.log('Missing category index');
+    console.log('Missing GLAM name');
     process.exit(1);
 }
 
-var INDEX = parseInt(process.argv[2]);
+config.loadGlams(() => {
+    var glam = config.glams[process.argv[2]];
 
-if (INDEX === undefined) {
-    console.log('Wrong category index');
-    process.exit(1);
-}
+    if (glam === undefined) {
+        console.log('Unknown GLAM name');
+        process.exit(1);
+    }
+    
+    var files = ["db_init.sql", "dailyInsert.sql", "functions.sql", "maintenance.sql"];
 
-var installationFiles = ["db_init.sql", "dailyInsert.sql", "functions.sql", "maintenance.sql"];
-var DBs = Config.DBs;
-DB = DBs[INDEX].connection;
-DB.connect();
-
-var step = 0;
-ProcessQuery();
+    console.log("Setup started");
+    processQuery(glam.connection, files, 0);
+});

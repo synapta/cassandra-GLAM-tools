@@ -8,7 +8,7 @@
     "mongodb": {
         "url": "mongodb://localhost:27017",
         "database": "cassandra",
-        "collection": "categories"
+        "collection": "glams"
     },
     "wmflabs": {
         "host": "localhost",

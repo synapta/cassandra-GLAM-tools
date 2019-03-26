@@ -12,12 +12,12 @@ var imgIndex;
 var catFreeTail=0;
 var usages;
 var usagindex=0;
+var glam;
 
 var Finalize=function() {
     console.log("===========================================");
     console.log("Do maintenance on Postgres data...");
-    config.DBs[INDEX].connection.query("select * from doMaintenance();",function(err,res){
-        config.DBs[INDEX].connection.end();
+    glam.connection.query("select * from doMaintenance();",function(err,res){
         console.log("Process fully completed!\n");
         process.exit(0);
     });
@@ -117,7 +117,7 @@ var afterCategories = function() {
     }
 
     console.log("Updating Postgres data...");
-    config.DBs[INDEX].connection.query(storage_query,function(err,res){
+    glam.connection.query(storage_query,function(err,res){
         if (err) {
             console.error(err);
             process.exit(1);
@@ -192,7 +192,7 @@ var loadImagesIntoDB = function(callback) {
     }
 
     console.log("Updating Postgres data...");
-    config.DBs[INDEX].connection.query(storage_query,function(err,res){
+    glam.connection.query(storage_query,function(err,res){
         console.log("Completed!");
         callback();
     });
@@ -243,7 +243,7 @@ var afterUsages = function() {
     }
 
     console.log("Updating Postgres data...");
-    config.DBs[INDEX].connection.query(storage_query,function(err,res){
+    glam.connection.query(storage_query,function(err,res){
         console.log("Completed!");
         Finalize();
     });
@@ -277,23 +277,23 @@ var BuildCategoryQuery = function (RQ) {
     AND page_title = cat_title`;
 }
 
-
 //ENTRY POINT
 if (process.argv.length != 3) {
-    console.log('Missing category index');
+    console.log('Missing GLAM name');
     process.exit(1);
 }
 
-INDEX = parseInt(process.argv[2]);
+config.loadGlams(() => {
+    glam = config.glams[process.argv[2]];
 
-if (INDEX === undefined) {
-    console.log('Wrong category index');
-    process.exit(1);
-}
-
-console.log("Application launched...");
-wikiCaller = config.connectionToWMF;
-
-console.log("Working for " + config.DBs[INDEX].fullname);
-config.DBs[INDEX].connection.connect();
-WikiOpen(config.DBs[INDEX].category.replace(/ /g,"_"));
+    if (glam === undefined) {
+        console.log('Unknown GLAM name');
+        process.exit(1);
+    }
+    
+    console.log("Application launched...");
+    wikiCaller = config.connectionToWMF;
+    
+    console.log("Working for " + glam.fullname);
+    WikiOpen(glam.category.replace(/ /g,"_"));
+});
