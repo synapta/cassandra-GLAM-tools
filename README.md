@@ -9,32 +9,41 @@ Install nodejs dependencies:
 npm install
 ```
 
-Create a PostgreSQL database and a user. You can find the `CREATE` query in
-`setup/SQL/db_create.sql`. Then you may need to update `config/categories.json`
- and `config/wmflabs.json`.
-
-Finally run the table installation:
-```
-cd setup
-node run.js
-```
-
 Install bower dependencies:
 ```
 cd app/pages/assets
 bower install
 ```
 
+Update the configuration file: `config/config.json`.
+
+The provided MongoDB collection must contain documents with the following format:
+```
+{
+   "name":"ETH",
+   "fullname":"ETH Library of Zurich",
+   "category":"Media contributed by the ETH-Bibliothek",
+   "image":"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Aettenschwil_1953.jpg/640px-Aettenschwil_1953.jpg",
+   "database":"eth",
+   "http-auth":{
+      "username":"eth",
+      "password":"PASSWORD"
+   }
+}
+```
+
+The field `http-auth` is optional and may be omitted is no password is required.
+
 ## Get data
 Open the SSH tunnel to the WMF databases:
 ```
-ssh -fN user@tools-dev.wmflabs.org -L 3306:itwiki.analytics.db.svc.eqiad.wmflabs:3306
+autossh -Nf -L 3306:itwiki.analytics.db.svc.eqiad.wmflabs:3306 user@tools-dev.wmflabs.org
 ```
 
 Run the data gathering!
 ```
 cd etl
-./run.sh
+python3 run.py
 ```
 
 ## Run webservices

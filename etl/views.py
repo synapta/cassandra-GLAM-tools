@@ -88,7 +88,7 @@ def loadImages(conn):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('cat', type=str)
+    parser.add_argument('glam', type=str)
     parser.add_argument('date', type=str)
     args = parser.parse_args()
 
@@ -97,13 +97,13 @@ def main():
     client = pymongo.MongoClient(config['mongodb']['url'])
     db = client[config['mongodb']['database']]
     collection = db[config['mongodb']['collection']]
-    category = collection.find_one({"name": args.cat})
+    glam = collection.find_one({"name": args.glam})
 
-    if category == None:
-        print("Unknown category", args.cat)
+    if glam == None:
+        print("Unknown Glam name", args.glam)
         sys.exit(1)
 
-    connstring = "dbname=" + category['database'] + " user=" + config['postgres']['user'] + \
+    connstring = "dbname=" + glam['database'] + " user=" + config['postgres']['user'] + \
         " password=" + config['postgres']['password'] + \
         " host=" + config['postgres']['host']
     pgconnection = psycopg2.connect(connstring)
