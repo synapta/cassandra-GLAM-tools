@@ -15,6 +15,6 @@
     "utf8": "~2.1.2"
   },
   "scripts": {
-    "postinstall": "raml2html ./docs/api.raml > ./app/pages/docs.html",
+    "postinstall": "raml2html ./docs/api.raml > ./app/pages/docs.html"
   }
 }
