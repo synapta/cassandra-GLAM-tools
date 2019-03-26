@@ -32,7 +32,7 @@ The provided MongoDB collection must contain documents with the following format
 }
 ```
 
-The field `http-auth` is optional and may be omitted is no password is required.
+The field `http-auth` is optional and may be omitted if no password is required.
 
 ## Get data
 Open the SSH tunnel to the WMF databases:
