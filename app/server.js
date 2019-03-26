@@ -4,6 +4,7 @@ var morgan = require('morgan');
 
 var app = express();
 app.use(morgan('common'));
+app.use(express.json());
 
 require('./routes.js')(app, apicache);
 

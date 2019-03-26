@@ -31,7 +31,7 @@ module.exports = function (app, apicache) {
             }
         }
 
-        function auth_create(auth_config) {
+        function createAuth(auth_config) {
             let auth_basic = auth.basic({
                 realm: auth_config['realm']
             }, function (username, password, callback) {
@@ -44,7 +44,7 @@ module.exports = function (app, apicache) {
         let id = getId(req.path);
 
         if (id === 'admin') {
-            auth_create(config.admin);
+            createAuth(config.admin);
         } else {
             let glam = config.glams[id];
 
@@ -53,7 +53,7 @@ module.exports = function (app, apicache) {
             } else if (glam.hasOwnProperty('http-auth') === false) {
                 next();
             } else {
-                auth_create(glam['http-auth']);
+                createAuth(glam['http-auth']);
             }
         }
     });
@@ -105,8 +105,33 @@ module.exports = function (app, apicache) {
     });
 
     //API
-    app.get('/api/index', apicache("1 hour"), function (request, response) {
-        api.index(request, response, config.glams);
+    app.get('/api/glams', apicache("1 hour"), function (request, response) {
+        api.glams(request, response, config.glams);
+    });
+
+    app.get('/api/admin/glams', function (request, response) {
+        api.glams(request, response, config.glams);
+    });
+
+    app.post('/api/admin/glams', function (request, response) {
+        api.createGlam(request, response, config);
+    });
+
+    app.get('/api/admin/glams/:id', function (request, response) {
+        let glam = config.glams[request.params.id];
+        if (glam !== undefined) {
+            api.getGlam(request, response, glam);
+        } else {
+            response.sendStatus(404);
+        }
+    });
+
+    app.put('/api/admin/glams/:id', function (request, response) {
+        response.sendStatus(501);
+    });
+
+    app.delete('/api/admin/glams/:id', function (request, response) {
+        response.sendStatus(501);
     });
 
     app.get('/api/:id/category', apicache("1 hour"), function (request, response) {

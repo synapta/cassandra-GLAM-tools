@@ -52,22 +52,35 @@ var categoryGraph = function (req, res, db) {
     })
 }
 
-var index = function (req, res, glams) {
+function glamToJson(glam) {
+    return {
+        'name': glam['name'],
+        'fullname': glam['fullname'],
+        'category': "Category:" + glam['category'],
+        'image': glam['image']
+    };
+}
+
+var glams = function (req, res, glams) {
     let result = [];
 
     for (var id in glams) {
         if (!glams.hasOwnProperty(id))
             continue;
 
-        let glam = {
-            'name': glams[id]['name'],
-            'fullname': glams[id]['fullname'],
-            'category': "Category:" + glams[id]['category'],
-            'image': glams[id]['image']
-        };
-        result.push(glam);
+        result.push(glamToJson(glams[id]));
     }
+
     res.json(result);
+}
+
+var getGlam = function (req, res, glam) {
+    res.json(glamToJson(glam));
+}
+
+var createGlam = function (req, res, config) {
+    console.log(req.body);
+    res.sendStatus(501);
 }
 
 var rootCategory = function (req, res, cat) {
@@ -326,7 +339,9 @@ var viewsSidebar = function (req, res, db) {
     });
 }
 
-exports.index = index;
+exports.glams = glams;
+exports.getGlam = getGlam;
+exports.createGlam = createGlam;
 exports.rootCategory = rootCategory;
 exports.totalMediaNum = totalMediaNum;
 exports.categoryGraph = categoryGraph;
