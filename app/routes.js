@@ -110,7 +110,7 @@ module.exports = function (app, apicache) {
     });
 
     app.get('/api/admin/glams', function (request, response) {
-        api.glams(request, response, config.glams);
+        api.glams(request, response, config.glams, true);
     });
 
     app.post('/api/admin/glams', function (request, response) {

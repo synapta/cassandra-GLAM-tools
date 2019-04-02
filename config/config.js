@@ -33,6 +33,10 @@ exports.loadGlams = (callback) => {
             'database': element['database']
           })
         };
+
+        if (element.hasOwnProperty('lastrun')) {
+          glam['lastrun'] = element['lastrun'];
+        }
     
         if (element.hasOwnProperty('http-auth')) {
           glam['http-auth'] = element['http-auth'];

@@ -61,14 +61,20 @@ function glamToJson(glam) {
     };
 }
 
-var glams = function (req, res, glams) {
+var glams = function (req, res, glams, admin) {
     let result = [];
 
     for (var id in glams) {
         if (!glams.hasOwnProperty(id))
             continue;
 
-        result.push(glamToJson(glams[id]));
+        json = glamToJson(glams[id]);
+
+        if (admin === true && glams[id].hasOwnProperty('lastrun')) {
+            json['lastrun'] = glams[id]['lastrun'];
+        }
+    
+        result.push(json);
     }
 
     res.json(result);
