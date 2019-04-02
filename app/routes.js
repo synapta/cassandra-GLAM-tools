@@ -3,7 +3,14 @@ var api = require('./api.js');
 var auth = require('http-auth');
 
 var config = require('../config/config.js');
-config.loadGlams();
+
+// Reload configuration every hour because MongoDB is also modified by run.py
+function loadGlams() {
+    config.loadGlams();
+    setTimeout(loadGlams, 3600000);
+}
+
+loadGlams();
 
 module.exports = function (app, apicache) {
 
