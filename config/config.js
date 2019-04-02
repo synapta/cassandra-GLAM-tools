@@ -36,6 +36,14 @@ exports.loadGlams = (callback) => {
 
         if (element.hasOwnProperty('lastrun')) {
           glam['lastrun'] = element['lastrun'];
+        } else {
+          glam['lastrun'] = null;
+        }
+
+        if (element.hasOwnProperty('paused')) {
+          glam['paused'] = element['paused'];
+        } else {
+          glam['paused'] = false;
         }
     
         if (element.hasOwnProperty('http-auth')) {

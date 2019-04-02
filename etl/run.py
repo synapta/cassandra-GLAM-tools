@@ -49,7 +49,7 @@ def views(name, date):
 
 def process_glam(collection, glam):
     if datetime.utcnow() < glam['lastrun'] + timedelta(days=1):
-        logging.info('No need to run %s', glam['name'])
+        logging.info('Glam %s is already updated', glam['name'])
         return
 
     success = True
@@ -136,6 +136,11 @@ def main():
     collection = db[config['mongodb']['collection']]
 
     for glam in collection.find():
+        if 'paused' in glam:
+            if glam['paused'] == True:
+                logging.info('Glam %s is paused', glam['name'])
+                continue
+
         if 'lastrun' in glam:
             process_glam(collection, glam)
         else:

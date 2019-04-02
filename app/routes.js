@@ -58,10 +58,14 @@ module.exports = function (app, apicache) {
         }
     });
 
+    function isValidGlam(glam) {
+        return glam !== undefined && glam['paused'] === false && glam['lastrun'] !== null;
+    }
+
     //VIEWS
     app.get('/:id', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
-        if (glam !== undefined) {
+        if (isValidGlam(glam)) {
             response.sendFile(__dirname + '/pages/views/index.html');
         } else {
             response.sendStatus(400);
@@ -70,7 +74,7 @@ module.exports = function (app, apicache) {
 
     app.get('/:id/category-network', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
-        if (glam !== undefined) {
+        if (isValidGlam(glam)) {
             response.sendFile(__dirname + '/pages/views/category-network/index.html');
         } else {
             response.sendStatus(400);
@@ -79,7 +83,7 @@ module.exports = function (app, apicache) {
 
     app.get('/:id/user-contributions', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
-        if (glam !== undefined) {
+        if (isValidGlam(glam)) {
             response.sendFile(__dirname + '/pages/views/user-contributions/index.html');
         } else {
             response.sendStatus(400);
@@ -88,7 +92,7 @@ module.exports = function (app, apicache) {
 
     app.get('/:id/usage', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
-        if (glam !== undefined) {
+        if (isValidGlam(glam)) {
             response.sendFile(__dirname + '/pages/views/usage/index.html');
         } else {
             response.sendStatus(400);
@@ -97,7 +101,7 @@ module.exports = function (app, apicache) {
 
     app.get('/:id/page-views', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
-        if (glam !== undefined) {
+        if (isValidGlam(glam)) {
             response.sendFile(__dirname + '/pages/views/page-views/index.html');
         } else {
             response.sendStatus(400);
@@ -136,7 +140,7 @@ module.exports = function (app, apicache) {
 
     app.get('/api/:id/category', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
-        if (glam !== undefined) {
+        if (isValidGlam(glam)) {
             api.categoryGraph(request, response, glam.connection);
         } else {
             response.sendStatus(400);
@@ -145,7 +149,7 @@ module.exports = function (app, apicache) {
 
     app.get('/api/:id/rootcategory', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
-        if (glam !== undefined) {
+        if (isValidGlam(glam)) {
             api.rootCategory(request, response, glam);
         } else {
             response.sendStatus(400);
@@ -154,7 +158,7 @@ module.exports = function (app, apicache) {
 
     app.get('/api/:id/totalMediaNum', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
-        if (glam !== undefined) {
+        if (isValidGlam(glam)) {
             api.totalMediaNum(request, response, glam.connection);
         } else {
             response.sendStatus(400);
@@ -163,7 +167,7 @@ module.exports = function (app, apicache) {
 
     app.get('/api/:id/views/by-date', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
-        if (glam !== undefined) {
+        if (isValidGlam(glam)) {
             api.viewsByDate(request, response, glam.connection);
         } else {
             response.sendStatus(400);
@@ -172,7 +176,7 @@ module.exports = function (app, apicache) {
 
     app.get('/api/:id/views/all', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
-        if (glam !== undefined) {
+        if (isValidGlam(glam)) {
             api.viewsAll(request, response, glam.connection);
         } else {
             response.sendStatus(400);
@@ -181,7 +185,7 @@ module.exports = function (app, apicache) {
 
     app.get('/api/:id/views/sidebar', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
-        if (glam !== undefined) {
+        if (isValidGlam(glam)) {
             api.viewsSidebar(request, response, glam.connection);
         } else {
             response.sendStatus(400);
@@ -190,7 +194,7 @@ module.exports = function (app, apicache) {
 
     app.get('/api/:id/views/files', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
-        if (glam !== undefined) {
+        if (isValidGlam(glam)) {
             api.viewsByFiles(request, response, glam.connection);
         } else {
             response.sendStatus(400);
@@ -199,7 +203,7 @@ module.exports = function (app, apicache) {
 
     app.get('/api/:id/usage/', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
-        if (glam !== undefined) {
+        if (isValidGlam(glam)) {
             api.usage(request, response, glam.connection);
         } else {
             response.sendStatus(400);
@@ -208,7 +212,7 @@ module.exports = function (app, apicache) {
 
     app.get('/api/:id/usage/stat', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
-        if (glam !== undefined) {
+        if (isValidGlam(glam)) {
             api.usageStat(request, response, glam.connection);
         } else {
             response.sendStatus(400);
@@ -217,7 +221,7 @@ module.exports = function (app, apicache) {
 
     app.get('/api/:id/usage/top', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
-        if (glam !== undefined) {
+        if (isValidGlam(glam)) {
             api.usageTop(request, response, glam.connection);
         } else {
             response.sendStatus(400);
@@ -226,7 +230,7 @@ module.exports = function (app, apicache) {
 
     app.get('/api/:id/usage/sidebar', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
-        if (glam !== undefined) {
+        if (isValidGlam(glam)) {
             api.usageSidebar(request, response, glam.connection);
         } else {
             response.sendStatus(400);
@@ -235,7 +239,7 @@ module.exports = function (app, apicache) {
 
     app.get('/api/:id/file/upload-date', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
-        if (glam !== undefined) {
+        if (isValidGlam(glam)) {
             api.uploadDate(request, response, request.query.start, request.query.end, glam.connection);
         } else {
             response.sendStatus(400);
@@ -244,7 +248,7 @@ module.exports = function (app, apicache) {
 
     app.get('/api/:id/file/upload-date-all', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
-        if (glam !== undefined) {
+        if (isValidGlam(glam)) {
             api.uploadDateAll(request, response, glam.connection);
         } else {
             response.sendStatus(400);

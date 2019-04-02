@@ -70,8 +70,13 @@ var glams = function (req, res, glams, admin) {
 
         json = glamToJson(glams[id]);
 
-        if (admin === true && glams[id].hasOwnProperty('lastrun')) {
+        if (admin) {
             json['lastrun'] = glams[id]['lastrun'];
+            json['paused'] = glams[id]['paused'];
+        } else {
+            if (glams[id]['paused'] || glams[id]['lastrun'] === null) {
+                continue;
+            }
         }
     
         result.push(json);
