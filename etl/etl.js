@@ -9,6 +9,7 @@ var images;
 var catQueue;
 var catHead=0;
 var imgIndex;
+var countImages=0;
 var catFreeTail=0;
 var usages;
 var usagindex=0;
@@ -19,6 +20,8 @@ var Finalize=function() {
     console.log("Do maintenance on Postgres data...");
     glam.connection.query("select * from doMaintenance();",function(err,res){
         console.log("Process fully completed!");
+        console.log("Number of categories: " + catFreeTail);
+        console.log("Number of images: " + countImages);
         process.exit(0);
     });
 }
@@ -167,6 +170,7 @@ var LoadImages = function() {
             images[imgIndex].img_size=rows[k].img_size;
             images[imgIndex].cl_to=utf8.decode(rows[k].cl_to);
             imgIndex++;
+            countImages++;
         }
         loadImagesIntoDB(function() {
             LoadImages();
