@@ -62,7 +62,7 @@ module.exports = function (app, apicache) {
         return glam !== undefined && glam['paused'] === false && glam['lastrun'] !== null;
     }
 
-    //VIEWS
+    // VIEWS
     app.get('/:id', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
         if (isValidGlam(glam)) {
@@ -108,7 +108,7 @@ module.exports = function (app, apicache) {
         }
     });
 
-    //API
+    // API
     app.get('/api/glams', apicache("1 hour"), function (request, response) {
         api.glams(request, response, config.glams);
     });
@@ -131,7 +131,12 @@ module.exports = function (app, apicache) {
     });
 
     app.put('/api/admin/glams/:id', function (request, response) {
-        response.sendStatus(501);
+        let glam = config.glams[request.params.id];
+        if (glam !== undefined) {
+            api.updateGlam(request, response, config);
+        } else {
+            response.sendStatus(404);
+        }
     });
 
     app.delete('/api/admin/glams/:id', function (request, response) {
@@ -255,7 +260,7 @@ module.exports = function (app, apicache) {
         }
     });
 
-    //NOT FOUND
+    // NOT FOUND
     app.get('*', function (req, res) {
         res.sendStatus(404);
     });

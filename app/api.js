@@ -78,7 +78,7 @@ var glams = function (req, res, glams, admin) {
                 continue;
             }
         }
-    
+
         result.push(json);
     }
 
@@ -139,6 +139,52 @@ var createGlam = function (req, res, config) {
     config.insertGlam(glam);
     res.sendStatus(200);
 }
+
+var updateGlam = function (req, res, config) {
+    let glam = { 'name': req.params.id };
+
+    let fullname = req.body['fullname'];
+    if (fullname !== undefined && fullname !== '') {
+        glam['fullname'] = fullname;
+    }
+
+    let category = req.body['category'];
+    if (category !== undefined && category !== '') {
+        category = category.replace('Category:', '');
+        category = category.replace(/_/g, ' ');
+        glam['category'] = category;
+    }
+
+    let image = req.body['image'];
+    if (image !== undefined && image !== '' && !image.includes(' ') && image.startsWith('http')) {
+        glam['image'] = image;
+    }
+
+    // Password is optional
+    let password = req.body['password'];
+    if (password !== undefined) {
+        if (password === '') {
+            // Remove password
+            glam['http-auth'] = undefined;
+        } else {
+            glam['http-auth'] = {
+                'username': glam['name'].toLowerCase(),
+                'password': password
+            };
+        }
+    }
+
+    // Paused is optional
+    let paused = req.body['paused'];
+    if (paused === 'true') {
+        glam['paused'] = true;
+    } else if (paused === 'false') {
+        glam['paused'] = false;
+    }
+
+    config.updateGlam(glam);
+    res.sendStatus(200);
+};
 
 var rootCategory = function (req, res, cat) {
     cat.connection.query('SELECT page_title from categories limit 1', (err, dbres) => {
@@ -399,6 +445,7 @@ var viewsSidebar = function (req, res, db) {
 exports.glams = glams;
 exports.getGlam = getGlam;
 exports.createGlam = createGlam;
+exports.updateGlam = updateGlam;
 exports.rootCategory = rootCategory;
 exports.totalMediaNum = totalMediaNum;
 exports.categoryGraph = categoryGraph;

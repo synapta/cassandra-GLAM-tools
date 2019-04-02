@@ -37,19 +37,19 @@ function loadGlams(callback) {
           })
         };
 
-        if (element.hasOwnProperty('lastrun')) {
+        if (element['lastrun']) {
           glam['lastrun'] = element['lastrun'];
         } else {
           glam['lastrun'] = null;
         }
 
-        if (element.hasOwnProperty('paused')) {
+        if (element['paused']) {
           glam['paused'] = element['paused'];
         } else {
           glam['paused'] = false;
         }
 
-        if (element.hasOwnProperty('http-auth')) {
+        if (element['http-auth']) {
           glam['http-auth'] = element['http-auth'];
           glam['http-auth']['realm'] = element['name'] + " stats";
         }
