@@ -12,10 +12,13 @@ exports.admin = config.admin;
 const client = new MongoClient(config['mongodb']['url'], { useNewUrlParser: true });
 
 var glams = {};
-exports.glams = glams;
 
-exports.loadGlams = (callback) => {
-  client.connect(() => {
+function isConnected(client) {
+  return !!client && !!client.topology && client.topology.isConnected()
+}
+
+function loadGlams(callback) {
+  let query = () => {
     const db = client.db(config['mongodb']['database']);
     const collection = db.collection(config['mongodb']['collection']);
     collection.find({}).toArray((err, docs) => {
@@ -45,20 +48,61 @@ exports.loadGlams = (callback) => {
         } else {
           glam['paused'] = false;
         }
-    
+
         if (element.hasOwnProperty('http-auth')) {
           glam['http-auth'] = element['http-auth'];
           glam['http-auth']['realm'] = element['name'] + " stats";
         }
-    
+
         // Glams are never deleted
         glams[glam['name']] = glam;
       });
 
-      client.close();
-
       if (callback !== undefined)
         callback();
     });
-  });
-};
+  };
+
+  if (!isConnected(client)) {
+    client.connect(query);
+  } else {
+    query();
+  }
+}
+
+function insertGlam(glam) {
+  let query = () => {
+    const db = client.db(config['mongodb']['database']);
+    const collection = db.collection(config['mongodb']['collection']);
+    collection.insertOne(glam, () => {
+      loadGlams();
+    });
+  };
+
+  if (!isConnected(client)) {
+    client.connect(query);
+  } else {
+    query();
+  }
+}
+
+function updateGlam(glam) {
+  let query = () => {
+    const db = client.db(config['mongodb']['database']);
+    const collection = db.collection(config['mongodb']['collection']);
+    collection.updateOne({ name: glam['name'] }, { $set: glam }, () => {
+      loadGlams();
+    });
+  };
+
+  if (!isConnected(client)) {
+    client.connect(query);
+  } else {
+    query();
+  }
+}
+
+exports.glams = glams;
+exports.loadGlams = loadGlams;
+exports.insertGlam = insertGlam;
+exports.updateGlam = updateGlam;

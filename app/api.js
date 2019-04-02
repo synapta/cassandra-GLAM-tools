@@ -90,8 +90,54 @@ var getGlam = function (req, res, glam) {
 }
 
 var createGlam = function (req, res, config) {
-    console.log(req.body);
-    res.sendStatus(501);
+    let glam = {};
+
+    let name = req.body['name'];
+    if (name === undefined || name === '' || name in config.glams || name.includes(' ')) {
+        res.sendStatus(400);
+        return;
+    }
+
+    glam['name'] = name;
+    glam['database'] = name.toLowerCase();
+
+    let fullname = req.body['fullname'];
+    if (fullname === undefined || fullname === '') {
+        res.sendStatus(400);
+        return;
+    }
+
+    glam['fullname'] = fullname;
+
+    let category = req.body['category'];
+    if (category === undefined || category === '') {
+        res.sendStatus(400);
+        return;
+    }
+
+    category = category.replace('Category:', '');
+    category = category.replace(/_/g, ' ');
+    glam['category'] = category;
+
+    let image = req.body['image'];
+    if (image === undefined || image === '' || image.includes(' ') || !image.startsWith('http')) {
+        res.sendStatus(400);
+        return;
+    }
+
+    glam['image'] = image;
+
+    // Password is optional
+    let password = req.body['password'];
+    if (password !== undefined && password !== '') {
+        glam['http-auth'] = {
+            'username': glam['database'],
+            'password': password
+        };
+    }
+
+    config.insertGlam(glam);
+    res.sendStatus(200);
 }
 
 var rootCategory = function (req, res, cat) {
