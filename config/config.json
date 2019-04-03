@@ -20,5 +20,9 @@
     "admin": {
         "username": "admin",
         "password": "PASSWORD"
+    },
+    "limits": {
+        "categories": 500,
+        "images": 500000
     }
 }

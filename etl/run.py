@@ -24,6 +24,11 @@ def update(collection, glam):
                           '$set': {'lastrun': datetime.utcnow()}})
 
 
+def pause(collection, glam):
+    collection.update_one({'_id': glam['_id']}, {
+                          '$set': {'paused': True}})
+
+
 def views_date():
     date = datetime.utcnow() - timedelta(days=2)
     return date.strftime("%Y-%m-%d")
@@ -58,9 +63,14 @@ def process_glam(collection, glam):
     # Run etl.js
     try:
         etl(glam['name'])
-    except SubprocessError:
+    except SubprocessError as e:
         success = False
         logging.error('Subprocess etl.js failed')
+
+        if e.returncode == 65:
+            logging.error('Glam %s is now paused', glam['name'])
+            pause(collection, glam)
+            return
 
     # Run views.py
     try:
@@ -97,9 +107,9 @@ def create_database(config, database):
     conn.autocommit = True
     curse = conn.cursor()
     try:
-        curse.execute("CREATE DATABASE " + database + " WITH OWNER = postgres " + \
-            "ENCODING = 'UTF8' TABLESPACE = pg_default " + \
-            "CONNECTION LIMIT = -1 TEMPLATE template0;")
+        curse.execute("CREATE DATABASE " + database + " WITH OWNER = postgres " +
+                      "ENCODING = 'UTF8' TABLESPACE = pg_default " +
+                      "CONNECTION LIMIT = -1 TEMPLATE template0;")
     except ProgrammingError:
         # the database is already available
         pass
@@ -153,6 +163,7 @@ def main():
                 setup(glam['name'])
             except SubprocessError:
                 logging.error('Subprocess setup.py failed')
+                continue
 
             process_glam(collection, glam)
 

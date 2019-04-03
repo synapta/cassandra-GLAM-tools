@@ -8,6 +8,7 @@ exports.connectionToWMF = new MariaClient(config['wmflabs']);
 
 config.admin['realm'] = 'Admin area';
 exports.admin = config.admin;
+exports.limits = config.limits;
 
 const client = new MongoClient(config['mongodb']['url'], { useNewUrlParser: true });
 
