@@ -17,16 +17,15 @@ var glam;
 
 var finalize = function (failure) {
     console.log("===========================================");
-    console.log("Do maintenance on Postgres data...");
+    console.log("Number of categories: " + catFreeTail);
+    console.log("Number of images: " + countImages);
+
+    if (failure === true) {
+        console.log("Process failed!");
+        process.exit(65);
+    }
+
     glam.connection.query("select * from doMaintenance();", function (err, res) {
-        console.log("Number of categories: " + catFreeTail);
-        console.log("Number of images: " + countImages);
-
-        if (failure === true) {
-            console.log("Process failed!");
-            process.exit(65);
-        }
-
         console.log("Process completed!");
         process.exit(0);
     });
