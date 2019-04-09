@@ -1,192 +1,428 @@
 #%RAML 1.0
 title: GLAM tool
 version: v1
-baseUri: http://cassandra.synapta.io/api{version}/{GLAM}
+baseUri: /api
 protocols:
   - HTTP
   - HTTPS
 mediaType: application/json
-/category:
-  displayName: Category tree
-  description: Lista delle categorie con nome e numero di file presenti.
+/glams:
+  description: Collection of Glams for the main page.
   get:
-    responses:
+    description: Get a list of the Glams in a non-paused status.
+    responses: 
       200:
         body:
           application/json:
             example: |
-              {
-                "nodes": [
+              [
+                {
+                  "name": "ZU",
+                  "fullname": "Canton of Zürich",
+                  "category": "Category:Historical images of buildings in the canton of Zürich",
+                  "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Herrliberger_Elgg_1740.jpg/640px-Herrliberger_Elgg_1740.jpg"
+                }
+              ]
+/admin:
+  description: The APIs for the administrative area.
+  /glams:
+    description: Collection of Glams for the administrative area.
+    get:
+      description: Get a list of the Glams available in the system.
+      responses: 
+        200:
+          body:
+            application/json:
+              example: |
+                [
                   {
-                      "id": "Media_contributed_by_the_ETH-Bibliothek",
-                      "files": 7565,
-                      "group": 1
-                  },
-                  {
-                      "id": "ETH-BIB_Mittelholzer-Spitsbergen_flight_1923",
-                      "files": 96,
-                      "group": 2
-                  },
-                  {
-                      "id": "ETH-BIB_Mittelholzer-Persia_flight_1924-1925",
-                      "files": 246,
-                      "group": 2
-                  }
-                ],
-                "edges": [
-                  {
-                    "target": "Media_contributed_by_the_ETH-Bibliothek",
-                    "source": null
-                  },
-                  {
-                    "target": "ETH-BIB_Mittelholzer-Spitsbergen_flight_1923",
-                    "source": "Media_contributed_by_the_ETH-Bibliothek"
-                  },
-                  {
-                    "target": "ETH-BIB_Mittelholzer-Persia_flight_1924-1925",
-                    "source": "Media_contributed_by_the_ETH-Bibliothek"
+                    "name": "ZU",
+                    "fullname": "Canton of Zürich",
+                    "category": "Category:Historical images of buildings in the canton of Zürich",
+                    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Herrliberger_Elgg_1740.jpg/640px-Herrliberger_Elgg_1740.jpg",
+                    "lastrun": "2019-04-08T20:02:35.328Z",
+                    "paused": false
                   }
                 ]
+    post:
+      description: Create a new Glam.
+      body: 
+        application/json:
+          type: |
+            {
+              "type": "object",
+              "$schema": "http://json-schema.org/draft-03/schema",
+              "id": "http://jsonschema.net",
+              "required": true,
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "required": true
+                },
+                "fullname": {
+                  "type": "string",
+                  "required": true
+                },
+                "category": {
+                  "type": "string",
+                  "required": true
+                },
+                "image": {
+                  "type": "string",
+                  "required": true
+                },
+                "password": {
+                  "type": "string",
+                  "required": false
+                }
               }
-
-/file/upload-date:
-  displayName: Uploads
-  description: Numero di file caricati raggruppati per giorno di caricamento e utente.
-  get:
-    queryParameters:
-      start:
-        displayName: Start month
-        type: string
-        description: Filtro per mese di inizio
-        example: "2015/01"
-        required: false
-      end:
-        displayName: End month
-        type: string
-        description: Filtro per mese di fine
-        example: "2016/01"
-        required: false
-    responses:
-      200:
+            }
+          example: |
+            {
+              "name": "ZU"
+              "fullname": "Canton of Zürich",
+              "category": "Category:Historical images_of buildings in the canton of Zürich",
+              "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Herrliberger_Elgg_1740.jpg/640px-Herrliberger_Elgg_1740.jpg",
+              "password": "PASSWORD"
+            }
+    /{glam}:
+      description: Entity representing a Glam in the administrative area.
+      get:
+        description: Get the Glam with `name = {glam}`.
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  {
+                    "name": "ZU"
+                    "fullname": "Canton of Zürich",
+                    "category": "Category:Historical images_of buildings in the canton of Zürich",
+                    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Herrliberger_Elgg_1740.jpg/640px-Herrliberger_Elgg_1740.jpg"
+                  }
+      put:
+        description: Update the Glam with `name = {glam}`. An empty password removes the password.
         body:
           application/json:
-            example: |
+            type: |
               {
-                  "timestamp": "2017/01/16",
-                  "users": [
+                "type": "object",
+                "$schema": "http://json-schema.org/draft-03/schema",
+                "id": "http://jsonschema.net",
+                "required": true,
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "fullname": {
+                    "type": "string",
+                    "required": false
+                  },
+                  "category": {
+                    "type": "string",
+                    "required": false
+                  },
+                  "image": {
+                    "type": "string",
+                    "required": false
+                  },
+                  "password": {
+                    "type": "string",
+                    "required": false
+                  },
+                  "paused": {
+                    "type": "string",
+                    "required": false
+                  }
+                }
+              }
+            example : |
+              {
+                "name": "ZU",
+                "fullname": "Canton of Zürich",
+                "category": "Category:Historical images_of buildings in the canton of Zürich",
+                "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Herrliberger_Elgg_1740.jpg/640px-Herrliberger_Elgg_1740.jpg",
+                "password": "",
+                "paused":"false"
+              }
+/{glam}:
+  description: Entity representing the Glam with `name = {glam}`.
+  /rootcategory:
+    description: The root category for the Glam.
+    get:
+      responses: 
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "name": "Canton of Zürich",
+                  "category": "Category:Historical images of buildings in the canton of Zürich"
+                }
+  /totalMediaNum:
+    description: The number of files for the Glam.
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "num": "679"
+                }
+  /category:
+    description: List of the categories with their names and the number of available files.
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "nodes": [
+                    {
+                        "id": "Media_contributed_by_the_ETH-Bibliothek",
+                        "files": 7565,
+                        "group": 1
+                    },
+                    {
+                        "id": "ETH-BIB_Mittelholzer-Spitsbergen_flight_1923",
+                        "files": 96,
+                        "group": 2
+                    },
+                    {
+                        "id": "ETH-BIB_Mittelholzer-Persia_flight_1924-1925",
+                        "files": 246,
+                        "group": 2
+                    }
+                  ],
+                  "edges": [
+                    {
+                      "target": "Media_contributed_by_the_ETH-Bibliothek",
+                      "source": null
+                    },
+                    {
+                      "target": "ETH-BIB_Mittelholzer-Spitsbergen_flight_1923",
+                      "source": "Media_contributed_by_the_ETH-Bibliothek"
+                    },
+                    {
+                      "target": "ETH-BIB_Mittelholzer-Persia_flight_1924-1925",
+                      "source": "Media_contributed_by_the_ETH-Bibliothek"
+                    }
+                  ]
+                }
+  /file/upload-date:
+    description: Number of files grouped by upload date and user, limited to 1000 results.
+    get:
+      queryParameters:
+        start:
+          description: The start month.
+          type: string
+          example: "2015/01"
+          required: false
+        end:
+          description: The end month.
+          type: string
+          example: "2016/01"
+          required: false
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                    "timestamp": "2017/01/16",
+                    "users": [
+                        {
+                            "user": "ALH",
+                            "files": [
+                                {
+                                    "date": "2013/08",
+                                    "count": 1
+                                }
+                            ]
+                        },
+                        {
+                            "user": "Abderitestatos",
+                            "files": [
+                                {
+                                    "date": "2009/01",
+                                    "count": 1
+                                },
+                                {
+                                    "date": "2009/09",
+                                    "count": 1
+                                },
+                                {
+                                    "date": "2011/07",
+                                    "count": 1
+                                }
+                            ]
+                        }
+                    ]
+                }
+  /file/upload-date-all:
+    description: Number of files grouped by upload date.
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                [
+                  {
+                    "count": "1",
+                    "date": "2005/12"
+                  },
+                  {
+                    "count": "1",
+                    "date": "2006/01"
+                  }
+                ]
+  /views/sidebar:
+    description: List of total, average, and median views per file, limited to 10000 results.
+    get:
+      responses: 
+        200:
+          body:
+            application/json:
+              example: |
+                [
+                  {
+                    "img_name": "Destruction_of_icons_in_Zurich_1524.jpg",
+                    "tot": "29338",
+                    "av": "2095.5714285714285714",
+                    "median": 2242.5
+                  },
+                  {
+                    "img_name": "Zürich_Bullinger.jpg",
+                    "tot": "18457",
+                    "av": "1318.3571428571428571",
+                    "median": 1360.5
+                  }
+                ]
+  /views/files:
+    description: List of views per file and per date, limited to 10000 results.
+    get:
+      responses: 
+        200:
+          body:
+            application/json:
+              example: |
+                [
+                  {
+                    "img_name": "11._Schweizerisches_Landesmuseum_-_Zürich.png",
+                    "sum": "16",
+                    "access_date": "2019-03-23T23:00:00.000Z"
+                  },
+                  {
+                    "img_name": "11._Schweizerisches_Landesmuseum_-_Zürich.png",
+                    "sum": "22",
+                    "access_date": "2019-03-24T23:00:00.000Z"
+                  }
+                ]
+  /views/by-date:
+    description: List of total views per date.
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                [
+                  {
+                      "date": "2017-01-01",
+                      "views": "9810"
+                  },
+                  {
+                      "date": "2017-01-02",
+                      "views": "4521"
+                  }
+                ]
+  /views/all:
+    description: Total number of file views.
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              example:  |
+                {
+                  "sum": "9812"
+                }
+  /usage:
+    description: List of the pages in which each file is used, limited to 1000 results.
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                [
+                  {
+                    "image": "11._Schweizerisches_Landesmuseum_-_Zürich.png",
+                    "pages": [
                       {
-                          "user": "ALH",
-                          "files": [
-                              {
-                                  "date": "2013/08",
-                                  "count": 1
-                              }
-                          ]
+                        "wiki": "dewiki",
+                        "title": "Rathaus_St._Johann"
                       },
                       {
-                          "user": "Abderitestatos",
-                          "files": [
-                              {
-                                  "date": "2009/01",
-                                  "count": 1
-                              },
-                              {
-                                  "date": "2009/09",
-                                  "count": 1
-                              },
-                              {
-                                  "date": "2011/07",
-                                  "count": 1
-                              }
-                           ]
+                        "wiki": "frwiki",
+                        "title": "Haute_École_d'art_de_Zurich"
                       }
+                    ]
+                  }
+                ]
+    /top:
+      description: List of the number of files used per wiki, limited to 10 results.
+      get:
+        responses: 
+          200:
+            body:
+              application/json:
+                example: |
+                  [
+                    {
+                      "tipo": "dewiki",
+                      "n": "483"
+                    },
+                    {
+                      "tipo": "enwiki",
+                      "n": "102"
+                    }
                   ]
-              }
-
-/file/upload-date-all:
-  displayName: Uploads
-  description: Numero di file caricati raggruppati per giorno di caricamento.
-  get:
-    responses:
-      200:
-        body:
-          application/json:
-            example: |
-              {
-                  [{"count":"1","date":"2005/12"},{"count":"1","date":"2006/01"}]
-              }
-
-/views/by-date:
-  displayName: Views by date
-  description: Lista del numero complessivo di visualizzazioni dei file per giorno.
-  get:
-    responses:
-      200:
-        body:
-          application/json:
-            example:  |
-              {
-                [
-                  {
-                      "date":"2017-01-01",
-                      "views":9810
-                  },
-                  {
-                      "date":"2017-01-02",
-                      "views":4521
-                  }
-                ]
-              }
-/views/all:
-  displayName: All views
-  description: Numero complessivo di visualizzazioni dei file dall'inizio del tracking (??/??/????).
-  get:
-    responses:
-      200:
-        body:
-          application/json:
-            example:  |
-              {
-                  "sum":9812
-              }
-/usage:
-  displayName: Pages using files
-  description: Lista delle pagine in cui viene utilizzato ogni file.
-  get:
-    responses:
-      200:
-        body:
-          application/json:
-            example:  |
-              {
-                [
-                  {
-                      "image":"photoX.png",
-                      "pages":
-                      [
-                          {
-                              "wiki":"enwiki",
-                              "title":"Page using the photoX"
-                          },
-                          {
-                              "wiki":"itwiki",
-                              "title":"Another page using the photoX"
-                          }
-                      ]
-                  },
-                  {
-                      "image":"photoY.png",
-                      "pages":
-                      [
-                          {
-                              "wiki":"dewiki",
-                              "title":"Page using the photoY"
-                          },
-                          {
-                              "wiki":"itwiki",
-                              "title":"Another page using the photoX"
-                          }
-                      ]
-                  }
-                ]
-              }
+    /stat:
+      description: Entity with some statistics about the files used.
+      get:
+        responses: 
+          200:
+            body:
+              application/json:
+               example: |
+                {
+                  "totalUsage": "783",
+                  "totalImagesUsed": "351",
+                  "totalProjects": "47",
+                  "totalPages": "783"
+                }
+    /sidebar:
+      description: List of the number of pages and wikis per file used, limited to 1000 results.
+      get:
+        responses: 
+          200:
+            body:
+              application/json:
+                example: |
+                  [
+                    {
+                      "gil_to": "Destruction_of_icons_in_Zurich_1524.jpg",
+                      "wiki": "15",
+                      "u": "25"
+                    },
+                    {
+                      "gil_to": "Spelterini_Zürich_City.jpg",
+                      "wiki": "6",
+                      "u": "21"
+                    }
+                  ]

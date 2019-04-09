@@ -213,7 +213,7 @@ module.exports = function (app, apicache) {
         }
     });
 
-    app.get('/api/:id/usage/', apicache("1 hour"), function (request, response) {
+    app.get('/api/:id/usage', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
         if (isValidGlam(glam)) {
             api.usage(request, response, glam.connection);
