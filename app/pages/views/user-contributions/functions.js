@@ -24,7 +24,7 @@ function barChart(data, minDate, maxDate, maxValue, div) {
 	}
 	for (var year = minY; year <= maxY; year++) {
 		  for (var month = 1; month <= 12; month++) {
-				  let currentDate = year+"/"+pad(month,2);
+				  let currentDate = year+"-"+pad(month,2);
 
 					if (tempDates[currentDate] === undefined) {
 						  obj = {};
@@ -36,7 +36,7 @@ function barChart(data, minDate, maxDate, maxValue, div) {
 	}
 
 	data.forEach(function(d) {
-			d.date = parseDate(d.date.replace("/","-"));
+			d.date = parseDate(d.date);
 			d.value = +d.count;
 	});
 
@@ -119,7 +119,7 @@ function dataviz() {
 						if (error)
 								window.location.replace('/500');
 
-						data.users.forEach(function (d){
+						data.forEach(function (d){
 							let items = d.files
 							let total = 0;
 
@@ -129,13 +129,13 @@ function dataviz() {
 							d.total = total;
 						})
 
-						data.users = data.users.sort(function(a,b){
+						data = data.sort(function(a,b){
 							return b.total - a.total;
 						});
 
-						for (let i = 0; i < data.users.length; i++) {
-							  $("#user_contributions_container").append("<h2 style='margin-left:1.5em' id='"+ data.users[i].user+ "_viz'>" + data.users[i].user + "</h2>")
-								barChart(data.users[i].files, minDate, maxDate, maxValue, "#user_contributions_container");
+						for (let i = 0; i < data.length; i++) {
+							  $("#user_contributions_container").append("<h2 style='margin-left:1.5em' id='"+ data[i].user+ "_viz'>" + data[i].user + "</h2>")
+								barChart(data[i].files, minDate, maxDate, maxValue, "#user_contributions_container");
 						}
 				});
 		});
@@ -147,7 +147,7 @@ function sidebar(type){
 
 		$.get(template_source, function(tpl) {
 				$.getJSON(getUrl(), function(data) {
-						data.users.forEach(function (d) {
+						data.forEach(function (d) {
 								let total = 0;
 
 								d.files.forEach(function (d) {
@@ -157,17 +157,17 @@ function sidebar(type){
 						})
 
 			      if (type === "by_num") {
-								data.users = data.users.sort(function(a,b){
+								data = data.sort(function(a,b){
 									return b.total - a.total;
 								});
 						}
 
-						data.users.forEach(function (d) {
+						data.forEach(function (d) {
 								d.total = nFormatter(d.total);
 						})
 
 						var template = Handlebars.compile(tpl);
-						$(target).html(template(data));
+						$(target).html(template({"users": data}));
 
 						highlight()
 				});

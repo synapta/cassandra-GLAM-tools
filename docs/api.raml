@@ -209,49 +209,46 @@ mediaType: application/json
         start:
           description: The start month.
           type: string
-          example: "2015/01"
+          example: "2015-01"
           required: false
         end:
           description: The end month.
           type: string
-          example: "2016/01"
+          example: "2016-01"
           required: false
       responses:
         200:
           body:
             application/json:
               example: |
-                {
-                    "timestamp": "2017/01/16",
-                    "users": [
-                        {
-                            "user": "ALH",
-                            "files": [
-                                {
-                                    "date": "2013/08",
-                                    "count": 1
-                                }
-                            ]
-                        },
-                        {
-                            "user": "Abderitestatos",
-                            "files": [
-                                {
-                                    "date": "2009/01",
-                                    "count": 1
-                                },
-                                {
-                                    "date": "2009/09",
-                                    "count": 1
-                                },
-                                {
-                                    "date": "2011/07",
-                                    "count": 1
-                                }
-                            ]
-                        }
-                    ]
-                }
+                [
+                  {
+                      "user": "ALH",
+                      "files": [
+                          {
+                              "date": "2013-08",
+                              "count": 1
+                          }
+                      ]
+                  },
+                  {
+                      "user": "Abderitestatos",
+                      "files": [
+                          {
+                              "date": "2009-01",
+                              "count": 1
+                          },
+                          {
+                              "date": "2009-09",
+                              "count": 1
+                          },
+                          {
+                              "date": "2011-07",
+                              "count": 1
+                          }
+                      ]
+                  }
+                ]
   /file/upload-date-all:
     description: Number of files grouped by upload date.
     get:
@@ -263,11 +260,11 @@ mediaType: application/json
                 [
                   {
                     "count": "1",
-                    "date": "2005/12"
+                    "date": "2005-12"
                   },
                   {
                     "count": "1",
-                    "date": "2006/01"
+                    "date": "2006-01"
                   }
                 ]
   /views/sidebar:

@@ -243,7 +243,7 @@ module.exports = function (app, apicache) {
     app.get('/api/:id/file/upload-date', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
         if (isValidGlam(glam)) {
-            api.uploadDate(request, response, request.query.start, request.query.end, glam.connection);
+            api.uploadDate(request, response, glam.connection);
         } else {
             response.sendStatus(400);
         }

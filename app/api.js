@@ -205,20 +205,20 @@ var getGlam = function (req, res, glam) {
 }
 
 // USER CONTRIBUTIONS
-var uploadDate = function (req, res, start, end, db) {
-    query = `select count(*) as img_count, img_user_text, to_char(img_timestamp, \'YYYY/MM\') as img_time
+var uploadDate = function (req, res, db) {
+    query = `select count(*) as img_count, img_user_text, to_char(img_timestamp, \'YYYY-MM\') as img_time
              from images`;
 
     //start and end are defined, convert them to timestamp and append
-    if (start !== undefined) {
-        splitted = start.split('/');
-        start_timestamp = "'" + splitted[0] + "-" + splitted[1] + "-1 00:00:00'";
+    if (req.query.start !== undefined) {
+        splitted = req.query.start.split('-');
+        start_timestamp = "'" + parseInt(splitted[0]) + "-" + parseInt(splitted[1]) + "-1 00:00:00'";
         query += " where img_timestamp>=" + start_timestamp;
     }
-    if (end !== undefined) {
-        splitted = end.split('/');
-        end_timestamp = "'" + splitted[0] + "-" + splitted[1] + "-1 00:00:00'";
-        if (start == undefined)
+    if (req.query.end !== undefined) {
+        splitted = req.query.end.split('-');
+        end_timestamp = "'" + parseInt(splitted[0]) + "-" + parseInt(splitted[1]) + "-1 00:00:00'";
+        if (req.query.start == undefined)
             query += " where ";
         else
             query += " and ";
@@ -228,8 +228,7 @@ var uploadDate = function (req, res, start, end, db) {
 
     db.query(query, (err, dbres) => {
         if (!err) {
-            result = new Object();
-            result.users = [];
+            result = [];
             i = 0;
             while (i < dbres.rows.length) {
                 user = Object();
@@ -242,7 +241,7 @@ var uploadDate = function (req, res, start, end, db) {
                     user.files[user.files.length] = file;
                     i++;
                 }
-                result.users[result.users.length] = user;
+                result.push(user);
             }
             res.json(result);
         } else {
@@ -253,7 +252,7 @@ var uploadDate = function (req, res, start, end, db) {
 }
 
 var uploadDateAll = function (req, res, db) {
-    let query = `select count(*) as count, to_char(img_timestamp, 'YYYY/MM') as date
+    let query = `select count(*) as count, to_char(img_timestamp, 'YYYY-MM') as date
                  from images
                  group by date
                  order by date`;
