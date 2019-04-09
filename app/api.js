@@ -206,10 +206,11 @@ var getGlam = function (req, res, glam) {
 
 // USER CONTRIBUTIONS
 var uploadDate = function (req, res, db) {
-    query = `select count(*) as img_count, img_user_text, to_char(img_timestamp, \'YYYY-MM\') as img_time
-             from images`;
+    query = `select sum(img_count) as img_sum, img_user_text, array_agg(img_count) as img_count, array_agg(img_time) as img_time
+        from (select count(*) as img_count, img_user_text, to_char(img_timestamp, 'YYYY-MM') as img_time
+        from images`;
 
-    //start and end are defined, convert them to timestamp and append
+    // start and end are defined, convert them to timestamp and append
     if (req.query.start !== undefined) {
         splitted = req.query.start.split('-');
         start_timestamp = "'" + parseInt(splitted[0]) + "-" + parseInt(splitted[1]) + "-1 00:00:00'";
@@ -224,25 +225,30 @@ var uploadDate = function (req, res, db) {
             query += " and ";
         query += "img_timestamp<=" + end_timestamp;
     }
-    query += " group by img_user_text, img_time order by img_user_text limit 1000";
+    query += ` group by img_user_text, img_time order by img_time) t
+        group by img_user_text
+        order by img_user_text
+        limit 1000
+        offset 0`;
 
     db.query(query, (err, dbres) => {
         if (!err) {
             result = [];
             i = 0;
-            while (i < dbres.rows.length) {
-                user = Object();
-                user.user = dbres.rows[i].img_user_text;
+            dbres.rows.forEach(function (row) {
+                user = {};
+                user.user = row.img_user_text;
                 user.files = [];
-                while (i < dbres.rows.length && user.user == dbres.rows[i].img_user_text) {
-                    file = Object();
-                    file.date = dbres.rows[i].img_time;
-                    file.count = dbres.rows[i].img_count;
-                    user.files[user.files.length] = file;
+                let i = 0;
+                while (i < row.img_time.length) {
+                    file = {};
+                    file.date = row.img_time[i];
+                    file.count = row.img_count[i];
+                    user.files.push(file);
                     i++;
                 }
                 result.push(user);
-            }
+            });
             res.json(result);
         } else {
             console.log(err);
