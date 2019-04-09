@@ -85,7 +85,8 @@ var glams = function (req, res, glams, admin) {
     res.json(result);
 }
 
-var getGlam = function (req, res, glam) {
+var getAdminGlam = function (req, res, glam) {
+    // TODO
     res.json(glamToJson(glam));
 }
 
@@ -186,24 +187,14 @@ var updateGlam = function (req, res, config) {
     res.sendStatus(200);
 };
 
-var rootCategory = function (req, res, cat) {
-    cat.connection.query('SELECT page_title from categories limit 1', (err, dbres) => {
+var getGlam = function (req, res, glam) {
+    glam.connection.query('SELECT COUNT(*) as value from images', (err, dbres) => {
         if (!err) {
             let result = {};
-            result.name = cat.fullname;
-            result.category = 'Category:' + cat.category;
+            result.fullname = glam.fullname;
+            result.category = 'Category:' + glam.category;
+            result.files = dbres.rows[0]['value'];
             res.json(result);
-        } else {
-            console.log(err);
-            res.sendStatus(400);
-        }
-    })
-}
-
-var totalMediaNum = function (req, res, db) {
-    db.query('SELECT COUNT(*) as num from images', (err, dbres) => {
-        if (!err) {
-            res.json(dbres.rows[0]);
         } else {
             console.log(err);
             res.sendStatus(400);
@@ -443,11 +434,10 @@ var viewsSidebar = function (req, res, db) {
 }
 
 exports.glams = glams;
-exports.getGlam = getGlam;
+exports.getAdminGlam = getAdminGlam;
 exports.createGlam = createGlam;
 exports.updateGlam = updateGlam;
-exports.rootCategory = rootCategory;
-exports.totalMediaNum = totalMediaNum;
+exports.getGlam = getGlam;
 exports.categoryGraph = categoryGraph;
 exports.uploadDate = uploadDate;
 exports.uploadDateAll = uploadDateAll;

@@ -131,7 +131,7 @@ module.exports = function (app, apicache) {
     app.get('/api/admin/glams/:id', function (request, response) {
         let glam = config.glams[request.params.id];
         if (glam !== undefined) {
-            api.getGlam(request, response, glam);
+            api.getAdminGlam(request, response, glam);
         } else {
             response.sendStatus(404);
         }
@@ -159,19 +159,10 @@ module.exports = function (app, apicache) {
         }
     });
 
-    app.get('/api/:id/rootcategory', apicache("1 hour"), function (request, response) {
+    app.get('/api/:id', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
         if (isValidGlam(glam)) {
-            api.rootCategory(request, response, glam);
-        } else {
-            response.sendStatus(400);
-        }
-    });
-
-    app.get('/api/:id/totalMediaNum', apicache("1 hour"), function (request, response) {
-        let glam = config.glams[request.params.id];
-        if (isValidGlam(glam)) {
-            api.totalMediaNum(request, response, glam.connection);
+            api.getGlam(request, response, glam);
         } else {
             response.sendStatus(400);
         }

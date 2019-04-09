@@ -17,24 +17,16 @@ function nFormatter(num) {
     return formatter(num.toFixed(1).replace(/\.0$/, ''));
 }
 
-function setTotalMediaNum() {
-  	var db = window.location.href.toString().split('/')[3];
-  	var jsonurl= "/api/"+db+"/totalMediaNum";
-
-  	$.getJSON(jsonurl, function(d) {
-  	    $('#totalMediaNum').text(formatter(d.num));
-  	});
-}
-
 function setCategory() {
   	var db = window.location.href.toString().split('/')[3];
-  	var jsonurl = "/api/"+db+"/rootcategory";
+  	var jsonurl = "/api/" + db;
 
   	$.getJSON(jsonurl, function(d) {
+				$('#totalMediaNum').text(formatter(d.files));
       	$('#cat_url').text(decodeURIComponent(d.category).replace("Category:",""));
       	$("#cat_url").attr("href", "https://commons.wikimedia.org/wiki/"+d.category);
       	$("#cat_url").attr("title", decodeURIComponent(d.category));
-        $(".glamName").text(d.name);
+        $(".glamName").text(d.fullname);
   	});
 
     //XXX needed for correct urls
