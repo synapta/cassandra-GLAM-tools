@@ -179,9 +179,9 @@ var updateGlam = function (req, res, config) {
 
     // Paused is optional
     let paused = req.body['paused'];
-    if (paused === 'true') {
+    if (paused === true) {
         glam['paused'] = true;
-    } else if (paused === 'false') {
+    } else if (paused === false) {
         glam['paused'] = false;
     }
 
