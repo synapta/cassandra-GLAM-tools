@@ -86,8 +86,10 @@ var glams = function (req, res, glams, admin) {
 }
 
 var getAdminGlam = function (req, res, glam) {
-    // TODO
-    res.json(glamToJson(glam));
+    let result = glamToJson(glam);
+    result['lastrun'] = glam['lastrun'];
+    result['paused'] = glam['paused'];
+    res.json(result);
 }
 
 var createGlam = function (req, res, config) {
