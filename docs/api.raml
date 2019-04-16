@@ -334,8 +334,24 @@ mediaType: application/json
                   }
                 ]
   /views/files:
-    description: List of views per file and per date, limited to 10000 results.
+    description: List of views of a file per date.
     get:
+      queryParameters:
+        file:
+          description: The name of the file.
+          type: string
+          example: "11._Schweizerisches_Landesmuseum_-_Zürich.png"
+          required: true
+        start:
+          description: The start month.
+          type: string
+          example: "2015-01"
+          required: false
+        end:
+          description: The end month.
+          type: string
+          example: "2016-01"
+          required: false
       responses: 
         200:
           body:
@@ -343,14 +359,12 @@ mediaType: application/json
               example: |
                 [
                   {
-                    "img_name": "11._Schweizerisches_Landesmuseum_-_Zürich.png",
-                    "sum": "16",
-                    "access_date": "2019-03-23T23:00:00.000Z"
+                    "sum": 16,
+                    "access_date": "2019-03-24"
                   },
                   {
-                    "img_name": "11._Schweizerisches_Landesmuseum_-_Zürich.png",
-                    "sum": "22",
-                    "access_date": "2019-03-24T23:00:00.000Z"
+                    "sum": 22,
+                    "access_date": "2019-03-25"
                   }
                 ]
   /views/by-date:

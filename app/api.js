@@ -436,13 +436,14 @@ var viewsAll = function (req, res, db) {
 }
 
 var viewsByDate = function (req, res, db) {
-    db.query('select sum(accesses) as sum,access_date from visualizations group by access_date order by access_date', (err, dbres) => {
+    db.query('select sum(accesses) as sum, access_date from visualizations group by access_date order by access_date', (err, dbres) => {
         if (!err) {
             result = [];
             i = 0;
             while (i < dbres.rows.length) {
                 result[i] = new Object;
-                result[i].date = dbres.rows[i].access_date.addHours(1).toISOString().substring(0, 10);//necessario aggiungere un'ora perchè lo vede con tempo +0, e quindi sottrae un ora (andando quindi nel giorno prima) alla data +1 di postgres
+                // necessario aggiungere un'ora perchè lo vede con tempo +0, e quindi sottrae un ora (andando quindi nel giorno prima) alla data +1 di postgres
+                result[i].date = dbres.rows[i].access_date.addHours(1).toISOString().substring(0, 10);
                 result[i].views = dbres.rows[i].sum;
                 i++;
             }
@@ -455,16 +456,43 @@ var viewsByDate = function (req, res, db) {
 }
 
 var viewsByFiles = function (req, res, db) {
-    let query = `select img_name, sum(accesses) as sum,access_date
+    let query = `select img_name, sum(accesses) as sum, access_date
                   from visualizations, images
                   where images.is_alive = true
-                  and images.media_id = visualizations.media_id
-                  group by img_name, access_date
-                  order by img_name, access_date
-                  limit 10000`
-    db.query(query, (err, dbres) => {
+                  and images.media_id = visualizations.media_id`;
+
+    if (req.query.file !== undefined) {
+        query += " and img_name = $1";
+    } else {
+        res.sendStatus(400);
+        return; 
+    }
+
+    if (req.query.start !== undefined) {
+        splitted = req.query.start.split('-');
+        start_timestamp = "'" + parseInt(splitted[0]) + "-" + parseInt(splitted[1]) + "-1 00:00:00'";
+        query += " and img_timestamp>=" + start_timestamp;
+    }
+    
+    if (req.query.end !== undefined) {
+        splitted = req.query.end.split('-');
+        end_timestamp = "'" + parseInt(splitted[0]) + "-" + parseInt(splitted[1]) + "-1 00:00:00'";
+        query += " and img_timestamp<=" + end_timestamp;
+    }
+
+    query += " group by img_name, access_date order by img_name, access_date";
+
+    db.query(query, [req.query.file], (err, dbres) => {
         if (!err) {
-            res.json(dbres.rows);
+            let result = [];
+            dbres.rows.forEach(function (row) {
+                let date = {
+                    "sum": parseInt(row.sum),
+                    "access_date": row.access_date.addHours(1).toISOString().substring(0, 10)
+                };
+                result.push(date);
+            });
+            res.json(result);
         } else {
             console.log(err);
             res.sendStatus(400);
