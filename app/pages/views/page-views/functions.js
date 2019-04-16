@@ -1,6 +1,6 @@
 function getUrlAll(){
 	var db=window.location.href.toString().split('/')[3];
-	return "/api/"+db+"/views/by-date";
+	return "/api/"+db+"/views";
 }
 function getUrlFiles(){
 	var db=window.location.href.toString().split('/')[3];

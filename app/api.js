@@ -478,7 +478,7 @@ var viewsAll = function (req, res, db) {
     });
 }
 
-var viewsByDate = function (req, res, db) {
+var views = function (req, res, db) {
     let query = `select sum(accesses) as sum, access_date
                  from visualizations`;
 
@@ -518,18 +518,12 @@ var viewsByDate = function (req, res, db) {
     });
 }
 
-var viewsByFiles = function (req, res, db) {
+var viewsByFile = function (req, res, db) {
     let query = `select img_name, sum(accesses) as sum, access_date
-                  from visualizations, images
-                  where images.is_alive = true
-                  and images.media_id = visualizations.media_id`;
-
-    if (req.query.file !== undefined) {
-        query += " and img_name = $1";
-    } else {
-        res.sendStatus(400);
-        return; 
-    }
+                    from visualizations, images
+                    where images.is_alive = true
+                    and images.media_id = visualizations.media_id
+                    and img_name = $1`;
 
     if (req.query.start !== undefined) {
         splitted = req.query.start.split('-');
@@ -545,7 +539,7 @@ var viewsByFiles = function (req, res, db) {
 
     query += " group by img_name, access_date order by img_name, access_date";
 
-    db.query(query, [req.query.file], (err, dbres) => {
+    db.query(query, [req.params.file], (err, dbres) => {
         if (!err) {
             let result = [];
             dbres.rows.forEach(function (row) {
@@ -632,7 +626,7 @@ exports.usage = usage;
 exports.usageStats = usageStats;
 exports.usageTop = usageTop;
 exports.usageSidebar = usageSidebar;
-exports.viewsByDate = viewsByDate;
-exports.viewsByFiles = viewsByFiles;
+exports.views = views;
+exports.viewsByFile = viewsByFile;
 exports.viewsAll = viewsAll;
 exports.viewsSidebar = viewsSidebar;

@@ -168,10 +168,10 @@ module.exports = function (app, apicache) {
         }
     });
 
-    app.get('/api/:id/views/by-date', apicache("1 hour"), function (request, response) {
+    app.get('/api/:id/views', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
         if (isValidGlam(glam)) {
-            api.viewsByDate(request, response, glam.connection);
+            api.views(request, response, glam.connection);
         } else {
             response.sendStatus(400);
         }
@@ -195,10 +195,10 @@ module.exports = function (app, apicache) {
         }
     });
 
-    app.get('/api/:id/views/files', apicache("1 hour"), function (request, response) {
+    app.get('/api/:id/views/file/:file', apicache("1 hour"), function (request, response) {
         let glam = config.glams[request.params.id];
-        if (isValidGlam(glam)) {
-            api.viewsByFiles(request, response, glam.connection);
+        if (isValidGlam(glam) || request.params.file !== undefined) {
+            api.viewsByFile(request, response, glam.connection);
         } else {
             response.sendStatus(400);
         }

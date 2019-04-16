@@ -295,79 +295,7 @@ mediaType: application/json
                     "date": "2006-01"
                   }
                 ]
-  /views/sidebar:
-    description: List of total, average, and median views per file.
-    get:
-      queryParameters:
-        sort:
-          description: The sorting criteria among views, median, and name.
-          type: string
-          example: "views"
-          required: false
-        page:
-          description: The page of the results.
-          type: integer
-          example: 0
-          required: false
-        limit:
-          description: The number of results per page.
-          type: integer
-          example: 100
-          required: false
-      responses: 
-        200:
-          body:
-            application/json:
-              example: |
-                [
-                  {
-                    "img_name": "Destruction_of_icons_in_Zurich_1524.jpg",
-                    "tot": 29338,
-                    "av": 2095.571,
-                    "median": 2242.5
-                  },
-                  {
-                    "img_name": "Zürich_Bullinger.jpg",
-                    "tot": 18457,
-                    "av": 1318.357,
-                    "median": 1360.5
-                  }
-                ]
-  /views/files:
-    description: List of views of a file per date.
-    get:
-      queryParameters:
-        file:
-          description: The name of the file.
-          type: string
-          example: "11._Schweizerisches_Landesmuseum_-_Zürich.png"
-          required: true
-        start:
-          description: The start month.
-          type: string
-          example: "2015-01"
-          required: false
-        end:
-          description: The end month.
-          type: string
-          example: "2016-01"
-          required: false
-      responses: 
-        200:
-          body:
-            application/json:
-              example: |
-                [
-                  {
-                    "sum": 16,
-                    "access_date": "2019-03-24"
-                  },
-                  {
-                    "sum": 22,
-                    "access_date": "2019-03-25"
-                  }
-                ]
-  /views/by-date:
+  /views:
     description: List of total views per date.
     get:
       queryParameters:
@@ -396,17 +324,84 @@ mediaType: application/json
                       "views": 4521
                   }
                 ]
-  /views/all:
-    description: Total number of file views.
-    get:
-      responses:
-        200:
-          body:
-            application/json:
-              example:  |
-                {
-                  "sum": 9812
-                }
+    /sidebar:
+      description: List of total, average, and median views per file.
+      get:
+        queryParameters:
+          sort:
+            description: The sorting criteria among views, median, and name.
+            type: string
+            example: "views"
+            required: false
+          page:
+            description: The page of the results.
+            type: integer
+            example: 0
+            required: false
+          limit:
+            description: The number of results per page.
+            type: integer
+            example: 100
+            required: false
+        responses: 
+          200:
+            body:
+              application/json:
+                example: |
+                  [
+                    {
+                      "img_name": "Destruction_of_icons_in_Zurich_1524.jpg",
+                      "tot": 29338,
+                      "av": 2095.571,
+                      "median": 2242.5
+                    },
+                    {
+                      "img_name": "Zürich_Bullinger.jpg",
+                      "tot": 18457,
+                      "av": 1318.357,
+                      "median": 1360.5
+                    }
+                  ]
+    /file/{file}:
+      description: List of views of the file with `name = {file}` grouped by date.
+      get:
+        queryParameters:
+          start:
+            description: The start month.
+            type: string
+            example: "2015-01"
+            required: false
+          end:
+            description: The end month.
+            type: string
+            example: "2016-01"
+            required: false
+        responses: 
+          200:
+            body:
+              application/json:
+                example: |
+                  [
+                    {
+                      "sum": 16,
+                      "access_date": "2019-03-24"
+                    },
+                    {
+                      "sum": 22,
+                      "access_date": "2019-03-25"
+                    }
+                  ]
+    /all:
+      description: Total number of file views.
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                example:  |
+                  {
+                    "sum": 9812
+                  }
   /usage:
     description: List of the pages in which each file is used.
     get:
