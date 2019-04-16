@@ -232,12 +232,16 @@ var uploadDate = function (req, res, db) {
     
     if (req.query.sort !== undefined) {
         if (req.query.sort === 'name') {
-            query += " order by img_user_text"
+            query += " order by img_user_text";
+        } else if (req.query.sort === 'total') {
+            query += " order by img_sum desc";
         } else {
-            query += " order by img_sum desc"
+            // Wrong value
+            query += " order by img_sum desc";   
         }
     } else {
-        query += " order by img_sum desc"
+        // Default order
+        query += " order by img_sum desc";
     }
 
     let page = 0;
@@ -473,12 +477,51 @@ var viewsSidebar = function (req, res, db) {
                   from images as i, visualizations as v
                   where i.media_id = v.media_id
                   and i.is_alive = true
-                  group by i.img_name
-                  order by tot desc
-                  limit 10000`
+                  group by i.img_name`;
+
+    if (req.query.sort !== undefined) {
+        if (req.query.sort === 'views') {
+            query += " order by tot desc";
+        } else if (req.query.sort === 'median') {
+            query += " order by median desc";
+        } else if (req.query.sort === 'name') {
+            query += " order by i.img_name";
+        } else {
+            // Wrong value
+            query += " order by tot desc";
+        }
+    } else {
+        // Default order
+        query += " order by tot desc";
+    }
+
+    let page = 0;
+    if (req.query.page !== undefined) {
+        page = parseInt(req.query.page);
+    }
+
+    let limit = 100;
+    if (req.query.limit !== undefined) {
+        limit = parseInt(req.query.limit);
+    }
+
+    let offset = limit * page;
+
+    query += " limit " + limit + " offset " + offset;
+
     db.query(query, (err, dbres) => {
         if (!err) {
-            res.json(dbres.rows);
+            let result = [];
+            dbres.rows.forEach(function (row) {
+                let view = {
+                    "img_name": row.img_name,
+                    "tot": parseInt(row.tot),
+                    "av": parseFloat(row.av),
+                    "median": parseFloat(row.median)
+                };
+                result.push(view);
+            })
+            res.json(result);
         } else {
             console.log(err);
             res.sendStatus(400);

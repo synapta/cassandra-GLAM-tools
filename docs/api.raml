@@ -296,8 +296,24 @@ mediaType: application/json
                   }
                 ]
   /views/sidebar:
-    description: List of total, average, and median views per file, limited to 10000 results.
+    description: List of total, average, and median views per file.
     get:
+      queryParameters:
+        sort:
+          description: The sorting criteria among views, median, and name.
+          type: string
+          example: "views"
+          required: false
+        page:
+          description: The page of the results.
+          type: integer
+          example: 0
+          required: false
+        limit:
+          description: The number of results per page.
+          type: integer
+          example: 100
+          required: false
       responses: 
         200:
           body:
@@ -306,14 +322,14 @@ mediaType: application/json
                 [
                   {
                     "img_name": "Destruction_of_icons_in_Zurich_1524.jpg",
-                    "tot": "29338",
-                    "av": "2095.5714285714285714",
+                    "tot": 29338,
+                    "av": 2095.571,
                     "median": 2242.5
                   },
                   {
                     "img_name": "Zürich_Bullinger.jpg",
-                    "tot": "18457",
-                    "av": "1318.3571428571428571",
+                    "tot": 18457,
+                    "av": 1318.357,
                     "median": 1360.5
                   }
                 ]
