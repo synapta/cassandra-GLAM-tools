@@ -159,7 +159,7 @@ mediaType: application/json
               {
                 "fullname": "Canton of Zürich",
                 "category": "Category:Historical images of buildings in the canton of Zürich",
-                "files": "679"
+                "files": 679
               }
   /category:
     description: List of the categories with their names and the number of available files.
@@ -451,22 +451,22 @@ mediaType: application/json
     /top:
       description: List of the number of files used per wiki, limited to 10 results.
       get:
-        responses: 
+        responses:
           200:
             body:
               application/json:
                 example: |
                   [
                     {
-                      "tipo": "dewiki",
-                      "n": "483"
+                      "wiki": "dewiki",
+                      "usage": 483
                     },
                     {
-                      "tipo": "enwiki",
-                      "n": "102"
+                      "wiki": "enwiki",
+                      "usage": 102
                     }
                   ]
-    /stat:
+    /stats:
       description: Entity with some statistics about the files used.
       get:
         responses: 
@@ -475,10 +475,10 @@ mediaType: application/json
               application/json:
                example: |
                 {
-                  "totalUsage": "783",
-                  "totalImagesUsed": "351",
-                  "totalProjects": "47",
-                  "totalPages": "783"
+                  "totalUsage": 783,
+                  "totalImagesUsed": 351,
+                  "totalProjects": 47,
+                  "totalPages": 783
                 }
     /sidebar:
       description: List of the number of pages and wikis per file used, limited to 1000 results.

@@ -4,7 +4,7 @@ function getUrl(){
 }
 function getUrlAll(){
 	var db=window.location.href.toString().split('/')[3];
-	return "/api/"+db+"/usage/stat";
+	return "/api/"+db+"/usage/stats";
 }
 function getUrlTop20(){
 	var db=window.location.href.toString().split('/')[3];
@@ -181,7 +181,8 @@ function statDraw() {
 			$("#usage_stat").append("<br><br>");
 			$("#usage_stat").append("Total pages enhanced: <b>" + formatter(data.totalPages) + "</b>");
 
-			setTotalMediaNum();
+			// From utils.js
+			setCategory();
 	});
 }
 

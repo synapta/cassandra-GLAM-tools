@@ -4,8 +4,8 @@ var donutChartDraw = function(div, query) {
         .height(200)
         .cornerRadius(3) // sets how rounded the corners are on each slice
         .padAngle(0.015) // effectively dictates the gap between slices
-        .variable('n')
-        .category('tipo');
+        .variable('usage')
+        .category('wiki');
 
     d3.json(query, function(error, data) {
         if (error) {

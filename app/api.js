@@ -195,7 +195,7 @@ var getGlam = function (req, res, glam) {
             let result = {};
             result.fullname = glam.fullname;
             result.category = 'Category:' + glam.category;
-            result.files = dbres.rows[0]['value'];
+            result.files = parseInt(dbres.rows[0]['value']);
             res.json(result);
         } else {
             console.log(err);
@@ -390,7 +390,7 @@ var usage = function (req, res, db) {
     });
 }
 
-var usageStat = function (req, res, db) {
+var usageStats = function (req, res, db) {
     let totalUsageQuery = `select count(*) as c, count(distinct gil_to) as d
                             from usages
                             where is_alive = true`;
@@ -403,10 +403,10 @@ var usageStat = function (req, res, db) {
             db.query(totalProjectsQuery, (err, totalProjects) => {
                 if (!err) {
                     let result = {};
-                    result.totalUsage = totalUsage.rows[0].c;
-                    result.totalImagesUsed = totalUsage.rows[0].d;
-                    result.totalProjects = totalProjects.rows[0].c;
-                    result.totalPages = totalProjects.rows[0].p;
+                    result.totalUsage = parseInt(totalUsage.rows[0].c);
+                    result.totalImagesUsed = parseInt(totalUsage.rows[0].d);
+                    result.totalProjects = parseInt(totalProjects.rows[0].c);
+                    result.totalPages = parseInt(totalProjects.rows[0].p);
                     res.json(result);
                 } else {
                     console.log(err);
@@ -421,16 +421,24 @@ var usageStat = function (req, res, db) {
 }
 
 var usageTop = function (req, res, db) {
-    let topProjectsQuery = `select gil_wiki as tipo, count(*) as n
-                              from usages
-                              where is_alive = true
-                              group by gil_wiki
-                              order by n desc
-                              limit 10`;
+    let query = `select gil_wiki as wiki, count(*) as usage
+                from usages
+                where is_alive = true
+                group by gil_wiki
+                order by usage desc
+                limit 10`;
 
-    db.query(topProjectsQuery, (err, top20Projects) => {
+    db.query(query, (err, dbres) => {
         if (!err) {
-            res.json(top20Projects.rows);
+            let result = [];
+            dbres.rows.forEach(function (row) {
+                let wiki = {
+                    "wiki": row.wiki,
+                    "usage": parseInt(row.usage)
+                }
+                result.push(wiki);
+            });
+            res.json(result);
         } else {
             console.log(err);
             res.sendStatus(400);
@@ -438,6 +446,7 @@ var usageTop = function (req, res, db) {
     });
 }
 
+// TODO this api should be deprecated because it is functionally equivalent to usage api
 var usageSidebar = function (req, res, db) {
     let usage = `select gil_to, count(distinct gil_wiki) as wiki, count(*) as u
                  from usages
@@ -457,6 +466,7 @@ var usageSidebar = function (req, res, db) {
 }
 
 // VIEWS
+// TODO this api should be deprecated as it seems not used
 var viewsAll = function (req, res, db) {
     db.query('select sum(accesses) as sum from visualizations', (err, dbres) => {
         if (!err) {
@@ -619,7 +629,7 @@ exports.categoryGraph = categoryGraph;
 exports.uploadDate = uploadDate;
 exports.uploadDateAll = uploadDateAll;
 exports.usage = usage;
-exports.usageStat = usageStat;
+exports.usageStats = usageStats;
 exports.usageTop = usageTop;
 exports.usageSidebar = usageSidebar;
 exports.viewsByDate = viewsByDate;
