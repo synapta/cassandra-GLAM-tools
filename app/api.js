@@ -325,30 +325,63 @@ var uploadDateAll = function (req, res, db) {
 
 // USAGE
 var usage = function (req, res, db) {
-    let usageQuery = `select gil_to,gil_wiki,gil_page_title
-                      from usages where is_alive=true
-                      order by gil_to, gil_wiki, gil_page_title
-                      limit 1000`
-    db.query(usageQuery, (err, dbres) => {
+    let query = `select gil_to, array_agg(gil_wiki) as gil_wiki, array_agg(gil_page_title) as gil_page_title,
+                    count(gil_page_title) as usage, count(distinct gil_wiki) as projects
+                    from usages
+                    where is_alive=true
+                    group by gil_to`;
+    
+    if (req.query.sort !== undefined) {
+        if (req.query.sort === 'usage') {
+            query += " order by usage desc";
+        } else if (req.query.sort === 'projects') {
+            query += " order by projects desc";
+        } else if (req.query.sort === 'name') {
+            query += " order by gil_to";
+        } else {
+            // Wrong value
+            query += " order by usage desc";   
+        }
+    } else {
+        // Default order
+        query += " order by usage desc";
+    }
+
+    let page = 0;
+    if (req.query.page !== undefined) {
+        page = parseInt(req.query.page);
+    }
+
+    let limit = 10;
+    if (req.query.limit !== undefined) {
+        limit = parseInt(req.query.limit);
+    }
+
+    let offset = limit * page;
+
+    query += " limit " + limit + " offset " + offset;
+
+    db.query(query, (err, dbres) => {
         if (!err) {
-            result = [];
-            dbindex = 0;
-            resindex = 0;
-            while (dbindex < dbres.rows.length) {
-                result[resindex] = new Object();
-                result[resindex].image = dbres.rows[dbindex].gil_to;
-                page = dbres.rows[dbindex].gil_to;
-                result[resindex].pages = [];
-                j = 0;
-                while (dbindex < dbres.rows.length && page == dbres.rows[dbindex].gil_to) {
-                    result[resindex].pages[j] = new Object();
-                    result[resindex].pages[j].wiki = dbres.rows[dbindex].gil_wiki;
-                    result[resindex].pages[j].title = dbres.rows[dbindex].gil_page_title;
-                    j++;
-                    dbindex++;
+            let result = [];
+            dbres.rows.forEach(function (row) {
+                let usage = {
+                    "image": row.gil_to,
+                    "usage": parseInt(row.usage),
+                    "projects": parseInt(row.projects),
+                    "pages": []
+                };
+                let i = 0;
+                while (i < row.gil_wiki.length) {
+                    let page = {
+                        "wiki": row.gil_wiki[i],
+                        "title": row.gil_page_title[i]
+                    };
+                    i++;
+                    usage.pages.push(page);
                 }
-                resindex++;
-            }
+                result.push(usage);
+            });
             res.json(result);
         } else {
             console.log(err);

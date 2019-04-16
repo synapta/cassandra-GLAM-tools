@@ -408,8 +408,24 @@ mediaType: application/json
                   "sum": 9812
                 }
   /usage:
-    description: List of the pages in which each file is used, limited to 1000 results.
+    description: List of the pages in which each file is used.
     get:
+      queryParameters:
+        sort:
+          description: The sorting criteria among usage, projects, and name.
+          type: string
+          example: "usage"
+          required: false
+        page:
+          description: The page of the results.
+          type: integer
+          example: 0
+          required: false
+        limit:
+          description: The number of results per page.
+          type: integer
+          example: 10
+          required: false
       responses:
         200:
           body:
@@ -418,6 +434,8 @@ mediaType: application/json
                 [
                   {
                     "image": "11._Schweizerisches_Landesmuseum_-_Zürich.png",
+                    "usage": 2,
+                    "projects": 2,
                     "pages": [
                       {
                         "wiki": "dewiki",
