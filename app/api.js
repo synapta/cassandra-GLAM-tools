@@ -425,9 +425,9 @@ var usageSidebar = function (req, res, db) {
 
 // VIEWS
 var viewsAll = function (req, res, db) {
-    db.query('select sum(accesses) from visualizations', (err, dbres) => {
+    db.query('select sum(accesses) as sum from visualizations', (err, dbres) => {
         if (!err) {
-            res.json(dbres.rows[0]);
+            res.json({"sum": parseInt(dbres.rows[0].sum)});
         } else {
             console.log(err);
             res.sendStatus(400);
@@ -436,17 +436,37 @@ var viewsAll = function (req, res, db) {
 }
 
 var viewsByDate = function (req, res, db) {
-    db.query('select sum(accesses) as sum, access_date from visualizations group by access_date order by access_date', (err, dbres) => {
+    let query = `select sum(accesses) as sum, access_date
+                 from visualizations`;
+
+    if (req.query.start !== undefined) {
+        splitted = req.query.start.split('-');
+        start_timestamp = "'" + parseInt(splitted[0]) + "-" + parseInt(splitted[1]) + "-1 00:00:00'";
+        query += " where access_date>=" + start_timestamp;
+    }
+    
+    if (req.query.end !== undefined) {
+        splitted = req.query.end.split('-');
+        end_timestamp = "'" + parseInt(splitted[0]) + "-" + parseInt(splitted[1]) + "-1 00:00:00'";
+        if (req.query.start == undefined)
+            query += " where ";
+        else
+            query += " and ";
+        query += "access_date<=" + end_timestamp;
+    }
+
+    query += " group by access_date order by access_date";
+
+    db.query(query, (err, dbres) => {
         if (!err) {
             result = [];
-            i = 0;
-            while (i < dbres.rows.length) {
-                result[i] = new Object;
-                // necessario aggiungere un'ora perchè lo vede con tempo +0, e quindi sottrae un ora (andando quindi nel giorno prima) alla data +1 di postgres
-                result[i].date = dbres.rows[i].access_date.addHours(1).toISOString().substring(0, 10);
-                result[i].views = dbres.rows[i].sum;
-                i++;
-            }
+            dbres.rows.forEach(function (row) {
+                let date = {
+                    "date": row.access_date.addHours(1).toISOString().substring(0, 10),
+                    "views": parseInt(row.sum)
+                };
+                result.push(date);
+            })
             res.json(result);
         } else {
             console.log(err);

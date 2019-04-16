@@ -370,6 +370,17 @@ mediaType: application/json
   /views/by-date:
     description: List of total views per date.
     get:
+      queryParameters:
+        start:
+          description: The start month.
+          type: string
+          example: "2015-01"
+          required: false
+        end:
+          description: The end month.
+          type: string
+          example: "2016-01"
+          required: false
       responses:
         200:
           body:
@@ -378,11 +389,11 @@ mediaType: application/json
                 [
                   {
                       "date": "2017-01-01",
-                      "views": "9810"
+                      "views": 9810
                   },
                   {
                       "date": "2017-01-02",
-                      "views": "4521"
+                      "views": 4521
                   }
                 ]
   /views/all:
@@ -394,7 +405,7 @@ mediaType: application/json
             application/json:
               example:  |
                 {
-                  "sum": "9812"
+                  "sum": 9812
                 }
   /usage:
     description: List of the pages in which each file is used, limited to 1000 results.
