@@ -206,7 +206,7 @@ var getGlam = function (req, res, glam) {
 
 // USER CONTRIBUTIONS
 var uploadDate = function (req, res, db) {
-    query = `select sum(img_count) as img_sum, img_user_text, array_agg(img_count) as img_count, array_agg(img_time) as img_time
+    let query = `select sum(img_count) as img_sum, img_user_text, array_agg(img_count) as img_count, array_agg(img_time) as img_time
         from (select count(*) as img_count, img_user_text, to_char(img_timestamp, 'YYYY-MM') as img_time
         from images`;
 
@@ -256,16 +256,16 @@ var uploadDate = function (req, res, db) {
 
     db.query(query, (err, dbres) => {
         if (!err) {
-            result = [];
+            let result = [];
             i = 0;
             dbres.rows.forEach(function (row) {
-                user = {};
+                let user = {};
                 user.user = row.img_user_text;
                 user.total = parseInt(row.img_sum);
                 user.files = [];
                 let i = 0;
                 while (i < row.img_time.length) {
-                    file = {};
+                    let file = {};
                     file.date = row.img_time[i];
                     file.count = parseInt(row.img_count[i]);
                     user.files.push(file);
@@ -283,13 +283,35 @@ var uploadDate = function (req, res, db) {
 
 var uploadDateAll = function (req, res, db) {
     let query = `select count(*) as count, to_char(img_timestamp, 'YYYY-MM') as date
-                 from images
-                 group by date
-                 order by date`;
+                 from images`;
+
+    if (req.query.start !== undefined) {
+        splitted = req.query.start.split('-');
+        start_timestamp = "'" + parseInt(splitted[0]) + "-" + parseInt(splitted[1]) + "-1 00:00:00'";
+        query += " where img_timestamp>=" + start_timestamp;
+    }
+    
+    if (req.query.end !== undefined) {
+        splitted = req.query.end.split('-');
+        end_timestamp = "'" + parseInt(splitted[0]) + "-" + parseInt(splitted[1]) + "-1 00:00:00'";
+        if (req.query.start == undefined)
+            query += " where ";
+        else
+            query += " and ";
+        query += "img_timestamp<=" + end_timestamp;
+    }
+    
+    query += " group by date order by date";
 
     db.query(query, (err, dbres) => {
         if (!err) {
-            res.json(dbres.rows);
+            let result = [];
+            dbres.rows.forEach(function (row) {
+                let date = {"count": parseInt(row.count),
+                            "date": row.date};
+                result.push(date);
+            });
+            res.json(result);
         } else {
             console.log(err);
             res.sendStatus(400);

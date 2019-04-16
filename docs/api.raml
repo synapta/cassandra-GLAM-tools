@@ -269,6 +269,17 @@ mediaType: application/json
   /file/upload-date-all:
     description: Number of files grouped by upload date.
     get:
+      queryParameters:
+        start:
+          description: The start month.
+          type: string
+          example: "2015-01"
+          required: false
+        end:
+          description: The end month.
+          type: string
+          example: "2016-01"
+          required: false
       responses:
         200:
           body:
@@ -276,11 +287,11 @@ mediaType: application/json
               example: |
                 [
                   {
-                    "count": "1",
+                    "count": 1,
                     "date": "2005-12"
                   },
                   {
-                    "count": "1",
+                    "count": 1,
                     "date": "2006-01"
                   }
                 ]
