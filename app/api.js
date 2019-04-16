@@ -216,6 +216,7 @@ var uploadDate = function (req, res, db) {
         start_timestamp = "'" + parseInt(splitted[0]) + "-" + parseInt(splitted[1]) + "-1 00:00:00'";
         query += " where img_timestamp>=" + start_timestamp;
     }
+    
     if (req.query.end !== undefined) {
         splitted = req.query.end.split('-');
         end_timestamp = "'" + parseInt(splitted[0]) + "-" + parseInt(splitted[1]) + "-1 00:00:00'";
@@ -225,11 +226,33 @@ var uploadDate = function (req, res, db) {
             query += " and ";
         query += "img_timestamp<=" + end_timestamp;
     }
+    
     query += ` group by img_user_text, img_time order by img_time) t
-        group by img_user_text
-        order by img_user_text
-        limit 1000
-        offset 0`;
+        group by img_user_text`
+    
+    if (req.query.sort !== undefined) {
+        if (req.query.sort === 'name') {
+            query += " order by img_user_text"
+        } else {
+            query += " order by img_sum desc"
+        }
+    } else {
+        query += " order by img_sum desc"
+    }
+
+    let page = 0;
+    if (req.query.page !== undefined) {
+        page = parseInt(req.query.page);
+    }
+
+    let limit = 10;
+    if (req.query.limit !== undefined) {
+        limit = parseInt(req.query.limit);
+    }
+
+    let offset = limit * page;
+
+    query += " limit " + limit + " offset " + offset;
 
     db.query(query, (err, dbres) => {
         if (!err) {
@@ -238,12 +261,13 @@ var uploadDate = function (req, res, db) {
             dbres.rows.forEach(function (row) {
                 user = {};
                 user.user = row.img_user_text;
+                user.total = parseInt(row.img_sum);
                 user.files = [];
                 let i = 0;
                 while (i < row.img_time.length) {
                     file = {};
                     file.date = row.img_time[i];
-                    file.count = row.img_count[i];
+                    file.count = parseInt(row.img_count[i]);
                     user.files.push(file);
                     i++;
                 }

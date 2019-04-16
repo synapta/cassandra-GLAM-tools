@@ -203,7 +203,7 @@ mediaType: application/json
                   ]
                 }
   /file/upload-date:
-    description: Number of files grouped by upload date and user, limited to 1000 results.
+    description: Number of files grouped by upload date and user.
     get:
       queryParameters:
         start:
@@ -216,6 +216,21 @@ mediaType: application/json
           type: string
           example: "2016-01"
           required: false
+        sort:
+          description: The sorting criteria between user and total.
+          type: string
+          example: "total"
+          required: false
+        page:
+          description: The page of the results.
+          type: integer
+          example: 0
+          required: false
+        limit:
+          description: The number of results per page.
+          type: integer
+          example: 10
+          required: false
       responses:
         200:
           body:
@@ -224,6 +239,7 @@ mediaType: application/json
                 [
                   {
                       "user": "ALH",
+                      "total": 1
                       "files": [
                           {
                               "date": "2013-08",
@@ -233,6 +249,7 @@ mediaType: application/json
                   },
                   {
                       "user": "Abderitestatos",
+                      "total": 3
                       "files": [
                           {
                               "date": "2009-01",
