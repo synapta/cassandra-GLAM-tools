@@ -3,6 +3,11 @@ their cooperation with Wikimedia projects. Starting from a Wikimedia Commons
 category this tool collects data about usage, views, contributors and topology
 of the files inside.
 
+
+~~~
+NOTE: Supported node version is 11 by now (due to mariaDB dependency)
+~~~
+
 ## Init
 Install Node.js global dependencies:
 ```
