@@ -30,7 +30,7 @@ module.exports = function (app, apicache) {
 
     app.use(function (req, res, next) {
         function getId(path) {
-            let exploded = path.split('/')
+            let exploded = path.split('/');
             if (path.startsWith('/api/')) {
                 return exploded[2];
             } else {
@@ -68,6 +68,14 @@ module.exports = function (app, apicache) {
     function isValidGlam(glam) {
         return glam !== undefined && glam['paused'] === false && glam['lastrun'] !== null;
     }
+
+    app.get('/admin/panel', function (req, res) {
+        res.sendFile(__dirname + '/pages/views/admin-panel.html');
+    });
+
+    app.get('/admin/new-glam', function (req, res) {
+        res.sendFile(__dirname + '/pages/views/new-glam.html');
+    });
 
     // VIEWS
     app.get('/:id', apicache("1 hour"), function (request, response) {

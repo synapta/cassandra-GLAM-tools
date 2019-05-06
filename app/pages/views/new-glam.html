@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>GLAM stat tool (Cassandra)</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/assets/style/style.css" />
+	<link rel="stylesheet" href="/assets/style/homepage.css" />
+	<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+	<style media="screen">
+		.error-message {
+
+	}
+
+	.success-message {
+
+	}
+	</style>
+</head>
+
+<body>
+	<header id="topbar" class="top_bar">
+		<div>
+			<h1>
+				<a href="/">GLAM stat tool (Cassandra)</a>
+			</h1>
+			<span style="color:white; font-size:12px;">version 1.2</span>
+		</div>
+	</header>
+
+	<main>
+		<section id="cover">
+			<div class="container">
+				<h2>
+					Create a new GLAM stats monitor
+				</h2>
+			</div>
+		</section>
+		<section>
+			<div class="container">
+				<div class="row">
+					<div class="col-12 my-5">
+						<div id="wrong-glam" class="error-message mb-4" style="display:none;">
+							<h3>OOPS! Something went wrong. Check the following things</h3>
+							<ul>
+								<li><b>GLAM ID</b> must be unique (there cannot be another GLAM with the same ID)</li>
+								<li><b>GLAM ID</b> cannot include spaces</li>
+								<li><b>Image URL</b> must be a valid URL (stars with <i>http://</i> or <i>https://</i>)</li>
+							</ul>
+						</div>
+						<div id="success-glam" class="success-message mb-4" style="display:none;">
+							<h3>New glam added correctly</h3>
+						</div>
+						<form id="new-glam-form" name="new-glam">
+							<div class="form-group">
+								<label for="glamID">Unique GLAM ID*</label>
+								<input type="text" class="form-control" id="glamID" aria-describedby="emailHelp" placeholder="e.g. ZU, ETH or SNL" required />
+							</div>
+							<div class="form-group">
+								<label for="glamFullName">Full Name*</label>
+								<input type="text" class="form-control" id="glamFullName" placeholder="e.g. Canton of Zürich, ETH Library of Zurich or Swiss National Library" required />
+							</div>
+							<div class="form-group">
+								<label for="glamCategory">Categroy*</label>
+								<input type="text" class="form-control" id="glamCategory" placeholder="e.g. Historical images of buildings in the canton of Zürich" required />
+							</div>
+							<div class="form-group">
+								<label for="featuredImageURL">Featured image URL*</label>
+								<input type="text" class="form-control" id="featuredImageURL" placeholder="URL" required />
+							</div>
+							<div class="form-group">
+								<label for="glamPassword">Password (leave blank for public GLAMs)</label>
+								<input type="password" class="form-control" id="glamPassword" placeholder="Password">
+							</div>
+							<button id="create-new-glam-button" class="btn btn-primary">CREATE</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="footer_home">
+		<section class="">
+			<span>
+				<a href="https://www.wikimedia.ch/" target="blank" title="Wikimedia CH">Wikimedia CH</a>
+			</span>
+			<span>
+				&bull;
+				<a href="http://www.supsi.ch/lcv" target="blank" title="SUPSI Laboratory of visual culture">SUPSI Laboratory of visual culture</a>
+			</span>
+			<span>
+				&bull;
+				<a href="https://synapta.it/" target="blank" title="Synapta">Synapta</a>
+			</span>
+			<div style="text-align:right;float:right">
+				<a href="https://github.com/synapta/cassandra-GLAM-tools" target="blank" title="GitHub repository">GitHub repository</a>
+			</div>
+		</section>
+	</footer>
+	<script type="text/javascript" src="/assets/bower_components/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+	<script type="text/javascript" src="/admin-functions.js"></script>
+</body>
+
+</html>

@@ -33,6 +33,20 @@ a {
   color: #0645AD;
 }
 
+.error-message {
+  color: #C62921;
+  background-color: rgba(255, 199, 191, 0.8);
+  border-radius: 5px;
+  padding: 15px;
+}
+
+.success-message {
+  color: #425d22;
+  background-color: #e3f1c4;
+  border-radius: 5px;
+  padding: 15px;
+}
+
 .top_bar {
   min-height: 3em;
   top: 0;
