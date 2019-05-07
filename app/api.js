@@ -1,57 +1,10 @@
-Date.prototype.addHours = function (h) {
-    this.setTime(this.getTime() + (h * 60 * 60 * 1000));
-    return this;
+Date.prototype.toISODateString = function () {
+    let offset = this.getTimezoneOffset() * 60 * 1000;
+    let local = new Date(this - offset);
+    return local.toISOString().slice(0, 10);
 }
 
-function arrayMin(arr) {
-    var len = arr.length, min = Infinity;
-    while (len--) {
-        if (arr[len] < min) {
-            min = arr[len];
-        }
-    }
-    return min;
-};
-
-function pad(num, size) {
-    var s = num + "";
-    while (s.length < size) s = "0" + s;
-    return s;
-};
-
-var categoryGraph = function (req, res, db) {
-    db.query('SELECT page_title,cat_files,cl_to[0:10],cat_level[0:10] from categories', (err, dbres) => {
-        if (!err) {
-            var result = Object();
-            result.nodes = [];
-            result.edges = [];
-            i = 0;
-            while (i < dbres.rows.length) {
-                node = Object();
-                node.id = dbres.rows[i].page_title;
-                node.files = dbres.rows[i].cat_files;
-                node.group = arrayMin(dbres.rows[i].cat_level);
-                j = 0;
-                while (j < dbres.rows[i].cl_to.length) {
-                    edge = Object();
-                    edge.target = dbres.rows[i].cl_to[j];
-                    edge.source = dbres.rows[i].page_title;
-                    if (edge.target != "ROOT")
-                        result.edges[result.edges.length] = edge;
-                    j++;
-                }
-                result.nodes[i] = node;
-
-                i++;
-            }
-            res.json(result);
-        } else {
-            console.log(err);
-            res.sendStatus(400);
-        }
-    })
-}
-
+// ADMIN
 function glamToJson(glam) {
     return {
         'name': glam['name'],
@@ -201,6 +154,100 @@ var getGlam = function (req, res, glam) {
             console.log(err);
             res.sendStatus(400);
         }
+    });
+};
+
+// ANNOTATIONS
+var getAnnotations = function (req, res, glam) {
+    glam.connection.query('SELECT * FROM annotations', (err, dbres) => {
+        if (!err) {
+            let result = [];
+            dbres.rows.forEach((row => {
+                result.push({'date': row['annotation_date'].toISODateString(),
+                             'annotation': row['annotation_value']});
+            }));
+            res.json(result);
+        } else {
+            console.log(err);
+            res.sendStatus(400);
+        }
+    });
+};
+
+var getAnnotation = function (req, res, glam) {
+    glam.connection.query('SELECT * FROM annotations WHERE annotation_date = $1', [req.params.date], (err, dbres) => {
+        if (!err) {
+            if (dbres.rows.length == 1) {
+                let row = dbres.rows[0];
+                let result = {'date': row['annotation_date'].toISODateString(),
+                              'annotation': row['annotation_value']};
+                res.json(result);
+            } else {
+                res.sendStatus(404);
+            }
+        } else {
+            console.log(err);
+            res.sendStatus(400);
+        }
+    });
+};
+
+var modifyAnnotation = function (req, res, glam) {
+    // TODO
+    res.sendStatus(501);
+};
+
+var createAnnotation = function (req, res, glam) {
+    // TODO
+    res.sendStatus(501);
+};
+
+var deleteAnnotation = function (req, res, glam) {
+    // TODO
+    res.sendStatus(501);
+};
+
+// CATEGORY NETWORK
+function arrayMin(arr) {
+    var len = arr.length, min = Infinity;
+    while (len--) {
+        if (arr[len] < min) {
+            min = arr[len];
+        }
+    }
+    return min;
+};
+
+var categoryGraph = function (req, res, db) {
+    db.query('SELECT page_title,cat_files,cl_to[0:10],cat_level[0:10] from categories', (err, dbres) => {
+        if (!err) {
+            var result = Object();
+            result.nodes = [];
+            result.edges = [];
+            i = 0;
+            while (i < dbres.rows.length) {
+                node = Object();
+                node.id = dbres.rows[i].page_title;
+                node.files = dbres.rows[i].cat_files;
+                node.group = arrayMin(dbres.rows[i].cat_level);
+                j = 0;
+                while (j < dbres.rows[i].cl_to.length) {
+                    edge = Object();
+                    edge.target = dbres.rows[i].cl_to[j];
+                    edge.source = dbres.rows[i].page_title;
+                    if (edge.target != "ROOT")
+                        result.edges[result.edges.length] = edge;
+                    j++;
+                }
+                result.nodes[i] = node;
+
+                i++;
+            }
+            res.json(result);
+        } else {
+            console.log(err);
+            res.sendStatus(400);
+        }
     })
 }
 
@@ -328,7 +375,7 @@ var usage = function (req, res, db) {
     let query = `select gil_to, array_agg(gil_wiki) as gil_wiki, array_agg(gil_page_title) as gil_page_title,
                     count(gil_page_title) as usage, count(distinct gil_wiki) as projects
                     from usages
-                    where is_alive=true
+                    where is_alive = true
                     group by gil_to`;
     
     if (req.query.sort !== undefined) {
@@ -505,7 +552,7 @@ var views = function (req, res, db) {
             result = [];
             dbres.rows.forEach(function (row) {
                 let date = {
-                    "date": row.access_date.addHours(1).toISOString().substring(0, 10),
+                    "date": row.access_date.toISODateString(),
                     "views": parseInt(row.sum)
                 };
                 result.push(date);
@@ -545,7 +592,7 @@ var viewsByFile = function (req, res, db) {
             dbres.rows.forEach(function (row) {
                 let date = {
                     "sum": parseInt(row.sum),
-                    "access_date": row.access_date.addHours(1).toISOString().substring(0, 10)
+                    "access_date": row.access_date.toISODateString()
                 };
                 result.push(date);
             });
@@ -618,6 +665,11 @@ exports.glams = glams;
 exports.getAdminGlam = getAdminGlam;
 exports.createGlam = createGlam;
 exports.updateGlam = updateGlam;
+exports.getAnnotations = getAnnotations;
+exports.getAnnotation = getAnnotation;
+exports.modifyAnnotation = modifyAnnotation;
+exports.createAnnotation = createAnnotation;
+exports.deleteAnnotation = deleteAnnotation;
 exports.getGlam = getGlam;
 exports.categoryGraph = categoryGraph;
 exports.uploadDate = uploadDate;
