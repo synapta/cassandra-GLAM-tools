@@ -4,7 +4,6 @@ Date.prototype.toISODateString = function () {
     return local.toISOString().slice(0, 10);
 }
 
-// ADMIN
 function glamToJson(glam) {
     return {
         'name': glam['name'],
@@ -14,6 +13,7 @@ function glamToJson(glam) {
     };
 }
 
+// ADMIN
 var glams = function (req, res, glams, admin) {
     let result = [];
 
@@ -25,9 +25,9 @@ var glams = function (req, res, glams, admin) {
 
         if (admin) {
             json['lastrun'] = glams[id]['lastrun'];
-            json['paused'] = glams[id]['paused'];
+            json['status'] = glams[id]['status'];
         } else {
-            if (glams[id]['paused'] || glams[id]['lastrun'] === null) {
+            if (glams[id]['status'] !== 'running') {
                 continue;
             }
         }
@@ -41,7 +41,7 @@ var glams = function (req, res, glams, admin) {
 var getAdminGlam = function (req, res, glam) {
     let result = glamToJson(glam);
     result['lastrun'] = glam['lastrun'];
-    result['paused'] = glam['paused'];
+    result['status'] = glam['status'];
     res.json(result);
 }
 
@@ -92,6 +92,8 @@ var createGlam = function (req, res, config) {
         };
     }
 
+    glam['status'] = 'pending';
+
     config.insertGlam(glam);
     res.sendStatus(200);
 }
@@ -133,9 +135,9 @@ var updateGlam = function (req, res, config) {
     // Paused is optional
     let paused = req.body['paused'];
     if (paused === true) {
-        glam['paused'] = true;
+        glam['status'] = 'paused';
     } else if (paused === false) {
-        glam['paused'] = false;
+        glam['status'] = 'pending';
     }
 
     config.updateGlam(glam);
