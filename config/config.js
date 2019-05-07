@@ -44,10 +44,10 @@ function loadGlams(callback) {
           glam['lastrun'] = null;
         }
 
-        if (element['paused']) {
-          glam['paused'] = element['paused'];
+        if (element['status']) {
+          glam['status'] = element['status'];
         } else {
-          glam['paused'] = false;
+          glam['status'] = null;
         }
 
         if (element['http-auth']) {

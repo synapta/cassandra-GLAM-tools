@@ -22,7 +22,7 @@
         "password": "PASSWORD"
     },
     "limits": {
-        "categories": 500,
+        "categories": 1000,
         "images": 500000
     }
 }

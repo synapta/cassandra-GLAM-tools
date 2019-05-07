@@ -21,12 +21,13 @@ logging.basicConfig(level=logging.INFO,
 
 def update(collection, glam):
     collection.update_one({'_id': glam['_id']}, {
-                          '$set': {'lastrun': datetime.utcnow()}})
+                          '$set': {'lastrun': datetime.utcnow()},
+                          '$set': {'status': 'running'}})
 
 
-def pause(collection, glam):
+def fail(collection, glam):
     collection.update_one({'_id': glam['_id']}, {
-                          '$set': {'paused': True}})
+                          '$set': {'status': 'failed'}})
 
 
 def views_date():
@@ -68,8 +69,8 @@ def process_glam(collection, glam):
         logging.error('Subprocess etl.js failed')
 
         if e.returncode == 65:
-            logging.error('Glam %s is now paused', glam['name'])
-            pause(collection, glam)
+            logging.error('Glam %s is now failed', glam['name'])
+            fail(collection, glam)
             return
 
     # Run views.py
@@ -146,9 +147,13 @@ def main():
     collection = db[config['mongodb']['collection']]
 
     for glam in collection.find():
-        if 'paused' in glam:
-            if glam['paused'] == True:
+        if 'status' in glam:
+            if glam['status'] == 'paused':
                 logging.info('Glam %s is paused', glam['name'])
+                continue
+            
+            if glam['status'] == 'failed':
+                logging.info('Glam %s is failed', glam['name'])
                 continue
 
         if 'lastrun' in glam:

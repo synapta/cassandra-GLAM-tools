@@ -41,7 +41,7 @@ mediaType: application/json
                     "category": "Category:Historical images of buildings in the canton of Zürich",
                     "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Herrliberger_Elgg_1740.jpg/640px-Herrliberger_Elgg_1740.jpg",
                     "lastrun": "2019-04-08T20:02:35.328Z",
-                    "paused": false
+                    "status": "running"
                   }
                 ]
     post:
@@ -100,7 +100,7 @@ mediaType: application/json
                     "category": "Category:Historical images_of buildings in the canton of Zürich",
                     "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Herrliberger_Elgg_1740.jpg/640px-Herrliberger_Elgg_1740.jpg",
                     "lastrun": "2019-03-26T13:27:13.809Z",
-                    "paused": false
+                    "status": "running"
                   }
       put:
         description: Update the Glam with `name = {glam}`. An empty password removes the password.
@@ -146,8 +146,22 @@ mediaType: application/json
                 "category": "Category:Historical images_of buildings in the canton of Zürich",
                 "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Herrliberger_Elgg_1740.jpg/640px-Herrliberger_Elgg_1740.jpg",
                 "password": "",
-                "paused": false
+                "status": "running"
               }
+      /annotations:
+        description: Collection of annotations for the administrative area.
+        get:
+          description: Get a list of the annotations available in the system.
+        /{date}:
+          description: Entity representing an annotation with `date = {date}`.
+          get:
+            description: Get the value of the annotation.
+          put:
+            description: Change the value of the annotation.
+          post:
+            description: Create a new annotation.
+          delete:
+            description: Delete the annotation.
 /{glam}:
   description: Entity representing the Glam with `name = {glam}`.
   get:
@@ -392,7 +406,7 @@ mediaType: application/json
                     }
                   ]
     /all:
-      description: Total number of file views.
+      description: Total number of file views. This API is deprecated and it should not be used.
       get:
         responses:
           200:
@@ -476,7 +490,7 @@ mediaType: application/json
                   "totalPages": 783
                 }
     /sidebar:
-      description: List of the number of pages and wikis per file used, limited to 1000 results.
+      description: List of the number of pages and wikis per file used, limited to 1000 results. This API is deprecated and it should not be used.
       get:
         responses: 
           200:

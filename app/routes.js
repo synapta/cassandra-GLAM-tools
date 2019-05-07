@@ -164,8 +164,49 @@ module.exports = function (app, apicache) {
         }
     });
 
-    app.delete('/api/admin/glams/:id', function (request, response) {
-        response.sendStatus(501);
+    app.get('/api/admin/glams/:id/annotations', function (request, response) {
+        let glam = config.glams[request.params.id];
+        if (glam !== undefined) {
+            api.getAnnotations(request, response, glam);
+        } else {
+            response.sendStatus(404);
+        }
+    });
+
+    app.get('/api/admin/glams/:id/annotations/:date', function (request, response) {
+        let glam = config.glams[request.params.id];
+        if (glam !== undefined) {
+            api.getAnnotation(request, response, glam);
+        } else {
+            response.sendStatus(404);
+        }
+    });
+
+    app.put('/api/admin/glams/:id/annotations/:date', function (request, response) {
+        let glam = config.glams[request.params.id];
+        if (glam !== undefined) {
+            api.modifyAnnotation(request, response, glam);
+        } else {
+            response.sendStatus(404);
+        }
+    });
+
+    app.post('/api/admin/glams/:id/annotations/:date', function (request, response) {
+        let glam = config.glams[request.params.id];
+        if (glam !== undefined) {
+            api.createAnnotation(request, response, glam);
+        } else {
+            response.sendStatus(404);
+        }
+    });
+
+    app.delete('/api/admin/glams/:id/annotations/:date', function (request, response) {
+        let glam = config.glams[request.params.id];
+        if (glam !== undefined) {
+            api.deleteAnnotation(request, response, glam);
+        } else {
+            response.sendStatus(404);
+        }
     });
 
     app.get('/api/:id/category', apicache("1 hour"), function (request, response) {
