@@ -36,7 +36,15 @@
 					<div class="col-10 mx-auto mt-5 mb-4">
 						<div class="row align-items-center">
 							<div class="col-12 col-md-8">
-								<h1>List of Glams available in the system</h1>
+								<h1>List of Glams available in the system <span id="admin-help">&#63;</span> </h1>
+								<div id="glam-legend" style="display:none;">
+									<ul>
+										<li><b style="color:#40798C;">RUNNING</b> - tool is collecting data. Everything is fine!</li>
+										<li><b style="color:#F7B32B;">PAUSED</b> - tool has been paused from collecting data</li>
+										<li><b style="color:#8C271E;">FAILED</b> - tool tried to collect data, but failed</li>
+										<li><b style="color:#5B5B5B;">PENDING</b> - tool is not started yet. It will soon!</li>
+									</ul>
+								</div>
 							</div>
 							<div class="col-12 col-md-4 text-right">
 								<a id="new-glam-button" href="/admin/new-glam">ADD NEW GLAM</a>

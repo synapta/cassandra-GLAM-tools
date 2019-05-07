@@ -1,4 +1,11 @@
 $(function() {
+  // Help
+  $('#admin-help').mouseenter(function() {
+    $('#glam-legend').stop().fadeIn(200);
+  }).mouseleave(function() {
+    $('#glam-legend').stop().fadeOut(200);
+  });
+  // Get data
   $.getJSON('/api/admin/glams', function(items) {
     if (items.length > 0) {
       $.get('/views/templates/glam-preview.tpl', function(tpl) {
@@ -13,16 +20,17 @@ $(function() {
           if (el.lastrun !== null) {
             obj.lastrun = moment(el.lastrun).format("MMM Do YY");
           }
-          if (el.paused) {
-            obj.paused = true;
-            obj.status = "paused";
-          }
-          if (el.lastrun === null) {
-            obj.draft = true;
-            obj.status = "draft";
-          } else if (!el.paused) {
-            obj.status = "active";
-          }
+          obj.status = el.status;
+          // if (el.paused) {
+          //   obj.paused = true;
+          //   obj.status = "paused";
+          // }
+          // if (el.lastrun === null) {
+          //   obj.draft = true;
+          //   obj.status = "draft";
+          // } else if (!el.paused) {
+          //   obj.status = "active";
+          // }
           // console.log(obj);
           // render
           if (isEven(idx)) {
