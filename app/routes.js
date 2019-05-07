@@ -69,12 +69,22 @@ module.exports = function (app, apicache) {
         return glam !== undefined && glam['paused'] === false && glam['lastrun'] !== null;
     }
 
+    // ADMIN PANEL
     app.get('/admin/panel', function (req, res) {
         res.sendFile(__dirname + '/pages/views/admin-panel.html');
     });
 
     app.get('/admin/new-glam', function (req, res) {
         res.sendFile(__dirname + '/pages/views/new-glam.html');
+    });
+
+    app.get('/admin/edit-glam/:id', apicache("1 hour"), function (request, response) {
+      let glam = config.glams[request.params.id];
+      if (glam !== undefined) {
+        response.sendFile(__dirname + '/pages/views/edit-glam.html');
+      } else {
+        response.sendStatus(400);
+      }
     });
 
     // VIEWS

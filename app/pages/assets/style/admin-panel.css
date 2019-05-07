@@ -1,0 +1,84 @@
+#new-glam-button {
+  padding: 0.5rem 1rem;
+  border: 1px solid;
+  border-radius: 3px;
+  margin: 0;
+  transition: all .5s;
+}
+
+#new-glam-button:hover {
+  background-color: rgba(6, 69, 173, 0.2);
+}
+
+.glam-block {
+  width: 100%;
+  padding: 2rem;
+  border-radius: 3px;
+  margin: 30px 0;
+  border-left: 3px solid;
+  background-color: rgba(64, 121, 140, 0.3);
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.glam-block .glam-controls-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.glam-block .glam-controls {
+  position: absolute;
+  top: 20px;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  font-weight: 900;
+  display: none;
+}
+
+.glam-block .glam-controls.edit {
+  position: absolute;
+  color: #fff;
+  left: 6%;
+}
+
+.glam-block .glam-controls.delete {
+  position: absolute;
+  color: #F72C25;
+  right: 6%;
+}
+
+.glam-block .info {
+  padding-right: 1rem;
+}
+
+.glam-block .img > img {
+  width: 100%;
+  height: auto;
+  max-width: 200px;
+}
+
+.glam-block .bold-span {
+  font-weight: 800;
+}
+
+.glam-block.active {
+  border-color: #40798C;
+  background-color: rgba(64, 121, 140, 0.3);
+}
+
+.glam-block.paused {
+  border-color: #F7B32B;
+  background-color: rgba(252, 246, 177, 0.3);
+}
+
+.glam-block.draft {
+  border-color: #8C271E;
+  background-color: rgba(140, 39, 30, 0.3);
+  opacity: 0.7;
+}

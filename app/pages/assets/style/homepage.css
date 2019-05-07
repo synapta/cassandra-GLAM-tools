@@ -1,3 +1,17 @@
+#admin-panel-link {
+  padding: 0.5rem 1rem;
+  border: 1px solid;
+  border-radius: 3px;
+  margin: 0;
+  transition: all .5s;
+  position: absolute;
+  right: 1rem;
+}
+
+#admin-panel-link:hover {
+  background-color: rgba(6, 69, 173, 0.7);
+}
+
 #photos {
    /* Prevent vertical gaps */
    line-height: 0;

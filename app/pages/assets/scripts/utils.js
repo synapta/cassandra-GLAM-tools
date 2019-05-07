@@ -21,6 +21,7 @@ function setCategory() {
   	var db = window.location.href.toString().split('/')[3];
   	var jsonurl = "/api/" + db;
 
+    console.log(jsonurl);
   	$.getJSON(jsonurl, function(d) {
 				$('#totalMediaNum').text(formatter(d.files));
       	$('#cat_url').text(decodeURIComponent(d.category).replace("Category:",""));

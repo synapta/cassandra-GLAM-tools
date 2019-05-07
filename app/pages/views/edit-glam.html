@@ -57,7 +57,7 @@
 						</div>
 						<div id="success-glam" class="mb-4" style="display:none;">
 							<div class="success-message mb-5">
-								<h3>New glam added correctly</h3>
+								<h3>Glam edited correctly</h3>
 							</div>
 							<div class="text-center">
 								<a href="/admin/panel">VIEW COMPLETE LIST</a>
@@ -67,7 +67,7 @@
 						<form id="new-glam-form" name="new-glam">
 							<div class="form-group">
 								<label for="glamID">Unique GLAM ID*</label>
-								<input type="text" class="form-control" id="glamID" aria-describedby="emailHelp" placeholder="e.g. ZU, ETH or SNL" required />
+								<input type="text" class="form-control" id="glamID" aria-describedby="emailHelp" placeholder="e.g. ZU, ETH or SNL" disabled required />
 							</div>
 							<div class="form-group">
 								<label for="glamFullName">Full Name*</label>
@@ -85,7 +85,7 @@
 								<label for="glamPassword">Password (leave blank for public GLAMs)</label>
 								<input type="password" class="form-control" id="glamPassword" placeholder="Password">
 							</div>
-							<button id="create-new-glam-button" class="btn btn-primary">CREATE</button>
+							<button id="edit-glam-button" class="btn btn-primary">SUBMIT</button>
 						</form>
 					</div>
 				</div>
@@ -113,7 +113,7 @@
 	</footer>
 	<script type="text/javascript" src="/assets/bower_components/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
-	<script type="text/javascript" src="/js/new-glam-panel.js"></script>
+	<script type="text/javascript" src="/js/edit-glam-panel.js"></script>
 </body>
 
 </html>
