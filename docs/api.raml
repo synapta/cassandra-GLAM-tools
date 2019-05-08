@@ -152,14 +152,76 @@ mediaType: application/json
         description: Collection of annotations for the administrative area.
         get:
           description: Get a list of the annotations available in the system.
+          responses:
+            200:
+              body:
+                application/json:
+                  example: |
+                    [
+                      {
+                        "date": "2019-01-01",
+                        "annotation": "test"
+                      },
+                      {
+                        "date": "2019-01-02",
+                        "annotation": "value"
+                      }
+                    ]
         /{date}:
           description: Entity representing an annotation with `date = {date}`.
           get:
             description: Get the value of the annotation.
+            responses:
+              200:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "date": "2019-01-01",
+                        "annotation": "test"
+                      }
           put:
             description: Change the value of the annotation.
+            body:
+              application/json:
+                type: |
+                  {
+                    "type": "object",
+                    "$schema": "http://json-schema.org/draft-03/schema",
+                    "id": "http://jsonschema.net",
+                    "required": true,
+                    "properties": {
+                      "annotation": {
+                        "type": "string",
+                        "required": true
+                      }
+                    }
+                  }
+                example : |
+                  {
+                    "annotation": "value"
+                  }
           post:
             description: Create a new annotation.
+            body:
+              application/json:
+                type: |
+                  {
+                    "type": "object",
+                    "$schema": "http://json-schema.org/draft-03/schema",
+                    "id": "http://jsonschema.net",
+                    "required": true,
+                    "properties": {
+                      "annotation": {
+                        "type": "string",
+                        "required": true
+                      }
+                    }
+                  }
+                example : |
+                  {
+                    "annotation": "value"
+                  }
           delete:
             description: Delete the annotation.
 /{glam}:
@@ -335,7 +397,8 @@ mediaType: application/json
                   },
                   {
                       "date": "2017-01-02",
-                      "views": 4521
+                      "views": 4521,
+                      "annotation": "test"
                   }
                 ]
     /sidebar:

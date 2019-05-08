@@ -211,18 +211,45 @@ var getAnnotation = function (req, res, glam) {
 };
 
 var modifyAnnotation = function (req, res, glam) {
-    // TODO
-    res.sendStatus(501);
+    let annotation = req.body['annotation'];
+    if (annotation === undefined || annotation === '') {
+        res.sendStatus(400);
+        return;
+    }
+
+    glam.connection.query('UPDATE annotations SET annotation_value = $2 WHERE annotation_date = $1', [req.params.date, annotation], (err, dbres) => {
+        if (!err) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(400);
+        }
+    });
 };
 
 var createAnnotation = function (req, res, glam) {
-    // TODO
-    res.sendStatus(501);
+    let annotation = req.body['annotation'];
+    if (annotation === undefined || annotation === '') {
+        res.sendStatus(400);
+        return;
+    }
+
+    glam.connection.query('INSERT INTO annotations (annotation_date, annotation_value) VALUES ($1, $2)', [req.params.date, annotation], (err, dbres) => {
+        if (!err) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(400);
+        }
+    });
 };
 
 var deleteAnnotation = function (req, res, glam) {
-    // TODO
-    res.sendStatus(501);
+    glam.connection.query('DELETE FROM annotations WHERE annotation_date = $1', [req.params.date], (err, dbres) => {
+        if (!err) {
+            res.sendStatus(200);
+        } else {
+            res.sendStatus(400);
+        }
+    });
 };
 
 // CATEGORY NETWORK
@@ -237,7 +264,7 @@ function arrayMin(arr) {
 };
 
 var categoryGraph = function (req, res, db) {
-    db.query('SELECT page_title,cat_files,cl_to[0:10],cat_level[0:10] from categories', (err, dbres) => {
+    db.query('SELECT page_title, cat_files, cl_to[0:10], cat_level[0:10] from categories', (err, dbres) => {
         if (!err) {
             var result = Object();
             result.nodes = [];
@@ -543,8 +570,9 @@ var viewsAll = function (req, res, db) {
 }
 
 var views = function (req, res, db) {
-    let query = `select sum(accesses) as sum, access_date
-                 from visualizations`;
+    let query = `select sum(accesses) as sum, access_date, annotation_value
+                 from visualizations
+                 LEFT OUTER JOIN annotations ON access_date = annotation_date`;
 
     let parameters = [];
 
@@ -562,7 +590,7 @@ var views = function (req, res, db) {
         parameters.push(req.query.end);
     }
 
-    query += " group by access_date order by access_date";
+    query += " group by access_date, annotation_value order by access_date";
 
     db.query(query, parameters, (err, dbres) => {
         if (!err) {
@@ -570,8 +598,11 @@ var views = function (req, res, db) {
             dbres.rows.forEach(function (row) {
                 let date = {
                     "date": row.access_date.toISODateString(),
-                    "views": parseInt(row.sum)
+                    "views": parseInt(row.sum),
                 };
+                if (row.annotation_value !== null) {
+                    date.annotation = row.annotation_value;
+                }
                 result.push(date);
             })
             res.json(result);
