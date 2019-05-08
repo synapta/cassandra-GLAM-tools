@@ -35,6 +35,22 @@ var glams = function (req, res, glams, admin) {
         result.push(json);
     }
 
+    if (admin) {
+        // Sort by decreasing timestamp
+        result.sort((a, b) => {
+            if (a['lastrun'] === null && b['lastrun'] === null) {
+                return 0;
+            }
+            if (a['lastrun'] === null) {
+                return 1;
+            }
+            if (b['lastrun'] === null) {
+                return -1;
+            }
+            return b['lastrun'].getTime() - a['lastrun'].getTime();
+        });
+    }
+
     res.json(result);
 }
 
