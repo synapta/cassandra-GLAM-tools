@@ -21,18 +21,21 @@ $(function() {
             obj.lastrun = moment(el.lastrun).format("MMM Do YY");
           }
           obj.status = el.status;
-          // if (el.paused) {
-          //   obj.paused = true;
-          //   obj.status = "paused";
-          // }
-          // if (el.lastrun === null) {
-          //   obj.draft = true;
-          //   obj.status = "draft";
-          // } else if (!el.paused) {
-          //   obj.status = "active";
-          // }
-          // console.log(obj);
-          // render
+          switch (obj.status) {
+            case "running":
+            case "pending":
+              obj.command = "pause";
+              obj.paused = false;
+              break;
+            case "paused":
+              obj.command = "restart";
+              obj.paused = true;
+              break;
+            case "failed":
+              obj.command = "retry";
+              obj.paused = true;
+              break;
+          }
           if (isEven(idx)) {
             $('#glams-list-left').append(template(obj));
           } else {
@@ -47,9 +50,27 @@ $(function() {
           $(this).find('.glam-controls-overlay').fadeOut(100);
           $(this).find('.glam-controls').fadeOut(100);
         });
+        // on click pause/unpause
+        $('.glam-block > .glam-controls.command').click(function() {
+          let pause = !$(this).data('glampaused');
+          $.ajax({
+            type: "PUT",
+            url:'/api/admin/glams/' + $(this).data('glamid'),
+            headers: { "Content-Type": "application/json" },
+            data: JSON.stringify({paused: pause}),
+            success: function(data) {
+              location.reload();
+            },
+            error: function(err) {
+              alert('Something went wrong!');
+              $(this).removeClass('disabled');
+            }
+          });
+          $(this).addClass('disabled');
+        });
       });
     } else {
-      // no glams
+      $('#glams-list').html('<div class="w-100 text-center my-5"><h1>No available GLAMs</h1></div>');
     }
   });
 });

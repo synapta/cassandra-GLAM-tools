@@ -1,9 +1,7 @@
 // // Create NEW glam
 $(function() {
   var id = window.location.href.toString().split('/')[5];
-  // console.log(id);
   $.getJSON('/api/admin/glams/' + id, function(data) {
-    console.log(data);
     $('#glamID').val(data.name);
     $('#glamFullName').val(data.fullname);
     $('#glamCategory').val(data.category.replace("Category:", ""));
