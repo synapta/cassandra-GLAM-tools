@@ -66,7 +66,7 @@ module.exports = function (app, apicache) {
     });
 
     function isValidGlam(glam) {
-        return glam !== undefined && glam['paused'] === false && glam['lastrun'] !== null;
+        return glam !== undefined && glam['status'] === 'running' && glam['lastrun'] !== null;
     }
 
     // ADMIN PANEL
