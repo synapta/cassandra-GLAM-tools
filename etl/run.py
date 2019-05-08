@@ -21,8 +21,8 @@ logging.basicConfig(level=logging.INFO,
 
 def update(collection, glam):
     collection.update_one({'_id': glam['_id']}, {
-                          '$set': {'lastrun': datetime.utcnow()},
-                          '$set': {'status': 'running'}})
+                          '$set': {'lastrun': datetime.utcnow(),
+                                   'status': 'running'}})
 
 
 def fail(collection, glam):
