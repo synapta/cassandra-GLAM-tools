@@ -221,14 +221,14 @@ mediaType: application/json
     get:
       queryParameters:
         start:
-          description: The start month.
-          type: string
-          example: "2015-01"
+          description: The start date.
+          type: date
+          example: "2015-01-01"
           required: false
         end:
-          description: The end month.
-          type: string
-          example: "2016-01"
+          description: The end date.
+          type: date
+          example: "2016-01-01"
           required: false
         sort:
           description: The sorting criteria between user and total.
@@ -285,14 +285,14 @@ mediaType: application/json
     get:
       queryParameters:
         start:
-          description: The start month.
-          type: string
-          example: "2015-01"
+          description: The start date.
+          type: date
+          example: "2015-01-01"
           required: false
         end:
-          description: The end month.
-          type: string
-          example: "2016-01"
+          description: The end date.
+          type: date
+          example: "2016-01-01"
           required: false
       responses:
         200:
@@ -314,14 +314,14 @@ mediaType: application/json
     get:
       queryParameters:
         start:
-          description: The start month.
-          type: string
-          example: "2015-01"
+          description: The start date.
+          type: date
+          example: "2015-01-01"
           required: false
         end:
-          description: The end month.
-          type: string
-          example: "2016-01"
+          description: The end date.
+          type: date
+          example: "2016-01-01"
           required: false
       responses:
         200:
@@ -381,14 +381,14 @@ mediaType: application/json
       get:
         queryParameters:
           start:
-            description: The start month.
-            type: string
-            example: "2015-01"
+            description: The start date.
+            type: date
+            example: "2015-01-01"
             required: false
           end:
-            description: The end month.
-            type: string
-            example: "2016-01"
+            description: The end date.
+            type: date
+            example: "2016-01-01"
             required: false
         responses: 
           200:

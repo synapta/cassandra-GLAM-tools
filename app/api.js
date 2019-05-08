@@ -275,21 +275,20 @@ var uploadDate = function (req, res, db) {
         from (select count(*) as img_count, img_user_text, to_char(img_timestamp, 'YYYY-MM') as img_time
         from images`;
 
-    // start and end are defined, convert them to timestamp and append
+    let parameters = [];
+
     if (req.query.start !== undefined) {
-        splitted = req.query.start.split('-');
-        start_timestamp = "'" + parseInt(splitted[0]) + "-" + parseInt(splitted[1]) + "-1 00:00:00'";
-        query += " where img_timestamp>=" + start_timestamp;
+        query += " where img_timestamp >= $1";
+        parameters.push(req.query.start);
     }
     
     if (req.query.end !== undefined) {
-        splitted = req.query.end.split('-');
-        end_timestamp = "'" + parseInt(splitted[0]) + "-" + parseInt(splitted[1]) + "-1 00:00:00'";
-        if (req.query.start == undefined)
-            query += " where ";
-        else
-            query += " and ";
-        query += "img_timestamp<=" + end_timestamp;
+        if (req.query.start === undefined) {
+            res.sendStatus(400);
+            return;
+        }
+        query += " and img_timestamp <= $2";
+        parameters.push(req.query.end);
     }
     
     query += ` group by img_user_text, img_time order by img_time) t
@@ -323,7 +322,7 @@ var uploadDate = function (req, res, db) {
 
     query += " limit " + limit + " offset " + offset;
 
-    db.query(query, (err, dbres) => {
+    db.query(query, parameters, (err, dbres) => {
         if (!err) {
             let result = [];
             i = 0;
@@ -354,25 +353,25 @@ var uploadDateAll = function (req, res, db) {
     let query = `select count(*) as count, to_char(img_timestamp, 'YYYY-MM') as date
                  from images`;
 
+    let parameters = [];
+
     if (req.query.start !== undefined) {
-        splitted = req.query.start.split('-');
-        start_timestamp = "'" + parseInt(splitted[0]) + "-" + parseInt(splitted[1]) + "-1 00:00:00'";
-        query += " where img_timestamp>=" + start_timestamp;
+        query += " where img_timestamp >= $1";
+        parameters.push(req.query.start);
     }
     
     if (req.query.end !== undefined) {
-        splitted = req.query.end.split('-');
-        end_timestamp = "'" + parseInt(splitted[0]) + "-" + parseInt(splitted[1]) + "-1 00:00:00'";
-        if (req.query.start == undefined)
-            query += " where ";
-        else
-            query += " and ";
-        query += "img_timestamp<=" + end_timestamp;
+        if (req.query.start === undefined) {
+            res.sendStatus(400);
+            return;
+        }
+        query += " and img_timestamp <= $2";
+        parameters.push(req.query.end);
     }
     
     query += " group by date order by date";
 
-    db.query(query, (err, dbres) => {
+    db.query(query, parameters, (err, dbres) => {
         if (!err) {
             let result = [];
             dbres.rows.forEach(function (row) {
@@ -547,25 +546,25 @@ var views = function (req, res, db) {
     let query = `select sum(accesses) as sum, access_date
                  from visualizations`;
 
+    let parameters = [];
+
     if (req.query.start !== undefined) {
-        splitted = req.query.start.split('-');
-        start_timestamp = "'" + parseInt(splitted[0]) + "-" + parseInt(splitted[1]) + "-1 00:00:00'";
-        query += " where access_date>=" + start_timestamp;
+        query += " where access_date >= $1";
+        parameters.push(req.query.start);
     }
     
     if (req.query.end !== undefined) {
-        splitted = req.query.end.split('-');
-        end_timestamp = "'" + parseInt(splitted[0]) + "-" + parseInt(splitted[1]) + "-1 00:00:00'";
-        if (req.query.start == undefined)
-            query += " where ";
-        else
-            query += " and ";
-        query += "access_date<=" + end_timestamp;
+        if (req.query.start === undefined) {
+            res.sendStatus(400);
+            return;
+        }
+        query += " and access_date <= $2";
+        parameters.push(req.query.end);
     }
 
     query += " group by access_date order by access_date";
 
-    db.query(query, (err, dbres) => {
+    db.query(query, parameters, (err, dbres) => {
         if (!err) {
             result = [];
             dbres.rows.forEach(function (row) {
@@ -589,22 +588,26 @@ var viewsByFile = function (req, res, db) {
                     where images.is_alive = true
                     and images.media_id = visualizations.media_id
                     and img_name = $1`;
+    
+    let parameters = [req.params.file];
 
     if (req.query.start !== undefined) {
-        splitted = req.query.start.split('-');
-        start_timestamp = "'" + parseInt(splitted[0]) + "-" + parseInt(splitted[1]) + "-1 00:00:00'";
-        query += " and img_timestamp>=" + start_timestamp;
+        query += " and access_date >= $2";
+        parameters.push(req.query.start);
     }
     
     if (req.query.end !== undefined) {
-        splitted = req.query.end.split('-');
-        end_timestamp = "'" + parseInt(splitted[0]) + "-" + parseInt(splitted[1]) + "-1 00:00:00'";
-        query += " and img_timestamp<=" + end_timestamp;
+        if (req.query.start === undefined) {
+            res.sendStatus(400);
+            return;
+        }
+        query += " and access_date <= $3";
+        parameters.push(req.query.end);
     }
 
     query += " group by img_name, access_date order by img_name, access_date";
 
-    db.query(query, [req.params.file], (err, dbres) => {
+    db.query(query, parameters, (err, dbres) => {
         if (!err) {
             let result = [];
             dbres.rows.forEach(function (row) {
