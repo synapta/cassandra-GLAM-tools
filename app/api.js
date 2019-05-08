@@ -629,8 +629,25 @@ var viewsSidebar = function (req, res, db) {
     let query = `select i.img_name, sum(v.accesses) as tot, avg(v.accesses) as av, PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER by v.accesses) as median
                   from images as i, visualizations as v
                   where i.media_id = v.media_id
-                  and i.is_alive = true
-                  group by i.img_name`;
+                  and i.is_alive = true`;
+
+    let parameters = [];
+
+    if (req.query.start !== undefined) {
+        query += " and access_date >= $1";
+        parameters.push(req.query.start);
+    }
+    
+    if (req.query.end !== undefined) {
+        if (req.query.start === undefined) {
+            res.sendStatus(400);
+            return;
+        }
+        query += " and access_date <= $2";
+        parameters.push(req.query.end);
+    }
+
+    query += " group by i.img_name";
 
     if (req.query.sort !== undefined) {
         if (req.query.sort === 'views') {
@@ -662,7 +679,7 @@ var viewsSidebar = function (req, res, db) {
 
     query += " limit " + limit + " offset " + offset;
 
-    db.query(query, (err, dbres) => {
+    db.query(query, parameters, (err, dbres) => {
         if (!err) {
             let result = [];
             dbres.rows.forEach(function (row) {

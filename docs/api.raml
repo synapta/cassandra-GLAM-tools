@@ -342,6 +342,16 @@ mediaType: application/json
       description: List of total, average, and median views per file.
       get:
         queryParameters:
+          start:
+            description: The start date.
+            type: date
+            example: "2015-01-01"
+            required: false
+          end:
+            description: The end date.
+            type: date
+            example: "2016-01-01"
+            required: false
           sort:
             description: The sorting criteria among views, median, and name.
             type: string
@@ -490,7 +500,7 @@ mediaType: application/json
                   "totalPages": 783
                 }
     /sidebar:
-      description: List of the number of pages and wikis per file used, limited to 1000 results. This API is deprecated and it should not be used.
+      description: List of the number of pages and wikis per file used, limited to 1000 results. This API is deprecated and it should not be used. Replace it with `/usage`.
       get:
         responses: 
           200:
