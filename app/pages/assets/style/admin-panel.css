@@ -7,6 +7,8 @@
   border-radius: 100%;
   text-align: center;
   font-size: 12px;
+  top: -3px;
+  position: relative;
 }
 
 #glam-legend {
@@ -17,6 +19,11 @@
   padding: 1rem 1rem 0;
   border-radius: 3px;
   right: 0;
+}
+
+#glam-legend ul {
+  list-style-type: none;
+  margin-left: -2rem;
 }
 
 #glam-legend li {
