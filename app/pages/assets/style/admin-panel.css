@@ -52,6 +52,12 @@
   display: flex;
   justify-content: space-between;
   position: relative;
+  transition: all .5s;
+}
+
+.glam-block.disabled {
+  pointer-events: none;
+  opacity: .5;
 }
 
 .glam-block .glam-controls-overlay {
@@ -79,9 +85,22 @@
   left: 6%;
 }
 
-.glam-block .glam-controls.delete {
+.glam-block .glam-controls.command {
   position: absolute;
-  color: #F72C25;
+  text-transform: uppercase;
+  color: #FFBFA0;
+  right: 6%;
+}
+
+.glam-block .glam-controls.command:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.glam-block .glam-controls.command.retry,
+.glam-block .glam-controls.command.restart {
+  position: absolute;
+  color: #87F6FF;
   right: 6%;
 }
 
