@@ -13,3 +13,9 @@
 .grid path {
   stroke-width: 0;
 }
+
+.zoom-area {
+  /* cursor: move; */
+  fill: none;
+  pointer-events: all;
+}
