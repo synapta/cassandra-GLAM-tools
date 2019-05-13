@@ -1,62 +1,46 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>GLAM stat tool (Cassandra)</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta charset="utf-8">
-		<meta http-equiv="Access-Control-Allow-Origin" content="*"/>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
-		<link rel="stylesheet" href="assets/style/style.css"/>
-		<link rel="stylesheet" href="assets/style/homepage.css"/>
-		<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-	</head>
-	<body>
-		<header id="topbar" class="top_bar">
-			<a id="admin-panel-link" href="/admin/panel">CONTROL PANEL</a>
-			<div>
-				<h1>
-					<a href="/">GLAM stat tool (Cassandra)</a>
-				</h1>
-				<span style="color:white; font-size:12px;">version 1.2</span>
-			</div>
-		</header>
 
-		<main>
+<head>
+	<title>GLAM stat tool (Cassandra)</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/assets/style/semantic-ui-sidebar.css" />
+	<link rel="stylesheet" href="/assets/style/style.css" />
+	<link rel="stylesheet" href="/assets/style/homepage.css" />
+</head>
+
+<body>
+	<div id="mobile-sidebar" class="ui left sidebar"></div>
+	<div class="pusher">
+		<header id="mobile-header-bar"></header>
+		<aside id="main-sidebar"></aside>
+		<main id="main-container">
+			<!-- Title -->
 			<section id="cover">
-				<div class="container">
-					<div class="row">
-						<div class="col-12">
-							<h2>
-								Support GLAMs (Galleries, Libraries, Archives, Museums) in monitoring and evaluating their cooperation with Wikimedia projects
-							</h2>
-						</div>
+				<div class="row">
+					<div class="col-12 col-xl-7">
+						<h2>Support GLAMs (Galleries, Libraries, Archives, Museums) in monitoring and evaluating their cooperation with Wikimedia projects</h2>
 					</div>
 				</div>
 			</section>
-
-      		<section id="photos">
-			</section>
-		</main>
-
-		<footer class="footer_home">
-			<section class="">
-				<span>
-					<a href="https://www.wikimedia.ch/" target="blank" title="Wikimedia CH">Wikimedia CH</a>
-				</span>
-				<span>
-					&bull;
-					<a href="http://www.supsi.ch/lcv" target="blank" title="SUPSI Laboratory of visual culture">SUPSI Laboratory of visual culture</a>
-				</span>
-				<span>
-					&bull;
-					<a href="https://synapta.it/" target="blank" title="Synapta">Synapta</a>
-				</span>
-				<div style="text-align:right;float:right">
-					<a href="https://github.com/synapta/cassandra-GLAM-tools" target="blank" title="GitHub repository">GitHub repository</a>
+			<!-- Main Content -->
+			<section>
+				<div class="row">
+					<div id="photos-1" class="col-12 col-xl-4"></div>
+					<div id="photos-2" class="col-12 col-xl-4"></div>
+					<div id="photos-3" class="col-12 col-xl-4"></div>
 				</div>
 			</section>
-		</footer>
-		<script type="text/javascript" src="/assets/bower_components/jquery/dist/jquery.min.js"></script>
-		<script type="text/javascript" src="/js/functions.js"></script>
-	</body>
+		</main>
+	</div>
+	<script type="text/javascript" src="/assets/bower_components/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="/assets/scripts/semantic-ui-sidebar.js"></script>
+	<script type="text/javascript" src="/assets/scripts/handlebars-v4.0.5.js"></script>
+	<script type="text/javascript" src="/js/loader.js"></script>
+	<script type="text/javascript" src="/js/functions.js"></script>
+</body>
+
 </html>

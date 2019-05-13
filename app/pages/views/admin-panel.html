@@ -7,33 +7,33 @@
 	<meta charset="utf-8">
 	<meta http-equiv="Access-Control-Allow-Origin" content="*" />
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/assets/style/semantic-ui-sidebar.css" />
 	<link rel="stylesheet" href="/assets/style/style.css" />
 	<link rel="stylesheet" href="/assets/style/admin-panel.css" />
-	<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
 </head>
 
 <body>
-	<header id="topbar" class="top_bar">
-		<div>
-			<h1>
-				<a href="/">GLAM stat tool (Cassandra)</a>
-			</h1>
-			<span style="color:white; font-size:12px;">version 1.2</span>
-		</div>
-	</header>
-
-	<main>
-		<section id="cover">
-			<div class="container">
-				<h2>
-					Admin Control Panel
-				</h2>
-			</div>
-		</section>
-		<section>
-			<div class="container">
+	<!-- Mobile sidebar -->
+	<div id="mobile-sidebar" class="ui left sidebar"></div>
+	<div class="pusher">
+		<!-- Mobile header bar -->
+		<header id="mobile-header-bar"></header>
+		<!-- Sidebar -->
+		<aside id="main-sidebar"></aside>
+		<!-- MAIN -->
+		<main id="main-container">
+			<!-- Title -->
+			<section id="cover">
 				<div class="row">
-					<div class="col-10 mx-auto mt-5 mb-3">
+					<div class="col-12">
+						<h2>Admin Control Panel</h2>
+					</div>
+				</div>
+			</section>
+			<!-- Main Content -->
+			<section>
+				<div class="row">
+					<div class="col-12 mx-auto mt-xl-5 mb-3">
 						<div class="row align-items-center">
 							<div class="col-12 col-md-8">
 								<h1>List of Glams available in the system <span id="admin-help">&#63;</span> </h1>
@@ -46,44 +46,27 @@
 									</ul>
 								</div>
 							</div>
-							<div class="col-12 col-md-4 text-right">
+							<div class="col-12 mt-4 mt-xl-0 col-md-4 text-md-right">
 								<a id="new-glam-button" href="/admin/new-glam">ADD NEW GLAM</a>
 							</div>
 						</div>
 					</div>
-					<div class="col-11 mx-auto">
+					<div class="col-12 mx-auto">
 						<div class="row" id="glams-list">
 							<div class="col-12 col-md-6" id="glams-list-left"></div>
 							<div class="col-12 col-md-6" id="glams-list-right"></div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</section>
-	</main>
-
-	<footer class="footer_home">
-		<section class="">
-			<span>
-				<a href="https://www.wikimedia.ch/" target="blank" title="Wikimedia CH">Wikimedia CH</a>
-			</span>
-			<span>
-				&bull;
-				<a href="http://www.supsi.ch/lcv" target="blank" title="SUPSI Laboratory of visual culture">SUPSI Laboratory of visual culture</a>
-			</span>
-			<span>
-				&bull;
-				<a href="https://synapta.it/" target="blank" title="Synapta">Synapta</a>
-			</span>
-			<div style="text-align:right;float:right">
-				<a href="https://github.com/synapta/cassandra-GLAM-tools" target="blank" title="GitHub repository">GitHub repository</a>
-			</div>
-		</section>
-	</footer>
+			</section>
+		</main>
+	</div>
 	<script type="text/javascript" src="/assets/bower_components/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+	<script type="text/javascript" src="/assets/scripts/semantic-ui-sidebar.js"></script>
 	<script type="text/javascript" src="/assets/scripts/handlebars-v4.0.5.js"></script>
 	<script type="text/javascript" src="/assets/scripts/moment-with-locales.js"></script>
+	<script type="text/javascript" src="/js/loader.js"></script>
 	<script type="text/javascript" src="/js/admin-panel.js"></script>
 </body>
 
