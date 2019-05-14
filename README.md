@@ -4,12 +4,11 @@ category this tool collects data about usage, views, contributors and topology
 of the files inside.
 
 ## Installation
-Please note that supported Node.js version is 11.
+Please note that the supported Node.js version is 11.
 
 Install Node.js global dependencies:
 ```
 sudo npm install -g bower
-sudo npm install -g forever
 ```
 
 Install Node.js project dependencies:
@@ -72,10 +71,5 @@ python3 run.py
 ## Run webservices
 ```
 cd app
-sudo nodejs server
-```
-
-```
-cd app
-sudo forever start server.js
+nodejs server
 ```
