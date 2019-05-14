@@ -1,147 +1,125 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>GLAM stat tool (Cassandra)</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta charset="utf-8">
-		<meta http-equiv="Access-Control-Allow-Origin" content="*"/>
-		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
-		<link rel="stylesheet" href="/assets/style/style.css"/>
-		<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-		<style>
-			body {
+
+<head>
+	<title>GLAM stat tool (Cassandra)</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*" />
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/assets/style/semantic-ui-sidebar.css" />
+	<link rel="stylesheet" href="/assets/style/style.css" />
+	<base id="basebase" href="" />
+	<style>
+		body {
 				height: 100%;
 				flex-direction: column;
 				min-height: 100vh;
 				display: flex;
 			}
 		</style>
-	</head>
-	<body>
-		<base id="basebase" href=""/>
-		<header id="topbar" class="top_bar">
-			<h1>
-				<a href="/">GLAM stat tool (Cassandra)</a>
-			</h1>
-			<span style="color:white; font-size:12px;">version 1.2.</span>
-			<h2>
-				<a href="index.html" class="glamName"></a>
-			</h2>
-		</header>
+</head>
 
-		<main>
+<body>
+	<!-- Mobile sidebar -->
+	<div id="mobile-sidebar" class="ui left sidebar"></div>
+	<div class="pusher">
+		<!-- Mobile header bar -->
+		<header id="mobile-header-bar"></header>
+		<!-- Sidebar -->
+		<aside id="main-sidebar"></aside>
+		<!-- MAIN -->
+		<main id="main-container">
+			<!-- Title -->
+			<section id="cover">
+				<div class="row">
+					<div class="col-12">
+						<div class="glam-title-container">
+							<div class="w3-container boxDashboardTitle">
+								<br>
+								<h1 class="glamName"></h1>
+								<br>
+								<small>Category in Commons:</small>
+								<br>
+								<a id="cat_url" target="_blank"></a>
+								<br><br>
+								<small>Total media in Commons:</small>&nbsp;&nbsp;&nbsp;
+								<span id="totalMediaNum" class="round-btn" style="margin: 0 auto;"></span>
+								<br><br>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
 			<section>
-				<div class="container" style="padding-top:2em;">
-					<div class="row">
-						<div class="col-sm-8">
-							<div class="row">
-								<div class="col-sm-6">
-									<a href="category-network" class="nodeca">
-										<div class="w3-border w3-hover-shadow">
-											<div class="w3-container w3-grey menu_title">
-			                  Category network
-			                </div>
-											<div class="w3-container boxDashboardTitle" style="text-align:center">
-												<img src="/assets/img/graph.png" height="200px"/>
-											</div>
-					          </div>
-									</a>
-								</div>
-
-								<div class="col-sm-6">
-									<a href="user-contributions" class="nodeca">
-										<div class="w3-border w3-hover-shadow">
-											<div class="w3-container w3-grey menu_title">
-			                  User contribution
-			                </div>
-											<div class="w3-container boxDashboardTitle" style="text-align:center">
-												<img src="/assets/img/users.png" height="200px"/>
-											</div>
-					          </div>
-									</a>
-								</div>
+				<div class="row">
+					<div class="col-12 col-lg-10 col-xl-9">
+						<div class="row">
+							<div class="col-12 col-xl-6 my-3">
+								<a href="category-network" class="nodeca">
+									<div class="w3-border w3-hover-shadow">
+										<div class="w3-container bg-accent menu_title">
+											Category network
+										</div>
+										<div class="w3-container boxDashboardTitle" style="text-align:center">
+											<img src="/assets/img/graph.png" height="200px" />
+										</div>
+									</div>
+								</a>
 							</div>
-
-							<br>
-
-							<div class="row">
-								<div class="col-sm-6">
-									<a href="usage" class="nodeca">
-										<div class="w3-border w3-hover-shadow">
-											<div class="w3-container w3-grey menu_title">
-												Usage
-											</div>
-											<div class="w3-container boxDashboardTitle" style="text-align:center">
-												<img src="/assets/img/usage.png" height="200px"/>
-											</div>
+							<div class="col-12 col-xl-6 my-3">
+								<a href="user-contributions" class="nodeca">
+									<div class="w3-border w3-hover-shadow">
+										<div class="w3-container bg-accent menu_title">
+											User contribution
 										</div>
-									</a>
-								</div>
-
-								<div class="col-sm-6">
-									<a href="page-views" class="nodeca">
-										<div class="w3-border w3-hover-shadow">
-											<div class="w3-container w3-grey menu_title">
-												Views
-											</div>
-											<div class="w3-container boxDashboardTitle" style="text-align:center">
-												<img src="/assets/img/views.png" height="200px"/>
-											</div>
+										<div class="w3-container boxDashboardTitle" style="text-align:center">
+											<img src="/assets/img/users.png" height="200px" />
 										</div>
-									</a>
-								</div>
+									</div>
+								</a>
 							</div>
 						</div>
-
-						<div class="col-sm-4">
-							<div class="w3-border">
-								<div class="w3-container" style="padding:0">
-                  <!--<img src="image.jpg" width="100%"/>-->
-                </div>
-								<div class="w3-container boxDashboardTitle">
-									<br>
-									<h1 class="glamName"></h1>
-									<br>
-									<small>Category in Commons:</small>
-									<br>
-									<a id="cat_url" target="_blank"></a>
-									<br><br>
-									<small>Total media in Commons:</small>&nbsp;&nbsp;&nbsp;
-									<span id="totalMediaNum" class="round-btn" style="margin: 0 auto;"></span>
-									<br><br>
-								</div>
+						<div class="row">
+							<div class="col-12 col-xl-6 my-3">
+								<a href="usage" class="nodeca">
+									<div class="w3-border w3-hover-shadow">
+										<div class="w3-container bg-accent menu_title">
+											Usage
+										</div>
+										<div class="w3-container boxDashboardTitle" style="text-align:center">
+											<img src="/assets/img/usage.png" height="200px" />
+										</div>
+									</div>
+								</a>
+							</div>
+							<div class="col-12 col-xl-6 my-3">
+								<a href="page-views" class="nodeca">
+									<div class="w3-border w3-hover-shadow">
+										<div class="w3-container bg-accent menu_title">
+											Views
+										</div>
+										<div class="w3-container boxDashboardTitle" style="text-align:center">
+											<img src="/assets/img/views.png" height="200px" />
+										</div>
+									</div>
+								</a>
 							</div>
 						</div>
-				  </div>
+					</div>
 				</div>
 			</section>
 		</main>
+	</div>
+	<div class="futovac"></div>
+	<script type="text/javascript" src="/assets/bower_components/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="/assets/scripts/semantic-ui-sidebar.js"></script>
+	<script type="text/javascript" src="/js/loader.js"></script>
+	<script type="text/javascript" src="/assets/scripts/utils.js"></script>
+	<script>
+		setCategory();
+	</script>
+</body>
 
-    <div class="futovac"></div>
-		<footer class="footer_home">
-			<section class="">
-				<span>
-					<a href="https://www.wikimedia.ch/" target="blank" title="Wikimedia CH">Wikimedia CH</a>
-				</span>
-				<span>
-					&bull;
-					<a href="http://www.supsi.ch/lcv" target="blank" title="SUPSI Laboratory of visual culture">SUPSI Laboratory of visual culture</a>
-				</span>
-				<span>
-					&bull;
-					<a href="https://synapta.it/" target="blank" title="Synapta">Synapta</a>
-				</span>
-				<div style="text-align:right;float:right">
-					<a href="https://github.com/synapta/cassandra-GLAM-tools" target="blank" title="Github repository">Github repository</a>
-				</div>
-			</section>
-		</footer>
-
-		<script type="text/javascript" src="/assets/bower_components/jquery/dist/jquery.min.js"></script>
-		<script type="text/javascript" src="/assets/scripts/utils.js"></script>
-		<script>
-			setCategory();
-		</script>
-	</body>
 </html>

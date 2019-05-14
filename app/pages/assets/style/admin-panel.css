@@ -1,13 +1,15 @@
 #admin-help {
-  color: #000;
-  width: 15px;
-  border: 1px solid;
-  height: 15px;
+  font-style: normal !important;
   display: inline-block;
+  margin-left: .5rem;
+  color: #000;
+  width: 16px;
+  height: 16px;
+  border: 1px solid;
   border-radius: 100%;
   text-align: center;
   font-size: 12px;
-  top: -3px;
+  top: -1px;
   position: relative;
 }
 
@@ -18,7 +20,7 @@
   z-index: 9;
   padding: 1rem 1rem 0;
   border-radius: 3px;
-  right: 0;
+  box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, .4);
 }
 
 #glam-legend ul {
@@ -44,12 +46,14 @@
 
 .glam-block {
   width: 100%;
-  padding: 2rem;
+  padding: 1rem 2rem;
   border-radius: 3px;
   margin: 30px 0;
-  border-left: 3px solid;
-  background-color: rgba(64, 121, 140, 0.3);
+  border-style: solid;
+  border-width: 1px 1px 1px 5px;
+  background-color: rgba(64, 121, 140, 0.1);
   display: flex;
+  align-items: center;
   justify-content: space-between;
   position: relative;
   transition: all .5s;
@@ -60,37 +64,27 @@
   opacity: .5;
 }
 
-.glam-block .glam-controls-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: none;
-  /* background-color: rgba(0, 0, 0, 0.7); */
-  background-color: var(--main-t);
+.glam-block .glam-controls-container {
+  display: flex;
+  align-items: baseline;
 }
 
 .glam-block .glam-controls {
-  position: absolute;
-  top: 20px;
-  font-size: 1.1rem;
-  letter-spacing: 2px;
-  font-weight: 900;
   display: none;
+  float: left;
+  font-size: 1.2rem;
+  font-weight: 900;
+  padding: 0 .5rem;
 }
 
 .glam-block .glam-controls.edit {
-  position: absolute;
-  color: #fff;
-  left: 6%;
+  color: #000;
+  margin: 0 .8rem;
 }
 
 .glam-block .glam-controls.command {
-  position: absolute;
-  text-transform: uppercase;
-  color: #FFBFA0;
-  right: 6%;
+  text-transform: capitalize;
+  color: firebrick;
 }
 
 .glam-block .glam-controls.command:hover {
@@ -100,9 +94,7 @@
 
 .glam-block .glam-controls.command.retry,
 .glam-block .glam-controls.command.restart {
-  position: absolute;
-  color: #87F6FF;
-  right: 6%;
+  color: darkcyan;
 }
 
 .glam-block .info {
@@ -110,9 +102,7 @@
 }
 
 .glam-block .img > img {
-  width: 100%;
-  height: auto;
-  max-width: 200px;
+  height: 150px;
 }
 
 .glam-block .bold-span {
@@ -123,11 +113,12 @@
   font-size: 1.5rem;
   text-transform: uppercase;
   font-weight: 800;
+  float: left;
 }
 
 .glam-block.running {
   border-color: #40798C;
-  background-color: rgba(64, 121, 140, 0.3);
+  background-color: rgba(64, 121, 140, 0.1);
 }
 
 .glam-block.running .status {
@@ -136,7 +127,7 @@
 
 .glam-block.paused {
   border-color: #F7B32B;
-  background-color: rgba(252, 246, 177, 0.3);
+  background-color: rgba(252, 246, 177, 0.1);
 }
 
 .glam-block.paused .status {
@@ -145,21 +136,82 @@
 
 .glam-block.failed {
   border-color: #8C271E;
-  background-color: rgba(140, 39, 30, 0.3);
-  /* opacity: 0.7; */
+  background-color: rgba(140, 39, 30, 0.1);
 }
 
 .glam-block.failed .status {
   color: #8C271E;
-  /* opacity: 0.7; */
 }
 
 .glam-block.pending {
   border-color: #5B5B5B;
-  background-color: #5B5B5B45;
+  background-color: rgba(91, 91, 91, 0.1);
   opacity: 0.9;
 }
 
 .glam-block.pending .status {
   color: #5B5B5B;
+}
+
+.glams-count {
+  color: gray;
+}
+
+.glams-count ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+}
+
+.glams-count ul li {
+  display: inline-block;
+}
+
+.glams-count ul li.active-btn {
+  font-weight: 600;
+  color: var(--main);
+  text-decoration: underline;
+}
+
+.glams-count .glam-filter {
+  font-style: italic;
+  color: var(--main);
+  font-size: 1rem;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: all .5s;
+}
+
+.glams-count .glam-filter:hover {
+  opacity: .5;
+}
+
+@media screen and (max-width: 991px) {
+  .glam-block .glam-controls {
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0;
+  }
+
+  .glam-block .img > img {
+    width: 100%;
+    height: auto;
+    max-width: 180px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .glam-block .glam-controls {
+    font-size: 0.9rem;
+    padding: 0;
+  }
+
+  .glam-block .glam-controls.edit {
+    margin: 0 .5rem;
+  }
+
+  .glam-block .img > img {
+    display: none;
+  }
 }
