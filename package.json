@@ -4,6 +4,7 @@
   "author": "Alessio Melandri <alessio.melandri@synapta.it> (https://synapta.it/), Dario Salza <dsalza@hotmail.it> (https://synapta.it/)",
   "private": true,
   "dependencies": {
+    "@sentry/node": "^5.2.0",
     "apicache": "~0.1.5",
     "express": "^4.16.4",
     "http-auth": "latest",
@@ -12,7 +13,6 @@
     "morgan": "^1.9.1",
     "pg": "~7.4.0",
     "raml2html": "latest",
-    "raven": "^2.6.4",
     "utf8": "~2.1.2"
   },
   "scripts": {

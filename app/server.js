@@ -1,12 +1,17 @@
-var Raven = require('raven');
-var config = require("../config/config.json");
-if (typeof config.raven !== 'undefined') Raven.config(config.raven.glamtoolsweb.DSN).install();
-
 var express = require('express');
 var apicache = require('apicache').options({ debug: false }).middleware;
 var morgan = require('morgan');
+var Sentry = require('@sentry/node');
+var config = require('../config/config.json');
 
 var app = express();
+
+if (typeof config.raven !== 'undefined') {
+    Sentry.init({dsn: config.raven.glamtoolsweb.DSN});
+    app.use(Sentry.Handlers.requestHandler());
+    app.use(Sentry.Handlers.errorHandler());
+}
+
 app.use(morgan('common'));
 app.use(express.json());
 
