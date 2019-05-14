@@ -12,6 +12,7 @@
     "morgan": "^1.9.1",
     "pg": "~7.4.0",
     "raml2html": "latest",
+    "raven": "^2.6.4",
     "utf8": "~2.1.2"
   },
   "scripts": {

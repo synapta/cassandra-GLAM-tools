@@ -1,3 +1,7 @@
+var Raven = require('raven');
+var config = require("../config/config.json");
+if (typeof config.raven !== 'undefined') Raven.config(config.raven.glamtoolsweb.DSN).install();
+
 var express = require('express');
 var apicache = require('apicache').options({ debug: false }).middleware;
 var morgan = require('morgan');

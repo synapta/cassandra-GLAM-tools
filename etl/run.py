@@ -152,7 +152,7 @@ def main():
             event_level=logging.ERROR  # Send errors as events
         )
         sentry_sdk.init(
-            dsn=config['raven']['glamtools']['DSN'],
+            dsn=config['raven']['glamtoolsetl']['DSN'],
             integrations=[sentry_logging]
         )
     except KeyError:
