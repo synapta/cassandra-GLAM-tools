@@ -7,7 +7,8 @@ import sys
 import time
 from datetime import datetime, timedelta
 from subprocess import SubprocessError
-
+import sentry_sdk
+from sentry_sdk.integrations.logging import LoggingIntegration
 import psycopg2
 import pymongo
 from psycopg2 import ProgrammingError
@@ -142,6 +143,22 @@ def initial_views(name):
 
 def main():
     config = json.load(open(config_file))
+
+    try:
+        logging.info('External error reporting enabled')
+        # All of this is already happening by default!
+        sentry_logging = LoggingIntegration(
+            level=logging.INFO,  # Capture info and above as breadcrumbs
+            event_level=logging.ERROR  # Send errors as events
+        )
+        sentry_sdk.init(
+            dsn=config['raven']['glamtools']['DSN'],
+            integrations=[sentry_logging]
+        )
+    except KeyError:
+        logging.info('External error reporting DISABLED')
+        pass
+
     client = pymongo.MongoClient(config['mongodb']['url'])
     db = client[config['mongodb']['database']]
     collection = db[config['mongodb']['collection']]
