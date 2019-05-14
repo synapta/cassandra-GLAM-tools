@@ -3,12 +3,9 @@ their cooperation with Wikimedia projects. Starting from a Wikimedia Commons
 category this tool collects data about usage, views, contributors and topology
 of the files inside.
 
+## Installation
+Please note that supported Node.js version is 11.
 
-~~~
-NOTE: Supported node version is 11 by now (due to mariaDB dependency)
-~~~
-
-## Init
 Install Node.js global dependencies:
 ```
 sudo npm install -g bower
@@ -31,7 +28,7 @@ cd app/pages/assets
 bower install
 ```
 
-Update the configuration file: `config/config.json`.
+Copy the file `config/config.example.json` to `config/config.json` and modify as required.
 
 The provided MongoDB collection must contain documents with the following format:
 ```
