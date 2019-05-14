@@ -8,7 +8,9 @@ app.use(express.json());
 
 require('./routes.js')(app, apicache);
 
-var server = app.listen(80, function() {
+var port = process.argv[2] ? parseInt(process.argv[2]) : 8081;
+
+var server = app.listen(port, function() {
     var host = server.address().address;
     var port = server.address().port;
     console.log('Server listening at http://%s:%s', host, port);
