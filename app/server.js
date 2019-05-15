@@ -17,6 +17,10 @@ app.use(express.json());
 
 require('./routes.js')(app, apicache);
 
+if (typeof config.raven !== 'undefined') {
+    app.use(Sentry.Handlers.errorHandler());
+}
+
 var port = process.argv[2] ? parseInt(process.argv[2]) : 8081;
 
 var server = app.listen(port, function() {

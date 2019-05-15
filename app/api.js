@@ -169,8 +169,7 @@ var getGlam = function (req, res, glam) {
             result.files = parseInt(dbres.rows[0]['value']);
             res.json(result);
         } else {
-            console.log(err);
-            res.sendStatus(400);
+            throw new Error(err);
         }
     });
 };
@@ -186,8 +185,7 @@ var getAnnotations = function (req, res, glam) {
             }));
             res.json(result);
         } else {
-            console.log(err);
-            res.sendStatus(400);
+            throw new Error(err);
         }
     });
 };
@@ -204,8 +202,7 @@ var getAnnotation = function (req, res, glam) {
                 res.sendStatus(404);
             }
         } else {
-            console.log(err);
-            res.sendStatus(400);
+            throw new Error(err);
         }
     });
 };
@@ -221,7 +218,7 @@ var modifyAnnotation = function (req, res, glam) {
         if (!err) {
             res.sendStatus(200);
         } else {
-            res.sendStatus(400);
+            throw new Error(err);
         }
     });
 };
@@ -237,7 +234,7 @@ var createAnnotation = function (req, res, glam) {
         if (!err) {
             res.sendStatus(200);
         } else {
-            res.sendStatus(400);
+            throw new Error(err);
         }
     });
 };
@@ -247,7 +244,7 @@ var deleteAnnotation = function (req, res, glam) {
         if (!err) {
             res.sendStatus(200);
         } else {
-            res.sendStatus(400);
+            throw new Error(err);
         }
     });
 };
@@ -290,8 +287,7 @@ var categoryGraph = function (req, res, db) {
             }
             res.json(result);
         } else {
-            console.log(err);
-            res.sendStatus(400);
+            throw new Error(err);
         }
     })
 }
@@ -370,8 +366,7 @@ var uploadDate = function (req, res, db) {
             });
             res.json(result);
         } else {
-            console.log(err);
-            res.sendStatus(400);
+            throw new Error(err);
         }
     })
 }
@@ -408,8 +403,7 @@ var uploadDateAll = function (req, res, db) {
             });
             res.json(result);
         } else {
-            console.log(err);
-            res.sendStatus(400);
+            throw new Error(err);
         }
     })
 }
@@ -475,8 +469,7 @@ var usage = function (req, res, db) {
             });
             res.json(result);
         } else {
-            console.log(err);
-            res.sendStatus(400);
+            throw new Error(err);
         }
     });
 }
@@ -500,13 +493,11 @@ var usageStats = function (req, res, db) {
                     result.totalPages = parseInt(totalProjects.rows[0].p);
                     res.json(result);
                 } else {
-                    console.log(err);
-                    res.sendStatus(400);
+                    throw new Error(err);
                 }
             });
         } else {
-            console.log(err);
-            res.sendStatus(400);
+            throw new Error(err);
         }
     });
 }
@@ -531,8 +522,7 @@ var usageTop = function (req, res, db) {
             });
             res.json(result);
         } else {
-            console.log(err);
-            res.sendStatus(400);
+            throw new Error(err);
         }
     });
 }
@@ -550,8 +540,7 @@ var usageSidebar = function (req, res, db) {
         if (!err) {
             res.json(dbres.rows);
         } else {
-            console.log(err);
-            res.sendStatus(400);
+            throw new Error(err);
         }
     });
 }
@@ -563,8 +552,7 @@ var viewsAll = function (req, res, db) {
         if (!err) {
             res.json({"sum": parseInt(dbres.rows[0].sum)});
         } else {
-            console.log(err);
-            res.sendStatus(400);
+            throw new Error(err);
         }
     });
 }
@@ -607,8 +595,7 @@ var views = function (req, res, db) {
             })
             res.json(result);
         } else {
-            console.log(err);
-            res.sendStatus(400);
+            throw new Error(err);
         }
     });
 }
@@ -650,8 +637,7 @@ var viewsByFile = function (req, res, db) {
             });
             res.json(result);
         } else {
-            console.log(err);
-            res.sendStatus(400);
+            throw new Error(err);
         }
     });
 }
@@ -724,8 +710,7 @@ var viewsSidebar = function (req, res, db) {
             })
             res.json(result);
         } else {
-            console.log(err);
-            res.sendStatus(400);
+            throw new Error(err);
         }
     });
 }
