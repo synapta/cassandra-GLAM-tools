@@ -9,7 +9,6 @@ var app = express();
 if (typeof config.raven !== 'undefined') {
     Sentry.init({dsn: config.raven.glamtoolsweb.DSN});
     app.use(Sentry.Handlers.requestHandler());
-    app.use(Sentry.Handlers.errorHandler());
 }
 
 app.use(morgan('common'));
