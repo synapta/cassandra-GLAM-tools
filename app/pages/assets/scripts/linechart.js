@@ -12,21 +12,22 @@ var lineChartDraw = function(div, query) {
 
 function lineChart(div, data) {
 
-  var availH = $("#" + div).outerHeight() * 0.85;
+  var margin = {};
+  var margin2 = {};
+  var kH;
+  var availH;
 
-  var margin = {
-        top: 10,
-        right: 50,
-        bottom: 140,
-        left: 30
-      },
-      margin2 = {
-        top: availH - margin.bottom + 30,
-        right: 50,
-        bottom: 50,
-        left: 30
-      },
-      width = Math.round($("#" + div).outerWidth()) - margin.left - margin.right,
+  if ($(window).width() < 576) {  // smartphones
+    availH = $("#" + div).outerHeight();
+    margin = { top: 10, right: 40, bottom: 140, left: 20 };
+    margin2 = { top: availH - margin.bottom + 30, right: 40, bottom: 50, left: 20 };
+  } else { // tablets and desktop
+    availH = $("#" + div).outerHeight() * 0.85;
+    margin = { top: 10, right: 50, bottom: 140, left: 30 };
+    margin2 = { top: availH - margin.bottom + 30, right: 50, bottom: 50, left: 30 };
+  }
+
+  var width = Math.round($("#" + div).outerWidth()) - margin.left - margin.right,
       height = availH - margin.top - margin.bottom,
       height2 = availH - margin2.top - margin2.bottom;
 
@@ -59,7 +60,7 @@ function lineChart(div, data) {
               .append("g")
               .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  // SCALLE OBJECTS
+  // SCALE OBJECTS
   var x = d3.scaleTime().range([0, width]);
   var y = d3.scaleLinear().range([height, 0]);
 
@@ -70,7 +71,7 @@ function lineChart(div, data) {
   // SET DOMAINS
   x.domain(d3.extent(data, function(d) { return d.date; }));
   y.domain([d3.min(data, function(d) { return d.views; }), d3.max(data, function(d) { return d.views; })]);
-  
+
   // BRUSH DOMAINS
   x2.domain(x.domain());
   y2.domain(y.domain());
@@ -80,7 +81,7 @@ function lineChart(div, data) {
   var xAxis2 = d3.axisBottom(x2);
   var yAxis = d3.axisLeft(y).ticks(2).tickFormat(d3.formatPrefix(".0", 1));
 
-  // clip path (clip line outside axis)
+  // Clip path (clip line outside axis)
   var clip = svg.append("defs")
                 .append("svg:clipPath")
                 .attr("id", "clip")
@@ -164,6 +165,7 @@ function lineChart(div, data) {
                     .attr("height", height)
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
                     .call(zoom);
+
 
   //  Label to display details (right top corner)
   var detailsLabel = focus.append("g").attr("class", "dateLabel");
