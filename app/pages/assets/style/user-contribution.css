@@ -1,0 +1,24 @@
+#main_contributions_container {
+  height: 90vh;
+  width: 100%;
+}
+
+#user_contributions_container {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 45vh;
+}
+
+#left-column {
+  background-color: var(--bg-gray);
+}
+
+.zoom {
+  /* cursor: move; */
+  fill: none;
+  /* pointer-events: all; */
+}
+
+.focus {
+  /* pointer-events: all; */
+}

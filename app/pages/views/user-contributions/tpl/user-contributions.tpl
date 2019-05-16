@@ -1,7 +1,7 @@
 {{#each users}}
 	<div class="list_item">
 		<div class="row">
-			<div class="col-9">
+			<div class="col-9 item-col">
 				<span class="id item" id="{{user}}">
 					{{user}}
 				</span>

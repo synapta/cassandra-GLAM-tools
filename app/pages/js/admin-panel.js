@@ -12,7 +12,6 @@ $(function() {
       let paused = 0;
       let failed = 0;
       let pending = 0;
-      console.log(items.length);
       $.get('/views/templates/glam-preview.tpl', function(tpl) {
         var template = Handlebars.compile(tpl);
         items.forEach(function(el, idx) {

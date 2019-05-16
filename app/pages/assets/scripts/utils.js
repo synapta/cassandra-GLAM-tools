@@ -60,6 +60,14 @@ function switch_page() {
   	});
 };
 
+// Check if object if empty
+function isEmpty(obj) {
+  if (Object.keys(obj).length > 0) {
+    return false;
+  }
+  return true;
+}
+
 String.prototype.hashCode = function() {
   var hash = 0, i, chr;
   if (this.length === 0) return hash;

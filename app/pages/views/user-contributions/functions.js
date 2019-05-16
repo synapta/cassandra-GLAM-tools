@@ -75,22 +75,24 @@ function download(){
 	$('<a href="' + getUrl() + '" download="' + "user_contributions.json" + '">Download dataset</a>').appendTo('#download_dataset');
 }
 
-function highlight(){
-	$(".list_item").on("click", ".item" , function(){
-		var element = $(this).attr("id");
+function highlight() {
+	$(".list_item").on("click", ".item-col" , function() {
 
-		// reset Sidebar - Dataviz
-		$("#sidebar .id").removeClass("selected_list_item");
+		var element = $(this).find('.item').attr("id");
 
-		// highlight Sidebar
-		$(this).toggleClass("selected_list_item");
+		// highlight Sidebar and show bars
+		if ($(this).find('.item').hasClass('selected_list_item')) {
+			hideUserContributionsBars();
+			$("#sidebar .id").removeClass("selected_list_item");
+			$("#sidebar .item-col").removeClass("selected_list_item_div");
+		} else {
+			showUserContributionsBars(element);
+			$("#sidebar .id").removeClass("selected_list_item");
+			$("#sidebar .item-col").removeClass("selected_list_item_div");
+			$(this).find('.item').addClass("selected_list_item")
+			$(this).addClass("selected_list_item_div");
+		}
 
-		// highlight Graph
-		document.getElementById(element+"_viz").scrollIntoView({
-				//behavior: "smooth",
-				block: "start"
-		});
-		document.getElementById('topbar').scrollIntoView();
 	});
 }
 
