@@ -115,14 +115,14 @@ function lineChart(div, data) {
                      .curve(d3.curveStepBefore);
 
   // GRID INSIDE THE GRAPH
-  focus.append("g")
-       .attr("class", "grid")
-       .attr("transform", "translate(0," + height + ")")
-       .call(make_x_gridlines().tickSize(-height).tickFormat(""));
-
-  focus.append("g")
-       .attr("class", "grid")
-       .call(make_y_gridlines().tickSize(-width).tickFormat(""));
+  // focus.append("g")
+  //      .attr("class", "grid")
+  //      .attr("transform", "translate(0," + height + ")")
+  //      .call(make_x_gridlines().tickSize(-height).tickFormat(""));
+  //
+  // focus.append("g")
+  //      .attr("class", "grid")
+  //      .call(make_y_gridlines().tickSize(-width).tickFormat(""));
 
 
   // DRAW AXIS
