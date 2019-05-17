@@ -28,18 +28,10 @@ function dataviz() {
         return b.total - a.total;
       });
 
-
-
       barChart(data, minDate, maxDate, maxValue, "#main_contributions_container", userData);
 
       $("#main_contributions_container").append("<hr>")
 
-
-      for (let i = 0; i < userData.length; i++) {
-      	  // $("#user_contributions_container").append("<h2 style='margin-left:1.5em' id='"+ userData[i].user+ "_viz'>" + userData[i].user + "</h2>")
-      		// barChart(userData[i].files, minDate, maxDate, maxValue, "#user_contributions_container");
-          // console.log(userData[i].user + "  usage length: " + userData[i].files.length)
-      }
     });
   });
 }
@@ -51,8 +43,7 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
   let minY = minDate.substring(0, 4);
   let maxY = maxDate.substring(0, 4);
 
-  // let displayed;
-  // let user_displayed;
+  let displayed;
   let current_range;
 
   //TODO quite slow...
@@ -109,7 +100,6 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
       el.value = +el.count;
     });
   });
-  // console.log(usersMap);
 
 	// Sort
   data = data.sort(function(a, b) {
@@ -134,7 +124,7 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
 							.attr("id", "svg-graph")
 							.attr("class", "main-area")
 					    .attr("width", width + margin.left + margin.right)
-					    .attr("height", height + margin.top + margin.bottom); //.call(zoom);
+					    .attr("height", height + margin.top + margin.bottom);
 
 	// SCALES
   var x = d3.scaleBand().range([0, width], .05).padding(.2);
@@ -159,6 +149,7 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
     tickValues = x.domain();
   }
 
+  tickValues3 = x.domain().filter((d, i) => { return (i % 3) === 0 });
 	// AXIS
   var xAxis = d3.axisBottom().scale(x).tickFormat(d3.timeFormat("%Y-%m")).ticks(10);
   var xAxis2 = d3.axisBottom().scale(x2).tickFormat(d3.timeFormat("%Y-%m")).ticks(10);
@@ -178,7 +169,7 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
   var gX = focus.append("g")
 						    .attr("class", "x axis")
 						    .attr("transform", "translate(0," + height + ")")
-						    .call(xAxis.tickValues(tickValues))
+						    .call(xAxis.tickValues(tickValues3))
 						    .selectAll("text")
 						    .style("text-anchor", "end")
 						    .attr("dx", "-.8em")
@@ -233,7 +224,9 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
         .call(zoom);
 
    zoomView.on('mousemove', function() {
-      console.log('direct mouse move');
+      focus.selectAll(".bar").style('opacity', '1');
+      detailsLabel.selectAll('text').remove();
+    }).on('mouseout', function() {
       focus.selectAll(".bar").style('opacity', '1');
       detailsLabel.selectAll('text').remove();
     });
@@ -315,6 +308,7 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
 
   function update() {
     // Update bars
+    displayed = 0;
     let bar = focus.selectAll(".bar").data(data);
     bar.attr("x", d => x(d.date))
        .attr("width", x.bandwidth())
@@ -322,7 +316,14 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
        .attr("height", d => height - y(d.value))
        .style("fill", "#080d5a")
        .style("transition", "opacity .3s")
-       .style("display", (d) => { return (x(d.date) != null) ? 'initial' : 'none'; })
+       .style("display", (d) => {
+         if (x(d.date) != null) {
+           displayed += 1;
+           return 'initial';
+         } else {
+           return 'none';
+         }
+       })
        .on("mousemove", function(d) {
          d3.select(this).style('opacity', '0.5');
          displayDetails(d, 'TOTAL')
@@ -353,6 +354,7 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
        .style("display", (d) => { return (x(d.date) != null) ? 'initial' : 'none'; })
        .on("mouseover", function(d) {
          d3.select(this).style('fill', 'gold');
+         focus.selectAll(".bar").style('opacity', '1');
          displayDetails(d, user.name);
        }).on("mouseout", function() {
          detailsLabel.selectAll('text').remove();
@@ -367,15 +369,36 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
        .attr("height", d => height - y(d.value));
     user_bar.exit().remove();
   }
+  window.axisCondition = false;
 
   function updateAxis() {
+
+    var axisFunc;
+
+    if (displayed < 21) {
+      // mostra tutte
+      axisFunc = xAxis.tickValues(x.domain());
+    } else if (displayed < 36) {
+      // uno ogni 2
+      axisFunc = xAxis.tickValues(x.domain().filter((d, i) => { return (i % 2) === 0 }));
+    } else if (displayed < 61) {
+      // uno ogni 3
+      axisFunc = xAxis.tickValues(x.domain().filter((d, i) => { return (i % 3) === 0 }));
+    } else if (displayed < 71) {
+      // uno ogni 4
+      axisFunc = xAxis.tickValues(x.domain().filter((d, i) => { return (i % 4) === 0 }));
+    } else {
+      // uno ogni 5
+      axisFunc = xAxis.tickValues(x.domain().filter((d, i) => { return (i % 5) === 0 }));
+    }
+
     focus.select(".axis.x")
-          .call(xAxis.tickValues(x.domain()))
+          .call(axisFunc)
           .selectAll("text")
           .style("text-anchor", "end")
-          .attr("dx", "-.8em")
-          .attr("dy", "-.55em")
-          .attr("transform", "rotate(-90)");
+          .attr("dx", "18")
+          .attr("dy", "8")
+          .attr("transform", "rotate(0)");
   }
 
   function updateContext(min, max) {
@@ -387,7 +410,6 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
     g.on('mousemove.passThru', passThru);
 
     function passThru(d) {
-      console.log('pass thru event');
       // get event
         var e = d3.event;
         // save pointer events stauts
@@ -396,7 +418,6 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
         this.style.pointerEvents = 'none';
         // get lower layer
         var el = document.elementFromPoint(d3.event.x, d3.event.y);
-        console.log(el);
         // create event
         var e2 = document.createEvent('MouseEvent');
         e2.initMouseEvent(e.type,e.bubbles,e.cancelable,e.view, e.detail,e.screenX,e.screenY,e.clientX,e.clientY,e.ctrlKey,e.altKey,e.shiftKey,e.metaKey,e.button,e.relatedTarget);
@@ -442,7 +463,5 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
     focus.selectAll('.user-bar').remove();
       SHOWN_USER = {};
   }
-
-  // showUserData();
 
 }
