@@ -318,7 +318,7 @@ mediaType: application/json
                       "total": 1
                       "files": [
                           {
-                              "date": "2013-08",
+                              "date": "2013-08-01",
                               "count": 1
                           }
                       ]
@@ -328,15 +328,15 @@ mediaType: application/json
                       "total": 3
                       "files": [
                           {
-                              "date": "2009-01",
+                              "date": "2009-01-01",
                               "count": 1
                           },
                           {
-                              "date": "2009-09",
+                              "date": "2009-09-01",
                               "count": 1
                           },
                           {
-                              "date": "2011-07",
+                              "date": "2011-07-01",
                               "count": 1
                           }
                       ]
@@ -349,7 +349,7 @@ mediaType: application/json
         start:
           description: The start date.
           type: date
-          example: "2015-01-01"
+          example: "2015-11-01"
           required: false
         end:
           description: The end date.
@@ -363,12 +363,16 @@ mediaType: application/json
               example: |
                 [
                   {
-                    "count": 1,
-                    "date": "2005-12"
+                    "count": 0,
+                    "date": "2005-11-01"
                   },
                   {
                     "count": 1,
-                    "date": "2006-01"
+                    "date": "2005-12-01"
+                  },
+                  {
+                    "count": 1,
+                    "date": "2006-01-01"
                   }
                 ]
   /views:

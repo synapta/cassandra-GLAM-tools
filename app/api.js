@@ -295,7 +295,7 @@ var categoryGraph = function (req, res, db) {
 // USER CONTRIBUTIONS
 var uploadDate = function (req, res, db) {
     let query = `select sum(img_count) as img_sum, img_user_text, array_agg(img_count) as img_count, array_agg(img_time) as img_time
-        from (select count(*) as img_count, img_user_text, to_char(img_timestamp, 'YYYY-MM') as img_time
+        from (select count(*) as img_count, img_user_text, date_trunc('month', img_timestamp) as img_time
         from images`;
 
     let parameters = [];
@@ -357,7 +357,7 @@ var uploadDate = function (req, res, db) {
                 let i = 0;
                 while (i < row.img_time.length) {
                     let file = {};
-                    file.date = row.img_time[i];
+                    file.date = row.img_time[i].toISODateString();
                     file.count = parseInt(row.img_count[i]);
                     user.files.push(file);
                     i++;
@@ -372,13 +372,23 @@ var uploadDate = function (req, res, db) {
 }
 
 var uploadDateAll = function (req, res, db) {
-    let query = `select count(*) as count, to_char(img_timestamp, 'YYYY-MM') as date
-                 from images`;
+    let query = `with min_max as (
+                    select min(img_timestamp) as min_date, max(img_timestamp) as max_date
+                    from images),
+                date_range as (
+                    select generate_series(date_trunc('month', min_date), date_trunc('month', max_date), interval '1 month') date_value
+                    from min_max),
+                date_counts as (
+                    select count(*) as count_value, date_trunc('month', img_timestamp) as date_count
+                    from images group by date_count)
+                select coalesce(count_value, 0) as count, date_value as date
+                from date_range
+                left outer join date_counts on date_value = date_count`;
 
     let parameters = [];
 
     if (req.query.start !== undefined) {
-        query += " where img_timestamp >= $1";
+        query += " where date_value >= $1";
         parameters.push(req.query.start);
     }
     
@@ -387,18 +397,18 @@ var uploadDateAll = function (req, res, db) {
             res.sendStatus(400);
             return;
         }
-        query += " and img_timestamp <= $2";
+        query += " and date_value <= $2";
         parameters.push(req.query.end);
     }
     
-    query += " group by date order by date";
+    query += " order by date_value";
 
     db.query(query, parameters, (err, dbres) => {
         if (!err) {
             let result = [];
             dbres.rows.forEach(function (row) {
                 let date = {"count": parseInt(row.count),
-                            "date": row.date};
+                            "date": row.date.toISODateString()};
                 result.push(date);
             });
             res.json(result);
