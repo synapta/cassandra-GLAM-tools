@@ -292,6 +292,11 @@ mediaType: application/json
           type: date
           example: "2016-01-01"
           required: false
+        groupby:
+          description: The date group by criteria among month, quarter, and year.
+          type: string
+          example: "month"
+          required: false
         sort:
           description: The sorting criteria between user and total.
           type: string
@@ -355,6 +360,11 @@ mediaType: application/json
           description: The end date.
           type: date
           example: "2016-01-01"
+          required: false
+        groupby:
+          description: The date group by criteria among month, quarter, and year.
+          type: string
+          example: "month"
           required: false
       responses:
         200:
