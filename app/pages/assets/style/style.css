@@ -73,6 +73,7 @@
 /*  GENERAL */
 :root {
   --main: #080d5a;
+  --secondary: #6373f7;
   --main-dark: #060a40;
   --main-t: #080d5ac8;
   --main-tt: #080d5aa0;
@@ -200,7 +201,7 @@ a {
   background-color: var(--bg-gray);
   position: fixed;
   height: 100%;
-  z-index: 1;
+  z-index: 2;
   top: 0;
   left: 0;
   width: var(--sidebar-width);
@@ -210,6 +211,25 @@ a {
   position: absolute;
   top: 3rem;
   left: var(--sidebar-items-left);
+}
+
+#main-sidebar > .institutions-menu {
+  position: absolute;
+  top: 15rem;
+  left: 0;
+  width: 100%;
+  border-width: 2px 0;
+  border-style: solid;
+  border-color: #fff;
+}
+
+#main-sidebar > .institutions-menu > h6 {
+  margin: 0;
+  padding: .5rem 0 .5rem var(--sidebar-items-left);
+  font-weight: 600;
+  color: var(--main);
+  cursor: pointer;
+  transition: opacity .5s;
 }
 
 #main-sidebar > #sidebar-logo img {
@@ -258,6 +278,30 @@ a {
 
 #admin-panel-link:hover {
   background-color: rgba(6, 69, 173, 0.7);
+}
+
+/* SECONDAY SIDEBAR */
+#secondary-sidebar {
+  background-color: var(--main);
+  position: absolute;
+  height: 100%;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  transition: all .5s;
+}
+
+#secondary-sidebar > .institutions-list {
+  position: relative;
+  top: 15rem;
+  list-style-type: none;
+  padding: 0 2rem;
+  color: #fff;
+}
+
+#secondary-sidebar > .institutions-list > li {
+  padding: 1rem 0;
 }
 
 /* MAIN CONTAINER */
@@ -425,12 +469,133 @@ footer {
 }
 
 .glam-title-container {
-  border-left: 3px solid var(--main);
+  color: #fff;
 }
 
-.glam-title-container h1 {
+.glam-title-container .glam-title-desc {
+  display: flex;
+  width: 100%;
+  height: 40px;
+  align-items: center;
+}
+
+.glam-title-container #cat_url {
+  color: #fff;
+  text-decoration: underline;
+  transition: opacity .5s;
+}
+
+.glam-title-container #cat_url:hover {
+  opacity: .5;
+}
+
+.glam-title-container #totalMediaNum {
+  color: #fff;
+}
+
+.glam-title-container h5 {
+  font-weight: 100;
+  text-transform: uppercase;
+}
+
+.chart-preview {
+  background-color: transparent;
+  margin-top: 3rem;
+  height: 450px;
+  perspective: 1000px;
+}
+
+.chart-preview-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.chart-preview-front,
+.chart-preview-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.chart-preview-front {
+  background-color: var(--bg-gray);
+  z-index: 2;
+}
+
+.chart-name {
   color: var(--main);
 }
+
+.chart-preview-back {
+  transform: rotateY(180deg);
+  z-index: 1;
+}
+
+.chart-logo {
+  flex-shrink: 0;
+  flex-grow: 0;
+  align-self: center;
+}
+
+.chart-separator hr {
+  width: 40%;
+  margin: 1rem auto;
+  border-color: var(--secondary);
+  border-width: 2px;
+}
+
+.chart-separator h5 {
+  color: var(--secondary);
+}
+
+.chart-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 40%;
+  margin: 0 auto;
+}
+
+.chart-link {
+  color: var(--main);
+  text-decoration: underline;
+  transition: opacity .5s;
+}
+
+.chart-link:hover {
+  opacity: .5;
+}
+
+.get-chart-info,
+.close-chart-info {
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: opacity.5s;
+  color: var(--main);
+}
+
+.get-chart-info:hover,
+.close-chart-info:hover {
+  opacity: .5;
+}
+
+.close-chart-info {
+  padding: .3rem .6rem;
+  font-size: 2rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
 
 .rect {
   min-width: 20px;
@@ -662,6 +827,15 @@ h2 {
 }
 
 @media screen and (max-width: 768px) {
+  .glam-title-section {
+    margin: .5rem 0;
+    padding: .5rem 0;
+  }
+
+  .glam-title-desc {
+    height: auto;
+  }
+
   #data_visualizations li {
     float: left;
     display: block;
@@ -713,7 +887,7 @@ h2 {
 
   #cover {
     padding-bottom: 0;
-    border-bottom: 1px solid var(--main);
+    /* border-bottom: 1px solid var(--main); */
     margin-bottom: 2rem;
   }
 

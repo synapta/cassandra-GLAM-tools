@@ -29,82 +29,141 @@
 		<header id="mobile-header-bar"></header>
 		<!-- Sidebar -->
 		<aside id="main-sidebar"></aside>
+		<aside id="secondary-sidebar"></aside>
 		<!-- MAIN -->
-		<main id="main-container">
-			<!-- Title -->
-			<section id="cover">
-				<div class="row">
-					<div class="col-12">
-						<div class="glam-title-container">
-							<div class="w3-container boxDashboardTitle">
-								<br>
-								<h1 class="glamName"></h1>
-								<br>
-								<small>Category in Commons:</small>
-								<br>
-								<a id="cat_url" target="_blank"></a>
-								<br><br>
-								<small>Total media in Commons:</small>&nbsp;&nbsp;&nbsp;
-								<span id="totalMediaNum" class="round-btn" style="margin: 0 auto;"></span>
-								<br><br>
-							</div>
-						</div>
+		<!-- Title -->
+		<section id="cover">
+			<div id="cover-overlay"></div>
+			<div class="row w-100 py-4 glam-title-container">
+				<div class="col-12 col-lg-4 glam-title-section">
+					<h5>INSTITUTION</h5>
+					<div class="glam-title-desc">
+						<h1 class="glamName"></h1>
 					</div>
 				</div>
-			</section>
+				<div class="col-12 col-lg-5 glam-title-section">
+					<h5>Category in Commons</h5>
+					<div class="glam-title-desc">
+						<a id="cat_url" target="_blank"></a>
+					</div>
+				</div>
+				<div class="col-12 col-lg-3 glam-title-section">
+					<h5>Total media in Commons</h5>
+					<div class="glam-title-desc">
+						<h2 id="totalMediaNum"></h2>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Content -->
+		<main id="main-container">
 			<section>
 				<div class="row">
-					<div class="col-12 col-lg-10 col-xl-9">
+					<div class="col-12 col-lg-11 mx-lg-auto">
 						<div class="row">
-							<div class="col-12 col-xl-6 my-3">
-								<a href="category-network" class="nodeca">
-									<div class="w3-border w3-hover-shadow">
-										<div class="w3-container bg-accent menu_title">
-											Category network
+							<div class="col-12 col-xl-3">
+								<div class="chart-preview">
+									<div class="chart-preview-inner">
+										<div class="chart-preview-front">
+											<img class="chart-logo"src="https://via.placeholder.com/80/6373f7/080d5a" alt="Categroy Network">
+											<div class="chart-separator">
+												<hr>
+												<h5>CHART</h5>
+											</div>
+											<h1 class="chart-name">CATEGORY NETWORK</h1>
+											<div class="chart-buttons">
+												<a class="chart-link" href="category-network">VIEW</a>
+												<span class="get-chart-info">&#8505;</span>
+											</div>
 										</div>
-										<div class="w3-container boxDashboardTitle" style="text-align:center">
-											<img src="/assets/img/graph.png" height="200px" />
+										<div class="chart-preview-back">
+											<span class="close-chart-info">&times</span>
+											<div class="chart-info">
+												<p><i>Category network</i> is a <b>GRAPH CHART</b> that shows the subcategories' topology
+													belonging to the main category. Each node represents a
+													category, while the edges are the relations.</p>
+											</div>
 										</div>
 									</div>
-								</a>
+								</div>
 							</div>
-							<div class="col-12 col-xl-6 my-3">
-								<a href="user-contributions" class="nodeca">
-									<div class="w3-border w3-hover-shadow">
-										<div class="w3-container bg-accent menu_title">
-											User contribution
+							<div class="col-12 col-xl-3">
+								<div class="chart-preview">
+									<div class="chart-preview-inner">
+										<div class="chart-preview-front">
+											<img class="chart-logo"src="https://via.placeholder.com/80/6373f7/080d5a" alt="Categroy Network">
+											<div class="chart-separator">
+												<hr>
+												<h5>CHART</h5>
+											</div>
+											<h1 class="chart-name">USER CONTRIBUTION</h1>
+											<div class="chart-buttons">
+												<a class="chart-link" href="user-contributions">VIEW</a>
+												<span class="get-chart-info">&#8505;</span>
+											</div>
 										</div>
-										<div class="w3-container boxDashboardTitle" style="text-align:center">
-											<img src="/assets/img/users.png" height="200px" />
+										<div class="chart-preview-back">
+											<span class="close-chart-info">&times</span>
+											<div class="chart-info">
+												<p><i>Users contribution</i> is a <b>BAR CHART</b> that
+													shows the number of uploads during time. Here you can
+													study if the contribution pattern is well
+													distributed or if it's composed by spikes.</p>
+											</div>
 										</div>
 									</div>
-								</a>
+								</div>
 							</div>
-						</div>
-						<div class="row">
-							<div class="col-12 col-xl-6 my-3">
-								<a href="usage" class="nodeca">
-									<div class="w3-border w3-hover-shadow">
-										<div class="w3-container bg-accent menu_title">
-											Usage
+							<div class="col-12 col-xl-3">
+								<div class="chart-preview">
+									<div class="chart-preview-inner">
+										<div class="chart-preview-front">
+											<img class="chart-logo"src="https://via.placeholder.com/80/6373f7/080d5a" alt="Categroy Network">
+											<div class="chart-separator">
+												<hr>
+												<h5>CHART</h5>
+											</div>
+											<h1 class="chart-name">USAGE</h1>
+											<div class="chart-buttons">
+												<a class="chart-link" href="usage">VIEW</a>
+												<span class="get-chart-info">&#8505;</span>
+											</div>
 										</div>
-										<div class="w3-container boxDashboardTitle" style="text-align:center">
-											<img src="/assets/img/usage.png" height="200px" />
+										<div class="chart-preview-back">
+											<span class="close-chart-info">&times</span>
+											<div class="chart-info">
+												<p>This chart shows the <i>usage</i> of the media of the
+													main category in Wikimedia projects.</p>
+											</div>
 										</div>
 									</div>
-								</a>
+								</div>
 							</div>
-							<div class="col-12 col-xl-6 my-3">
-								<a href="page-views" class="nodeca">
-									<div class="w3-border w3-hover-shadow">
-										<div class="w3-container bg-accent menu_title">
-											Views
+							<div class="col-12 col-xl-3">
+								<div class="chart-preview">
+									<div class="chart-preview-inner">
+										<div class="chart-preview-front">
+											<img class="chart-logo"src="https://via.placeholder.com/80/6373f7/080d5a" alt="Categroy Network">
+											<div class="chart-separator">
+												<hr>
+												<h5>CHART</h5>
+											</div>
+											<h1 class="chart-name">VIEWS</h1>
+											<div class="chart-buttons">
+												<a class="chart-link" href="page-views">VIEW</a>
+												<span class="get-chart-info">&#8505;</span>
+											</div>
 										</div>
-										<div class="w3-container boxDashboardTitle" style="text-align:center">
-											<img src="/assets/img/views.png" height="200px" />
+										<div class="chart-preview-back">
+											<span class="close-chart-info">&times</span>
+											<div class="chart-info">
+												<p><i>Views</i> is a <b>LINE CHART</b> that
+													shows the sum of the views for the files thats belong
+													to the main category with a 24h span.</p>
+											</div>
 										</div>
 									</div>
-								</a>
+								</div>
 							</div>
 						</div>
 					</div>
