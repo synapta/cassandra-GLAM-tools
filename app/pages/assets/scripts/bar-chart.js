@@ -28,9 +28,11 @@ function dataviz() {
         return b.total - a.total;
       });
 
+      $("#main_contributions_container").empty();
+
       barChart(data, minDate, maxDate, maxValue, "#main_contributions_container", userData);
 
-      $("#main_contributions_container").append("<hr>")
+      $("#main_contributions_container").append("<hr>");
 
     });
   });
@@ -140,18 +142,16 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
   y2.domain(y.domain());
 
 	// TICKS
-  var tickValues;
-  if ($(window).width() < 576) {
-    tickValues = x.domain().filter((d, i) => { return (i % 3) === 0 });
-  } else if ($(window).width() < 991) {
-    tickValues = x.domain().filter((d, i) => { return (i % 2) === 0 });
+  var tickValues3 = x.domain().filter((d, i) => { return (i % 3) === 0 });
+
+	// AXIS
+  var xAxis;
+  if ($('#groupby-select').val() === 'year') {
+    xAxis = d3.axisBottom().scale(x).tickFormat(d3.timeFormat("%Y")).ticks(10);
   } else {
-    tickValues = x.domain();
+    xAxis = d3.axisBottom().scale(x).tickFormat(d3.timeFormat("%Y-%m")).ticks(10);
   }
 
-  tickValues3 = x.domain().filter((d, i) => { return (i % 3) === 0 });
-	// AXIS
-  var xAxis = d3.axisBottom().scale(x).tickFormat(d3.timeFormat("%Y-%m")).ticks(10);
   var xAxis2 = d3.axisBottom().scale(x2).tickFormat(d3.timeFormat("%Y-%m")).ticks(10);
   var yAxis = d3.axisLeft().scale(y).tickValues(y.ticks(3).concat(y.domain()));
 
@@ -190,16 +190,6 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
 						    .attr("dy", ".71em")
 						    .style("text-anchor", "end")
 						    .text("Value");
-
-
-	// var bars = focus.selectAll("bar")
-	// 									   .data(data)
-	// 									   .enter().append("rect")
-	// 									   .style("fill", "#080d5a")
-	// 									   .attr("x", d => x(d.date))
-	// 									   .attr("width", x.bandwidth())
-	// 									   .attr("y", d => y(d.value))
-	// 									   .attr("height", d => height - y(d.value));
 
 	var subBars = context.selectAll("bar")
 										   .data(data)
@@ -241,13 +231,21 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
     // remove previous
     detailsLabel.selectAll('text').remove();
     // format data
-    let fT = moment(d.date).format("DD MMM YY, HH:mm");
+    let fDate;
+    if ($('#groupby-select').val() === 'year') {
+      fDate = "YEAR: " + moment(d.date).format("YYYY");
+    } else if ($('#groupby-select').val() === 'quarter') {
+      fDate = "QUARTER: " + moment(d.date).format("MMM") + "-" + moment(d.date).add(2, 'months').format("MMM") + " " + moment(d.date).format("YYYY");
+    } else {
+      fDate = "MONTH: " + moment(d.date).format("MMM YYYY");
+    }
+
     // show data (time)
     detailsLabel.append("text")
                 .attr("x", width - 200)
                 .attr("y", 30)
                 .attr("class", "info-label")
-                .html("DATE: " + fT)
+                .html(fDate)
                 .attr("font-family", "monospace")
                 .attr("font-size", "14px");
     // show data (views)

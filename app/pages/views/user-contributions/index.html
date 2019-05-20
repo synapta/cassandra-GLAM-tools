@@ -86,7 +86,15 @@
 				 <div id="left-column" class="col-12 col-lg-3">
 					 <!-- <section id="left_sidebar"> -->
 						 <div id="sidebar_box">
-							 <div  id="sorting_options">
+							 <div id="groupby_options">
+								 Select view:
+								 <select id="groupby-select">
+									 <option selected value="month">Month</option>
+									 <option value="quarter">Quarter</option>
+									 <option value="year">Year</option>
+								 </select>
+							 </div>
+							 <div id="sorting_options">
 								 <span style="font-size:0.8em;" id="by_num" class="underline">
 									 by total
 								 </span>
@@ -102,7 +110,7 @@
 			</div>
 		</main>
 		<style>
-			#visualizations #dataviz{
+			#visualizations #dataviz {
 				overflow-y: auto;
 				overflow-x: hidden;
 				/*height: 100%;

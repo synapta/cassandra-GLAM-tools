@@ -19,6 +19,12 @@
   /* pointer-events: all; */
 }
 
-.focus {
-  /* pointer-events: all; */
+#groupby_options {
+  font-size: 1em;
+  padding: 0.5em;
+  border-bottom: 1px solid gray;
+}
+
+#groupby-select {
+  margin-left: 0.5rem;
 }

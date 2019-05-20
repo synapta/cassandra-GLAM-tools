@@ -1,10 +1,12 @@
-function getUrl(){
-	var db=window.location.href.toString().split('/')[3];
-	return "/api/"+db+"/file/upload-date";
+function getUrl() {
+	var db = window.location.href.toString().split('/')[3];
+	var groupby = $('#groupby-select').val();
+	return "/api/"+db+"/file/upload-date?groupby=" + groupby;
 }
 function getUrlAll(){
-	var db=window.location.href.toString().split('/')[3];
-	return "/api/"+db+"/file/upload-date-all";
+	var db = window.location.href.toString().split('/')[3];
+	var groupby = $('#groupby-select').val();
+	return "/api/"+db+"/file/upload-date-all?groupby=" + groupby;
 }
 
 function pad(str, max) {
@@ -102,7 +104,7 @@ function highlight() {
 	});
 }
 
-$(document).ready(function(){
+$(document).ready(function() {
 		setCategory();
 		sidebar("by_num");
 		dataviz();
@@ -110,4 +112,7 @@ $(document).ready(function(){
 		download();
 		switch_page();
 		sorting_sidebar();
+		$('#groupby-select').change(function() {
+			dataviz();
+		});
 })
