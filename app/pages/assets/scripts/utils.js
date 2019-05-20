@@ -27,6 +27,7 @@ function setCategory() {
       	$("#cat_url").attr("href", "https://commons.wikimedia.org/wiki/"+d.category);
       	$("#cat_url").attr("title", decodeURIComponent(d.category));
         $(".glamName").text(d.fullname);
+        $('#cover').css('background-image', 'url(' + d.image + ')');
   	});
 
     //XXX needed for correct urls
@@ -38,7 +39,7 @@ function setCategory() {
 function how_to_read(){
   	box = $(".how_to_read");
 
-  	$("#how_to_read_button").click(function(){
+  	$("#how_to_read_button").click(function() {
   		  box.toggleClass("show");
   	});
 };
