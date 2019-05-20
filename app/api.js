@@ -167,6 +167,7 @@ var getGlam = function (req, res, glam) {
             result.fullname = glam.fullname;
             result.category = 'Category:' + glam.category;
             result.files = parseInt(dbres.rows[0]['value']);
+            result.image = glam.image;
             res.json(result);
         } else {
             throw new Error(err);
@@ -321,7 +322,7 @@ var uploadDate = function (req, res, db) {
         query += " where img_timestamp >= $1";
         parameters.push(req.query.start);
     }
-    
+
     if (req.query.end !== undefined) {
         if (req.query.start === undefined) {
             res.sendStatus(400);
@@ -330,10 +331,10 @@ var uploadDate = function (req, res, db) {
         query += " and img_timestamp <= $2";
         parameters.push(req.query.end);
     }
-    
+
     query += ` group by img_user_text, img_time order by img_time) t
         group by img_user_text`
-    
+
     if (req.query.sort !== undefined) {
         if (req.query.sort === 'name') {
             query += " order by img_user_text";
@@ -341,7 +342,7 @@ var uploadDate = function (req, res, db) {
             query += " order by img_sum desc";
         } else {
             // Wrong value
-            query += " order by img_sum desc";   
+            query += " order by img_sum desc";
         }
     } else {
         // Default order
@@ -410,7 +411,7 @@ var uploadDateAll = function (req, res, db) {
         query += " where date_value >= $1";
         parameters.push(req.query.start);
     }
-    
+
     if (req.query.end !== undefined) {
         if (req.query.start === undefined) {
             res.sendStatus(400);
@@ -419,7 +420,7 @@ var uploadDateAll = function (req, res, db) {
         query += " and date_value <= $2";
         parameters.push(req.query.end);
     }
-    
+
     query += " order by date_value";
 
     db.query(query, parameters, (err, dbres) => {
@@ -444,7 +445,7 @@ var usage = function (req, res, db) {
                     from usages
                     where is_alive = true
                     group by gil_to`;
-    
+
     if (req.query.sort !== undefined) {
         if (req.query.sort === 'usage') {
             query += " order by usage desc";
@@ -454,7 +455,7 @@ var usage = function (req, res, db) {
             query += " order by gil_to";
         } else {
             // Wrong value
-            query += " order by usage desc";   
+            query += " order by usage desc";
         }
     } else {
         // Default order
@@ -597,7 +598,7 @@ var views = function (req, res, db) {
         query += " where access_date >= $1";
         parameters.push(req.query.start);
     }
-    
+
     if (req.query.end !== undefined) {
         if (req.query.start === undefined) {
             res.sendStatus(400);
@@ -635,14 +636,14 @@ var viewsByFile = function (req, res, db) {
                     where images.is_alive = true
                     and images.media_id = visualizations.media_id
                     and img_name = $1`;
-    
+
     let parameters = [req.params.file];
 
     if (req.query.start !== undefined) {
         query += " and access_date >= $2";
         parameters.push(req.query.start);
     }
-    
+
     if (req.query.end !== undefined) {
         if (req.query.start === undefined) {
             res.sendStatus(400);
@@ -683,7 +684,7 @@ var viewsSidebar = function (req, res, db) {
         query += " and access_date >= $1";
         parameters.push(req.query.start);
     }
-    
+
     if (req.query.end !== undefined) {
         if (req.query.start === undefined) {
             res.sendStatus(400);
