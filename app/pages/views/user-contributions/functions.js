@@ -7,12 +7,12 @@ function getUrlAll(){
 	return "/api/"+db+"/file/upload-date-all";
 }
 
-function pad (str, max) {
+function pad(str, max) {
   str = str.toString();
   return str.length < max ? pad("0" + str, max) : str;
 }
 
-function sidebar(type){
+function sidebar(type) {
 		var template_source = "/views/user-contributions/tpl/user-contributions.tpl";
 		var target = "#sidebar";
 
@@ -25,12 +25,18 @@ function sidebar(type){
 										total += +d.count
 								})
 								d.total = total;
-						})
+						});
 
 			      if (type === "by_num") {
-								data = data.sort(function(a,b){
+								data = data.sort(function(a,b) {
 									return b.total - a.total;
 								});
+						} else {
+							data = data.sort(function(a,b) {
+								if (a.user < b.user) { return -1; }
+								if (a.user > b.user) { return 1; }
+								return 0;
+							});
 						}
 
 						data.forEach(function (d) {
@@ -40,13 +46,13 @@ function sidebar(type){
 						var template = Handlebars.compile(tpl);
 						$(target).html(template({"users": data}));
 
-						highlight()
+						highlight();
 				});
 		});
 }
 
-function sorting_sidebar(){
-	$("#by_num").on("click", function(){
+function sorting_sidebar() {
+	$("#by_num").on("click", function() {
 		if ($("#by_num").hasClass("underline") ) {
 			//console.log("già selezionato")
 		} else {
@@ -56,9 +62,9 @@ function sorting_sidebar(){
 			$("#by_num").css("cursor","default");
 			$("#by_name").css("cursor","pointer");
 		}
-	})
+	});
 
-	$("#by_name").on("click", function(){
+	$("#by_name").on("click", function() {
 		if ($("#by_name").hasClass("underline") ) {
 			//console.log("già selezionato")
 		} else {
@@ -68,7 +74,7 @@ function sorting_sidebar(){
 			$("#by_name").css("cursor","default");
 			$("#by_num").css("cursor","pointer");
 		}
-	})
+	});
 }
 
 function download(){
