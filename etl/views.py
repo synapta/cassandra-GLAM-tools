@@ -105,7 +105,8 @@ def main():
 
     connstring = "dbname=" + glam['database'] + " user=" + config['postgres']['user'] + \
         " password=" + config['postgres']['password'] + \
-        " host=" + config['postgres']['host']
+        " host=" + config['postgres']['host'] + \
+        " port=" + str(config['postgres']['port'])
     pgconnection = psycopg2.connect(connstring)
     # print(pgconnection.encoding)
     pgconnection.autocommit = True

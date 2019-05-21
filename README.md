@@ -62,10 +62,16 @@ Open the SSH tunnel to the WMF databases:
 autossh -f -N wmflabs
 ```
 
-Run the data gathering!
+Run the data gathering periodically (e.g., every 15 minutes).
 ```
 cd etl
 python3 run.py
+```
+
+If some dates are missing from the views chart, you can process them again.
+```
+cd etl
+python3 fix_views.py
 ```
 
 ## Run webservices
