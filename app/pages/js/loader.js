@@ -16,7 +16,26 @@ function is_touch_device() {
 
 // Load main sidebar
 $('#main-sidebar').load('/views/templates/sidebar.html', function() {
+  // Load secondary sidebar
   $('#secondary-sidebar').load('/views/templates/secondary-sidebar.html', function() {
+    // Fill GLAMS list
+    $.get('/api/glams', function(glams) {
+      if (glams.length > 0) {
+        glams.forEach(function(g) {
+          // create list element with link
+          let list_element = $('<li>');
+          let a = $('<a>');
+          // set attrs
+          a.html(g['fullname']);
+          a.attr('href', '/' + g['name']);
+          a.attr('alt', g['category']);
+          // append
+          list_element.append(a);
+          $('#secondary-sidebar > .institutions-list').append(list_element);
+        });
+      }
+    });
+    // Set mouse handler
     $('.institutions-menu').mouseenter(function() {
       $('#secondary-sidebar').css('left', 'var(--sidebar-width)');
       $(this).css('opacity', '.4');
@@ -26,8 +45,8 @@ $('#main-sidebar').load('/views/templates/sidebar.html', function() {
         $('.institutions-menu').css('opacity', '1');
       }
     });
+    // Set mouse handlers
     $('#secondary-sidebar').mouseleave(function() {
-      console.log('ue')
       if ($('.institutions-menu:hover').length === 0) {
         $(this).css('left', '0');
         $('.institutions-menu').css('opacity', '1');
