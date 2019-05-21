@@ -50,7 +50,7 @@ function switch_page() {
   	var h_1 = h[h.length-1]
   	var home = baseurl.replace(h_1,"")
 
-  	$('#switch_page').change(function(){
+  	$('#switch_page').change(function() {
     		var page = $(this).val();
     		var url = home + page;
 

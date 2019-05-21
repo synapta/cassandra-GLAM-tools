@@ -1,0 +1,190 @@
+/*  GENERAL */
+:root {
+  /* --sidebar-width: 250px; */
+  /* --sidebar-items-left: 3.2rem; */
+}
+
+/* HEADER BAR */
+.top_bar {
+  min-height: 3em;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+#topbar {
+  background-color: var(--main);
+}
+
+#topbar .breadcrumb-separator {
+  color: #fff;
+  margin: 0 1rem;
+  font-size: 1.4rem;
+  font-weight: 100;
+}
+
+#topbar a {
+  color: white;
+  text-decoration: underline;
+}
+
+#topbar h1 {
+  padding-left: 0.5em;
+}
+
+#topbar h6 {
+  margin: 0 .5rem 0 0;
+  color: #fff;
+  font-weight: 100;
+}
+
+#topbar h2 {
+  font-size: 1.2em;
+  margin: 0;
+}
+
+/*the container must be positioned relative:*/
+.select-chart {
+  position: relative;
+  font-family: Arial;
+}
+
+.select-chart select {
+  display: none; /*hide original SELECT element:*/
+}
+
+.select-selected {
+  background-color: transparent;
+  border: 1px solid #fff;
+}
+
+/*style the arrow inside the select element:*/
+.select-selected:after {
+  position: absolute;
+  content: "";
+  top: 15px;
+  right: 12px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #fff transparent transparent transparent;
+}
+
+/*point the arrow upwards when the select box is open (active):*/
+.select-selected.select-arrow-active:after {
+  border-color: transparent transparent #fff transparent;
+  top: 7px;
+}
+
+/*style the items (options), including the selected item:*/
+.select-items div,.select-selected {
+  width: 185px;
+  color: #fff;
+  padding: .5rem 1.4rem .5rem 1.2rem;
+  border-bottom: 1px solid #fff;
+  cursor: pointer;
+  user-select: none;
+}
+
+/*style items (options):*/
+.select-items {
+  position: absolute;
+  background-color: var(--main);
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+
+/*hide the items when the select box is closed:*/
+.select-hide {
+  display: none;
+}
+
+.select-items div:hover, .same-as-selected {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* FOOTER */
+#chart-page-footer {
+  display: flex;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #fff;
+  color: var(--main);
+  box-shadow: 0 -1px 15px 0px rgba(0,0,0,.1);
+  border-top: 1px solid rgba(0,0,0,.1);
+  padding: 1.2rem 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+#chart-page-footer h6 {
+  margin-bottom: 0;
+  font-weight: 100;
+  transition: opacity .5s;
+  cursor: pointer;
+}
+
+#chart-page-footer h6:hover {
+  opacity: .4;
+}
+
+#chart-page-footer img {
+  display: inline-block;
+  margin-right: .5rem;
+  position: relative;
+  top: -1px;
+  height: auto;
+}
+
+#chart-page-footer .help img {
+  width: 10px;
+}
+
+#chart-page-footer .download img {
+  width: 13px;
+}
+
+#chart-page-footer .download a {
+  text-transform: uppercase;
+  color: var(--main);
+}
+
+#chart-page-footer .help,
+#chart-page-footer .download {
+  margin: 0 2rem;
+}
+
+/* HOT TO READ */
+#how_to_read_button:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.how_to_read {
+  display: none;
+  z-index: 1;
+  position: absolute;
+  margin: 1em;
+  background-color: #fff;
+  border: 3px dotted #DCDCDC;
+  padding: 2em;
+  font-size: 0.8em;
+  width: calc(100% - 3em);
+  box-shadow: 5px 5px 30px 0px rgba(0, 0, 0, .2);
+}
+
+.how_to_read h5 {
+  text-transform: uppercase;
+  color: var(--main);
+}
+
+@media screen and (max-width: 768px) {}
+
+@media screen and (max-width: 576px) {}

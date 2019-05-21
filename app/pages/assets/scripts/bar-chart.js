@@ -32,8 +32,6 @@ function dataviz() {
 
       barChart(data, minDate, maxDate, maxValue, "#main_contributions_container", userData);
 
-      $("#main_contributions_container").append("<hr>");
-
     });
   });
 }

@@ -1,28 +1,39 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Usage | GLAM stat tool (Cassandra)</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta charset="utf-8">
-		<meta http-equiv="Access-Control-Allow-Origin" content="*"/>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
-		<link rel="stylesheet" href="/assets/style/donut.css"/>
-		<link rel="stylesheet" href="/assets/style/style.css"/>
-		<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-	</head>
-	<body class="overflow_hidden">
-		<base id="basebase" href=""/>
-		<header id="topbar" class="top_bar">
-			<h1>
-				<a href="/">GLAM stat tool (Cassandra)</a>
-			</h1>
-			<span style="color:white; font-size:12px;">version 1.2.</span>
-			<h2>
-				<a class="glamName" href=".."></a>
-			</h2>
-		</header>
 
-		<div id="sub_header" class="sub_top_bar">
+<head>
+	<title>Usage | GLAM stat tool (Cassandra)</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/assets/style/donut.css" />
+	<link rel="stylesheet" href="/assets/style/style.css" />
+	<link rel="stylesheet" href="/assets/style/chart-page.css" />
+	<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+	<base id="basebase" href="" />
+</head>
+
+<body class="overflow_hidden">
+	<header id="topbar" class="top_bar">
+		<h6>INSTITUTION</h6>
+		<h2><a class="glamName" href=".."></a></h2>
+		<span class="breadcrumb-separator"> > </span>
+		<h6>CATEGRY IN COMMONS</h6>
+		<h2><a id="cat_url" href="" title="Mediawiki category" target="_blank"></a></h2>
+		<span class="breadcrumb-separator"> > </span>
+		<h6>CHART</h6>
+		<div class="select-chart">
+			<select id="switch_page">
+				<option selected value="usage">Usage</option>
+				<option value="category-network">Category network</option>
+				<option value="user-contributions">User contributions</option>
+				<option value="page-views">Page views</option>
+			</select>
+		</div>
+	</header>
+
+	<!-- <div id="sub_header" class="sub_top_bar">
 			<div>
 				<div class="label">
 					Category
@@ -59,72 +70,84 @@
 				</div>
 				<div id="download_dataset"></div>
 			</div>
+		</div> -->
+
+	<main id="visualizations">
+		<section id="dataviz" class="v_noscore" style="overflow: unset;">
+			<div class="how_to_read" style="z-index:999">
+				<span onclick='$(".how_to_read").toggleClass("show");' style="float:right; cursor:pointer">X</span>
+				<h5>Description</h5>
+				This section show the usage of the media of the main category in Wikimedia projects.<br>
+				Every time a media is used in a Wikipedia article in any language or in any other sister projects like
+				Wikidata, Wikisource, etc. it counts 1 here. In this page you can investigate about how many files are
+				really used, in which projects and which are the most popular ones.
+				<br><br>
+				<h5>How to read it</h5>
+				On the top left a donut chart show the top ten projects that are currently using these files. On the bottom
+				instead each file is detailed with a link to each page in which is used.
+				<br><br>
+				<h5>How to use it</h5>
+				On the right menu you can order files by usage or by number of distinct projects or by name.
+				If you click into a file name the correspondant detail will scroll up.
+			</div>
+			<div id="main_usage_container" class="row">
+				<div id="usage_donut" class="col-6" style="text-align:center"></div>
+				<div id="usage_stat" class="col-6"></div>
+			</div>
+			<hr>
+			<div id="file_usage_container"></div>
+		</section>
+
+		<section id="left_sidebar">
+			<div id="sidebar_box">
+				<div id="sorting_options">
+					<span style="font-size:0.8em;" id="by_num" class="underline">
+						by usage
+					</span>
+					/
+					<span style="font-size:0.8em; cursor:pointer;" id="by_proj">
+						by projects
+					</span>
+					/
+					<span style="font-size:0.8em; cursor:pointer;" id="by_name">
+						by name
+					</span>
+				</div>
+				<div id="sidebar"></div>
+			</div>
+		</section>
+	</main>
+
+	<footer id="chart-page-footer">
+		<div class="help">
+			<h6 id="how_to_read_button"><img src="/assets/img/question-icon.svg" alt="help">HELP</h6>
 		</div>
+		<div class="download">
+			<h6 id="download_dataset"><img src="/assets/img/download-icon.svg" alt="download"></h6>
+		</div>
+	</footer>
 
-		<main id="visualizations">
-			<section id="dataviz" class="v_noscore" style="overflow: unset;">
-				<div class="how_to_read" style="z-index:999">
-					<span onclick='$(".how_to_read").toggleClass("show");' style="float:right; cursor:pointer">X</span>
-					<h5>Description</h5>
-					This section show the usage of the media of the main category in Wikimedia projects.<br>
-					Every time a media is used in a Wikipedia article in any language or in any other sister projects like
-					Wikidata, Wikisource, etc. it counts 1 here. In this page you can investigate about how many files are
-					really used, in which projects and which are the most popular ones.
-					<br><br>
-					<h5>How to read it</h5>
-				  On the top left a donut chart show the top ten projects that are currently using these files. On the bottom
-					instead each file is detailed with a link to each page in which is used.
-					<br><br>
-					<h5>How to use it</h5>
-					On the right menu you can order files by usage or by number of distinct projects or by name.
-					If you click into a file name the correspondant detail will scroll up.
-				</div>
-				<div id="main_usage_container" class="row">
-					<div id="usage_donut" class="col-6" style="text-align:center"></div>
-					<div id="usage_stat" class="col-6"></div>
-				</div>
-				<hr>
-				<div id="file_usage_container"></div>
-			</section>
-
-			<section id="left_sidebar">
-				<div id="sidebar_box">
-					<div  id="sorting_options">
-						<span style="font-size:0.8em;" id="by_num" class="underline">
-							by usage
-						</span>
-						/
-						<span style="font-size:0.8em; cursor:pointer;" id="by_proj">
-							by projects
-						</span>
-						/
-						<span style="font-size:0.8em; cursor:pointer;" id="by_name">
-							by name
-						</span>
-					</div>
-					<div id="sidebar"></div>
-				</div>
-			</section>
-		</main>
-		<style>
-			#visualizations #dataviz{
+	<style>
+		#visualizations #dataviz {
 				overflow-y: auto;
 				overflow-x: hidden;
 				/*height: 100%;
 				height: 80vh;*/
 			}
-			#user_contributions_container{
+			#user_contributions_container {
 				overflow-x: hidden;
 			}
 			#sidebar .list_item:last-child {
 				margin-bottom: 0px;
 			}
 		</style>
-		<script type="text/javascript" src="/assets/bower_components/jquery/dist/jquery.min.js"></script>
-		<script type="text/javascript" src="/assets/bower_components/d3/d3.min.js"></script>
-		<script type="text/javascript" src="/assets/scripts/handlebars-v4.0.5.js"></script>
-		<script type="text/javascript" src="/assets/scripts/utils.js"></script>
-		<script type="text/javascript" src="/assets/scripts/donut.js"></script>
-		<script type="text/javascript" src="/views/usage/functions.js"></script>
-	</body>
+	<script type="text/javascript" src="/assets/bower_components/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="/assets/bower_components/d3/d3.min.js"></script>
+	<script type="text/javascript" src="/assets/scripts/handlebars-v4.0.5.js"></script>
+	<script type="text/javascript" src="/assets/scripts/utils.js"></script>
+	<script type="text/javascript" src="/assets/scripts/select-chart.js"></script>
+	<script type="text/javascript" src="/assets/scripts/donut.js"></script>
+	<script type="text/javascript" src="/views/usage/functions.js"></script>
+</body>
+
 </html>

@@ -315,34 +315,6 @@ a {
   min-height: 100vh;
 }
 
-.top_bar {
-  min-height: 3em;
-  top: 0;
-  width: 100%;
-  z-index: 1;
-  padding: 0.5em;
-}
-
-#topbar {
-  background-color: #0D6FF6;
-}
-
-#topbar a {
-  color: white;
-  text-decoration: none;
-}
-
-#topbar h1 {
-  display: inline;
-  padding-left: 0.5em;
-}
-
-#topbar h2 {
-  display: inline;
-  font-size: 1.2em;
-  margin-left: 2em;
-}
-
 #sub_header {
   background-color: #dcdcdc;
   min-height: 3em;
@@ -721,25 +693,6 @@ footer {
   cursor: pointer;
   height: 2.5em;
   border-bottom: 1px dotted #e3e1e1;
-}
-
-#how_to_read_button {
-  text-decoration: underline;
-}
-
-#how_to_read_button:hover {
-  cursor: pointer;
-}
-
-.how_to_read {
-  display: none;
-  position: absolute;
-  margin: 1em;
-  background-color: white;
-  border: 3px dotted #DCDCDC;
-  padding: 2em;
-  font-size: 0.8em;
-  width: calc(70% - 3em);
 }
 
 #sidebar {

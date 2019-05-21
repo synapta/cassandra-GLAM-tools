@@ -1,120 +1,97 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>User contributions | GLAM stat tool (Cassandra)</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta charset="utf-8">
-		<meta http-equiv="Access-Control-Allow-Origin" content="*"/>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
-		<link rel="stylesheet" href="/assets/style/user-contribution.css"/>
-		<link rel="stylesheet" href="/assets/style/style.css"/>
-		<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-	</head>
-	<body class="overflow_hidden">
-		<base id="basebase" href=""/>
-		<header id="topbar" class="top_bar">
-			<h1>
-				<a href="/">GLAM stat tool (Cassandra)</a>
-			</h1>
-			<span style="color:white; font-size:12px;">version 1.2.</span>
-			<h2>
-				<a class="glamName" href=".."></a>
-			</h2>
-		</header>
 
-		<div id="sub_header" class="sub_top_bar">
-			<div>
-				<div class="label">
-					Category
+<head>
+	<title>User contributions | GLAM stat tool (Cassandra)</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/assets/style/user-contribution.css" />
+	<link rel="stylesheet" href="/assets/style/style.css" />
+	<link rel="stylesheet" href="/assets/style/chart-page.css" />
+	<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+	<base id="basebase" href="" />
+</head>
+
+<body class="overflow_hidden">
+
+	<header id="topbar" class="top_bar">
+		<h6>INSTITUTION</h6>
+		<h2><a class="glamName" href=".."></a></h2>
+		<span class="breadcrumb-separator"> > </span>
+		<h6>CATEGRY IN COMMONS</h6>
+		<h2><a id="cat_url" href="" title="Mediawiki category" target="_blank"></a></h2>
+		<span class="breadcrumb-separator"> > </span>
+		<h6>CHART</h6>
+		<div class="select-chart">
+			<select id="switch_page">
+				<option selected value="user-contributions">User contributions</option>
+				<option value="category-network">Category network</option>
+				<option value="usage">Usage</option>
+				<option value="page-views">Page views</option>
+			</select>
+		</div>
+	</header>
+
+	<main id="visualizations">
+		<div class="row w-100">
+			<div class="col-12 col-lg-9">
+				<div class="how_to_read">
+					<span onclick='$(".how_to_read").toggleClass("show");' style="float:right; cursor:pointer">X</span>
+					<h5>Description</h5>
+					This bar chart shows the number of uploads during time.<br>
+					Here you can study if the contribution pattern is well distributed or if it's composed by spikes.
+					<br><br>
+					<h5>How to read it</h5>
+					On the orizontal axis we have time, with one month precision. On the vertical axis the total uploaded files in
+					the category during a month.
+					<br><br>
+					<h5>How to use it</h5>
+					On the right menu you can order users by name or by number of contributions. If you click into a user name the
+					correspondant graph of contributions will show up.
 				</div>
-				<div>
-					<a id="cat_url" href="https://commons.wikimedia.org/w/index.php?title=Category:Media_contributed_by_the_ETH-Bibliothek" title="Media contributed by the ETH-Bibiothek" target="_blank">
-					</a>
-				</div>
+				<div id="main_contributions_container"></div>
 			</div>
-			<div>
-				<div class="label">
-					Chart
+			<div id="left-column" class="col-12 col-lg-3">
+				<div id="sidebar_box">
+					<div id="groupby_options">
+						Select view:
+						<select id="groupby-select">
+							<option selected value="month">Month</option>
+							<option value="quarter">Quarter</option>
+							<option value="year">Year</option>
+						</select>
+					</div>
+					<div id="sorting_options">
+						<span style="font-size:0.8em;" id="by_num" class="underline">
+							by total
+						</span>
+						/
+						<span style="font-size:0.8em; cursor:pointer;" id="by_name">
+							by name
+						</span>
+					</div>
+					<div id="sidebar"></div>
 				</div>
-				<div>
-					<select id="switch_page">
-						<option value="user-contributions">User contributions</option>
-						<option value="category-network">Category network</option>
-						<option value="usage">Usage</option>
-						<option value="page-views">Page views</option>
-					</select>
-				</div>
-			</div>
-			<div>
-				<div class="label">
-					Help
-				</div>
-				<div id="how_to_read_button">
-					How to read the visualization
-				</div>
-			</div>
-			<div>
-				<div class="label">
-					Download
-				</div>
-				<div id="download_dataset"></div>
 			</div>
 		</div>
+	</main>
 
-		<main id="visualizations">
-			<div class="row w-100">
-				 <div class="col-12 col-lg-9">
-					 <!-- <section id="dataviz" class="v_noscore" style="overflow: unset;"> -->
-						 <div class="how_to_read">
-							 <span onclick='$(".how_to_read").toggleClass("show");' style="float:right; cursor:pointer">X</span>
-							 <h5>Description</h5>
-							 This bar chart shows the number of uploads during time.<br>
-							 Here you can study if the contribution pattern is well distributed or if it's composed by spikes.
-							 <br><br>
-							 <h5>How to read it</h5>
-							 On the orizontal axis we have time, with one month precision. On the vertical axis the total uploaded files in
-							 the category during a month.
-							 <br><br>
-							 <h5>How to use it</h5>
-							 On the right menu you can order users by name or by number of contributions. If you click into a user name the
-							 correspondant graph of contributions will show up.
-						 </div>
-						 <div id="main_contributions_container"></div>
-						 <!-- <div id="user_contributions_container"></div> -->
-					 <!-- </section> -->
-				 </div>
-				 <div id="left-column" class="col-12 col-lg-3">
-					 <!-- <section id="left_sidebar"> -->
-						 <div id="sidebar_box">
-							 <div id="groupby_options">
-								 Select view:
-								 <select id="groupby-select">
-									 <option selected value="month">Month</option>
-									 <option value="quarter">Quarter</option>
-									 <option value="year">Year</option>
-								 </select>
-							 </div>
-							 <div id="sorting_options">
-								 <span style="font-size:0.8em;" id="by_num" class="underline">
-									 by total
-								 </span>
-								 /
-								 <span style="font-size:0.8em; cursor:pointer;" id="by_name">
-									 by name
-								 </span>
-							 </div>
-							 <div id="sidebar"></div>
-						 </div>
-					 <!-- </section> -->
-				 </div>
-			</div>
-		</main>
-		<style>
-			#visualizations #dataviz {
+<footer id="chart-page-footer">
+	<div class="help">
+		<h6 id="how_to_read_button"><img src="/assets/img/question-icon.svg" alt="help">HELP</h6>
+	</div>
+	<div class="download">
+		<h6 id="download_dataset"><img src="/assets/img/download-icon.svg" alt="download"></h6>
+	</div>
+</footer>
+
+
+	<style>
+		#visualizations #dataviz {
 				overflow-y: auto;
 				overflow-x: hidden;
-				/*height: 100%;
-				height: 80vh;*/
 			}
 			#user_contributions_container{
 				overflow-x: hidden;
@@ -123,15 +100,15 @@
 				margin-bottom: 0px;
 			}
 		</style>
-		<script type="text/javascript" src="/assets/bower_components/jquery/dist/jquery.min.js"></script>
-		<!-- <script type="text/javascript" src="/assets/bower_components/d3/d3.min.js"></script> -->
-		<script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
-		<!-- <script src="https://d3js.org/d3-selection-multi.v1.min.js"></script> -->
-		<script type="text/javascript" src="/assets/scripts/moment-with-locales.js"></script>
-		<script type="text/javascript" src="/assets/scripts/handlebars-v4.0.5.js"></script>
-		<script type="text/javascript" src="/assets/scripts/utils.js"></script>
-		<script type="text/javascript" src="/assets/scripts/bar-chart.js"></script>
-		<script type="text/javascript" src="/views/user-contributions/functions.js"></script>
+	<script type="text/javascript" src="/assets/bower_components/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="/assets/bower_components/d3/d3.min.js"></script>
+	<script type="text/javascript" src="/assets/scripts/moment-with-locales.js"></script>
+	<script type="text/javascript" src="/assets/scripts/handlebars-v4.0.5.js"></script>
+	<script type="text/javascript" src="/assets/scripts/utils.js"></script>
+	<script type="text/javascript" src="/assets/scripts/select-chart.js"></script>
+	<script type="text/javascript" src="/assets/scripts/bar-chart.js"></script>
+	<script type="text/javascript" src="/views/user-contributions/functions.js"></script>
 
-	</body>
+</body>
+
 </html>

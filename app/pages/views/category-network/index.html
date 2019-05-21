@@ -7,21 +7,31 @@
 		<meta http-equiv="Access-Control-Allow-Origin" content="*"/>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
 		<link rel="stylesheet" href="/assets/style/style.css"/>
+		<link rel="stylesheet" href="/assets/style/chart-page.css"/>
 		<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+		<base id="basebase" href=""/>
 	</head>
 	<body class="overflow_hidden">
-		<base id="basebase" href=""/>
+
 		<header id="topbar" class="top_bar">
-			<h1>
-				<a href="/">GLAM stat tool (Cassandra)</a>
-			</h1>
-			<span style="color:white; font-size:12px;">version 1.2.</span>
-			<h2>
-				<a class="glamName" href=".."></a>
-			</h2>
+			<h6>INSTITUTION</h6>
+			<h2><a class="glamName" href=".."></a></h2>
+			<span class="breadcrumb-separator"> > </span>
+			<h6>CATEGRY IN COMMONS</h6>
+			<h2><a id="cat_url" href="" title="Mediawiki category" target="_blank"></a></h2>
+			<span class="breadcrumb-separator"> > </span>
+			<h6>CHART</h6>
+			<div class="select-chart">
+				<select id="switch_page">
+					<option selected value="category-network">Category network</option>
+					<option value="user-contributions">User contributions</option>
+					<option value="usage">Usage</option>
+					<option value="page-views">Page views</option>
+				</select>
+			</div>
 		</header>
 
-		<div id="sub_header" class="sub_top_bar">
+		<!-- <div id="sub_header" class="sub_top_bar">
 			<div>
 				<div class="label">
 					Category
@@ -57,7 +67,7 @@
 				</div>
 				<div id="download_dataset"></div>
 			</div>
-		</div>
+		</div> -->
 
 		<main id="visualizations">
 			<section id="dataviz" class="v_noscore">
@@ -95,7 +105,18 @@
 					<div id="sidebar"></div>
 				</div>
 			</section>
+
 		</main>
+
+		<footer id="chart-page-footer">
+			<div class="help">
+				<h6 id="how_to_read_button"><img src="/assets/img/question-icon.svg" alt="help">HELP</h6>
+			</div>
+			<div class="download">
+				<h6 id="download_dataset"><img src="/assets/img/download-icon.svg" alt="download"></h6>
+			</div>
+		</footer>
+
 		<style>
 			#visualizations #dataviz {
 				height: 100vh;
@@ -105,6 +126,7 @@
 		<script type="text/javascript" src="/assets/bower_components/d3/d3.min.js"></script>
 		<script type="text/javascript" src="/assets/scripts/handlebars-v4.0.5.js"></script>
 		<script type="text/javascript" src="/assets/scripts/utils.js"></script>
+		<script type="text/javascript" src="/assets/scripts/select-chart.js"></script>
 		<script type="text/javascript" src="/views/category-network/functions.js"></script>
 	</body>
 </html>
