@@ -1,3 +1,4 @@
+
 $(document).ready(function() {
   $.get('/api/glams', function (glams) {
     var photos = $('#photos');
@@ -10,29 +11,6 @@ $(document).ready(function() {
           obj.category = glam['category'];
           obj.image_url = glam['image'];
           obj.title = glam['fullname'];
-
-          // photos.append(template(obj));
-
-          // var a = $('<a>');
-          // a.attr('href', '/' + glam['name']);
-          // a.attr('alt', glam['category']);
-          // photos.append(a);
-          //
-          // var container = $('<div>');
-          // container.attr('class', 'container');
-          // a.append(container);
-          //
-          // var img = $('<img>');
-          // img.attr('src', glam['image']);
-          // container.append(img);
-          //
-          // var block = $('<div>');
-          // block.attr('class', 'text-block');
-          // container.append(block);
-          //
-          // var h4 = $('<h4>');
-          // h4.text(glam['fullname']);
-          // block.append(h4);
 
           switch (idx % 3) {
             case 0:
@@ -51,7 +29,7 @@ $(document).ready(function() {
         });
       });
     } else {
-      console.log('no glams');
+      $('#photos-2').html('<div class="w-100 text-center my-5"><h1>No available GLAMs</h1></div>');
     }
   });
 });

@@ -297,11 +297,15 @@ a {
   top: 15rem;
   list-style-type: none;
   padding: 0 2rem;
-  color: #fff;
 }
 
 #secondary-sidebar > .institutions-list > li {
-  padding: 1rem 0;
+  padding: .9rem 0;
+  font-size: .9rem;
+}
+
+#secondary-sidebar > .institutions-list > li > a {
+  color: #fff;
 }
 
 /* MAIN CONTAINER */
@@ -429,14 +433,42 @@ footer {
   background-color: rgba(6, 69, 173, 0.2);
 }
 
-#cover {
+.cover {
   position: relative;
   margin-left: var(--sidebar-width);
-  padding: 1rem 3rem;
   display: flex;
   align-items: center;
   background-size: cover;
   background-position: center;
+}
+
+.cover h2 {
+  font-size: 2rem;
+  margin-bottom: 0;
+}
+
+/* home page cover */
+#home-cover {
+  padding: 2rem 3rem;
+}
+
+#home-cover h2 {
+  color: var(--main);
+}
+
+/* glam home page cover */
+#cover {
+  padding: 1rem 3rem;
+}
+
+#cover h2 {
+  color: var(--main);
+}
+
+#cover h2::after {
+  clear: both;
+  content: "";
+  display: block;
 }
 
 #cover-overlay {
@@ -448,26 +480,17 @@ footer {
   background-color: var(--main-t);
 }
 
-#home-cover {
-  padding: 2rem 0rem 3rem;
+/* admin page cover */
+#admin-cover {
+  background-color: var(--main);
+  padding: 2rem 3rem;
 }
 
-#home-cover h2 {
-  color: var(--main);
-  font-size: 2rem;
+#admin-cover h2 {
+  color: #fff;
 }
 
-#cover h2 {
-  color: var(--main);
-  font-size: 2rem;
-}
-
-#cover h2::after {
-  clear: both;
-  content: "";
-  display: block;
-}
-
+/* GLAM HOME PAGE */
 .glam-title-container {
   color: #fff;
 }
