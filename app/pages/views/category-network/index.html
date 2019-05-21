@@ -1,132 +1,91 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Category network | GLAM stat tool (Cassandra)</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta charset="utf-8">
-		<meta http-equiv="Access-Control-Allow-Origin" content="*"/>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
-		<link rel="stylesheet" href="/assets/style/style.css"/>
-		<link rel="stylesheet" href="/assets/style/chart-page.css"/>
-		<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-		<base id="basebase" href=""/>
-	</head>
-	<body class="overflow_hidden">
 
-		<header id="topbar" class="top_bar">
-			<h6>INSTITUTION</h6>
-			<h2><a class="glamName" href=".."></a></h2>
-			<span class="breadcrumb-separator"> > </span>
-			<h6>CATEGRY IN COMMONS</h6>
-			<h2><a id="cat_url" href="" title="Mediawiki category" target="_blank"></a></h2>
-			<span class="breadcrumb-separator"> > </span>
-			<h6>CHART</h6>
-			<div class="select-chart">
-				<select id="switch_page">
-					<option selected value="category-network">Category network</option>
-					<option value="user-contributions">User contributions</option>
-					<option value="usage">Usage</option>
-					<option value="page-views">Page views</option>
-				</select>
-			</div>
-		</header>
+<head>
+	<title>Category network | GLAM stat tool (Cassandra)</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/assets/style/style.css" />
+	<link rel="stylesheet" href="/assets/style/chart-page.css" />
+	<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+	<base id="basebase" href="" />
+</head>
 
-		<!-- <div id="sub_header" class="sub_top_bar">
-			<div>
-				<div class="label">
-					Category
-				</div>
-				<div>
-					<a id="cat_url" target="_blank"></a>
-				</div>
-			</div>
-			<div>
-				<div class="label">
-					Chart
-				</div>
-				<div>
-					<select id="switch_page">
-						<option value="category-network">Category network</option>
-						<option value="user-contributions">User contributions</option>
-						<option value="usage">Usage</option>
-						<option value="page-views">Page views</option>
-					</select>
-				</div>
-			</div>
-			<div>
-				<div class="label">
-					Help
-				</div>
-				<div id="how_to_read_button">
-					How to read the visualization
-				</div>
-			</div>
-			<div>
-				<div class="label">
-					Download
-				</div>
-				<div id="download_dataset"></div>
-			</div>
-		</div> -->
+<body class="overflow_hidden">
 
-		<main id="visualizations">
-			<section id="dataviz" class="v_noscore">
-				<div class="how_to_read">
-					<span onclick='$(".how_to_read").toggleClass("show");' style="float:right; cursor:pointer">X</span>
-					<h5>Description</h5>
-					This graph chart shows the subcategories' topology belonging to the main category.<br>
-					Having just one category (or level) is a bad practise on Wikimedia Commons because makes difficult
-					to the community to find and use files. Instead a multilevel and articulated categorization permits
-					a better reuse of the uploaded media.
-					<br><br>
-					<h5>How to read it</h5>
-				  Each node represents a category, while the edges are the relations. Categories at the same level share the color.
-					The bubble size is proportional to the amount of files within every category.
-					<br><br>
-					<h5>How to use it</h5>
-					On the right menu you can order categories by level or by number of files. If you click into a category name the
-					correspondant node will highlight (and viceversa).
-				</div>
-				<div id="legend" style="width: 10%;float: left;margin:2em 0 0 1.5em;"></div>
-				<div id="category_network_container"></div>
-			</section>
+	<header id="topbar" class="top_bar">
+		<h6>INSTITUTION</h6>
+		<h2><a class="glamName" href=".."></a></h2>
+		<span class="breadcrumb-separator"> > </span>
+		<h6>CATEGRY IN COMMONS</h6>
+		<h2><a id="cat_url" href="" title="Mediawiki category" target="_blank"></a></h2>
+		<span class="breadcrumb-separator"> > </span>
+		<h6>CHART</h6>
+		<div class="select-chart">
+			<select id="switch_page">
+				<option selected value="category-network">Category network</option>
+				<option value="user-contributions">User contributions</option>
+				<option value="usage">Usage</option>
+				<option value="page-views">Page views</option>
+			</select>
+		</div>
+	</header>
 
-			<section id="left_sidebar">
-				<div id="sidebar_box">
-					<div  id="sorting_options">
-						<span style="font-size:0.8em;" id="by_name" class="underline">
-							by level
-						</span>
-						/
-						<span style="font-size:0.8em; cursor:pointer;" id="desc_order">
-							by total
-						</span>
-					</div>
-					<div id="sidebar"></div>
-				</div>
-			</section>
-
-		</main>
-
-		<footer id="chart-page-footer">
-			<div class="help">
-				<h6 id="how_to_read_button"><img src="/assets/img/question-icon.svg" alt="help">HELP</h6>
+	<main id="visualizations">
+		<section id="dataviz" class="v_noscore">
+			<div class="how_to_read">
+				<span onclick='$(".how_to_read").toggleClass("show");' style="float:right; cursor:pointer">X</span>
+				<h5>Description</h5>
+				This graph chart shows the subcategories' topology belonging to the main category.<br>
+				Having just one category (or level) is a bad practise on Wikimedia Commons because makes difficult
+				to the community to find and use files. Instead a multilevel and articulated categorization permits
+				a better reuse of the uploaded media.
+				<br><br>
+				<h5>How to read it</h5>
+				Each node represents a category, while the edges are the relations. Categories at the same level share the color.
+				The bubble size is proportional to the amount of files within every category.
+				<br><br>
+				<h5>How to use it</h5>
+				On the right menu you can order categories by level or by number of files. If you click into a category name the
+				correspondant node will highlight (and viceversa).
 			</div>
-			<div class="download">
-				<h6 id="download_dataset"><img src="/assets/img/download-icon.svg" alt="download"></h6>
-			</div>
-		</footer>
+			<div id="legend" style="width: 10%;float: left;margin:2em 0 0 1.5em;"></div>
+			<div id="category_network_container"></div>
+		</section>
 
-		<style>
-			#visualizations #dataviz {
-				height: 100vh;
-			}
-		</style>
-		<script type="text/javascript" src="/assets/bower_components/jquery/dist/jquery.min.js"></script>
-		<script type="text/javascript" src="/assets/bower_components/d3/d3.min.js"></script>
-		<script type="text/javascript" src="/assets/scripts/handlebars-v4.0.5.js"></script>
-		<script type="text/javascript" src="/assets/scripts/utils.js"></script>
-		<script type="text/javascript" src="/assets/scripts/select-chart.js"></script>
-		<script type="text/javascript" src="/views/category-network/functions.js"></script>
-	</body>
+		<section id="left_sidebar">
+			<div id="sidebar_box">
+				<div id="sorting_options">
+					<span style="font-size:0.8em;" id="by_name" class="underline">
+						by level
+					</span>
+					/
+					<span style="font-size:0.8em; cursor:pointer;" id="desc_order">
+						by total
+					</span>
+				</div>
+				<div id="sidebar"></div>
+			</div>
+		</section>
+	</main>
+
+	<footer id="chart-page-footer">
+		<div class="help">
+			<h6 id="how_to_read_button"><img src="/assets/img/question-icon.svg" alt="help">HELP</h6>
+		</div>
+		<div class="download">
+			<h6 id="download_dataset"><img src="/assets/img/download-icon.svg" alt="download"></h6>
+		</div>
+	</footer>
+
+	<script type="text/javascript" src="/assets/bower_components/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="/assets/bower_components/d3/d3.min.js"></script>
+	<script type="text/javascript" src="/assets/scripts/handlebars-v4.0.5.js"></script>
+	<script type="text/javascript" src="/assets/scripts/utils.js"></script>
+	<script type="text/javascript" src="/assets/scripts/select-chart.js"></script>
+	<script type="text/javascript" src="/views/category-network/functions.js"></script>
+</body>
+
 </html>

@@ -185,6 +185,16 @@
   color: var(--main);
 }
 
+/* DATAVIZ */
+#visualizations #dataviz {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#sidebar .list_item:last-child {
+  margin-bottom: 0px;
+}
+
 @media screen and (max-width: 768px) {}
 
 @media screen and (max-width: 576px) {}
