@@ -40,13 +40,13 @@ def views_date():
 
 def setup(name):
     logging.info('Running setup.js for %s', name)
-    subprocess.run(['nodejs', 'setup.js', name], check=True)
+    subprocess.run(['node', 'setup.js', name], check=True)
     logging.info('Subprocess setup.js completed')
 
 
 def etl(name):
     logging.info('Running etl.js for %s', name)
-    subprocess.run(['nodejs', 'etl.js', name], check=True)
+    subprocess.run(['node', 'etl.js', name], check=True)
     logging.info('Subprocess etl.js completed')
 
 

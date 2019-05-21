@@ -77,5 +77,5 @@ python3 fix_views.py
 ## Run webservices
 ```
 cd app
-nodejs server
+node server
 ```
