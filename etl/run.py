@@ -7,11 +7,13 @@ import sys
 import time
 from datetime import datetime, timedelta
 from subprocess import SubprocessError
-import sentry_sdk
-from sentry_sdk.integrations.logging import LoggingIntegration
+
 import psycopg2
 import pymongo
 from psycopg2 import ProgrammingError
+
+import sentry_sdk
+from sentry_sdk.integrations.logging import LoggingIntegration
 
 config_file = '../config/config.json'
 views_dir = 'temp'
@@ -104,7 +106,8 @@ def clean_downloads():
 def create_database(config, database):
     connstring = "dbname=template1 user=" + config['postgres']['user'] + \
         " password=" + config['postgres']['password'] + \
-        " host=" + config['postgres']['host']
+        " host=" + config['postgres']['host'] + \
+        " port=" + str(config['postgres']['port'])
     conn = psycopg2.connect(connstring)
     conn.autocommit = True
     curse = conn.cursor()
@@ -146,10 +149,10 @@ def main():
 
     try:
         logging.info('External error reporting enabled')
-        # All of this is already happening by default!
+
         sentry_logging = LoggingIntegration(
-            level=logging.INFO,  # Capture info and above as breadcrumbs
-            event_level=logging.ERROR  # Send errors as events
+            level=logging.INFO,
+            event_level=logging.ERROR
         )
         sentry_sdk.init(
             dsn=config['raven']['glamtoolsetl']['DSN'],
@@ -168,7 +171,7 @@ def main():
             if glam['status'] == 'paused':
                 logging.info('Glam %s is paused', glam['name'])
                 continue
-            
+
             if glam['status'] == 'failed':
                 logging.info('Glam %s is failed', glam['name'])
                 continue

@@ -279,12 +279,13 @@ var buildUsageQuery = function (RQ) {
     AND img_name = page_title`;
 }
 var buildImageQuery = function (RQ) {
-    return `SELECT img_name, img_user_text, img_timestamp, img_size, cl_to
-    FROM categorylinks, page, image
-    WHERE cl_to IN(${RQ})
+    return `SELECT img_name, actor_name AS img_user_text, img_timestamp, img_size, cl_to
+    FROM categorylinks, page, image, actor
+    WHERE cl_to IN (${RQ})
     AND page_id = cl_from
     AND page_namespace = 6
-    AND img_name = page_title`;
+    AND img_name = page_title
+    AND img_actor = actor_id`;
 }
 var buildCategoryQuery = function (RQ) {
     return `SELECT page_title, cl_to, cat_subcats, cat_files
