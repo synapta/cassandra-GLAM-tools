@@ -16,7 +16,7 @@ function pad(str, max) {
 
 function sidebar(type) {
 		var template_source = "/views/user-contributions/tpl/user-contributions.tpl";
-		var target = "#sidebar";
+		var target = "#right_sidebar_list";
 
 		$.get(template_source, function(tpl) {
 				$.getJSON(getUrl(), function(data) {
@@ -91,12 +91,12 @@ function highlight() {
 		// highlight Sidebar and show bars
 		if ($(this).find('.item').hasClass('selected_list_item')) {
 			hideUserContributionsBars();
-			$("#sidebar .id").removeClass("selected_list_item");
-			$("#sidebar .item-col").removeClass("selected_list_item_div");
+			$("#right_sidebar_list .id").removeClass("selected_list_item");
+			$("#right_sidebar_list .item-col").removeClass("selected_list_item_div");
 		} else {
 			showUserContributionsBars(element);
-			$("#sidebar .id").removeClass("selected_list_item");
-			$("#sidebar .item-col").removeClass("selected_list_item_div");
+			$("#right_sidebar_list .id").removeClass("selected_list_item");
+			$("#right_sidebar_list .item-col").removeClass("selected_list_item_div");
 			$(this).find('.item').addClass("selected_list_item")
 			$(this).addClass("selected_list_item_div");
 		}

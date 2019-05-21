@@ -227,16 +227,16 @@ function sidebar(order) {
 
 	var template_source = "/views/category-network/tpl/category-network.tpl";
 	var data_source = getUrl();
-	var target = "#sidebar";
+	var target = "#right_sidebar_list";
 
-	function highlight(){
+	function highlight() {
 
 		// from Sidebar to Graph
 		$(".list_item").on("click", ".item" , function(){
 			element = $(this).find(".id").attr("id");
 
 			// reset Sidebar - Dataviz
-			$("#sidebar .id").removeClass("selected_list_item");
+			$("#right_sidebar_list .id").removeClass("selected_list_item");
 			$("#category_network_container").find(".circle").removeClass("selected_circle");
 
 			// highlight Graph
@@ -254,7 +254,7 @@ function sidebar(order) {
 				element = e.split(" ",1)
 
 				// reset Sidebar - Dataviz
-				$("#sidebar .id").removeClass("selected_list_item");
+				$("#right_sidebar_list .id").removeClass("selected_list_item");
 				$("#category_network_container").find(".circle").removeClass("selected_circle");
 
 				// highlight Graph
@@ -262,7 +262,7 @@ function sidebar(order) {
 				node_selected.toggleClass("selected_circle");
 
 				// highlight Sidebar
-				selected = $("#sidebar").find("#" + element)
+				selected = $("#right_sidebar_list").find("#" + element)
 				selected.toggleClass("selected_list_item");
 				document.getElementById(element).scrollIntoView({
 				    //behavior: "smooth",

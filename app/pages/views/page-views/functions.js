@@ -14,7 +14,7 @@ function getUrlSidebar(){
 function sidebar(type){
 	var template_source = "/views/page-views/tpl/views.tpl";
 	var data_source = getUrlSidebar();
-	var target = "#sidebar";
+	var target = "#right_sidebar_list";
 
 	$.get( template_source , function(tpl) {
 		$.getJSON( data_source , function(data) {

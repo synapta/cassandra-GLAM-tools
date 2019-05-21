@@ -7,87 +7,96 @@
 	<meta charset="utf-8">
 	<meta http-equiv="Access-Control-Allow-Origin" content="*" />
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/assets/style/semantic-ui-sidebar.css" />
 	<link rel="stylesheet" href="/assets/style/linechart.css" />
 	<link rel="stylesheet" href="/assets/style/style.css" />
 	<link rel="stylesheet" href="/assets/style/chart-page.css" />
-	<!-- <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"> -->
 	<base id="basebase" href="" />
 </head>
 
 <body class="overflow_hidden">
+	<div id="mobile-sidebar" class="ui left sidebar"></div>
+	<div class="pusher">
+		<header id="mobile-header-bar"></header>
+		<aside id="main-sidebar"></aside>
+		<aside id="secondary-sidebar"></aside>
 
-	<header id="topbar" class="top_bar">
-		<h6>INSTITUTION</h6>
-		<h2><a class="glamName" href=".."></a></h2>
-		<span class="breadcrumb-separator"> > </span>
-		<h6>CATEGRY IN COMMONS</h6>
-		<h2><a id="cat_url" href="" title="Mediawiki category" target="_blank"></a></h2>
-		<span class="breadcrumb-separator"> > </span>
-		<h6>CHART</h6>
-		<div class="select-chart">
-			<select id="switch_page">
-				<option selected value="page-views">Views</option>
-				<option value="category-network">Category network</option>
-				<option value="user-contributions">User contributions</option>
-				<option value="usage">Usage</option>
-			</select>
-		</div>
-	</header>
-
-	<main id="visualizations">
-		<section id="dataviz" class="v_noscore" style="overflow: unset;">
-			<div class="how_to_read">
-				<span onclick='$(".how_to_read").toggleClass("show");' style="float:right; cursor:pointer">X</span>
-				<h5>Description</h5>
-				This line chart shows the sum of the views for the files thats belong to the main category with a 24h span.<br>
-				Generally is quite visible the difference of visits between workdays and weekends. Sometimes some spikes could lead
-				to a popular event. A growing trend is not always equals to a growing popularity of the category because of file additions.
-				<br><br>
-				<h5>How to read it</h5>
-				On the orizontal axis we have time, with one day precision. On the vertical axis the total views performed by all files in
-				the category. This axis has logarithmic scale.
-				<br><br>
-				<h5>How to use it</h5>
-				On the right menu you can order files by views, by median or by name.
+		<header id="topbar" class="top_bar chart-page-margin-left">
+			<h6>INSTITUTION</h6>
+			<h2><a class="glamName" href=".."></a></h2>
+			<span class="breadcrumb-separator"> > </span>
+			<h6>CATEGRY IN COMMONS</h6>
+			<h2><a id="cat_url" href="" title="Mediawiki category" target="_blank"></a></h2>
+			<span class="breadcrumb-separator"> > </span>
+			<h6>CHART</h6>
+			<div class="select-chart">
+				<select id="switch_page">
+					<option selected value="page-views">Views</option>
+					<option value="category-network">Category network</option>
+					<option value="user-contributions">User contributions</option>
+					<option value="usage">Usage</option>
+				</select>
 			</div>
-			<div id="main_views_container"></div>
-		</section>
+		</header>
 
-		<section id="left_sidebar">
-			<div id="sidebar_box">
-				<div id="sorting_options">
-					<span style="font-size:0.8em;" id="by_num" class="underline">
-						by views
-					</span>
-					/
-					<span style="font-size:0.8em; cursor:pointer;" id="by_median">
-						by median
-					</span>
-					/
-					<span style="font-size:0.8em; cursor:pointer;" id="by_name">
-						by name
-					</span>
+		<main id="visualizations" class="chart-page-margin-left">
+			<div class="row w100 m-0">
+				<div class="col-12 col-lg-9">
+					<div class="how_to_read">
+						<span onclick='$(".how_to_read").toggleClass("show");' style="float:right; cursor:pointer">X</span>
+						<h5>Description</h5>
+						This line chart shows the sum of the views for the files thats belong to the main category with a 24h span.<br>
+						Generally is quite visible the difference of visits between workdays and weekends. Sometimes some spikes could lead
+						to a popular event. A growing trend is not always equals to a growing popularity of the category because of file additions.
+						<br><br>
+						<h5>How to read it</h5>
+						On the orizontal axis we have time, with one day precision. On the vertical axis the total views performed by all files in
+						the category. This axis has logarithmic scale.
+						<br><br>
+						<h5>How to use it</h5>
+						On the right menu you can order files by views, by median or by name.
+					</div>
+					<div id="main_views_container"></div>
 				</div>
-				<div id="sidebar"></div>
+				<div id="right-column" class="col-12 col-lg-3">
+					<div id="right_sidebar_box">
+						<div id="sorting_options">
+							<span style="font-size:0.8em;" id="by_num" class="underline">
+								by views
+							</span>
+							/
+							<span style="font-size:0.8em; cursor:pointer;" id="by_median">
+								by median
+							</span>
+							/
+							<span style="font-size:0.8em; cursor:pointer;" id="by_name">
+								by name
+							</span>
+						</div>
+						<div id="right_sidebar_list"></div>
+					</div>
+				</div>
 			</div>
-		</section>
 
-		<footer id="chart-page-footer">
-			<div class="help">
-				<h6 id="how_to_read_button"><img src="/assets/img/question-icon.svg" alt="help">HELP</h6>
-			</div>
-			<div class="download">
-				<h6 id="download_dataset"><img src="/assets/img/download-icon.svg" alt="download"></h6>
-			</div>
-		</footer>
-	</main>
+			<footer id="chart-page-footer" class="chart-page-margin-left">
+				<div class="help">
+					<h6 id="how_to_read_button"><img src="/assets/img/question-icon.svg" alt="help">HELP</h6>
+				</div>
+				<div class="download">
+					<h6 id="download_dataset"><img src="/assets/img/download-icon.svg" alt="download"></h6>
+				</div>
+			</footer>
+		</main>
+	</div>
 
 	<script type="text/javascript" src="/assets/bower_components/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="/assets/bower_components/d3/d3.min.js"></script>
 	<script type="text/javascript" src="/assets/scripts/handlebars-v4.0.5.js"></script>
 	<script type="text/javascript" src="/assets/scripts/moment-with-locales.js"></script>
+	<script type="text/javascript" src="/assets/scripts/semantic-ui-sidebar.js"></script>
+	<script type="text/javascript" src="/js/loader.js"></script>
 	<script type="text/javascript" src="/assets/scripts/utils.js"></script>
-	<script type="text/javascript" src="/assets/scripts/select-chart.js"></script>
+	<script type="text/javascript" src="/assets/scripts/custom-selector.js"></script>
 	<script type="text/javascript" src="/assets/scripts/linechart.js"></script>
 	<script type="text/javascript" src="/views/page-views/functions.js"></script>
 </body>

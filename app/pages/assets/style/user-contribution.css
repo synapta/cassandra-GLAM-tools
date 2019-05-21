@@ -3,10 +3,6 @@
   width: 100%;
 }
 
-#left-column {
-  background-color: var(--bg-gray);
-}
-
 .zoom {
   /* cursor: move; */
   fill: none;

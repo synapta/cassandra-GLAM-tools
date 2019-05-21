@@ -383,9 +383,12 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
     } else if (displayed < 71) {
       // uno ogni 4
       axisFunc = xAxis.tickValues(x.domain().filter((d, i) => { return (i % 4) === 0 }));
-    } else {
+    } else if (displayed < 86) {
       // uno ogni 5
       axisFunc = xAxis.tickValues(x.domain().filter((d, i) => { return (i % 5) === 0 }));
+    } else {
+      // uno ogni 10
+      axisFunc = xAxis.tickValues(x.domain().filter((d, i) => { return (i % 10) === 0 }));
     }
 
     focus.select(".axis.x")

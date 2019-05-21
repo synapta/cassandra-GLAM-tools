@@ -22,7 +22,7 @@ function lineChart(div, data) {
     margin = { top: 10, right: 40, bottom: 140, left: 20 };
     margin2 = { top: availH - margin.bottom + 30, right: 40, bottom: 50, left: 20 };
   } else { // tablets and desktop
-    availH = $("#" + div).outerHeight() * 0.85;
+    availH = $("#" + div).outerHeight() * 0.82;
     margin = { top: 10, right: 50, bottom: 140, left: 30 };
     margin2 = { top: availH - margin.bottom + 30, right: 50, bottom: 50, left: 30 };
   }
@@ -180,7 +180,7 @@ function lineChart(div, data) {
 
     if (isInsideGraph(mousePoint)) {
       // MOVE VERTICAL LINE
-      let mouseX = mousePoint.x - margin.left * 2;
+      let mouseX = mousePoint.x - margin.left * 2 - $('#main-sidebar').width() - 15;
       verticalLine.select('line').remove();
       verticalLine.append("line")
                   .attr("x1", mouseX).attr("x2", mouseX)
@@ -247,7 +247,7 @@ function lineChart(div, data) {
 
   // check if point is inside graph
   function isInsideGraph(point) {
-    if (point.x > margin.left * 2 && point.x < (width + margin.left * 2) &&
+    if (point.x > (margin.left * 2 + $('#main-sidebar').width() + 15) && point.x < (width + margin.left * 2 + $('#main-sidebar').width() + 15) &&
       point.y > ($('#svg-graph').offset().top + margin.top) &&
       point.y < (height + $('#svg-graph').offset().top + margin.top)) {
       return true;

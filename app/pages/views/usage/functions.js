@@ -53,7 +53,7 @@ function dataviz(){
 function sidebar(type){
 	var template_source = "/views/usage/tpl/usage.tpl";
 	var data_source = getUrlSidebar();
-	var target = "#sidebar";
+	var target = "#right_sidebar_list";
 
 	$.get( template_source , function(tpl) {
 		$.getJSON( data_source , function(data) {
@@ -155,7 +155,7 @@ function highlight(){
 		var element = $(this).attr("id");
 
 		// reset Sidebar - Dataviz
-		$("#sidebar .id").removeClass("selected_list_item");
+		$("#right_sidebar_list .id").removeClass("selected_list_item");
 
 		// highlight Sidebar
 		$(this).toggleClass("selected_list_item");
