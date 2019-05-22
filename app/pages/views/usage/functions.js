@@ -94,12 +94,12 @@ function sidebar(type){
 
 function sorting_sidebar(){
 	$("#by_num").on("click", function(){
-		if ($("#by_num").hasClass("underline") ) {
+		if ($("#by_num").hasClass("active_order") ) {
 			//console.log("già selezionato")
 		} else {
-			$("#by_name").removeClass("underline");
-			$("#by_num").addClass("underline");
-			$("#by_proj").removeClass("underline");
+			$("#by_name").removeClass("active_order");
+			$("#by_num").addClass("active_order");
+			$("#by_proj").removeClass("active_order");
 			sidebar("by_num");
 			$("#by_num").css("cursor","default");
 			$("#by_name").css("cursor","pointer");
@@ -108,12 +108,12 @@ function sorting_sidebar(){
 	})
 
 	$("#by_proj").on("click", function(){
-		if ($("#by_proj").hasClass("underline") ) {
+		if ($("#by_proj").hasClass("active_order") ) {
 			//console.log("già selezionato")
 		} else {
-			$("#by_name").removeClass("underline");
-			$("#by_num").removeClass("underline");
-			$("#by_proj").addClass("underline");
+			$("#by_name").removeClass("active_order");
+			$("#by_num").removeClass("active_order");
+			$("#by_proj").addClass("active_order");
 			sidebar("by_proj");
 			$("#by_name").css("cursor","pointer");
 			$("#by_num").css("cursor","pointer");
@@ -122,12 +122,12 @@ function sorting_sidebar(){
 	})
 
 	$("#by_name").on("click", function(){
-		if ($("#by_name").hasClass("underline") ) {
+		if ($("#by_name").hasClass("active_order") ) {
 			//console.log("già selezionato")
 		} else {
-			$("#by_name").addClass("underline");
-			$("#by_num").removeClass("underline");
-			$("#by_proj").removeClass("underline");
+			$("#by_name").addClass("active_order");
+			$("#by_num").removeClass("active_order");
+			$("#by_proj").removeClass("active_order");
 			sidebar("by_name");
 			$("#by_name").css("cursor","default");
 			$("#by_num").css("cursor","pointer");
@@ -150,18 +150,19 @@ function how_to_read(){
 	});
 };
 
-function highlight(){
-	$(".list_item").on("click", ".item" , function(){
-		var element = $(this).attr("id");
+function highlight() {
+	$(".list_item").on("click", function() {
+		var element = $(this).find('.item').attr("id");
 
-		// reset Sidebar - Dataviz
-		$("#right_sidebar_list .id").removeClass("selected_list_item");
-
-		// highlight Sidebar
-		$(this).toggleClass("selected_list_item");
+		if ($(this).hasClass('list_item_active')) {
+			$(".list_item").removeClass("list_item_active");
+		} else {
+			$(".list_item").removeClass("list_item_active");
+			$(this).addClass("list_item_active")
+		}
 
 		// highlight Graph
-		document.getElementById(element+"_viz").scrollIntoView({
+		document.getElementById(element + "_viz").scrollIntoView({
 				//behavior: "smooth",
 				block: "start"
 		});

@@ -55,11 +55,11 @@ function sidebar(type) {
 
 function sorting_sidebar() {
 	$("#by_num").on("click", function() {
-		if ($("#by_num").hasClass("underline") ) {
+		if ($("#by_num").hasClass("active_order") ) {
 			//console.log("già selezionato")
 		} else {
-			$("#by_name").toggleClass("underline");
-			$("#by_num").toggleClass("underline");
+			$("#by_name").toggleClass("active_order");
+			$("#by_num").toggleClass("active_order");
 			sidebar("by_num");
 			$("#by_num").css("cursor","default");
 			$("#by_name").css("cursor","pointer");
@@ -67,11 +67,11 @@ function sorting_sidebar() {
 	});
 
 	$("#by_name").on("click", function() {
-		if ($("#by_name").hasClass("underline") ) {
+		if ($("#by_name").hasClass("active_order") ) {
 			//console.log("già selezionato")
 		} else {
-			$("#by_name").toggleClass("underline");
-			$("#by_num").toggleClass("underline");
+			$("#by_name").toggleClass("active_order");
+			$("#by_num").toggleClass("active_order");
 			sidebar("by_name");
 			$("#by_name").css("cursor","default");
 			$("#by_num").css("cursor","pointer");
@@ -84,21 +84,18 @@ function download(){
 }
 
 function highlight() {
-	$(".list_item").on("click", ".item-col" , function() {
+	$(".list_item").on("click", function() {
 
 		var element = $(this).find('.item').attr("id");
 
 		// highlight Sidebar and show bars
-		if ($(this).find('.item').hasClass('selected_list_item')) {
+		if ($(this).hasClass('list_item_active')) {
 			hideUserContributionsBars();
-			$("#right_sidebar_list .id").removeClass("selected_list_item");
-			$("#right_sidebar_list .item-col").removeClass("selected_list_item_div");
+			$(".list_item").removeClass("list_item_active");
 		} else {
 			showUserContributionsBars(element);
-			$("#right_sidebar_list .id").removeClass("selected_list_item");
-			$("#right_sidebar_list .item-col").removeClass("selected_list_item_div");
-			$(this).find('.item').addClass("selected_list_item")
-			$(this).addClass("selected_list_item_div");
+			$(".list_item").removeClass("list_item_active");
+			$(this).addClass("list_item_active")
 		}
 
 	});

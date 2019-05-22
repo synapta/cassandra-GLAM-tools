@@ -80,6 +80,7 @@
   --bg-gray: #efefef;
   --accent: #a68300;
   --accent-tt: #a6830064;
+  --accent-ttt: #a6830028;
   --sidebar-width: 250px;
   --sidebar-items-left: 3.2rem;
 }
@@ -506,7 +507,7 @@ footer {
 .chart-preview {
   background-color: transparent;
   margin-top: 3rem;
-  height: 450px;
+  height: 400px;
   perspective: 1000px;
 }
 

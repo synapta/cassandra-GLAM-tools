@@ -79,7 +79,7 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
 		// tablets and desktop
 		availH = $(div).outerHeight() * 0.9;
 		margin = { top: 20, right: 30, bottom: 160, left: 50 };
-		margin2 = { top: availH - margin.bottom + 50, right: 30, bottom: 10, left: 50 };
+		margin2 = { top: availH - margin.bottom + 30, right: 30, bottom: 30, left: 50 };
 	}
 
 	var width = Math.round($(div).outerWidth()) - margin.left - margin.right,

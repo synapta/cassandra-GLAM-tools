@@ -197,11 +197,11 @@ function dataviz() {
 
 function sorting_sidebar(){
 	$("#desc_order").on("click", function(){
-		if ($("#desc_order").hasClass("underline") ) {
+		if ($("#desc_order").hasClass("active_order") ) {
 			//console.log("già selezionato")
 		} else {
-			$("#by_name").toggleClass("underline");
-			$("#desc_order").toggleClass("underline");
+			$("#by_name").toggleClass("active_order");
+			$("#desc_order").toggleClass("active_order");
 			$("#category_network_container").find(".circle").removeClass("selected_circle");
 			sidebar("desc_order");
 			$("#desc_order").css("cursor","default");
@@ -210,11 +210,11 @@ function sorting_sidebar(){
 	})
 
 	$("#by_name").on("click", function(){
-		if ($("#by_name").hasClass("underline") ) {
+		if ($("#by_name").hasClass("active_order") ) {
       //console.log("già selezionato")
 		} else {
-			$("#by_name").toggleClass("underline");
-			$("#desc_order").toggleClass("underline");
+			$("#by_name").toggleClass("active_order");
+			$("#desc_order").toggleClass("active_order");
 			$("#category_network_container").find(".circle").removeClass("selected_circle");
 			sidebar("by_name");
 			$("#by_name").css("cursor","default");
@@ -232,44 +232,56 @@ function sidebar(order) {
 	function highlight() {
 
 		// from Sidebar to Graph
-		$(".list_item").on("click", ".item" , function(){
-			element = $(this).find(".id").attr("id");
+		$(".list_item").on("click", function() {
 
-			// reset Sidebar - Dataviz
-			$("#right_sidebar_list .id").removeClass("selected_list_item");
-			$("#category_network_container").find(".circle").removeClass("selected_circle");
+			let element = $(this).find(".id").attr("id");
 
-			// highlight Graph
-			node_selected = $("#category_network_container").find("." + element).children(".circle")
-			node_selected.toggleClass("selected_circle");
-
-			// highlight Sidebar
-			selected = $(this).find(".id");
-			selected.toggleClass("selected_list_item");
+			if ($(this).hasClass('list_item_active')) {
+				// reset
+				resetHighlighted();
+			} else {
+				// reset
+				resetHighlighted();
+				// highlight item
+				$(this).addClass('list_item_active');
+				// turn on circle
+				let node_selected = $("#category_network_container").find("." + element).children(".circle")
+				node_selected.toggleClass("selected_circle");
+			}
 		});
 
 		// from Graph to Sidebar
-		$(".node").on("click", function(){
-				e = $(this).attr("class");
-				element = e.split(" ",1)
+		$(".node").on("click", function() {
+				let e = $(this).attr("class");
+				let element = e.split(" ",1)
 
+				$('.list_item').removeClass('list_item_active');
 				// reset Sidebar - Dataviz
 				$("#right_sidebar_list .id").removeClass("selected_list_item");
 				$("#category_network_container").find(".circle").removeClass("selected_circle");
 
 				// highlight Graph
-				node_selected = $(this).children(".circle")
+				let node_selected = $(this).children(".circle");
 				node_selected.toggleClass("selected_circle");
 
 				// highlight Sidebar
-				selected = $("#right_sidebar_list").find("#" + element)
-				selected.toggleClass("selected_list_item");
+				let selected = $("#right_sidebar_list").find("#" + element);
+				// selected.toggleClass("selected_list_item");
+				selected.closest('.list_item').addClass("list_item_active");
+
 				document.getElementById(element).scrollIntoView({
-				    //behavior: "smooth",
-				    block: "start"
+				    // behavior: "smooth",
+				    block: "center"
 				});
 				document.getElementById('topbar').scrollIntoView();
 		})
+	}
+
+	function resetHighlighted() {
+		// reset item highlight
+		$('.list_item').removeClass('list_item_active');
+		// and circle
+		$("#category_network_container").find(".circle").removeClass("selected_circle");
 	}
 
 	$.get( template_source , function(tpl) {
