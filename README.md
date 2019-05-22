@@ -62,6 +62,21 @@ Open the SSH tunnel to the WMF databases:
 autossh -f -N wmflabs
 ```
 
+Create a systemd service unit to auto-launch autossh (optional):
+
+```
+[Unit]
+Description=AutoSSH for stats.wikimedia.swiss database.
+ 
+[Service]
+User=<user>
+Group=<user>
+ExecStart=/usr/bin/autossh -N wmflabs
+ 
+[Install]
+WantedBy=multi-user.target
+```
+
 Run the data gathering periodically (e.g., every 15 minutes).
 ```
 cd etl
