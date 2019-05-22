@@ -18,81 +18,85 @@
 <body class="overflow_hidden">
 	<div id="mobile-sidebar" class="ui left sidebar"></div>
 	<div class="pusher">
-	<header id="mobile-header-bar"></header>
-	<aside id="main-sidebar"></aside>
-	<aside id="secondary-sidebar"></aside>
 
-	<header id="topbar" class="top_bar chart-page-margin-left">
-		<h6>INSTITUTION</h6>
-		<h2><a class="glamName" href=".."></a></h2>
-		<span class="breadcrumb-separator"> > </span>
-		<h6>CATEGRY IN COMMONS</h6>
-		<h2><a id="cat_url" href="" title="Mediawiki category" target="_blank"></a></h2>
-		<span class="breadcrumb-separator"> > </span>
-		<h6>CHART</h6>
-		<div class="select-chart">
-			<select id="switch_page">
-				<option selected value="user-contributions">User contributions</option>
-				<option value="category-network">Category network</option>
-				<option value="usage">Usage</option>
-				<option value="page-views">Page views</option>
-			</select>
-		</div>
-	</header>
+		<header id="mobile-header-bar"></header>
 
-	<main id="visualizations" class="chart-page-margin-left">
-		<div class="row w-100 m-0">
-			<div class="col-12 col-lg-9">
-				<div class="how_to_read">
-					<span onclick='$(".how_to_read").toggleClass("show");' style="float:right; cursor:pointer">X</span>
-					<h5>Description</h5>
-					This bar chart shows the number of uploads during time.<br>
-					Here you can study if the contribution pattern is well distributed or if it's composed by spikes.
-					<br><br>
-					<h5>How to read it</h5>
-					On the orizontal axis we have time, with one month precision. On the vertical axis the total uploaded files in
-					the category during a month.
-					<br><br>
-					<h5>How to use it</h5>
-					On the right menu you can order users by name or by number of contributions. If you click into a user name the
-					correspondant graph of contributions will show up.
-				</div>
-				<div id="main_contributions_container"></div>
-			</div>
-			<div id="right-column" class="col-12 col-lg-3">
-				<div id="right_sidebar_box">
-					<div id="groupby_options">
-						Select view:
-						<select id="groupby-select">
-							<option selected value="month">Month</option>
-							<option value="quarter">Quarter</option>
-							<option value="year">Year</option>
-						</select>
-					</div>
-					<div id="sorting_options">
-						<span style="font-size:0.8em;" id="by_num" class="underline">
-							by total
-						</span>
-						/
-						<span style="font-size:0.8em; cursor:pointer;" id="by_name">
-							by name
-						</span>
-					</div>
-					<div id="right_sidebar_list"></div>
+		<header id="topbar" class="top_bar">
+			<a id="white-logo" href="/">
+				<img src="/assets/img/glam-logo-white.svg" alt="GLAM stat tool">
+			</a>
+			<div id="breadcrumbs">
+				<h6>INSTITUTION</h6>
+				<h2><a class="glamName" href=".."></a></h2>
+				<span class="breadcrumb-separator"> > </span>
+				<h6>CATEGRY IN COMMONS</h6>
+				<h2><a id="cat_url" href="" title="Mediawiki category" target="_blank"></a></h2>
+				<span class="breadcrumb-separator"> > </span>
+				<h6>CHART</h6>
+				<div class="select-chart">
+					<select id="switch_page">
+						<option selected value="user-contributions">User contributions</option>
+						<option value="category-network">Category network</option>
+						<option value="usage">Usage</option>
+						<option value="page-views">Page views</option>
+					</select>
 				</div>
 			</div>
-		</div>
-	</main>
+		</header>
 
-	<footer id="chart-page-footer" class="chart-page-margin-left">
-		<div class="help">
-			<h6 id="how_to_read_button"><img src="/assets/img/question-icon.svg" alt="help">HELP</h6>
-		</div>
-		<div class="download">
-			<h6 id="download_dataset"><img src="/assets/img/download-icon.svg" alt="download"></h6>
-		</div>
-	</footer>
-</div>
+		<main id="visualizations">
+			<div class="row w-100 m-0">
+				<div class="col-12 col-lg-8">
+					<div class="how_to_read">
+						<span onclick='$(".how_to_read").toggleClass("show");' style="float:right; cursor:pointer">X</span>
+						<h5>Description</h5>
+						This bar chart shows the number of uploads during time.<br>
+						Here you can study if the contribution pattern is well distributed or if it's composed by spikes.
+						<br><br>
+						<h5>How to read it</h5>
+						On the orizontal axis we have time, with one month precision. On the vertical axis the total uploaded files in
+						the category during a month.
+						<br><br>
+						<h5>How to use it</h5>
+						On the right menu you can order users by name or by number of contributions. If you click into a user name the
+						correspondant graph of contributions will show up.
+					</div>
+					<div id="main_contributions_container"></div>
+				</div>
+				<div id="right-column" class="col-12 col-lg-4">
+					<div id="right_sidebar_box">
+						<div id="groupby_options">
+							Select view:
+							<select id="groupby-select">
+								<option selected value="month">Month</option>
+								<option value="quarter">Quarter</option>
+								<option value="year">Year</option>
+							</select>
+						</div>
+						<div id="sorting_options">
+							<span style="font-size:0.8em;" id="by_num" class="underline">
+								by total
+							</span>
+							/
+							<span style="font-size:0.8em; cursor:pointer;" id="by_name">
+								by name
+							</span>
+						</div>
+						<div id="right_sidebar_list"></div>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<footer id="chart-page-footer">
+			<div class="help">
+				<h6 id="how_to_read_button"><img src="/assets/img/question-icon.svg" alt="help">HELP</h6>
+			</div>
+			<div class="download">
+				<h6 id="download_dataset"><img src="/assets/img/download-icon.svg" alt="download"></h6>
+			</div>
+		</footer>
+	</div>
 
 	<script type="text/javascript" src="/assets/bower_components/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="/assets/bower_components/d3/d3.min.js"></script>

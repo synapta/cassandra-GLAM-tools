@@ -230,6 +230,7 @@ h2 {
   border-width: 2px 0;
   border-style: solid;
   border-color: #fff;
+  transition: opacity .5s;
 }
 
 #main-sidebar > .institutions-menu > h6 {
@@ -238,7 +239,6 @@ h2 {
   font-weight: 600;
   color: var(--main);
   cursor: pointer;
-  transition: opacity .5s;
 }
 
 #main-sidebar > #sidebar-logo img {
@@ -526,10 +526,11 @@ footer {
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  padding: 3rem 1rem;
+  -webkit-backface-visibility: hidden;
+  padding: 4rem 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-around;
 }
 
 .chart-preview-front {

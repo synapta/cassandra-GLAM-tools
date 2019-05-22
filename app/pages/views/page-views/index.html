@@ -17,31 +17,35 @@
 <body class="overflow_hidden">
 	<div id="mobile-sidebar" class="ui left sidebar"></div>
 	<div class="pusher">
-		<header id="mobile-header-bar"></header>
-		<aside id="main-sidebar"></aside>
-		<aside id="secondary-sidebar"></aside>
 
-		<header id="topbar" class="top_bar chart-page-margin-left">
-			<h6>INSTITUTION</h6>
-			<h2><a class="glamName" href=".."></a></h2>
-			<span class="breadcrumb-separator"> > </span>
-			<h6>CATEGRY IN COMMONS</h6>
-			<h2><a id="cat_url" href="" title="Mediawiki category" target="_blank"></a></h2>
-			<span class="breadcrumb-separator"> > </span>
-			<h6>CHART</h6>
-			<div class="select-chart">
-				<select id="switch_page">
-					<option selected value="page-views">Views</option>
-					<option value="category-network">Category network</option>
-					<option value="user-contributions">User contributions</option>
-					<option value="usage">Usage</option>
-				</select>
+		<header id="mobile-header-bar"></header>
+
+		<header id="topbar" class="top_bar">
+			<a id="white-logo" href="/">
+				<img src="/assets/img/glam-logo-white.svg" alt="GLAM stat tool">
+			</a>
+			<div id="breadcrumbs">
+				<h6>INSTITUTION</h6>
+				<h2><a class="glamName" href=".."></a></h2>
+				<span class="breadcrumb-separator"> > </span>
+				<h6>CATEGRY IN COMMONS</h6>
+				<h2><a id="cat_url" href="" title="Mediawiki category" target="_blank"></a></h2>
+				<span class="breadcrumb-separator"> > </span>
+				<h6>CHART</h6>
+				<div class="select-chart">
+					<select id="switch_page">
+						<option selected value="page-views">Views</option>
+						<option value="category-network">Category network</option>
+						<option value="user-contributions">User contributions</option>
+						<option value="usage">Usage</option>
+					</select>
+				</div>
 			</div>
 		</header>
 
-		<main id="visualizations" class="chart-page-margin-left">
+		<main id="visualizations">
 			<div class="row w100 m-0">
-				<div class="col-12 col-lg-9">
+				<div class="col-12 col-lg-8">
 					<div class="how_to_read">
 						<span onclick='$(".how_to_read").toggleClass("show");' style="float:right; cursor:pointer">X</span>
 						<h5>Description</h5>
@@ -58,7 +62,7 @@
 					</div>
 					<div id="main_views_container"></div>
 				</div>
-				<div id="right-column" class="col-12 col-lg-3">
+				<div id="right-column" class="col-12 col-lg-4">
 					<div id="right_sidebar_box">
 						<div id="sorting_options">
 							<span style="font-size:0.8em;" id="by_num" class="underline">
@@ -78,7 +82,7 @@
 				</div>
 			</div>
 
-			<footer id="chart-page-footer" class="chart-page-margin-left">
+			<footer id="chart-page-footer">
 				<div class="help">
 					<h6 id="how_to_read_button"><img src="/assets/img/question-icon.svg" alt="help">HELP</h6>
 				</div>
