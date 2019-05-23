@@ -1,7 +1,7 @@
 var horizBarChartDraw = function(div, query, stats_data) {
   // get data
   d3.json(query, function(error, data) {
-    console.log(query);
+    // console.log(query);
     // manage error
     if (error) throw error;
     // sort
@@ -51,19 +51,19 @@ function drawHorizBars(data, div, totalPages) {
   var x = d3.scaleLinear().range([0, width]);
   var y = d3.scaleBand().range([height, 0]).padding(0.3);
 
-  var xAxis = d3.axisBottom()
-                .scale(x)
-                .tickFormat(d3.format(".2s"));
-
-  var yAxis = d3.axisLeft()
-                .scale(y)
-                .ticks(10);
-
   x.domain([Math.max(0, d3.min(data, function(d) {
     return d.usage - (d3.max(data, function(d) {
       return d.usage; }) * 0.05); })), d3.max(data, function(d) { return d.usage; })]);
 
   y.domain(data.map(function(d) { return d.wiki; }));
+
+  var xAxis = d3.axisBottom().scale(x).tickValues(x.ticks(8).concat(x.domain()));
+
+  var yAxis = d3.axisLeft()
+                .scale(y)
+                .ticks(10);
+
+  console.log(x.ticks(3));
 
 
   var gX = svg.append("g")
