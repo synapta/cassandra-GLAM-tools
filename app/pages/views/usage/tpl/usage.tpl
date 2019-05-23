@@ -1,5 +1,5 @@
 {{#each files}}
-	<div class="list_item">
+	<div class="list_item" id="{{gil_to_id}}">
 		<div class="row">
 			<div class="col-9">
 				<span class="id item" id="{{gil_to}}">
@@ -30,8 +30,14 @@
 				</div>
 			</div>
 		</div>
+		<div class="list_item_panel">
+			<div class="row">
+				<div class="col-12 mt-2 wiki_column">
+				</div>
+			</div>
+		</div>
 
-		<div class="clear"></div>
+		<!-- <div class="clear"></div> -->
 		</div>
 	</div>
 {{/each}}

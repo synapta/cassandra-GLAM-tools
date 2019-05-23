@@ -334,14 +334,29 @@
 }
 
 /* USAGE CHART */
-#main_usage_container {
-  height: 30vh;
+#usage_stat > div {
+  padding: 1rem 0;
+  margin-top: 1rem;
 }
 
-#file_usage_container {
+#usage_stat > div:not(:last-child) {
+  border-right: 1px solid rgba(100, 100, 100, .3);
+}
+
+#usage_stat .usage-stat {
+  display: flex;
+  flex-direction: column;
+  text-transform: uppercase;
+}
+
+#usage_stat .usage-stat p {
+  font-size: .9rem;
+}
+
+#usage_horiz_bars {
   overflow-y: auto;
   overflow-x: hidden;
-  height: 50vh;
+  height: 62vh;
 }
 
 /* PAGE VIEWS CHART */

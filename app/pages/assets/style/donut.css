@@ -1,7 +1,7 @@
 /* Add shadow effect to chart. If you don't like it, get rid of it. */
 svg {
-    -webkit-filter: drop-shadow( 0px 3px 3px rgba(0,0,0,.3) );
-    filter: drop-shadow( 0px 3px 3px rgba(0,0,0,.25) );
+    /* -webkit-filter: drop-shadow( 0px 3px 3px rgba(0,0,0,.3) ); */
+    /* filter: drop-shadow( 0px 3px 3px rgba(0,0,0,.25) ); */
 }
 
 /* Make the percentage on the text labels bold*/
@@ -14,4 +14,19 @@ svg {
 .labelName {
     font-size: 0.9em;
     font-style: italic;
+}
+
+#right_sidebar_list {
+  height: 74vh !important;
+}
+
+.list_item .list_item_panel {
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.list_item_active .list_item_panel {
+  padding: 1.5rem 0 0;
+  max-height: 500px;
 }

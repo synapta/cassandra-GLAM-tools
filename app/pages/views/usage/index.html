@@ -63,12 +63,20 @@
 						On the right menu you can order files by usage or by number of distinct projects or by name.
 						If you click into a file name the correspondant detail will scroll up.
 					</div>
-					<div id="main_usage_container" class="row">
-						<div id="usage_donut" class="col-6" style="text-align:center"></div>
-						<div id="usage_stat" class="col-6"></div>
+					<div id="usage_stat" class="row">
+						<div class="col-12 col-lg-4 text-center">
+							<div id="distinct-media" class="usage-stat"></div>
+						</div>
+						<div class="col-12 col-lg-4 text-center">
+							<div id="total-projects" class="usage-stat"></div>
+						</div>
+						<div class="col-12 col-lg-4 text-center">
+							<div id="total-pages" class="usage-stat"></div>
+						</div>
 					</div>
 					<hr>
-					<div id="file_usage_container"></div>
+					<!-- <div id="file_usage_container"></div> -->
+					<div id="usage_horiz_bars"></div>
 				</div>
 				<div id="right-column" class="col-12 col-lg-4">
 					<div id="right_sidebar_box">
@@ -106,7 +114,7 @@
 	<script type="text/javascript" src="/js/loader.js"></script>
 	<script type="text/javascript" src="/assets/scripts/utils.js"></script>
 	<script type="text/javascript" src="/assets/scripts/custom-selector.js"></script>
-	<script type="text/javascript" src="/assets/scripts/donut.js"></script>
+	<script type="text/javascript" src="/assets/scripts/horiz-bar-chart.js"></script>
 	<script type="text/javascript" src="/views/usage/functions.js"></script>
 </body>
 
