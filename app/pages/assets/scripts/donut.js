@@ -64,7 +64,7 @@ function donutChart() {
             var svg = selection.append('svg')
                 .attr('width', width + margin.left + margin.right)
                 .attr('height', height + margin.top + margin.bottom)
-              .append('g')
+                .append('g')
                 .attr('transform', 'translate(' + width / 3 + ',' + height / 2 + ')');
             // ===========================================================================================
 
@@ -80,7 +80,7 @@ function donutChart() {
             var path = svg.select('.slices')
                 .datum(data).selectAll('path')
                 .data(pie)
-              .enter().append('path')
+                .enter().append('path')
                 .attr('fill', function(d) { return colour(d.data[category]); })
                 .attr('d', arc);
             // ===========================================================================================
@@ -126,7 +126,8 @@ function donutChart() {
               .attr('x', legendRectSize + legendSpacing)
               .attr('y', legendRectSize - legendSpacing/2)
               .style('font-size', '0.7rem')
-              .text(function(d,i) { return data[i].tipo.replace(/wiki$/,"").toUpperCase() + " - " + formatter(data[i].n); });
+              .text(function(d,i) { return data[i].wiki.replace(/wiki$/,"").toUpperCase() + " - " + formatter(data[i].usage); });
+
             // ===========================================================================================
             // Functions
 

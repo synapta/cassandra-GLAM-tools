@@ -1,3 +1,5 @@
+var ACTIVE_ITEM_ID;
+
 var w = window;
 var width = 900, ///w.outerWidth,
 height = Math.round(width - (width / 3));
@@ -230,7 +232,10 @@ function sidebar(order) {
 	var target = "#right_sidebar_list";
 
 	function highlight() {
-
+		if (ACTIVE_ITEM_ID !== undefined) {
+			$('#' + ACTIVE_ITEM_ID).closest('.list_item').addClass('list_item_active');
+			$("#category_network_container").find("." + ACTIVE_ITEM_ID).children(".circle").addClass("selected_circle");
+		}
 		// from Sidebar to Graph
 		$(".list_item").on("click", function() {
 
@@ -239,6 +244,7 @@ function sidebar(order) {
 			if ($(this).hasClass('list_item_active')) {
 				// reset
 				resetHighlighted();
+				ACTIVE_ITEM_ID = undefined;
 			} else {
 				// reset
 				resetHighlighted();
@@ -247,6 +253,7 @@ function sidebar(order) {
 				// turn on circle
 				let node_selected = $("#category_network_container").find("." + element).children(".circle")
 				node_selected.toggleClass("selected_circle");
+				ACTIVE_ITEM_ID = element;
 			}
 		});
 
@@ -266,6 +273,7 @@ function sidebar(order) {
 
 				// highlight Sidebar
 				let selected = $("#right_sidebar_list").find("#" + element);
+				ACTIVE_ITEM_ID = element;
 				// selected.toggleClass("selected_list_item");
 				selected.closest('.list_item').addClass("list_item_active");
 

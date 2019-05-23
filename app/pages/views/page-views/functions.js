@@ -1,3 +1,5 @@
+var ACTIVE_ITEM_ID;
+
 function getUrlAll(){
 	var db=window.location.href.toString().split('/')[3];
 	return "/api/"+db+"/views";
@@ -33,6 +35,7 @@ function sidebar(type){
 
 			for (let i = 0; i < data.length; i++) {
 				  data[i].img_name_text = data[i].img_name.replace(/_/g," ");
+				  data[i].img_name_id = data[i].img_name.replace(".jpg", "");
 					data[i].tot = nFormatter(+data[i].tot);
 					data[i].av = nFormatter(+data[i].av);
 					data[i].median = nFormatter(+data[i].median);
@@ -115,23 +118,32 @@ function how_to_read(){
 };
 
 function highlight(){
+	if (ACTIVE_ITEM_ID !== undefined) {
+		console.log(ACTIVE_ITEM_ID);
+		$('#' + ACTIVE_ITEM_ID).closest('.list_item').addClass('list_item_active');
+	}
+
 	$(".list_item").on("click", function() {
 
-		var element = $(this).attr("id");
+		var element = $(this).find('.id.item').attr("id");
+
+
 
 		if ($(this).hasClass('list_item_active')) {
 			$(".list_item").removeClass("list_item_active");
+			ACTIVE_ITEM_ID = undefined;
 		} else {
 			$(".list_item").removeClass("list_item_active");
 			$(this).addClass("list_item_active")
+			ACTIVE_ITEM_ID = element;
 		}
 
 		// highlight Graph
-		document.getElementById(element+"_viz").scrollIntoView({
-				//behavior: "smooth",
-				block: "start"
-		});
-		document.getElementById('topbar').scrollIntoView();
+		// document.getElementById(element+"_viz").scrollIntoView({
+		// 		//behavior: "smooth",
+		// 		block: "start"
+		// });
+		// document.getElementById('topbar').scrollIntoView();
 	});
 }
 

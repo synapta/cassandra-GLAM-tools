@@ -94,7 +94,7 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
   // Format user data
   let usersMap = {};
   userData.forEach(function(user, idx) {
-    usersMap[user.user] = idx;
+    usersMap[user.user.replace(/\s/g, "_")] = idx;
     user.files.forEach(function(el) {
       el.date = parseDate(el.date);
       el.value = +el.count;

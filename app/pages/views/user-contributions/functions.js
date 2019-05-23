@@ -1,8 +1,11 @@
+var ACTIVE_ITEM_ID;
+
 function getUrl() {
 	var db = window.location.href.toString().split('/')[3];
 	var groupby = $('#groupby-select').val();
 	return "/api/"+db+"/file/upload-date?groupby=" + groupby;
 }
+
 function getUrlAll(){
 	var db = window.location.href.toString().split('/')[3];
 	var groupby = $('#groupby-select').val();
@@ -27,6 +30,8 @@ function sidebar(type) {
 										total += +d.count
 								})
 								d.total = total;
+
+								d.user_id = d.user.replace(/\s/g, "_");
 						});
 
 			      if (type === "by_num") {
@@ -79,11 +84,15 @@ function sorting_sidebar() {
 	});
 }
 
-function download(){
+function download() {
 	$('<a href="' + getUrl() + '" download="' + "user_contributions.json" + '">Download dataset</a>').appendTo('#download_dataset');
 }
 
 function highlight() {
+	if (ACTIVE_ITEM_ID !== undefined) {
+		$('#' + ACTIVE_ITEM_ID).closest('.list_item').addClass('list_item_active');
+	}
+
 	$(".list_item").on("click", function() {
 
 		var element = $(this).find('.item').attr("id");
@@ -92,9 +101,11 @@ function highlight() {
 		if ($(this).hasClass('list_item_active')) {
 			hideUserContributionsBars();
 			$(".list_item").removeClass("list_item_active");
+			ACTIVE_ITEM_ID = undefined;
 		} else {
 			showUserContributionsBars(element);
 			$(".list_item").removeClass("list_item_active");
+			ACTIVE_ITEM_ID = element;
 			$(this).addClass("list_item_active")
 		}
 

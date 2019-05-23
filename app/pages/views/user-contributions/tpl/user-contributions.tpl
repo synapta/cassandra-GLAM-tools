@@ -2,7 +2,7 @@
 	<div class="list_item">
 		<div class="row">
 			<div class="col-9 item-col">
-				<span class="id item" id="{{user}}">
+				<span class="id item" id="{{user_id}}">
 					{{user}}
 				</span>
 				<div class="link" style="font-size:0.6em;">

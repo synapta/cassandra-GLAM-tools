@@ -2,7 +2,7 @@
 	<div class="list_item">
 		<div class="row">
 			<div class="col-8">
-				<span class="id item" id="{{img_name}}">
+				<span class="id item" id="{{img_name_id}}">
 					{{img_name_text}}
 				</span>
 				<div class="link" style="font-size:0.6em;">
