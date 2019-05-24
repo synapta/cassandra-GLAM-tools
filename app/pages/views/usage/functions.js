@@ -1,9 +1,25 @@
+const FIRST_CALL_LIMIT = 500;
+
+var TOTAL_IMAGES;
+var IMAGES_RENDERED = 0;
 var ACTIVE_ITEM_ID;
 
 function getUrl(limit) {
 	let l = Number.isInteger(limit) ? "?limit=" + limit : "";
 	var db = window.location.href.toString().split('/')[3];
 	return "/api/" + db + "/usage" + l;
+}
+
+function getUrl(limit, sort) {
+	let l = Number.isInteger(limit) ? "?limit=" + limit : "";
+	let s;
+	if (sort === 'usage' || sort === 'projects' || sort === 'name') {
+		s = '&sort=' + sort;
+	} else {
+		s = "";
+	}
+	var db = window.location.href.toString().split('/')[3];
+	return "/api/" + db + "/usage" + l + s + "&page=0";
 }
 
 function getUrlPaginated(page) {
@@ -25,122 +41,89 @@ function getUrlTop20() {
 	return "/api/" + db + "/usage/top";
 }
 
-function getUrlSidebar() {
-	var db = window.location.href.toString().split('/')[3];
-	return "/api/" + db + "/usage/sidebar";
-}
-
-// function dataviz() {
-// 	  d3.json(getUrl(), function(error, data) {
-// 				if (error) 	window.location.replace('/500');
-//
-// 				/*data.users = data.users.sort(function(a,b) {
-// 					return b.total - a.total;
-// 				});*/
-//
-// 				console.log('detasdaails data', data);
-//
-// 				data.forEach(function(file) {
-// 					  $("#file_usage_container").append("<h2 style='margin-left:1.5em' id='" + file.image + "_viz'>" + file.image.replace(/_/g, " ") + "</h2>")
-// 						let currentWiki = null;
-// 						let entry = "";
-// 						entry += "<table>";
-// 						for (let i = 0; i < file.pages.length; i++) {
-// 							  if (currentWiki !== file.pages[i].wiki && currentWiki !== null) {
-// 									  entry += "</td></tr>";
-// 								}
-// 							  if (currentWiki !== file.pages[i].wiki) {
-// 									  currentWiki = file.pages[i].wiki;
-// 										entry += "<tr>";
-// 										entry += "<td>";
-// 										entry += "<span style='margin-left:3em;font-size:0.7em;text-decoration:underline'>" + currentWiki + "</span>";
-// 										entry += "</td><td style='padding-left:2em'>";
-// 								}
-// 								//XXX doesn't work with wikidata or wikisource
-// 							  entry += "<a href='https://" + currentWiki.replace("wiki","") + ".wikipedia.org/w/index.php?title=" +
-// 								  file.pages[i].title +"' style='font-size:0.9em;margin-right:2em'>" + file.pages[i].title.replace(/_/g, " ") + "</a>";
-// 						}
-// 						entry += "</table><br><br>";
-// 						$("#file_usage_container").append(entry);
-// 				});
-// 		});
-// }
-
 function sidebar(type) {
-	var target = "#right_sidebar_list";
-	// fill
-	$.get("/views/usage/tpl/usage.tpl", function(tpl) {
-		$.getJSON(getUrlSidebar(), function(data) {
-			// console.log('sidebar data', data);
+	$.getJSON(getUrlAll(), function(stats) {
+		// save total
+		TOTAL_IMAGES = stats.totalImagesUsed;
+		// render first part
+		$.get("/views/usage/tpl/usage.tpl", function(tpl) {
+			$.getJSON(getUrl(FIRST_CALL_LIMIT, type), function(data) {
 
-			for (let i = 0; i < data.length; i++) {
-				  data[i].gil_to_name = data[i].gil_to.replace(/_/g," ");
-				  data[i].gil_to_id = cleanImageName(data[i].gil_to);
-			}
+				// console.log(getUrl(FIRST_CALL_LIMIT, type));
+				// console.log('data length', data.length);
+				// console.log('data', data);
 
-      if (type === "by_num") {
-					data = data.sort(function(a,b){
-						return b.n - a.n;
-					});
-			}
+				renderImageListItems(tpl, data);
 
-			if (type === "by_proj") {
-					data = data.sort(function(a,b){
-						return b.wiki - a.wiki;
-					});
-			}
+				if (FIRST_CALL_LIMIT < TOTAL_IMAGES) {
+					setLoadOnScroll();
+				}
 
-			if (type === "by_name") {
-					data = data.sort(function(a,b){
-						if(a.gil_to < b.gil_to) return -1;
-				    if(a.gil_to > b.gil_to) return 1;
-				    return 0;
-					});
-			}
+				// Manage click
+				highlightOnClick();
 
-			var obj = {};
-			obj.files = data;
-			var template = Handlebars.compile(tpl);
-			$(target).html(template(obj));
-
-			let limit = (data.length < 1000) ? data.length : 1000;
-
-			d3.json(getUrl(limit), function(error, detailed_data) {
-				if (error) 	window.location.replace('/500');
-
-				// console.log(detailed_data);
-
-				detailed_data.forEach(function(file, idx) {
-					let target = $('#' + cleanImageName(file.image) + ' .list_item_panel .wiki_column');
-					let currentWiki = null;
-					let entry = "";
-					entry += "<table>";
-					for (let i = 0; i < file.pages.length; i++) {
-							if (currentWiki !== file.pages[i].wiki && currentWiki !== null) {
-									entry += "</td></tr>";
-							}
-							if (currentWiki !== file.pages[i].wiki) {
-									currentWiki = file.pages[i].wiki;
-									entry += "<tr>";
-									entry += "<td>";
-									entry += "<span style='margin-left:3em;font-size:0.7em;text-decoration:underline'>" + currentWiki + "</span>";
-									entry += "</td><td style='padding-left:2em'>";
-							}
-							//XXX doesn't work with wikidata or wikisource
-							entry += "<a href='https://" + currentWiki.replace("wiki","") + ".wikipedia.org/w/index.php?title=" +
-								file.pages[i].title +"' style='font-size:0.9em;margin-right:2em'>" + file.pages[i].title.replace(/_/g, " ") + "</a>";
-					}
-					entry += "</table><br><br>";
-					target.append(entry);
-				});
 			});
-
-			highlight();
 		});
 	});
 }
 
-function highlight() {
+function getPageFromElementIdx(element_idx) {
+	// calc in which page is an element with a given index
+	return Math.floor((element_idx - 1) / 10);
+}
+
+function renderImageListItems(tpl, data) {
+	data.forEach(function(file) {
+		// Format name and id
+		file.image_name = file.image.replace(/_/g," ");
+		file.image_id = cleanImageName(file.image);
+		// Format wiki pages list
+		file.wikis= [];
+		let currentWiki = null;
+		// loop through all pages
+		file.pages.forEach(function(page) {
+			// check if not already added
+			if (currentWiki !== page.wiki) {
+				// format object
+				let wiki_obj = {};
+				currentWiki = page.wiki;
+				wiki_obj.wiki_name = currentWiki;
+				wiki_obj.wiki_link =  `https://${currentWiki.replace("wiki","")}.wikipedia.org/w/index.php?title=${page.title}`;
+				wiki_obj.wiki_page = page.title.replace(/_/g, " ");
+				// push
+				file.wikis.push(wiki_obj);
+			}
+		});
+	});
+	// increment number of items rendered
+	IMAGES_RENDERED += data.length;
+	// render to DOM
+	var obj = {};
+	obj.files = data;
+	var template = Handlebars.compile(tpl);
+	$('#right_sidebar_list').html(template(obj));
+}
+
+// function setLoadOnScroll() {
+// 	console.log('set scroll handler and manage pagination');
+// 	if (scrolled to bottom && not already asked to server) {
+// 		if (IMAGES_RENDERED < TOTAL_IMAGES) {
+// 			// cal new page number
+// 			let page = getPageFromElementIdx(IMAGES_RENDERED + 1);
+// 			$.get("/views/usage/tpl/usage.tpl", function(tpl) {
+// 				$.getJSON(getUrlPaginated(page), function(data) {
+// 					// append() instead of html() !!!
+// 					renderImageListItems(tpl, data, append)
+// 				});
+// 			});
+// 		} else {
+// 			// show "no more elements"
+// 		}
+// 	}
+// }
+
+
+function highlightOnClick() {
 
 	if (ACTIVE_ITEM_ID !== undefined) {
 		$('#' + ACTIVE_ITEM_ID).addClass('list_item_active');
@@ -162,7 +145,7 @@ function highlight() {
 	});
 }
 
-function sorting_sidebar(){
+function sorting_sidebar() {
 	$("#by_num").on("click", function(){
 		if ($("#by_num").hasClass("active_order") ) {
 			//console.log("già selezionato")
@@ -170,7 +153,7 @@ function sorting_sidebar(){
 			$("#by_name").removeClass("active_order");
 			$("#by_num").addClass("active_order");
 			$("#by_proj").removeClass("active_order");
-			sidebar("by_num");
+			sidebar("usage");
 			$("#by_num").css("cursor","default");
 			$("#by_name").css("cursor","pointer");
 			$("#by_proj").css("cursor","pointer");
@@ -184,7 +167,7 @@ function sorting_sidebar(){
 			$("#by_name").removeClass("active_order");
 			$("#by_num").removeClass("active_order");
 			$("#by_proj").addClass("active_order");
-			sidebar("by_proj");
+			sidebar("projects");
 			$("#by_name").css("cursor","pointer");
 			$("#by_num").css("cursor","pointer");
 			$("#by_proj").css("cursor","default");
@@ -198,7 +181,7 @@ function sorting_sidebar(){
 			$("#by_name").addClass("active_order");
 			$("#by_num").removeClass("active_order");
 			$("#by_proj").removeClass("active_order");
-			sidebar("by_name");
+			sidebar("name");
 			$("#by_name").css("cursor","default");
 			$("#by_num").css("cursor","pointer");
 			$("#by_proj").css("cursor","pointer");
@@ -207,7 +190,7 @@ function sorting_sidebar(){
 }
 
 function cleanImageName(name) {
-	// clean special character in order to use image name as element
+	// clean special characters in order to use image name as element ID
 	return name.replace(/jpg/i, "").replace(/png/i, "").replace(/[{()}]/g, "").replace(/\./g,"").replace(/\,/g,"").replace(/&/g,"").replace(/'/g,"").replace(/"/g,"");
 }
 
@@ -221,7 +204,6 @@ function how_to_read() {
 
 	$("#how_to_read_button").click(function(){
 		box.toggleClass("show");
-		// console.log("click")
 	});
 };
 
@@ -239,17 +221,13 @@ function drawUsageDataViz() {
 }
 
 function drawStats(stats_data) {
-	// $("#usage_stat").append("<br><br>");
 	$("#usage_stat #distinct-media").append("<p>Distinct media used</p> <div><b>" + formatter(stats_data.totalImagesUsed) + "</b> / <span id='totalMediaNum'></span></div>");
-	// $("#usage_stat").append("<br><br>");
 	$("#usage_stat #total-projects").append("<p>Total projects involved</p> <b>" + formatter(stats_data.totalProjects) + "</b>");
-	// $("#usage_stat").append("<br><br>");
 	$("#usage_stat #total-pages").append("<p>Total pages enhanced</p> <b>" + formatter(stats_data.totalPages) + "</b>");
 }
 
 $(function() {
 	setCategory();
-	// dataviz();
 	how_to_read();
 	sidebar("by_num");
 	download();
