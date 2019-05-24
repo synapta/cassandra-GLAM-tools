@@ -448,18 +448,18 @@ var usage = function (req, res, db) {
 
     if (req.query.sort !== undefined) {
         if (req.query.sort === 'usage') {
-            query += " order by usage desc";
+            query += " order by usage desc, gil_to";
         } else if (req.query.sort === 'projects') {
-            query += " order by projects desc";
+            query += " order by projects desc, gil_to";
         } else if (req.query.sort === 'name') {
             query += " order by gil_to";
         } else {
             // Wrong value
-            query += " order by usage desc";
+            query += " order by usage desc, gil_to";
         }
     } else {
         // Default order
-        query += " order by usage desc";
+        query += " order by usage desc, gil_to";
     }
 
     let page = 0;
