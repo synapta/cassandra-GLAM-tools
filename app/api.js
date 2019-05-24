@@ -160,7 +160,7 @@ var updateGlam = function (req, res, config) {
     res.sendStatus(200);
 };
 
-var getGlam = function (req, res, glam) {
+var getGlam = function (req, res, next, glam) {
     glam.connection.query('SELECT COUNT(*) as value from images', (err, dbres) => {
         if (!err) {
             let result = {};
@@ -170,13 +170,13 @@ var getGlam = function (req, res, glam) {
             result.image = glam.image;
             res.json(result);
         } else {
-            throw new Error(err);
+            next(new Error(err));
         }
     });
 };
 
 // ANNOTATIONS
-var getAnnotations = function (req, res, glam) {
+var getAnnotations = function (req, res, next, glam) {
     glam.connection.query('SELECT * FROM annotations', (err, dbres) => {
         if (!err) {
             let result = [];
@@ -186,12 +186,12 @@ var getAnnotations = function (req, res, glam) {
             }));
             res.json(result);
         } else {
-            throw new Error(err);
+            next(new Error(err));
         }
     });
 };
 
-var getAnnotation = function (req, res, glam) {
+var getAnnotation = function (req, res, next, glam) {
     glam.connection.query('SELECT * FROM annotations WHERE annotation_date = $1', [req.params.date], (err, dbres) => {
         if (!err) {
             if (dbres.rows.length == 1) {
@@ -203,12 +203,12 @@ var getAnnotation = function (req, res, glam) {
                 res.sendStatus(404);
             }
         } else {
-            throw new Error(err);
+            next(new Error(err));
         }
     });
 };
 
-var modifyAnnotation = function (req, res, glam) {
+var modifyAnnotation = function (req, res, next, glam) {
     let annotation = req.body['annotation'];
     if (annotation === undefined || annotation === '') {
         res.sendStatus(400);
@@ -219,12 +219,12 @@ var modifyAnnotation = function (req, res, glam) {
         if (!err) {
             res.sendStatus(200);
         } else {
-            throw new Error(err);
+            next(new Error(err));
         }
     });
 };
 
-var createAnnotation = function (req, res, glam) {
+var createAnnotation = function (req, res, next, glam) {
     let annotation = req.body['annotation'];
     if (annotation === undefined || annotation === '') {
         res.sendStatus(400);
@@ -235,17 +235,17 @@ var createAnnotation = function (req, res, glam) {
         if (!err) {
             res.sendStatus(200);
         } else {
-            throw new Error(err);
+            next(new Error(err));
         }
     });
 };
 
-var deleteAnnotation = function (req, res, glam) {
+var deleteAnnotation = function (req, res, next, glam) {
     glam.connection.query('DELETE FROM annotations WHERE annotation_date = $1', [req.params.date], (err, dbres) => {
         if (!err) {
             res.sendStatus(200);
         } else {
-            throw new Error(err);
+            next(new Error(err));
         }
     });
 };
@@ -261,7 +261,7 @@ function arrayMin(arr) {
     return min;
 };
 
-var categoryGraph = function (req, res, db) {
+var categoryGraph = function (req, res, next, db) {
     db.query('SELECT page_title, cat_files, cl_to[0:10], cat_level[0:10] from categories', (err, dbres) => {
         if (!err) {
             var result = Object();
@@ -288,7 +288,7 @@ var categoryGraph = function (req, res, db) {
             }
             res.json(result);
         } else {
-            throw new Error(err);
+            next(new Error(err));
         }
     })
 }
@@ -310,7 +310,7 @@ function parseGroupBy(groupby) {
     }
 }
 
-var uploadDate = function (req, res, db) {
+var uploadDate = function (req, res, next, db) {
     let groupby = parseGroupBy(req.query.groupby);
     let query = `select sum(img_count) as img_sum, img_user_text, array_agg(img_count) as img_count, array_agg(img_time) as img_time
         from (select count(*) as img_count, img_user_text, date_trunc('` + groupby + `', img_timestamp) as img_time
@@ -384,12 +384,12 @@ var uploadDate = function (req, res, db) {
             });
             res.json(result);
         } else {
-            throw new Error(err);
+            next(new Error(err));
         }
     })
 }
 
-var uploadDateAll = function (req, res, db) {
+var uploadDateAll = function (req, res, next, db) {
     let groupby = parseGroupBy(req.query.groupby);
     let query = `with min_max as (
                     select min(img_timestamp) as min_date, max(img_timestamp) as max_date
@@ -433,13 +433,13 @@ var uploadDateAll = function (req, res, db) {
             });
             res.json(result);
         } else {
-            throw new Error(err);
+            next(new Error(err));
         }
     })
 }
 
 // USAGE
-var usage = function (req, res, db) {
+var usage = function (req, res, next, db) {
     let query = `select gil_to, array_agg(gil_wiki) as gil_wiki, array_agg(gil_page_title) as gil_page_title,
                     count(gil_page_title) as usage, count(distinct gil_wiki) as projects
                     from usages
@@ -499,12 +499,12 @@ var usage = function (req, res, db) {
             });
             res.json(result);
         } else {
-            throw new Error(err);
+            next(new Error(err));
         }
     });
 }
 
-var usageStats = function (req, res, db) {
+var usageStats = function (req, res, next, db) {
     let totalUsageQuery = `select count(*) as c, count(distinct gil_to) as d
                             from usages
                             where is_alive = true`;
@@ -523,16 +523,16 @@ var usageStats = function (req, res, db) {
                     result.totalPages = parseInt(totalProjects.rows[0].p);
                     res.json(result);
                 } else {
-                    throw new Error(err);
+                    next(new Error(err));
                 }
             });
         } else {
-            throw new Error(err);
+            next(new Error(err));
         }
     });
 }
 
-var usageTop = function (req, res, db) {
+var usageTop = function (req, res, next, db) {
     let query = `select gil_wiki as wiki, count(*) as usage
                 from usages
                 where is_alive = true
@@ -552,13 +552,13 @@ var usageTop = function (req, res, db) {
             });
             res.json(result);
         } else {
-            throw new Error(err);
+            next(new Error(err));
         }
     });
 }
 
 // TODO this api should be deprecated because it is functionally equivalent to usage api
-var usageSidebar = function (req, res, db) {
+var usageSidebar = function (req, res, next, db) {
     let usage = `select gil_to, count(distinct gil_wiki) as wiki, count(*) as u
                  from usages
                  where is_alive = true
@@ -570,24 +570,24 @@ var usageSidebar = function (req, res, db) {
         if (!err) {
             res.json(dbres.rows);
         } else {
-            throw new Error(err);
+            next(new Error(err));
         }
     });
 }
 
 // VIEWS
 // TODO this api should be deprecated as it seems not used
-var viewsAll = function (req, res, db) {
+var viewsAll = function (req, res, next, db) {
     db.query('select sum(accesses) as sum from visualizations', (err, dbres) => {
         if (!err) {
             res.json({"sum": parseInt(dbres.rows[0].sum)});
         } else {
-            throw new Error(err);
+            next(new Error(err));
         }
     });
 }
 
-var views = function (req, res, db) {
+var views = function (req, res, next, db) {
     let query = `select sum(accesses) as sum, access_date, annotation_value
                  from visualizations
                  LEFT OUTER JOIN annotations ON access_date = annotation_date`;
@@ -625,12 +625,12 @@ var views = function (req, res, db) {
             })
             res.json(result);
         } else {
-            throw new Error(err);
+            next(new Error(err));
         }
     });
 }
 
-var viewsByFile = function (req, res, db) {
+var viewsByFile = function (req, res, next, db) {
     let query = `select img_name, sum(accesses) as sum, access_date
                     from visualizations, images
                     where images.is_alive = true
@@ -667,12 +667,12 @@ var viewsByFile = function (req, res, db) {
             });
             res.json(result);
         } else {
-            throw new Error(err);
+            next(new Error(err));
         }
     });
 }
 
-var viewsSidebar = function (req, res, db) {
+var viewsSidebar = function (req, res, next, db) {
     let query = `select i.img_name, sum(v.accesses) as tot, avg(v.accesses) as av, PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER by v.accesses) as median
                   from images as i, visualizations as v
                   where i.media_id = v.media_id
@@ -740,7 +740,7 @@ var viewsSidebar = function (req, res, db) {
             })
             res.json(result);
         } else {
-            throw new Error(err);
+            next(new Error(err));
         }
     });
 }

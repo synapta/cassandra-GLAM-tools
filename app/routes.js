@@ -78,242 +78,242 @@ module.exports = function (app, apicache) {
         res.sendFile(__dirname + '/pages/views/new-glam.html');
     });
 
-    app.get('/admin/edit-glam/:id', apicache("1 hour"), function (request, response) {
-      let glam = config.glams[request.params.id];
+    app.get('/admin/edit-glam/:id', apicache("1 hour"), function (req, res) {
+      let glam = config.glams[req.params.id];
       if (glam !== undefined) {
-        response.sendFile(__dirname + '/pages/views/edit-glam.html');
+        res.sendFile(__dirname + '/pages/views/edit-glam.html');
       } else {
-        response.sendStatus(400);
+        res.sendStatus(400);
       }
     });
 
     // VIEWS
-    app.get('/:id', apicache("1 hour"), function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.get('/:id', apicache("1 hour"), function (req, res) {
+        let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
-            response.sendFile(__dirname + '/pages/views/index.html');
+            res.sendFile(__dirname + '/pages/views/index.html');
         } else {
-            response.sendStatus(400);
+            res.sendStatus(400);
         }
     });
 
-    app.get('/:id/category-network', apicache("1 hour"), function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.get('/:id/category-network', apicache("1 hour"), function (req, res) {
+        let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
-            response.sendFile(__dirname + '/pages/views/category-network/index.html');
+            res.sendFile(__dirname + '/pages/views/category-network/index.html');
         } else {
-            response.sendStatus(400);
+            res.sendStatus(400);
         }
     });
 
-    app.get('/:id/user-contributions', apicache("1 hour"), function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.get('/:id/user-contributions', apicache("1 hour"), function (req, res) {
+        let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
-            response.sendFile(__dirname + '/pages/views/user-contributions/index.html');
+            res.sendFile(__dirname + '/pages/views/user-contributions/index.html');
         } else {
-            response.sendStatus(400);
+            res.sendStatus(400);
         }
     });
 
-    app.get('/:id/usage', apicache("1 hour"), function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.get('/:id/usage', apicache("1 hour"), function (req, res) {
+        let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
-            response.sendFile(__dirname + '/pages/views/usage/index.html');
+            res.sendFile(__dirname + '/pages/views/usage/index.html');
         } else {
-            response.sendStatus(400);
+            res.sendStatus(400);
         }
     });
 
-    app.get('/:id/page-views', apicache("1 hour"), function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.get('/:id/page-views', apicache("1 hour"), function (req, res) {
+        let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
-            response.sendFile(__dirname + '/pages/views/page-views/index.html');
+            res.sendFile(__dirname + '/pages/views/page-views/index.html');
         } else {
-            response.sendStatus(400);
+            res.sendStatus(400);
         }
     });
 
     // API
-    app.get('/api/glams', apicache("1 hour"), function (request, response) {
-        api.glams(request, response, config.glams);
+    app.get('/api/glams', apicache("1 hour"), function (req, res) {
+        api.glams(req, res, config.glams);
     });
 
     app.get('/api/admin/glams', function (request, response) {
         api.glams(request, response, config.glams, true);
     });
 
-    app.post('/api/admin/glams', function (request, response) {
-        api.createGlam(request, response, config);
+    app.post('/api/admin/glams', function (req, res) {
+        api.createGlam(req, res, config);
     });
 
-    app.get('/api/admin/glams/:id', function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.get('/api/admin/glams/:id', function (req, res) {
+        let glam = config.glams[req.params.id];
         if (glam !== undefined) {
-            api.getAdminGlam(request, response, glam);
+            api.getAdminGlam(req, res, glam);
         } else {
-            response.sendStatus(404);
+            res.sendStatus(404);
         }
     });
 
-    app.put('/api/admin/glams/:id', function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.put('/api/admin/glams/:id', function (req, res) {
+        let glam = config.glams[req.params.id];
         if (glam !== undefined) {
-            api.updateGlam(request, response, config);
+            api.updateGlam(req, res, config);
         } else {
-            response.sendStatus(404);
+            res.sendStatus(404);
         }
     });
 
-    app.get('/api/admin/glams/:id/annotations', function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.get('/api/admin/glams/:id/annotations', function (req, res, next) {
+        let glam = config.glams[req.params.id];
         if (glam !== undefined) {
-            api.getAnnotations(request, response, glam);
+            api.getAnnotations(req, res, next, glam);
         } else {
-            response.sendStatus(404);
+            res.sendStatus(404);
         }
     });
 
-    app.get('/api/admin/glams/:id/annotations/:date', function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.get('/api/admin/glams/:id/annotations/:date', function (req, res, next) {
+        let glam = config.glams[req.params.id];
         if (glam !== undefined) {
-            api.getAnnotation(request, response, glam);
+            api.getAnnotation(req, res, next, glam);
         } else {
-            response.sendStatus(404);
+            res.sendStatus(404);
         }
     });
 
-    app.put('/api/admin/glams/:id/annotations/:date', function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.put('/api/admin/glams/:id/annotations/:date', function (req, res, next) {
+        let glam = config.glams[req.params.id];
         if (glam !== undefined) {
-            api.modifyAnnotation(request, response, glam);
+            api.modifyAnnotation(req, res, next, glam);
         } else {
-            response.sendStatus(404);
+            res.sendStatus(404);
         }
     });
 
-    app.post('/api/admin/glams/:id/annotations/:date', function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.post('/api/admin/glams/:id/annotations/:date', function (req, res, next) {
+        let glam = config.glams[req.params.id];
         if (glam !== undefined) {
-            api.createAnnotation(request, response, glam);
+            api.createAnnotation(req, res, next, glam);
         } else {
-            response.sendStatus(404);
+            res.sendStatus(404);
         }
     });
 
-    app.delete('/api/admin/glams/:id/annotations/:date', function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.delete('/api/admin/glams/:id/annotations/:date', function (req, res, next) {
+        let glam = config.glams[req.params.id];
         if (glam !== undefined) {
-            api.deleteAnnotation(request, response, glam);
+            api.deleteAnnotation(req, res, next, glam);
         } else {
-            response.sendStatus(404);
+            res.sendStatus(404);
         }
     });
 
-    app.get('/api/:id/category', apicache("1 hour"), function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.get('/api/:id/category', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
-            api.categoryGraph(request, response, glam.connection);
+            api.categoryGraph(req, res, next, glam.connection);
         } else {
-            response.sendStatus(400);
+            res.sendStatus(400);
         }
     });
 
-    app.get('/api/:id', apicache("1 hour"), function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.get('/api/:id', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
-            api.getGlam(request, response, glam);
+            api.getGlam(req, res, next, glam);
         } else {
-            response.sendStatus(400);
+            res.sendStatus(400);
         }
     });
 
-    app.get('/api/:id/views', apicache("1 hour"), function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.get('/api/:id/views', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
-            api.views(request, response, glam.connection);
+            api.views(req, res, next, glam.connection);
         } else {
-            response.sendStatus(400);
+            res.sendStatus(400);
         }
     });
 
-    app.get('/api/:id/views/all', apicache("1 hour"), function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.get('/api/:id/views/all', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
-            api.viewsAll(request, response, glam.connection);
+            api.viewsAll(req, res, next, glam.connection);
         } else {
-            response.sendStatus(400);
+            res.sendStatus(400);
         }
     });
 
-    app.get('/api/:id/views/sidebar', apicache("1 hour"), function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.get('/api/:id/views/sidebar', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
-            api.viewsSidebar(request, response, glam.connection);
+            api.viewsSidebar(req, res, next, glam.connection);
         } else {
-            response.sendStatus(400);
+            res.sendStatus(400);
         }
     });
 
-    app.get('/api/:id/views/file/:file', apicache("1 hour"), function (request, response) {
-        let glam = config.glams[request.params.id];
-        if (isValidGlam(glam) || request.params.file !== undefined) {
-            api.viewsByFile(request, response, glam.connection);
+    app.get('/api/:id/views/file/:file', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam) || req.params.file !== undefined) {
+            api.viewsByFile(req, res, next, glam.connection);
         } else {
-            response.sendStatus(400);
+            res.sendStatus(400);
         }
     });
 
-    app.get('/api/:id/usage', apicache("1 hour"), function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.get('/api/:id/usage', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
-            api.usage(request, response, glam.connection);
+            api.usage(req, res, next, glam.connection);
         } else {
-            response.sendStatus(400);
+            res.sendStatus(400);
         }
     });
 
-    app.get('/api/:id/usage/stats', apicache("1 hour"), function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.get('/api/:id/usage/stats', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
-            api.usageStats(request, response, glam.connection);
+            api.usageStats(req, res, next, glam.connection);
         } else {
-            response.sendStatus(400);
+            res.sendStatus(400);
         }
     });
 
-    app.get('/api/:id/usage/top', apicache("1 hour"), function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.get('/api/:id/usage/top', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
-            api.usageTop(request, response, glam.connection);
+            api.usageTop(req, res, next, glam.connection);
         } else {
-            response.sendStatus(400);
+            res.sendStatus(400);
         }
     });
 
-    app.get('/api/:id/usage/sidebar', apicache("1 hour"), function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.get('/api/:id/usage/sidebar', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
-            api.usageSidebar(request, response, glam.connection);
+            api.usageSidebar(req, res, next, glam.connection);
         } else {
-            response.sendStatus(400);
+            res.sendStatus(400);
         }
     });
 
-    app.get('/api/:id/file/upload-date', apicache("1 hour"), function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.get('/api/:id/file/upload-date', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
-            api.uploadDate(request, response, glam.connection);
+            api.uploadDate(req, res, next, glam.connection);
         } else {
-            response.sendStatus(400);
+            res.sendStatus(400);
         }
     });
 
-    app.get('/api/:id/file/upload-date-all', apicache("1 hour"), function (request, response) {
-        let glam = config.glams[request.params.id];
+    app.get('/api/:id/file/upload-date-all', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
-            api.uploadDateAll(request, response, glam.connection);
+            api.uploadDateAll(req, res, next, glam.connection);
         } else {
-            response.sendStatus(400);
+            res.sendStatus(400);
         }
     });
 
