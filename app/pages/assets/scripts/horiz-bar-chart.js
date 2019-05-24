@@ -33,7 +33,7 @@ function drawHorizBars(data, div, totalPages) {
   } else {
     // tablets and desktop
     availH = $(div).outerHeight() * 0.85;
-    margin = { top: 30, right: 20, bottom: 10, left: 70 };
+    margin = { top: 40, right: 20, bottom: 10, left: 70 };
   }
 
   var width = Math.round($(div).outerWidth()) - margin.left - margin.right,
@@ -63,7 +63,7 @@ function drawHorizBars(data, div, totalPages) {
                 .scale(y)
                 .ticks(10);
 
-  console.log(x.ticks(3));
+  // console.log(x.ticks(3));
 
 
   var gX = svg.append("g")

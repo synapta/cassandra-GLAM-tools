@@ -334,6 +334,11 @@
 }
 
 /* USAGE CHART */
+#usage_stat {
+  padding-bottom: .5rem;
+  border-bottom: 1px solid rgba(100, 100, 100, .3);
+}
+
 #usage_stat > div {
   padding: 1rem 0;
   margin-top: 1rem;
@@ -356,7 +361,11 @@
 #usage_horiz_bars {
   overflow-y: auto;
   overflow-x: hidden;
-  height: 62vh;
+  width: 100%;
+  height: 65vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* PAGE VIEWS CHART */
