@@ -528,15 +528,17 @@ footer {
   height: 100%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
   padding: 4rem 1rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: space-around;
 }
 
 .chart-preview-front {
   background-color: var(--bg-gray);
-  z-index: 2;
+  z-index: 1;
 }
 
 .chart-name {
@@ -546,10 +548,13 @@ footer {
 
 .chart-preview-back {
   transform: rotateY(180deg);
-  z-index: 1;
+  z-index: 2;
+  background-color: var(--main);
+  color: #fff;
 }
 
 .chart-logo {
+  width: 80px;
   flex-shrink: 0;
   flex-grow: 0;
   align-self: center;
