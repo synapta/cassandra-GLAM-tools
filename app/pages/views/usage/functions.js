@@ -1,7 +1,9 @@
-const FIRST_CALL_LIMIT = 500;
+const FIRST_CALL_LIMIT = 300;
 
 var TOTAL_IMAGES;
 var IMAGES_RENDERED = 0;
+var RENDERING = false;
+
 var ACTIVE_ITEM_ID;
 
 function getUrl(limit) {
@@ -43,25 +45,22 @@ function getUrlTop20() {
 
 function sidebar(type) {
 	$.getJSON(getUrlAll(), function(stats) {
+		// is rendering
+		RENDERING = true;
 		// save total
 		TOTAL_IMAGES = stats.totalImagesUsed;
-		// render first part
+		// get tempalte
 		$.get("/views/usage/tpl/usage.tpl", function(tpl) {
+			// get data
 			$.getJSON(getUrl(FIRST_CALL_LIMIT, type), function(data) {
-
-				// console.log(getUrl(FIRST_CALL_LIMIT, type));
-				// console.log('data length', data.length);
-				// console.log('data', data);
-
+				// render first part
 				renderImageListItems(tpl, data);
-
+				//  set scroll handlers
 				if (FIRST_CALL_LIMIT < TOTAL_IMAGES) {
-					setLoadOnScroll();
+					$('#right_sidebar_list').scroll(loadMoreOnScroll);
 				}
-
 				// Manage click
 				highlightOnClick();
-
 			});
 		});
 	});
@@ -72,7 +71,10 @@ function getPageFromElementIdx(element_idx) {
 	return Math.floor((element_idx - 1) / 10);
 }
 
-function renderImageListItems(tpl, data) {
+function renderImageListItems(tpl, data, append) {
+	// if append not provided, set to false
+	append = append || false;
+	// loop through data and display items
 	data.forEach(function(file) {
 		// Format name and id
 		file.image_name = file.image.replace(/_/g," ");
@@ -97,40 +99,53 @@ function renderImageListItems(tpl, data) {
 	});
 	// increment number of items rendered
 	IMAGES_RENDERED += data.length;
-	// render to DOM
+	// complile template
 	var obj = {};
 	obj.files = data;
 	var template = Handlebars.compile(tpl);
-	$('#right_sidebar_list').html(template(obj));
+	// append existing content or replace html
+	append ? $('#right_sidebar_list').append(template(obj)) : $('#right_sidebar_list').html(template(obj));
+	// set tatus to finished rendering
+	RENDERING = false;
 }
 
-// function setLoadOnScroll() {
-// 	console.log('set scroll handler and manage pagination');
-// 	if (scrolled to bottom && not already asked to server) {
-// 		if (IMAGES_RENDERED < TOTAL_IMAGES) {
-// 			// cal new page number
-// 			let page = getPageFromElementIdx(IMAGES_RENDERED + 1);
-// 			$.get("/views/usage/tpl/usage.tpl", function(tpl) {
-// 				$.getJSON(getUrlPaginated(page), function(data) {
-// 					// append() instead of html() !!!
-// 					renderImageListItems(tpl, data, append)
-// 				});
-// 			});
-// 		} else {
-// 			// show "no more elements"
-// 		}
-// 	}
-// }
+
+function loadMoreOnScroll() {
+	// if reached end of div
+	if (($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) && !RENDERING) {
+		// if there are more elements to load
+		if (IMAGES_RENDERED < TOTAL_IMAGES) {
+			// calc new page number
+			let page = getPageFromElementIdx(IMAGES_RENDERED + 1);
+			//get template
+			$.get("/views/usage/tpl/usage.tpl", function(tpl) {
+				// get data
+				$.getJSON(getUrlPaginated(page), function(data) {
+					RENDERING = true;
+					// last argument to true calls append() instead of html()
+					renderImageListItems(tpl, data, true)
+					// manage click
+					highlightOnClick('new elements');
+				});
+			});
+		} else {
+			// show "no more elements"
+			$('#right_sidebar_list').append('<div class="mt-4 text-center">No more elements to load</div>');
+			// remove handler
+			$('#right_sidebar_list').off('scroll', loadMoreOnScroll);
+		}
+	}
+}
 
 
-function highlightOnClick() {
+function highlightOnClick(string) {
 
 	if (ACTIVE_ITEM_ID !== undefined) {
 		$('#' + ACTIVE_ITEM_ID).addClass('list_item_active');
 	}
 
-	$(".list_item").on("click", function() {
-
+	// remove handler and set it on update elements
+	$(".list_item").off("click").on("click", function() {
 		if ($(this).hasClass('list_item_active')) {
 			$(".list_item").removeClass("list_item_active");
 			ACTIVE_ITEM_ID = undefined;
@@ -139,9 +154,6 @@ function highlightOnClick() {
 			$(this).addClass("list_item_active")
 			ACTIVE_ITEM_ID = $(this).attr("id");
 		}
-
-		// TODO highlight bar
-
 	});
 }
 
