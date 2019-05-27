@@ -6,8 +6,8 @@
 					{{name}}
 				</span>
 				<div class="link" style="font-size:0.6em;">
-					<a href="https://commons.wikimedia.org/wiki/Category:{{id}}" title="{{name}}" target="_blank">
-						view on Commons
+					<a style="text-decoration:underline" href="https://commons.wikimedia.org/wiki/Category:{{id}}" title="{{name}}" target="_blank">
+						view on Commons <img class="link-out-small" src="/assets/img/link-out.svg" alt="go">
 					</a>
 				</div>
 			</div>
