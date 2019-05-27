@@ -103,7 +103,7 @@ function drawHorizBars(data, div, totalPages) {
      .data(data)
      .enter().append("rect")
      .attr("class", "bar")
-     .attr("data-wiki", d => d.wiki)
+     .attr("id", d => d.wiki)
      .style("transition", "width 1s ease-in-out, stroke .3s")
      .attr("width", (d) => 0 )
      .attr('fill', '#080d5a')
@@ -125,4 +125,15 @@ function drawHorizBars(data, div, totalPages) {
      //   console.log(d);
      //   d3.select(this).attr('stroke', '#080d5a');
      // });
+
+    window.highlightUsageBars = function(array) {
+      array.forEach(function(el) {
+        console.log(el);
+        d3.select('#' + el).attr('stroke', 'red');
+      });
+    }
+
+    window.turnOffUsageBars = function(array) {
+      bars.attr('stroke', '#080d5a');
+    }
 }

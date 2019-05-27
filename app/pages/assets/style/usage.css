@@ -30,3 +30,11 @@ svg {
   padding: 1.5rem 0 0;
   max-height: 800px;
 }
+
+.wiki_column table tbody tr:not(:last-child) {
+  border-bottom: 1px solid rgba(100, 100, 100, .2);
+}
+
+.wiki_column table tbody tr td a:not(:last-child)::after {
+  content: ",";
+}

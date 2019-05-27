@@ -1,5 +1,5 @@
 {{#each files}}
-	<div class="list_item" id="{{image_id}}">
+	<div class="list_item" id="{{image_id}}" data-wikilist="{{wiki_array}}">
 		<div class="row">
 			<div class="col-9">
 				<span class="id item" id="{{image}}">
@@ -41,7 +41,9 @@
 										<span style="margin-left:3em;font-size:0.7em;text-decoration:underline">{{wiki_name}}</span>
 									</td>
 									<td style="padding-left:2em">
+										{{#each wiki_links}}
 										<a href="{{wiki_link}}" style="font-size:0.9em;margin-right:2em">{{wiki_page}}</a>
+										{{/each}}
 									</td>
 								</tr>
 							{{/each}}
@@ -50,6 +52,5 @@
 				</div>
 			</div>
 		</div>
-	</div>
 	</div>
 {{/each}}

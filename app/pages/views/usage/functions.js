@@ -1,4 +1,4 @@
-const FIRST_CALL_LIMIT = 300;
+const FIRST_CALL_LIMIT = 30;
 
 var TOTAL_IMAGES;
 var IMAGES_RENDERED = 0;
@@ -80,26 +80,50 @@ function renderImageListItems(tpl, data, append) {
 		file.image_name = file.image.replace(/_/g," ");
 		file.image_id = cleanImageName(file.image);
 		// Format wiki pages list
-		file.wikis= [];
 		let currentWiki = null;
+		file.wiki_array = [];
+		file.wikis = [];
+		// sort alphabetically
+		file.pages = file.pages.sort(function(a,b) {
+			if (a.wiki < b.wiki) return -1;
+			if (a.wiki > b.wiki) return 1;
+			return 0;
+		});
 		// loop through all pages
+		var wiki_obj = {};
 		file.pages.forEach(function(page) {
+			// format object
+			let link_obj = {};
 			// check if not already added
 			if (currentWiki !== page.wiki) {
-				// format object
-				let wiki_obj = {};
+				// reset temp object
+				wiki_obj = {}
+				wiki_obj.wiki_links = [];
+				// update current wiki
 				currentWiki = page.wiki;
+				// page name
 				wiki_obj.wiki_name = currentWiki;
-				wiki_obj.wiki_link =  `https://${currentWiki.replace("wiki","")}.wikipedia.org/w/index.php?title=${page.title}`;
-				wiki_obj.wiki_page = page.title.replace(/_/g, " ");
+				// links
+				link_obj.wiki_link =  `https://${currentWiki.replace("wiki","")}.wikipedia.org/w/index.php?title=${page.title}`;
+				link_obj.wiki_page = page.title.replace(/_/g, " ");
 				// push
+				wiki_obj.wiki_links.push(link_obj);
 				file.wikis.push(wiki_obj);
+				// save wiki list in an array (for highlighting bars in chart)
+				file.wiki_array.push(currentWiki);
+			} else {
+				// add link to current wiki object
+				link_obj.wiki_link =  `https://${currentWiki.replace("wiki","")}.wikipedia.org/w/index.php?title=${page.title}`;
+				link_obj.wiki_page = page.title.replace(/_/g, " ");
+				// push current wiki object
+				wiki_obj.wiki_links.push(link_obj);
 			}
 		});
+		file.wiki_array = JSON.stringify(file.wiki_array);
 	});
 	// increment number of items rendered
 	IMAGES_RENDERED += data.length;
-	// complile template
+	// compile template
 	var obj = {};
 	obj.files = data;
 	var template = Handlebars.compile(tpl);
@@ -149,10 +173,14 @@ function highlightOnClick(string) {
 		if ($(this).hasClass('list_item_active')) {
 			$(".list_item").removeClass("list_item_active");
 			ACTIVE_ITEM_ID = undefined;
+			// from horiz-bar-chart.js
+			turnOffUsageBars();
 		} else {
 			$(".list_item").removeClass("list_item_active");
 			$(this).addClass("list_item_active")
 			ACTIVE_ITEM_ID = $(this).attr("id");
+			// from horiz-bar-chart.js
+			highlightUsageBars($(this).data("wikilist"));
 		}
 	});
 }
