@@ -79,6 +79,8 @@
   --main-tt: #080d5aa0;
   --bg-gray: #efefef;
   --accent: #a68300;
+  --accent-green: #12B39A;
+  --accent-blue: #1523e6;
   --accent-tt: #a6830064;
   --accent-ttt: #a6830028;
   --sidebar-width: 250px;
@@ -573,9 +575,14 @@ footer {
 
 .chart-buttons {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   width: 40%;
   margin: 0 auto;
+}
+
+.chart-buttons a {
+  margin: .8rem 0;
 }
 
 .chart-link {
