@@ -1,7 +1,6 @@
 var horizBarChartDraw = function(div, query, stats_data) {
   // get data
   d3.json(query, function(error, data) {
-    // console.log(query);
     // manage error
     if (error) throw error;
     // sort
@@ -14,9 +13,6 @@ var horizBarChartDraw = function(div, query, stats_data) {
     });
     // draw
     drawHorizBars(data, '#' + div, stats_data.totalPages);
-    //
-    // console.log('top 20 data', data);
-    // console.log('stats data', stats_data);
   });
 }
 
@@ -39,8 +35,6 @@ function drawHorizBars(data, div, totalPages) {
   var width = Math.round($(div).outerWidth()) - margin.left - margin.right,
       height = availH - margin.top - margin.bottom;
 
-  // console.log(width, height);
-
   var svg = d3.select(div).append("svg")
               .attr("width", width + margin.left + margin.right)
               .attr("height", height + 50 + margin.top + margin.bottom)
@@ -62,9 +56,6 @@ function drawHorizBars(data, div, totalPages) {
   var yAxis = d3.axisLeft()
                 .scale(y)
                 .ticks(10);
-
-  // console.log(x.ticks(3));
-
 
   var gX = svg.append("g")
                 .attr("class", "x axis")
@@ -113,27 +104,44 @@ function drawHorizBars(data, div, totalPages) {
      .attr("y", function(d) { return y(d.wiki); })
      .attr("height", y.bandwidth());
 
-     setTimeout(function() {
-       bars.attr("width", function(d) { return x(d.usage); } )
-     }, 100);
 
+    // add labels
+  var labels = svg.selectAll('.text')
+                  .data(data)
+                  .enter().append("text")
+                  .attr("class", "usage-bar-label")
+                  .attr("x", d => x(d.usage))
+                  .attr("dx", ".6em")
+                  .attr("y", d => y(d.wiki) + y.bandwidth() / 2)
+                  .attr("dy", ".4em")
+                  .text(d => {
+                    let p = d.usage / totalPages * 100;
+                    return `${d.usage} (${p.toFixed(2)}%)`;
+                  });
 
-     // bars.on('mouseover', function(d) {
-     //   console.log(d);
-     //   d3.select(this).attr('stroke', '#a68300');
-     // }).on('mouseout', function(d) {
-     //   console.log(d);
-     //   d3.select(this).attr('stroke', '#080d5a');
-     // });
+     // animation
+  setTimeout(function() {
+    bars.attr("width", d => x(d.usage));
+  }, 100);
 
-    window.highlightUsageBars = function(array) {
-      array.forEach(function(el) {
-        console.log(el);
-        d3.select('#' + el).attr('stroke', 'red');
-      });
-    }
+  // check for labels outside graph
+  labels.each(function(d) {
+   let bbox =  d3.select(this).node().getBBox();
+   let threshold = width - margin.left;
+   if (bbox.x + bbox.width > threshold) {
+     d3.select(this)
+       .attr("x", bbox.x - bbox.width * 1.5)
+       .attr("fill", "#fff");
+     }
+  });
 
-    window.turnOffUsageBars = function(array) {
-      bars.attr('stroke', '#080d5a');
-    }
+  window.highlightUsageBars = function(array) {
+    array.forEach(function(el) {
+      d3.select('#' + el).attr('stroke', 'red');
+    });
+  }
+
+  window.turnOffUsageBars = function(array) {
+    bars.attr('stroke', '#080d5a');
+  }
 }
