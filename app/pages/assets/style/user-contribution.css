@@ -9,13 +9,20 @@
   /* pointer-events: all; */
 }
 
+.groupby_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 2rem;
+  padding: 0 2rem;
+  border-left: 1px solid rgba(255, 255, 255, .5);
+  height: 63.22px;
+}
+
 #groupby_options {
   font-size: 1em;
-  border-bottom: 1px solid gray;
-  margin: .5rem 0 0;
-  padding: .5rem 0 1rem;
+  color: #fff;
   display: flex;
-  /* flex-direction: column; */
   align-items: center;
   justify-content: center;
   text-transform: uppercase;
@@ -23,10 +30,11 @@
 
 #groupby-select {
   margin: 0 .5rem;
-  background-color: transparent;
+  background-color: var(--main);
   padding: .3rem;
+  color: #fff;
 }
 
-#right_sidebar_list {
+/* #right_sidebar_list {
   height: 65vh !important;
-}
+} */
