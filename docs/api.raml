@@ -544,6 +544,31 @@ mediaType: application/json
                     ]
                   }
                 ]
+    /file/{file}:
+      description: List of the pages in which the file `{file}` is used.
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  [
+                    {
+                      "image": "11._Schweizerisches_Landesmuseum_-_Zürich.png",
+                      "usage": 2,
+                      "projects": 2,
+                      "pages": [
+                        {
+                          "wiki": "dewiki",
+                          "title": "Rathaus_St._Johann"
+                        },
+                        {
+                          "wiki": "frwiki",
+                          "title": "Haute_École_d'art_de_Zurich"
+                        }
+                      ]
+                    }
+                  ]
     /top:
       description: List of the number of files used per wiki, limited to 10 results.
       get:

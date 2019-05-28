@@ -439,6 +439,25 @@ var uploadDateAll = function (req, res, next, db) {
 }
 
 // USAGE
+function getUsage(row) {
+    let usage = {
+        "image": row.gil_to,
+        "usage": parseInt(row.usage),
+        "projects": parseInt(row.projects),
+        "pages": []
+    };
+    let i = 0;
+    while (i < row.gil_wiki.length) {
+        let page = {
+            "wiki": row.gil_wiki[i],
+            "title": row.gil_page_title[i]
+        };
+        i++;
+        usage.pages.push(page);
+    }
+    return usage;
+}
+
 var usage = function (req, res, next, db) {
     let query = `select gil_to, array_agg(gil_wiki) as gil_wiki, array_agg(gil_page_title) as gil_page_title,
                     count(gil_page_title) as usage, count(distinct gil_wiki) as projects
@@ -480,22 +499,28 @@ var usage = function (req, res, next, db) {
         if (!err) {
             let result = [];
             dbres.rows.forEach(function (row) {
-                let usage = {
-                    "image": row.gil_to,
-                    "usage": parseInt(row.usage),
-                    "projects": parseInt(row.projects),
-                    "pages": []
-                };
-                let i = 0;
-                while (i < row.gil_wiki.length) {
-                    let page = {
-                        "wiki": row.gil_wiki[i],
-                        "title": row.gil_page_title[i]
-                    };
-                    i++;
-                    usage.pages.push(page);
-                }
-                result.push(usage);
+                result.push(getUsage(row));
+            });
+            res.json(result);
+        } else {
+            next(new Error(err));
+        }
+    });
+}
+
+var usageFile = function (req, res, next, db) {
+    let query = `select gil_to, array_agg(gil_wiki) as gil_wiki, array_agg(gil_page_title) as gil_page_title,
+                    count(gil_page_title) as usage, count(distinct gil_wiki) as projects
+                    from usages
+                    where is_alive = true
+                    and gil_to = $1
+                    group by gil_to`;
+
+    db.query(query, [req.params.file], (err, dbres) => {
+        if (!err) {
+            let result = [];
+            dbres.rows.forEach(function (row) {
+                result.push(getUsage(row));
             });
             res.json(result);
         } else {
@@ -768,6 +793,7 @@ exports.categoryGraph = categoryGraph;
 exports.uploadDate = uploadDate;
 exports.uploadDateAll = uploadDateAll;
 exports.usage = usage;
+exports.usageFile = usageFile;
 exports.usageStats = usageStats;
 exports.usageTop = usageTop;
 exports.usageSidebar = usageSidebar;

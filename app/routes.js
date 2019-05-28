@@ -272,6 +272,15 @@ module.exports = function (app, apicache) {
         }
     });
 
+    app.get('/api/:id/usage/file/:file', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            api.usageFile(req, res, next, glam.connection);
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
     app.get('/api/:id/usage/stats', apicache("1 hour"), function (req, res, next) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
