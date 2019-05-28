@@ -533,12 +533,21 @@ var usageStats = function (req, res, next, db) {
 }
 
 var usageTop = function (req, res, next, db) {
-    let query = `select gil_wiki as wiki, count(*) as usage
+    let query = `with top10 as
+                (select gil_wiki as wiki, count(*) as usage
                 from usages
                 where is_alive = true
                 group by gil_wiki
                 order by usage desc
-                limit 10`;
+                limit 10)
+                select *
+                from top10
+                union all
+                select 'others' as wiki, count(*) as usage
+                from usages
+                where gil_wiki not in
+                (select wiki
+                from top10)`;
 
     db.query(query, (err, dbres) => {
         if (!err) {
