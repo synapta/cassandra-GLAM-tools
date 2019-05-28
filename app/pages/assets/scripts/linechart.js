@@ -1,4 +1,11 @@
+var FILE_QUERY
+var SHOWN_IMAGE = false;
+
+
 var lineChartDraw = function(div, query) {
+
+  FILE_QUERY = query + "/file/";
+
   d3.json(query, function(error, data) {
     if (error) {
       console.error(error);
@@ -11,6 +18,8 @@ var lineChartDraw = function(div, query) {
 }
 
 function lineChart(div, data) {
+
+  // console.log(data);
 
   var margin = {};
   var margin2 = {};
@@ -32,6 +41,8 @@ function lineChart(div, data) {
       height2 = availH - margin2.top - margin2.bottom;
 
   var parseTime = d3.isoParse;
+
+  var image_valueline, image_path;
 
   // FORMAT DATA
   data.forEach(function(d) {
@@ -62,7 +73,7 @@ function lineChart(div, data) {
 
   // SCALE OBJECTS
   var x = d3.scaleTime().range([0, width]);
-  var y = d3.scaleLinear().range([height, 0]);
+  var y = d3.scaleLog().range([height, 0]);
 
   // BRUSH SCALES
   var x2 = d3.scaleTime().range([0, width]);
@@ -79,7 +90,10 @@ function lineChart(div, data) {
   // AXIS
   var xAxis = d3.axisBottom(x);
   var xAxis2 = d3.axisBottom(x2);
-  var yAxis = d3.axisLeft(y).ticks(2).tickFormat(d3.formatPrefix(".0", 1));
+
+  // var yAxis = d3.axisLeft(y).ticks(20).tickFormat(d3.formatPrefix(".0", 1)).tickSize(6, 0);
+
+  var yAxis = d3.axisLeft(y).ticks(20).tickFormat(d3.formatPrefix(".0", 1));
 
   // Clip path (clip line outside axis)
   var clip = svg.append("defs")
@@ -107,12 +121,12 @@ function lineChart(div, data) {
   var valueline = d3.line()
                     .x(function(d) { return x(d.date); })
                     .y(function(d) { return y(d.views); })
-                    .curve(d3.curveStepBefore);
+                    .curve(d3.curveLinear);
 
   var valueline2 = d3.line()
                      .x(function(d) { return x2(d.date); })
                      .y(function(d) { return y2(d.views); })
-                     .curve(d3.curveStepBefore);
+                     .curve(d3.curveLinear);
 
   // GRID INSIDE THE GRAPH
   // focus.append("g")
@@ -247,6 +261,7 @@ function lineChart(div, data) {
 
   // check if point is inside graph
   function isInsideGraph(point) {
+    // console.log(point);
     if (point.x > (margin.left * 2 + $('#main-sidebar').width() + 15) && point.x < (width + margin.left * 2 + $('#main-sidebar').width() + 15) &&
       point.y > ($('#svg-graph').offset().top + margin.top) &&
       point.y < (height + $('#svg-graph').offset().top + margin.top)) {
@@ -262,8 +277,12 @@ function lineChart(div, data) {
     var t = d3.event.transform;
     x.domain(t.rescaleX(x2).domain());
     path.attr("d", valueline);
+    if (SHOWN_IMAGE) {
+      image_path.attr("d", image_valueline);
+    }
     gX.call(xAxis);
     brushView.call(brush.move, x.range().map(t.invertX, t));
+
   }
 
   function brushFunction() {
@@ -271,10 +290,61 @@ function lineChart(div, data) {
     var s = d3.event.selection || x2.range();
     x.domain(s.map(x2.invert, x2));
     path.attr("d", valueline);
+    if (SHOWN_IMAGE) {
+      image_path.attr("d", image_valueline);
+    }
     gX.call(xAxis);
     svg.select(".zoom-area")
        .call(zoom.transform, d3.zoomIdentity
        .scale(width / (s[1] - s[0]))
        .translate(-s[0], 0));
+  }
+
+  window.hideFileLine = function() {
+    d3.selectAll('.image_line').remove();
+    y.domain([d3.min(data, function(d) { return d.views; }), d3.max(data, function(d) { return d.views; })]);
+    // update main line chart
+    path.transition().attr("d", valueline);
+    SHOWN_IMAGE = false;
+  }
+
+  window.showFileLine = function(filename) {
+    d3.selectAll('.image_line').remove();
+     if (filename !== undefined) {
+       d3.json(FILE_QUERY + filename, function(error, image_data) {
+         if (error) throw error;
+
+         image_data.forEach(function(d) {
+           d.access_date = parseTime(d.access_date);
+           d.sum = +d.sum;
+         });
+
+         SHOWN_IMAGE = true;
+
+         // update domain
+         let min = Math.min(d3.min(image_data, function(d) { return d.sum; }), d3.min(data, function(d) { return d.views; }));
+         let max = Math.max(d3.max(image_data, function(d) { return d.sum; }), d3.max(data, function(d) { return d.views; }));
+
+         y.domain([min, max]);
+
+         // update axis
+         gY.call(yAxis);
+
+         // update main line chart
+         path.transition().attr("d", valueline);
+
+         // append new line
+         image_valueline = d3.line()
+                           .x(function(d) { return x(d.access_date); })
+                           .y(function(d) { return y(d.sum); })
+                           .curve(d3.curveLinear);
+
+         image_path = lineChart.append("path")
+                       .datum(image_data)
+                       .attr("class", "image_line")
+                       .attr("d", image_valueline);
+
+       });
+     }
   }
 }

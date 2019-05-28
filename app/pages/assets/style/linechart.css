@@ -1,6 +1,13 @@
 .line {
   fill: none;
-  stroke: steelblue;
+  stroke: var(--main);
+  stroke-width: 2px;
+  /* display: none; */
+}
+
+.image_line {
+  fill: none;
+  stroke: var(--accent-green);
   stroke-width: 2px;
 }
 

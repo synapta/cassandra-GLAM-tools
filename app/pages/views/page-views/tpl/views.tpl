@@ -1,5 +1,5 @@
 {{#each files}}
-	<div class="list_item">
+	<div class="list_item" data-imagename="{{img_name}}">
 		<div class="row">
 			<div class="col-8">
 				<span class="id item" id="{{img_name_id}}">

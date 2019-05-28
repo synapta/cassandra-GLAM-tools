@@ -117,7 +117,7 @@ function how_to_read(){
 	});
 };
 
-function highlight(){
+function highlight() {
 	if (ACTIVE_ITEM_ID !== undefined) {
 		console.log(ACTIVE_ITEM_ID);
 		$('#' + ACTIVE_ITEM_ID).closest('.list_item').addClass('list_item_active');
@@ -127,15 +127,20 @@ function highlight(){
 
 		var element = $(this).find('.id.item').attr("id");
 
-
+		// console.log($(this).data('imagename'));
+		// $.getJSON('/api/ZU/views/file/' + $(this).data('imagename'), function(data) {
+		// 	console.log(data.length);
+		// });
 
 		if ($(this).hasClass('list_item_active')) {
 			$(".list_item").removeClass("list_item_active");
-			ACTIVE_ITEM_ID = undefined;
+			ACTIVE_ITEM_ID = undefined;+
+			hideFileLine();
 		} else {
 			$(".list_item").removeClass("list_item_active");
 			$(this).addClass("list_item_active")
 			ACTIVE_ITEM_ID = element;
+			showFileLine($(this).data('imagename'));
 		}
 
 		// highlight Graph
