@@ -20,6 +20,11 @@ function getUrl() {
 		return "/api/"+db+"/category";
 }
 
+function getUrlDataset() {
+	var db=window.location.href.toString().split('/')[3];
+	return "/api/"+db+"/category/dataset";
+}
+
 function dataviz() {
 		var data_source = getUrl();
 
@@ -331,7 +336,7 @@ function sidebar(order) {
 }
 
 function download() {
-	$('<a href="' + getUrl() + '" download="' + "category_network.json" + '">Download dataset</a>').appendTo('#download_dataset');
+	$('<a href="' + getUrlDataset() + '" download="' + "category_network.csv" + '">Download dataset</a>').appendTo('#download_dataset');
 }
 
 $("#how_to_read_button").click(function(){

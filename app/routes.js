@@ -218,6 +218,15 @@ module.exports = function (app, apicache) {
         }
     });
 
+    app.get('/api/:id/category/dataset', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            api.categoryGraphDataset(req, res, next, glam.connection);
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
     app.get('/api/:id', apicache("1 hour"), function (req, res, next) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
@@ -236,10 +245,10 @@ module.exports = function (app, apicache) {
         }
     });
 
-    app.get('/api/:id/views/all', apicache("1 hour"), function (req, res, next) {
+    app.get('/api/:id/views/dataset', apicache("1 hour"), function (req, res, next) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
-            api.viewsAll(req, res, next, glam.connection);
+            api.viewsDataset(req, res, next, glam.connection);
         } else {
             res.sendStatus(400);
         }
@@ -272,6 +281,24 @@ module.exports = function (app, apicache) {
         }
     });
 
+    app.get('/api/:id/usage/dataset', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            api.usageDataset(req, res, next, glam.connection);
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
+    app.get('/api/:id/usage/file/:file', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            api.usageFile(req, res, next, glam.connection);
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
     app.get('/api/:id/usage/stats', apicache("1 hour"), function (req, res, next) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
@@ -290,19 +317,19 @@ module.exports = function (app, apicache) {
         }
     });
 
-    app.get('/api/:id/usage/sidebar', apicache("1 hour"), function (req, res, next) {
+    app.get('/api/:id/file/upload-date', apicache("1 hour"), function (req, res, next) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
-            api.usageSidebar(req, res, next, glam.connection);
+            api.uploadDate(req, res, next, glam.connection);
         } else {
             res.sendStatus(400);
         }
     });
 
-    app.get('/api/:id/file/upload-date', apicache("1 hour"), function (req, res, next) {
+    app.get('/api/:id/file/upload-date/dataset', apicache("1 hour"), function (req, res, next) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
-            api.uploadDate(req, res, next, glam.connection);
+            api.uploadDateDataset(req, res, next, glam.connection);
         } else {
             res.sendStatus(400);
         }

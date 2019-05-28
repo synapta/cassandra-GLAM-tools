@@ -1,3 +1,5 @@
+const stringify = require('csv-stringify');
+
 Date.prototype.toISODateString = function () {
     let offset = this.getTimezoneOffset() * 60 * 1000;
     let local = new Date(this - offset);
@@ -264,33 +266,49 @@ function arrayMin(arr) {
 var categoryGraph = function (req, res, next, db) {
     db.query('SELECT page_title, cat_files, cl_to[0:10], cat_level[0:10] from categories', (err, dbres) => {
         if (!err) {
-            var result = Object();
+            let result = {};
             result.nodes = [];
             result.edges = [];
-            i = 0;
-            while (i < dbres.rows.length) {
-                node = Object();
-                node.id = dbres.rows[i].page_title;
-                node.files = dbres.rows[i].cat_files;
-                node.group = arrayMin(dbres.rows[i].cat_level);
-                j = 0;
-                while (j < dbres.rows[i].cl_to.length) {
-                    edge = Object();
-                    edge.target = dbres.rows[i].cl_to[j];
-                    edge.source = dbres.rows[i].page_title;
+            dbres.rows.forEach(function (row) {
+                let node = {};
+                node.id = row.page_title;
+                node.files = row.cat_files;
+                node.group = arrayMin(row.cat_level);
+                row.cl_to.forEach(function (target) {
+                    let edge = {};
+                    edge.target = target;
+                    edge.source = row.page_title;
                     if (edge.target != "ROOT")
-                        result.edges[result.edges.length] = edge;
-                    j++;
-                }
-                result.nodes[i] = node;
-
-                i++;
-            }
+                        result.edges.push(edge);
+                });
+                result.nodes.push(node);
+            });
             res.json(result);
         } else {
             next(new Error(err));
         }
-    })
+    });
+}
+
+var categoryGraphDataset = function (req, res, next, db) {
+    db.query('SELECT page_title, cat_files, cl_to[0:10], cat_level[0:10] from categories', (err, dbres) => {
+        if (!err) {
+            res.set('Content-Type', 'text/csv');
+            let stringifier = stringify({'delimiter': ';', 'record_delimiter': 'windows'});
+            stringifier.pipe(res);
+            stringifier.write(["Category", "Files", "Level"]);
+            dbres.rows.forEach(function (row) {
+                let line = [];
+                line[0] = row.page_title;
+                line[1] = row.cat_files;
+                line[2] = arrayMin(row.cat_level);
+                stringifier.write(line);
+            });
+            stringifier.end();
+        } else {
+            next(new Error(err));
+        }
+    });
 }
 
 // USER CONTRIBUTIONS
@@ -366,7 +384,6 @@ var uploadDate = function (req, res, next, db) {
     db.query(query, parameters, (err, dbres) => {
         if (!err) {
             let result = [];
-            i = 0;
             dbres.rows.forEach(function (row) {
                 let user = {};
                 user.user = row.img_user_text;
@@ -386,8 +403,42 @@ var uploadDate = function (req, res, next, db) {
         } else {
             next(new Error(err));
         }
-    })
+    });
 }
+
+var uploadDateDataset = function (req, res, next, db) {
+    let groupby = parseGroupBy();
+    let query = `select sum(img_count) as img_sum, img_user_text, array_agg(img_count) as img_count, array_agg(img_time) as img_time
+        from (select count(*) as img_count, img_user_text, date_trunc('` + groupby + `', img_timestamp) as img_time
+        from images
+        group by img_user_text, img_time order by img_time) t
+        group by img_user_text
+        order by img_sum desc`;
+
+    db.query(query, (err, dbres) => {
+        if (!err) {
+            res.set('Content-Type', 'text/csv');
+            let stringifier = stringify({'delimiter': ';', 'record_delimiter': 'windows'});
+            stringifier.pipe(res);
+            stringifier.write(["User", "Date", "Count"]);
+            dbres.rows.forEach(function (row) {
+                let user = row.img_user_text;
+                let i = 0;
+                while (i < row.img_time.length) {
+                    let line = [];
+                    line[0] = user;
+                    line[1] = row.img_time[i].toISODateString();
+                    line[2] = parseInt(row.img_count[i]);
+                    stringifier.write(line);
+                    i++;
+                }
+            });
+            stringifier.end();
+        } else {
+            next(new Error(err));
+        }
+    });
+};
 
 var uploadDateAll = function (req, res, next, db) {
     let groupby = parseGroupBy(req.query.groupby);
@@ -439,6 +490,25 @@ var uploadDateAll = function (req, res, next, db) {
 }
 
 // USAGE
+function getUsage(row) {
+    let usage = {
+        "image": row.gil_to,
+        "usage": parseInt(row.usage),
+        "projects": parseInt(row.projects),
+        "pages": []
+    };
+    let i = 0;
+    while (i < row.gil_wiki.length) {
+        let page = {
+            "wiki": row.gil_wiki[i],
+            "title": row.gil_page_title[i]
+        };
+        i++;
+        usage.pages.push(page);
+    }
+    return usage;
+}
+
 var usage = function (req, res, next, db) {
     let query = `select gil_to, array_agg(gil_wiki) as gil_wiki, array_agg(gil_page_title) as gil_page_title,
                     count(gil_page_title) as usage, count(distinct gil_wiki) as projects
@@ -480,22 +550,61 @@ var usage = function (req, res, next, db) {
         if (!err) {
             let result = [];
             dbres.rows.forEach(function (row) {
-                let usage = {
-                    "image": row.gil_to,
-                    "usage": parseInt(row.usage),
-                    "projects": parseInt(row.projects),
-                    "pages": []
-                };
+                result.push(getUsage(row));
+            });
+            res.json(result);
+        } else {
+            next(new Error(err));
+        }
+    });
+}
+
+var usageDataset = function (req, res, next, db) {
+    let query = `select gil_to, array_agg(gil_wiki) as gil_wiki, array_agg(gil_page_title) as gil_page_title,
+                    count(gil_page_title) as usage, count(distinct gil_wiki) as projects
+                    from usages
+                    where is_alive = true
+                    group by gil_to
+                    order by usage desc, gil_to`;
+
+    db.query(query, (err, dbres) => {
+        if (!err) {
+            res.set('Content-Type', 'text/csv');
+            let stringifier = stringify({'delimiter': ';', 'record_delimiter': 'windows'});
+            stringifier.pipe(res);
+            stringifier.write(["File", "Project", "Page"]);
+            dbres.rows.forEach(function (row) {
                 let i = 0;
                 while (i < row.gil_wiki.length) {
-                    let page = {
-                        "wiki": row.gil_wiki[i],
-                        "title": row.gil_page_title[i]
-                    };
+                    let line = [
+                        row.gil_to,
+                        row.gil_wiki[i],
+                        row.gil_page_title[i]
+                    ];
+                    stringifier.write(line);
                     i++;
-                    usage.pages.push(page);
                 }
-                result.push(usage);
+            });
+            stringifier.end();
+        } else {
+            next(new Error(err));
+        }
+    });
+}
+
+var usageFile = function (req, res, next, db) {
+    let query = `select gil_to, array_agg(gil_wiki) as gil_wiki, array_agg(gil_page_title) as gil_page_title,
+                    count(gil_page_title) as usage, count(distinct gil_wiki) as projects
+                    from usages
+                    where is_alive = true
+                    and gil_to = $1
+                    group by gil_to`;
+
+    db.query(query, [req.params.file], (err, dbres) => {
+        if (!err) {
+            let result = [];
+            dbres.rows.forEach(function (row) {
+                result.push(getUsage(row));
             });
             res.json(result);
         } else {
@@ -533,12 +642,21 @@ var usageStats = function (req, res, next, db) {
 }
 
 var usageTop = function (req, res, next, db) {
-    let query = `select gil_wiki as wiki, count(*) as usage
+    let query = `with top10 as
+                (select gil_wiki as wiki, count(*) as usage
                 from usages
                 where is_alive = true
                 group by gil_wiki
                 order by usage desc
-                limit 10`;
+                limit 10)
+                select *
+                from top10
+                union all
+                select 'others' as wiki, count(*) as usage
+                from usages
+                where gil_wiki not in
+                (select wiki
+                from top10)`;
 
     db.query(query, (err, dbres) => {
         if (!err) {
@@ -557,36 +675,7 @@ var usageTop = function (req, res, next, db) {
     });
 }
 
-// TODO this api should be deprecated because it is functionally equivalent to usage api
-var usageSidebar = function (req, res, next, db) {
-    let usage = `select gil_to, count(distinct gil_wiki) as wiki, count(*) as u
-                 from usages
-                 where is_alive = true
-                 group by gil_to
-                 order by u desc, wiki desc
-                 limit 1000`;
-
-    db.query(usage, (err, dbres) => {
-        if (!err) {
-            res.json(dbres.rows);
-        } else {
-            next(new Error(err));
-        }
-    });
-}
-
 // VIEWS
-// TODO this api should be deprecated as it seems not used
-var viewsAll = function (req, res, next, db) {
-    db.query('select sum(accesses) as sum from visualizations', (err, dbres) => {
-        if (!err) {
-            res.json({"sum": parseInt(dbres.rows[0].sum)});
-        } else {
-            next(new Error(err));
-        }
-    });
-}
-
 var views = function (req, res, next, db) {
     let query = `select sum(accesses) as sum, access_date, annotation_value
                  from visualizations
@@ -624,6 +713,31 @@ var views = function (req, res, next, db) {
                 result.push(date);
             })
             res.json(result);
+        } else {
+            next(new Error(err));
+        }
+    });
+}
+
+var viewsDataset = function (req, res, next, db) {
+    let query = `select sum(accesses) as sum, access_date
+                 from visualizations
+                 group by access_date order by access_date`;
+
+    db.query(query, (err, dbres) => {
+        if (!err) {
+            res.set('Content-Type', 'text/csv');
+            let stringifier = stringify({'delimiter': ';', 'record_delimiter': 'windows'});
+            stringifier.pipe(res);
+            stringifier.write(["Date", "Views"]);
+            dbres.rows.forEach(function (row) {
+                let line = [
+                    row.access_date.toISODateString(),
+                    parseInt(row.sum)
+                ];
+                stringifier.write(line);
+            })
+            stringifier.end();
         } else {
             next(new Error(err));
         }
@@ -756,13 +870,16 @@ exports.createAnnotation = createAnnotation;
 exports.deleteAnnotation = deleteAnnotation;
 exports.getGlam = getGlam;
 exports.categoryGraph = categoryGraph;
+exports.categoryGraphDataset = categoryGraphDataset;
 exports.uploadDate = uploadDate;
+exports.uploadDateDataset = uploadDateDataset;
 exports.uploadDateAll = uploadDateAll;
 exports.usage = usage;
+exports.usageDataset = usageDataset;
+exports.usageFile = usageFile;
 exports.usageStats = usageStats;
 exports.usageTop = usageTop;
-exports.usageSidebar = usageSidebar;
 exports.views = views;
+exports.viewsDataset = viewsDataset;
 exports.viewsByFile = viewsByFile;
-exports.viewsAll = viewsAll;
 exports.viewsSidebar = viewsSidebar;
