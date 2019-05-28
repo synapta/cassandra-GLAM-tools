@@ -293,24 +293,18 @@ var categoryGraph = function (req, res, next, db) {
 var categoryGraphDataset = function (req, res, next, db) {
     db.query('SELECT page_title, cat_files, cl_to[0:10], cat_level[0:10] from categories', (err, dbres) => {
         if (!err) {
-            let result = [];
-            let header = ["Category", "Files", "Level"];
-            result.push(header);
+            res.set('Content-Type', 'text/csv');
+            let stringifier = stringify({'delimiter': ';', 'record_delimiter': 'windows'});
+            stringifier.pipe(res);
+            stringifier.write(["Category", "Files", "Level"]);
             dbres.rows.forEach(function (row) {
                 let line = [];
                 line[0] = row.page_title;
                 line[1] = row.cat_files;
                 line[2] = arrayMin(row.cat_level);
-                result.push(line);
+                stringifier.write(line);
             });
-            stringify(result, {'delimiter': ';', 'record_delimiter': 'windows'}, function (err, output) {
-                if (err) {
-                    next(new Error(err));
-                } else {
-                    res.set('Content-Type', 'text/csv')
-                    res.send(output);
-                }
-            });
+            stringifier.end();
         } else {
             next(new Error(err));
         }
@@ -423,9 +417,10 @@ var uploadDateDataset = function (req, res, next, db) {
 
     db.query(query, (err, dbres) => {
         if (!err) {
-            let result = [];
-            let header = ["User", "Date", "Count"];
-            result.push(header);
+            res.set('Content-Type', 'text/csv');
+            let stringifier = stringify({'delimiter': ';', 'record_delimiter': 'windows'});
+            stringifier.pipe(res);
+            stringifier.write(["User", "Date", "Count"]);
             dbres.rows.forEach(function (row) {
                 let user = row.img_user_text;
                 let i = 0;
@@ -434,18 +429,11 @@ var uploadDateDataset = function (req, res, next, db) {
                     line[0] = user;
                     line[1] = row.img_time[i].toISODateString();
                     line[2] = parseInt(row.img_count[i]);
-                    result.push(line);
+                    stringifier.write(line);
                     i++;
                 }
             });
-            stringify(result, {'delimiter': ';', 'record_delimiter': 'windows'}, function (err, output) {
-                if (err) {
-                    next(new Error(err));
-                } else {
-                    res.set('Content-Type', 'text/csv')
-                    res.send(output);
-                }
-            });
+            stringifier.end();
         } else {
             next(new Error(err));
         }
@@ -581,9 +569,10 @@ var usageDataset = function (req, res, next, db) {
 
     db.query(query, (err, dbres) => {
         if (!err) {
-            let result = [];
-            let header = ["File", "Project", "Page"];
-            result.push(header);
+            res.set('Content-Type', 'text/csv');
+            let stringifier = stringify({'delimiter': ';', 'record_delimiter': 'windows'});
+            stringifier.pipe(res);
+            stringifier.write(["File", "Project", "Page"]);
             dbres.rows.forEach(function (row) {
                 let i = 0;
                 while (i < row.gil_wiki.length) {
@@ -592,18 +581,11 @@ var usageDataset = function (req, res, next, db) {
                         row.gil_wiki[i],
                         row.gil_page_title[i]
                     ];
-                    result.push(line);
+                    stringifier.write(line);
                     i++;
                 }
             });
-            stringify(result, {'delimiter': ';', 'record_delimiter': 'windows'}, function (err, output) {
-                if (err) {
-                    next(new Error(err));
-                } else {
-                    res.set('Content-Type', 'text/csv')
-                    res.send(output);
-                }
-            });
+            stringifier.end();
         } else {
             next(new Error(err));
         }
@@ -775,25 +757,19 @@ var viewsDataset = function (req, res, next, db) {
 
     db.query(query, (err, dbres) => {
         if (!err) {
-            result = [];
-            let header = ["File", "Date", "Views"];
-            result.push(header);
+            res.set('Content-Type', 'text/csv');
+            let stringifier = stringify({'delimiter': ';', 'record_delimiter': 'windows'});
+            stringifier.pipe(res);
+            stringifier.write(["File", "Date", "Views"]);
             dbres.rows.forEach(function (row) {
                 let line = [
                     row.img_name,
                     row.access_date.toISODateString(),
                     parseInt(row.sum)
                 ];
-                result.push(line);
+                stringifier.write(line);
             })
-            stringify(result, {'delimiter': ';', 'record_delimiter': 'windows'}, function (err, output) {
-                if (err) {
-                    next(new Error(err));
-                } else {
-                    res.set('Content-Type', 'text/csv')
-                    res.send(output);
-                }
-            });
+            stringifier.end();
         } else {
             next(new Error(err));
         }
