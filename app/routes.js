@@ -254,15 +254,6 @@ module.exports = function (app, apicache) {
         }
     });
 
-    app.get('/api/:id/views/all', apicache("1 hour"), function (req, res, next) {
-        let glam = config.glams[req.params.id];
-        if (isValidGlam(glam)) {
-            api.viewsAll(req, res, next, glam.connection);
-        } else {
-            res.sendStatus(400);
-        }
-    });
-
     app.get('/api/:id/views/sidebar', apicache("1 hour"), function (req, res, next) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
@@ -321,15 +312,6 @@ module.exports = function (app, apicache) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             api.usageTop(req, res, next, glam.connection);
-        } else {
-            res.sendStatus(400);
-        }
-    });
-
-    app.get('/api/:id/usage/sidebar', apicache("1 hour"), function (req, res, next) {
-        let glam = config.glams[req.params.id];
-        if (isValidGlam(glam)) {
-            api.usageSidebar(req, res, next, glam.connection);
         } else {
             res.sendStatus(400);
         }

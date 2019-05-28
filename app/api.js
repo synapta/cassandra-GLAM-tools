@@ -675,36 +675,7 @@ var usageTop = function (req, res, next, db) {
     });
 }
 
-// TODO this api should be deprecated because it is functionally equivalent to usage api
-var usageSidebar = function (req, res, next, db) {
-    let usage = `select gil_to, count(distinct gil_wiki) as wiki, count(*) as u
-                 from usages
-                 where is_alive = true
-                 group by gil_to
-                 order by u desc, wiki desc
-                 limit 1000`;
-
-    db.query(usage, (err, dbres) => {
-        if (!err) {
-            res.json(dbres.rows);
-        } else {
-            next(new Error(err));
-        }
-    });
-}
-
 // VIEWS
-// TODO this api should be deprecated as it seems not used
-var viewsAll = function (req, res, next, db) {
-    db.query('select sum(accesses) as sum from visualizations', (err, dbres) => {
-        if (!err) {
-            res.json({"sum": parseInt(dbres.rows[0].sum)});
-        } else {
-            next(new Error(err));
-        }
-    });
-}
-
 var views = function (req, res, next, db) {
     let query = `select sum(accesses) as sum, access_date, annotation_value
                  from visualizations
@@ -908,9 +879,7 @@ exports.usageDataset = usageDataset;
 exports.usageFile = usageFile;
 exports.usageStats = usageStats;
 exports.usageTop = usageTop;
-exports.usageSidebar = usageSidebar;
 exports.views = views;
 exports.viewsDataset = viewsDataset;
 exports.viewsByFile = viewsByFile;
-exports.viewsAll = viewsAll;
 exports.viewsSidebar = viewsSidebar;
