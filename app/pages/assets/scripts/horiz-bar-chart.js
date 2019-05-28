@@ -45,13 +45,11 @@ function drawHorizBars(data, div, totalPages) {
   var x = d3.scaleLinear().range([0, width]);
   var y = d3.scaleBand().range([height, 0]).padding(0.3);
 
-  x.domain([Math.max(0, d3.min(data, function(d) {
-    return d.usage - (d3.max(data, function(d) {
-      return d.usage; }) * 0.05); })), d3.max(data, function(d) { return d.usage; })]);
+  x.domain([0, d3.max(data, function(d) { return d.usage; })]);
 
   y.domain(data.map(function(d) { return d.wiki; }));
 
-  var xAxis = d3.axisBottom().scale(x).tickValues(x.ticks(8).concat(x.domain()));
+  var xAxis = d3.axisBottom().scale(x).tickValues(x.ticks(5).concat(x.domain()));
 
   var yAxis = d3.axisLeft()
                 .scale(y)
