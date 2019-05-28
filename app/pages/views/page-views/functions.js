@@ -4,10 +4,17 @@ function getUrlAll(){
 	var db=window.location.href.toString().split('/')[3];
 	return "/api/"+db+"/views";
 }
+
+function getUrlDataset(){
+	var db=window.location.href.toString().split('/')[3];
+	return "/api/"+db+"/views/dataset";
+}
+
 function getUrlFiles(){
 	var db=window.location.href.toString().split('/')[3];
 	return "/api/"+db+"/views/files";
 }
+
 function getUrlSidebar(){
 	var db=window.location.href.toString().split('/')[3];
 	return "/api/"+db+"/views/sidebar";
@@ -104,7 +111,7 @@ function sorting_sidebar(){
 }
 
 function download(){
-	$('<a href="' + getUrlAll() + '" download="' + "views.json" + '">Download dataset</a>').appendTo('#download_dataset');
+	$('<a href="' + getUrlDataset() + '" download="' + "views.csv" + '">Download dataset</a>').appendTo('#download_dataset');
 }
 
 function how_to_read(){

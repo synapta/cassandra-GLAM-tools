@@ -278,6 +278,17 @@ mediaType: application/json
                     }
                   ]
                 }
+    /dataset:
+      description: Number of files and category level per category as a CSV file.
+      get:
+        responses: 
+          200:
+            body:
+              application/csv:
+                example: |
+                  Category;Files;Level
+                  Historical_images_of_buildings_in_the_canton_of_Zürich;6;0
+                  Historical_images_of_churches_in_the_canton_of_Zürich;22;1
   /file/upload-date:
     description: Number of files grouped by upload date and user.
     get:
@@ -347,6 +358,17 @@ mediaType: application/json
                       ]
                   }
                 ]
+    /dataset:
+      description: Number of files grouped by upload date and user as a CSV file.
+      get:
+        responses:
+          200:
+            body:
+              application/csv:
+                example: |
+                  User;Date;Count
+                  Parpan05;2006-09-01;2
+                  Parpan05;2007-06-01;2
   /file/upload-date-all:
     description: Number of files grouped by upload date.
     get:
@@ -415,6 +437,18 @@ mediaType: application/json
                       "annotation": "test"
                   }
                 ]
+    /dataset:
+      description: List of views per file and date as a CSV file.
+      get:
+        responses:
+          200:
+            body:
+              application/csv:
+                example: |
+                  File;Date;Views
+                  11._Schweizerisches_Landesmuseum_-_Zürich.png;2019-03-24;16
+                  1798TuriciI.jpg;2019-03-24;4
+                  2013-05-05_Zuriko_(Foto_Dietrich_Michael_Weidmann)_109.JPG;2019-03-24;1
     /sidebar:
       description: List of total, average, and median views per file.
       get:
@@ -544,8 +578,19 @@ mediaType: application/json
                     ]
                   }
                 ]
+    /dataset:
+      description: List of the pages in which each file is used as a CSV file.
+      get:
+        responses:
+          200:
+            body:
+              application/csv:
+                example: |
+                  File;Project;Page
+                  Destruction_of_icons_in_Zurich_1524.jpg;frwiki;Réforme_protestante_à_Zurich
+                  Destruction_of_icons_in_Zurich_1524.jpg;eswiki;Iconoclasia
     /file/{file}:
-      description: List of the pages in which the file `{file}` is used.
+      description: List of the pages in which the file with `name = {file}` is used.
       get:
         responses:
           200:

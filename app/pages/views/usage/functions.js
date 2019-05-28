@@ -31,6 +31,11 @@ function getUrlPaginated(page) {
 	}
 }
 
+function getUrlDataset() {
+	var db = window.location.href.toString().split('/')[3];
+	return "/api/" + db + "/usage/dataset";
+}
+
 function getUrlAll() {
 	var db = window.location.href.toString().split('/')[3];
 	return "/api/" + db + "/usage/stats";
@@ -195,7 +200,7 @@ function cleanImageName(name) {
 }
 
 function download(){
-	$('<a href="' + getUrl() + '" download="' + "usage.json" + '">Download dataset</a>').appendTo('#download_dataset');
+	$('<a href="' + getUrlDataset() + '" download="' + "usage.csv" + '">Download dataset</a>').appendTo('#download_dataset');
 }
 
 function how_to_read() {

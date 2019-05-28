@@ -6,6 +6,11 @@ function getUrl() {
 	return "/api/"+db+"/file/upload-date?groupby=" + groupby;
 }
 
+function getUrlDataset() {
+	var db = window.location.href.toString().split('/')[3];
+	return "/api/"+db+"/file/upload-date/dataset";
+}
+
 function getUrlAll(){
 	var db = window.location.href.toString().split('/')[3];
 	var groupby = $('#groupby-select').val();
@@ -85,7 +90,7 @@ function sorting_sidebar() {
 }
 
 function download() {
-	$('<a href="' + getUrl() + '" download="' + "user_contributions.json" + '">Download dataset</a>').appendTo('#download_dataset');
+	$('<a href="' + getUrlDataset() + '" download="' + "user_contributions.csv" + '">Download dataset</a>').appendTo('#download_dataset');
 }
 
 function highlight() {

@@ -218,6 +218,15 @@ module.exports = function (app, apicache) {
         }
     });
 
+    app.get('/api/:id/category/dataset', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            api.categoryGraphDataset(req, res, next, glam.connection);
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
     app.get('/api/:id', apicache("1 hour"), function (req, res, next) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
@@ -231,6 +240,15 @@ module.exports = function (app, apicache) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             api.views(req, res, next, glam.connection);
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
+    app.get('/api/:id/views/dataset', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            api.viewsDataset(req, res, next, glam.connection);
         } else {
             res.sendStatus(400);
         }
@@ -267,6 +285,15 @@ module.exports = function (app, apicache) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             api.usage(req, res, next, glam.connection);
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
+    app.get('/api/:id/usage/dataset', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            api.usageDataset(req, res, next, glam.connection);
         } else {
             res.sendStatus(400);
         }
@@ -312,6 +339,15 @@ module.exports = function (app, apicache) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             api.uploadDate(req, res, next, glam.connection);
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
+    app.get('/api/:id/file/upload-date/dataset', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            api.uploadDateDataset(req, res, next, glam.connection);
         } else {
             res.sendStatus(400);
         }
