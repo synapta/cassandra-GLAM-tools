@@ -438,17 +438,16 @@ mediaType: application/json
                   }
                 ]
     /dataset:
-      description: List of views per file and date as a CSV file.
+      description: List of total views per date as a CSV file.
       get:
         responses:
           200:
             body:
               application/csv:
                 example: |
-                  File;Date;Views
-                  11._Schweizerisches_Landesmuseum_-_Zürich.png;2019-03-24;16
-                  1798TuriciI.jpg;2019-03-24;4
-                  2013-05-05_Zuriko_(Foto_Dietrich_Michael_Weidmann)_109.JPG;2019-03-24;1
+                  Date;Views
+                  2019-03-24;16
+                  2019-03-25;4
     /sidebar:
       description: List of total, average, and median views per file.
       get:

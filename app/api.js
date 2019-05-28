@@ -749,21 +749,18 @@ var views = function (req, res, next, db) {
 }
 
 var viewsDataset = function (req, res, next, db) {
-    let query = `select img_name, sum(accesses) as sum, access_date
-                 from visualizations, images
-                 where images.is_alive = true
-                 and images.media_id = visualizations.media_id
-                 group by img_name, access_date order by access_date`;
+    let query = `select sum(accesses) as sum, access_date
+                 from visualizations
+                 group by access_date order by access_date`;
 
     db.query(query, (err, dbres) => {
         if (!err) {
             res.set('Content-Type', 'text/csv');
             let stringifier = stringify({'delimiter': ';', 'record_delimiter': 'windows'});
             stringifier.pipe(res);
-            stringifier.write(["File", "Date", "Views"]);
+            stringifier.write(["Date", "Views"]);
             dbres.rows.forEach(function (row) {
                 let line = [
-                    row.img_name,
                     row.access_date.toISODateString(),
                     parseInt(row.sum)
                 ];
