@@ -126,7 +126,7 @@ function how_to_read(){
 
 function highlight() {
 	if (ACTIVE_ITEM_ID !== undefined) {
-		console.log(ACTIVE_ITEM_ID);
+		// console.log(ACTIVE_ITEM_ID);
 		$('#' + ACTIVE_ITEM_ID).closest('.list_item').addClass('list_item_active');
 	}
 
