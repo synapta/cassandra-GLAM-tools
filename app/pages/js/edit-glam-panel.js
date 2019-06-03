@@ -1,6 +1,9 @@
-// // Create NEW glam
+var PWD_EDITED = false;
+
+// Edit glam
 $(function() {
   var id = window.location.href.toString().split('/')[5];
+
   $.getJSON('/api/admin/glams/' + id, function(data) {
     $('#glamID').val(data.name);
     $('#glamFullName').val(data.fullname);
@@ -16,10 +19,13 @@ $(function() {
         "name": $('#glamID').val(),
         "fullname": $('#glamFullName').val(),
         "category": $('#glamCategory').val(),
-        "image": $('#featuredImageURL').val(),
-        "password": $('#glamPassword').val()
+        "image": $('#featuredImageURL').val()
       };
 
+      if (PWD_EDITED) {
+        glamData.password = $('#glamPassword').val();
+      }
+      
       $.ajax({
         type: "PUT",
         url:'/api/admin/glams/' + id,
@@ -27,7 +33,7 @@ $(function() {
         data: JSON.stringify(glamData),
         success: function(data) {
           $('#wrong-glam').fadeOut(200);
-          $('#new-glam-form').fadeOut(200, function() {
+          $('#edit-glam-form').fadeOut(200, function() {
             $('#success-glam').fadeIn(200);
           });
         },
@@ -36,6 +42,19 @@ $(function() {
           $('#wrong-glam').fadeIn(200);
         }
       });
+    }
+  });
+
+  $('#edit-password-button').click(function(e) {
+    e.preventDefault();
+    if ($('#password-field').is(':visible')) {
+      $('#password-field').fadeOut(400);
+      PWD_EDITED = false;
+      $(this).text('EDIT PASSWORD').removeClass('btn-warning').addClass('btn-danger');
+    } else {
+      $('#password-field').fadeIn(400);
+      PWD_EDITED = true;
+      $(this).text('KEEP OLD PASSWORD').removeClass('btn-danger').addClass('btn-warning');
     }
   });
 });

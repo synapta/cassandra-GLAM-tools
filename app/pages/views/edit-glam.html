@@ -50,7 +50,7 @@
 								<a href="/admin/panel">VIEW COMPLETE LIST</a>
 							</div>
 						</div>
-						<form id="new-glam-form" name="new-glam" autocomplete="off">
+						<form id="edit-glam-form" name="new-glam" autocomplete="off">
 							<div class="form-group">
 								<label for="glamID">Unique GLAM ID*</label>
 								<input type="text" class="form-control" id="glamID" aria-describedby="emailHelp" placeholder="e.g. ZU, ETH or SNL" disabled required />
@@ -67,11 +67,14 @@
 								<label for="featuredImageURL">Featured image URL*</label>
 								<input type="text" class="form-control" id="featuredImageURL" placeholder="URL" required />
 							</div>
-							<div class="form-group">
-								<label for="glamPassword">Password (leave blank for public GLAMs)</label>
+							<div class="form-group" id="password-field">
+								<label for="glamPassword">New password (leave blank for public GLAMs)</label>
 								<input type="password" class="form-control" id="glamPassword" placeholder="Password" autocomplete="new-password">
 							</div>
-							<button id="edit-glam-button" class="btn btn-primary">SUBMIT</button>
+							<div class="form-group d-flex">
+								<button id="edit-glam-button" class="btn btn-primary mr-auto">SUBMIT</button>
+								<button id="edit-password-button" class="btn btn-danger ml-auto">EDIT PASSWORD</button>
+							</div>
 						</form>
 					</div>
 				</div>

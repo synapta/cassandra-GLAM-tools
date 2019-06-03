@@ -638,6 +638,10 @@ footer {
   margin-right: 20px;
 }
 
+#password-field {
+  display: none;
+}
+
 @media screen and (max-width: 768px) {
   .glam-title-section {
     margin: .5rem 0;
