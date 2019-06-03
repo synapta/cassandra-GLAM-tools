@@ -1,3 +1,5 @@
+var TOP_WIKIS = [];
+
 var horizBarChartDraw = function(div, query, stats_data) {
   // get data
   d3.json(query, function(error, data) {
@@ -5,10 +7,12 @@ var horizBarChartDraw = function(div, query, stats_data) {
     if (error) throw error;
     // sort
     data = data.sort(function(a, b) {
+      if (a.wiki === 'others') return -1; // put others column as last element
       return a.usage - b.usage;
     });
     // format the data
     data.forEach(function(d) {
+      if (d.wiki !== 'others') TOP_WIKIS.push(d.wiki);
       d.usage = +d.usage;
     });
     // draw
@@ -29,7 +33,7 @@ function drawHorizBars(data, div, totalPages) {
   } else {
     // tablets and desktop
     availH = $(div).outerHeight() * 0.85;
-    margin = { top: 40, right: 20, bottom: 10, left: 70 };
+    margin = { top: 40, right: 30, bottom: 20, left: 80 };
   }
 
   var width = Math.round($(div).outerWidth()) - margin.left - margin.right,
@@ -137,6 +141,11 @@ function drawHorizBars(data, div, totalPages) {
     array.forEach(function(el) {
       d3.select('#' + el).attr('stroke', 'red');
     });
+    // check if used in other wikis
+    let difference = array.filter(x => !TOP_WIKIS.includes(x));
+    if (difference.length > 0) {
+      d3.select('#others').attr('stroke', 'red');
+    }
   }
 
   window.turnOffUsageBars = function(array) {
