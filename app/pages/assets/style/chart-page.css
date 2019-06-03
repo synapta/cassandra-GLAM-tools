@@ -436,6 +436,12 @@
     display: none;
   }
 
+  .groupby_container {
+    margin: 1rem 0 .5rem;
+    padding: 0;
+    border: none;
+  }
+
   #visualizations {
     display: flex;
     flex-direction: column;
@@ -468,6 +474,11 @@
     width: 100%;
     height: auto;
     margin-bottom: 1rem;
+    overflow: hidden;
+  }
+
+  #usage_horiz_bars {
+    overflow-y: hidden;
   }
 
   #visualizations #right-column {
@@ -485,4 +496,18 @@
 
   #chart-page-footer {
     position: relative;
+    flex-direction: column;
+  }
+
+  #chart-page-footer > div {
+    margin: 1rem 0;
+  }
+
+  #chart-page-footer .chart-title, #chart-page-footer .commons-category {
+    flex-direction: column;
+  }
+
+  #chart-page-footer .commons-category {
+    align-items: flex-start;
+  }
 }
