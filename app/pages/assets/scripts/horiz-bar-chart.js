@@ -29,7 +29,7 @@ function drawHorizBars(data, div, totalPages) {
   if ($(window).width() < 576) {
     // smartphones
     availH = $(div).outerHeight();
-    margin = { top: 10, right: 10, bottom: 40, left: 30 };
+    margin = { top: 40, right: 10, bottom: 40, left: 30 };
   } else {
     // tablets and desktop
     availH = $(div).outerHeight() * 0.85;
