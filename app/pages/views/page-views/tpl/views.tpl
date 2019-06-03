@@ -5,9 +5,12 @@
 				<span class="id item" id="{{img_name_id}}">
 					{{img_name_text}}
 				</span>
-				<div class="link" style="font-size:0.6em;">
+				<div class="link" style="font-size:0.8em;">
 					<a style="text-decoration:underline" href="https://commons.wikimedia.org/wiki/File:{{img_name}}" title="{{img_name_text}}" target="_blank">
 						view on Commons <img class="link-out-small" src="/assets/img/link-out.svg" alt="go">
+					</a>
+					<a style="text-decoration:underline; margin-left:1rem;" href="../file/{{img_name}}" title="{{name}}">
+						view details
 					</a>
 				</div>
 			</div>

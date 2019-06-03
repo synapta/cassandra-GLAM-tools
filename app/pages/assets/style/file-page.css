@@ -1,12 +1,32 @@
+html, body {
+  height: 100%;
+}
+
+body {
+  overflow: hidden;
+}
+
+#visualizations {
+  position: relative;
+  height: calc(100vh - 95px - 75px);
+}
+
+#visualizations > .row {
+  height: 100%;
+  margin: 0;
+}
+
 /* HEADER BAR */
 .top_bar {
-  min-height: 3em;
+  /* min-height: 3em; */
+  height: 95px;
   top: 0;
   width: 100%;
   z-index: 1;
   padding: 1rem 1.5rem;
   display: flex;
   align-items: center;
+  position: relative;
 }
 
 #breadcrumbs {
@@ -62,73 +82,11 @@
   margin: 0;
 }
 
-/*the container must be positioned relative:*/
-.select-chart {
-  position: relative;
-  font-family: Arial;
-}
-
-.select-chart select {
-  display: none; /*hide original SELECT element:*/
-}
-
-.select-selected {
-  background-color: transparent;
-  border: 1px solid #fff;
-}
-
-/*style the arrow inside the select element:*/
-.select-selected:after {
-  position: absolute;
-  content: "";
-  top: 15px;
-  right: 12px;
-  width: 0;
-  height: 0;
-  border: 6px solid transparent;
-  border-color: #fff transparent transparent transparent;
-}
-
-/*point the arrow upwards when the select box is open (active):*/
-.select-selected.select-arrow-active:after {
-  border-color: transparent transparent #fff transparent;
-  top: 7px;
-}
-
-/*style the items (options), including the selected item:*/
-.select-items div,.select-selected {
-  width: 175px;
-  font-size: 0.9rem;
-  color: #fff;
-  padding: .5rem 1.4rem .5rem 1.2rem;
-  border-bottom: 1px solid #fff;
-  cursor: pointer;
-  user-select: none;
-}
-
-/*style items (options):*/
-.select-items {
-  position: absolute;
-  background-color: var(--main);
-  top: 100%;
-  left: 0;
-  right: 0;
-  z-index: 99;
-}
-
-/*hide the items when the select box is closed:*/
-.select-hide {
-  display: none;
-}
-
-.select-items div:hover, .same-as-selected {
-  background-color: rgba(0, 0, 0, 0.1);
-}
-
 /* FOOTER */
 #chart-page-footer {
   display: flex;
   position: fixed;
+  height: 75px;
   left: 0;
   bottom: 0;
   width: 100%;
@@ -183,7 +141,8 @@
 }
 
 #chart-page-footer .chart-title,
-#chart-page-footer .commons-category {
+#chart-page-footer .commons-category,
+#chart-page-footer .file-name {
   display: flex;
   align-items: center;
 }
@@ -202,39 +161,17 @@
   margin: 0;
 }
 
-#chart-page-footer .commons-category h6 {
+#chart-page-footer .commons-category h6,
+#chart-page-footer .file-name h6 {
   margin: 0 .5rem 0 0;
   font-weight: 100;
   font-size: 0.8rem;
 }
 
-#chart-page-footer .commons-category h2 {
-  margin: 0;
+#chart-page-footer .commons-category h2,
+#chart-page-footer .file-name h2 {
+  margin: 0 1rem 0 0;
   text-decoration: underline;
-}
-
-/* HOT TO READ */
-#how_to_read_button:hover {
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-.how_to_read {
-  display: none;
-  z-index: 1;
-  position: absolute;
-  margin: 1em;
-  background-color: #fff;
-  border: 3px dotted var(--accent-green);
-  padding: 2em;
-  font-size: 0.8em;
-  width: calc(100% - 3em);
-  box-shadow: 5px 5px 30px 0px rgba(0, 0, 0, .2);
-}
-
-.how_to_read h5 {
-  text-transform: uppercase;
-  color: var(--main);
 }
 
 /* CHART CONTAINER */
@@ -244,9 +181,9 @@
 
 /* RIGHT COLUMN */
 #right-column {
-  /* background-color: var(--bg-gray); */
-  border-left: 1px dotted var(--bg-gray);
-  padding-right: 0;
+  height: 100%;
+  overflow-y: scroll;
+  padding-bottom: 2rem;
 }
 
 #right_sidebar_box {
@@ -279,7 +216,7 @@
 #right_sidebar_list {
   overflow-y: auto;
   /* overflow-x: visible; */
-  height: 73vh;
+  height: 77vh;
   margin-right: -15px;
 }
 
@@ -327,87 +264,84 @@
   font-weight: 600;
 }
 
-/* CATEGORY NETWORK CHART */
-#category span {
-  font-size: 2em;
-  font-weight: lighter;
-  text-decoration: none;
+#file_cat_network_legend {
+  position: absolute;
+  width: 80px;
 }
 
-#category_network_container {
-  height: 80%;
-  overflow-y: hidden;
-  padding: 1em;
-}
-
-#category_network_container .edges {
-  stroke: #999;
-  stroke-opacity: 0.6;
-  fill: red;
-}
-
-#category_network_container .nodes g {
-  cursor: pointer;
-}
-
-#category_network_container .nodes > g {
-  z-index: 2;
-}
-
-#category_network_container .nodes g text {
-  opacity: 0.4;
-}
-
-#category_network_container .nodes g:hover text {
-  opacity: 1;
-  transform: scale(1.5, 1.5);
-}
-
-.selected_circle {
-  stroke: black;
-  stroke-width: 3px;
-}
-
-/* USAGE CHART */
-#usage_stat {
-  padding-bottom: .5rem;
-  border-bottom: 1px solid rgba(100, 100, 100, .3);
-}
-
-#usage_stat > div {
-  padding: 1rem 0;
-  margin-top: 1rem;
-}
-
-#usage_stat > div:not(:last-child) {
-  border-right: 1px solid rgba(100, 100, 100, .3);
-}
-
-#usage_stat .usage-stat {
-  display: flex;
-  flex-direction: column;
-  text-transform: uppercase;
-}
-
-#usage_stat .usage-stat p {
-  font-size: .9rem;
-}
-
-#usage_horiz_bars {
-  overflow-y: auto;
-  overflow-x: hidden;
-  width: 100%;
-  height: 65vh;
+#file-dataviz {
   display: flex;
   justify-content: center;
-  align-items: center;
+  height: 100%;
+  overflow-y: auto;
+  padding-top: 3rem;
 }
 
-/* PAGE VIEWS CHART */
-#main_views_container {
-  height: 100vh;
+.file-dataviz-container {
+  padding: 2rem 1rem;
+  margin: 1rem;
+  height: 700px;
+  border-bottom: 1px solid var(--main);
 }
 
+.file-dataviz-chart {
+  height: 100%;
+}
+
+.line {
+  fill: none;
+  stroke: var(--main);
+  stroke-width: 1px;
+}
+
+.image_line {
+  fill: none;
+  stroke: var(--accent-green);
+  stroke-width: 1px;
+}
+
+
+.zoom-area {
+  fill: none;
+  pointer-events: all;
+}
+
+.file_details {
+  width: 100%;
+}
+
+.file_details_intro {
+  width: 100%;
+}
+
+.file_details_intro h1 {
+  font-size: 1.5rem;
+  color: var(--main);
+  margin-bottom: 1rem;
+}
+
+.file_details img {
+  width: 100%;
+  margin: 1rem 0;
+  padding: 1rem 0;
+  border-top: 1px solid rgba(100, 100, 100, .5);
+  border-bottom: 1px solid rgba(100, 100, 100, .5);
+}
+
+.file_details_section {
+  margin: .5rem 0;
+  padding: .5rem 0;
+  border-top: 1px solid rgba(100, 100, 100, .5);
+}
+
+.file_details_section h2 {
+  font-size: 1.3rem;
+  color: var(--main);
+}
+
+.file_details_section span {
+  color: var(--accent-blue);
+}
 
 @media screen and (max-width: 768px) {}
 

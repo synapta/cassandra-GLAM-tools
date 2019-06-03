@@ -97,6 +97,15 @@ module.exports = function (app, apicache) {
         }
     });
 
+    app.get('/:id/file/:file', apicache("1 hour"), function (req, res) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            res.sendFile(__dirname + '/pages/views/file-page/index.html');
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
     app.get('/:id/category-network', apicache("1 hour"), function (req, res) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
