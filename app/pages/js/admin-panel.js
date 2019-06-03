@@ -61,7 +61,6 @@ $(function() {
         $('#paused-glams').html(paused);
         $('#failed-glams').html(failed);
         if (is_touch_device()) {
-          console.log('touch screen');
           // show always
           $('.glam-controls').fadeIn();
         } else {
@@ -73,7 +72,7 @@ $(function() {
           });
         }
         // on click pause/unpause
-        $('.glam-block > .glam-controls.command').click(function() {
+        $('.glam-block .glam-controls.command').click(function() {
           let pause = !$(this).data('glampaused');
           $.ajax({
             type: "PUT",
@@ -108,7 +107,6 @@ function isEven(number) {
 
 function filterGlams(id) {
   let $btn = $('#' + id + '-btn');
-  console.log($btn);
   $('.filt-btn').removeClass('active-btn');
   switch (id) {
     case 'total':
