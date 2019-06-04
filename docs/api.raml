@@ -510,6 +510,17 @@ mediaType: application/json
                       "median": 1360.5
                     }
                   ]
+    /stats:
+      description: The total number of available files.
+      get:
+        responses: 
+          200:
+            body:
+              application/json:
+                example: |
+                  {
+                    "total": 14091
+                  }
     /file/{file}:
       description: List of views of the file with `name = {file}` grouped by date.
       get:
