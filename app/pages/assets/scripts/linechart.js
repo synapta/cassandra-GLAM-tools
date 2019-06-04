@@ -1,5 +1,5 @@
 var FILE_QUERY
-var SHOWN_IMAGE = false;
+var SHOWN_SEC_LINE = false;
 
 
 var lineChartDraw = function(div, query) {
@@ -42,7 +42,7 @@ function lineChart(div, data) {
 
   var parseTime = d3.isoParse;
 
-  var image_valueline, image_path;
+  var image_valueline, image_path, img_data;
 
   // FORMAT DATA
   data.forEach(function(d) {
@@ -121,7 +121,7 @@ function lineChart(div, data) {
   var valueline = d3.line()
                     .x(function(d) { return x(d.date); })
                     .y(function(d) { return y(d.views); })
-                    .curve(d3.curveLinear);
+                    .curve(d3.curveStepBefore);
 
   var valueline2 = d3.line()
                      .x(function(d) { return x2(d.date); })
@@ -180,21 +180,25 @@ function lineChart(div, data) {
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
                     .call(zoom);
 
-
   //  Label to display details (right top corner)
   var detailsLabel = focus.append("g").attr("class", "dateLabel");
   var bisect = d3.bisector(function(d) { return d.date; }).left;
+  var image_bisect = d3.bisector(function(d) { return d.access_date; }).left;
 
-  // Line across the plots on mouse pointer
+    // Line across the plots on mouse pointer
   var verticalLine = focus.append("g").attr("class", "hover-line");
 
   // MOUSE HANDLER
+  // $(".zoom-area").mousemove(function(event) {
   $("#svg-graph").mousemove(function(event) {
+
     let mousePoint = {x: event.pageX, y: event.pageY };
+
+    // console.log(mousePoint);
 
     if (isInsideGraph(mousePoint)) {
       // MOVE VERTICAL LINE
-      let mouseX = mousePoint.x - margin.left * 2 - $('#main-sidebar').width() - 15;
+      let mouseX = mousePoint.x - margin.left * 2 - 15;
       verticalLine.select('line').remove();
       verticalLine.append("line")
                   .attr("x1", mouseX).attr("x2", mouseX)
@@ -210,6 +214,46 @@ function lineChart(div, data) {
       detailsLabel.selectAll('text').remove();
     }
   });
+
+  // add circles for annotation
+  // $("#svg-graph").on("click", function(event) {
+  //
+  //   let mousePoint = {x: event.pageX, y: event.pageY };
+  //   let xCoord = mousePoint.x - margin.left * 2 - 15;
+  //   let yCoord = y(data[bisect(data, getValueForPositionXFromData(xCoord))].views);
+  //   let fT = moment(getValueForPositionXFromData(xCoord)).format("DD MMM YY, HH:mm");
+  //
+  //   var circle_data = {
+  //     x: xCoord,
+  //     y: yCoord,
+  //     time: fT,
+  //     text: "description"
+  //   };
+  //
+  //   // console.log(circle_data);
+  //
+  //   if (isInsideGraph(mousePoint)) {
+  //     addCircle(circle_data);
+  //   }
+  // });
+
+  // focus.selectAll('.note-dot')
+
+
+  // function addCircle(circle_data) {
+  //   focus.append("circle") // Uses the enter().append() method
+  //        .datum(circle_data)
+  //        .attr("class", "note-dot") // Assign a class for styling
+  //        .attr("cx", (d) => d.x)
+  //        .attr("cy", (d) => d.y)
+  //        .attr("r", 5)
+  //        .style("transition", "all .5s")
+  //        .on('mouseover', function(d) {
+  //          console.log(d);
+  //        }).on('mouseout', function(d) {
+  //
+  //        });
+  // }
 
   // *** FUNCTIONS ***
   // display data in text box
@@ -232,9 +276,21 @@ function lineChart(div, data) {
                 .attr("x", width - 200)
                 .attr("y", 50)
                 .attr("class", "info-label")
-                .html("VIEWS: " + views)
+                .html("TOTAL VIEWS: " + views)
                 .attr("font-family", "monospace")
                 .attr("font-size", "14px");
+
+    if (SHOWN_SEC_LINE) {
+      let img_views = img_data[image_bisect(img_data, time)].sum;
+      // show data (views)
+      detailsLabel.append("text")
+                  .attr("x", width - 200)
+                  .attr("y", 70)
+                  .attr("class", "info-label")
+                  .html("IMAGE VIEWS: " + img_views)
+                  .attr("font-family", "monospace")
+                  .attr("font-size", "14px");
+    }
   }
 
   // x axis object
@@ -262,13 +318,14 @@ function lineChart(div, data) {
   // check if point is inside graph
   function isInsideGraph(point) {
     // console.log(point);
-    if (point.x > (margin.left * 2 + $('#main-sidebar').width() + 15) && point.x < (width + margin.left * 2 + $('#main-sidebar').width() + 15) &&
+    if (point.x > (margin.left * 2 + 15) && point.x < (width + margin.left * 2 + 15) &&
       point.y > ($('#svg-graph').offset().top + margin.top) &&
       point.y < (height + $('#svg-graph').offset().top + margin.top)) {
       return true;
     } else {
       return false;
     }
+    return true;
   }
 
   // zoom behavior handler
@@ -277,12 +334,17 @@ function lineChart(div, data) {
     var t = d3.event.transform;
     x.domain(t.rescaleX(x2).domain());
     path.attr("d", valueline);
-    if (SHOWN_IMAGE) {
+    if (SHOWN_SEC_LINE) {
       image_path.attr("d", image_valueline);
     }
     gX.call(xAxis);
-    brushView.call(brush.move, x.range().map(t.invertX, t));
+    // update dots
+    let dots = focus.selectAll('.note-dot');
+    // console.log(dots);
+    dots.attr("cx", (d) => d.x)
+        .attr("cy", (d) => d.y);
 
+    brushView.call(brush.move, x.range().map(t.invertX, t));
   }
 
   function brushFunction() {
@@ -290,7 +352,7 @@ function lineChart(div, data) {
     var s = d3.event.selection || x2.range();
     x.domain(s.map(x2.invert, x2));
     path.attr("d", valueline);
-    if (SHOWN_IMAGE) {
+    if (SHOWN_SEC_LINE) {
       image_path.attr("d", image_valueline);
     }
     gX.call(xAxis);
@@ -305,7 +367,7 @@ function lineChart(div, data) {
     y.domain([d3.min(data, function(d) { return d.views; }), d3.max(data, function(d) { return d.views; })]);
     // update main line chart
     path.transition().attr("d", valueline);
-    SHOWN_IMAGE = false;
+    SHOWN_SEC_LINE = false;
   }
 
   window.showFileLine = function(filename) {
@@ -319,7 +381,8 @@ function lineChart(div, data) {
            d.sum = +d.sum;
          });
 
-         SHOWN_IMAGE = true;
+         SHOWN_SEC_LINE = true;
+         img_data = image_data;
 
          // update domain
          let min = Math.min(d3.min(image_data, function(d) { return d.sum; }), d3.min(data, function(d) { return d.views; }));
@@ -337,7 +400,7 @@ function lineChart(div, data) {
          image_valueline = d3.line()
                            .x(function(d) { return x(d.access_date); })
                            .y(function(d) { return y(d.sum); })
-                           .curve(d3.curveLinear);
+                           .curve(d3.curveStepBefore);
 
          image_path = lineChart.append("path")
                        .datum(image_data)
