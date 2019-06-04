@@ -281,6 +281,15 @@ module.exports = function (app, apicache) {
         }
     });
 
+    app.get('/api/:id/views/stats', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam) || req.params.file !== undefined) {
+            api.viewsStats(req, res, next, glam.connection);
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
     app.get('/api/:id/usage', apicache("1 hour"), function (req, res, next) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {

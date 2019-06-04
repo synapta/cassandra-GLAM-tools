@@ -859,6 +859,28 @@ var viewsSidebar = function (req, res, next, db) {
     });
 }
 
+var viewsStats = function (req, res, next, db) {
+    let query = `select count(img_name) as count
+                from images as i
+                where is_alive = true`;
+
+    db.query(query, (err, dbres) => {
+        if (!err) {
+            if (dbres.rows.length > 0) {
+                let row = dbres.rows[0];
+                let result = {
+                    "total": parseInt(row.count)
+                };
+                res.json(result);
+            } else {
+                res.sendStatus(404);
+            }
+        } else {
+            next(new Error(err));
+        }
+    });
+}
+
 // FILE
 var fileDetails = function (req, res, next, db) {
     let query = `select i.img_name, sum(v.accesses) as tot, avg(v.accesses) as avg,
@@ -920,4 +942,5 @@ exports.views = views;
 exports.viewsDataset = viewsDataset;
 exports.viewsByFile = viewsByFile;
 exports.viewsSidebar = viewsSidebar;
+exports.viewsStats = viewsStats;
 exports.fileDetails = fileDetails;
