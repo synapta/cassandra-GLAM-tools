@@ -25,9 +25,19 @@ var finalize = function (failure) {
         process.exit(65);
     }
 
-    glam.connection.query("select * from doMaintenance(); refresh materialized view visualizations_stats;", function (err, res) {
-        console.log("Process completed!");
-        process.exit(0);
+    glam.connection.query("select * from doMaintenance();", function (err, res) {
+        if (err) {
+            console.log(err);
+            process.exit(1);
+        }
+        glam.connection.query("refresh materialized view visualizations_stats;", function (err, res) {
+            if (err) {
+                console.log(err);
+                process.exit(1);
+            }
+            console.log("Process completed!");
+            process.exit(0);
+        });
     });
 }
 
