@@ -214,9 +214,11 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
    zoomView.on('mousemove', function() {
       focus.selectAll(".bar").style('opacity', '1');
       detailsLabel.selectAll('text').remove();
+      detailsLabel.selectAll('rect').remove();
     }).on('mouseout', function() {
       focus.selectAll(".bar").style('opacity', '1');
       detailsLabel.selectAll('text').remove();
+      detailsLabel.selectAll('rect').remove();
     });
 
   passThruEvents(focus.select('.zoom'));
@@ -228,6 +230,7 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
   function displayDetails(d, name) {
     // remove previous
     detailsLabel.selectAll('text').remove();
+    detailsLabel.selectAll('rect').remove();
     // format data
     let fDate;
     if ($('#groupby-select').val() === 'year') {
@@ -239,21 +242,37 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
     }
 
     // show data (time)
-    detailsLabel.append("text")
-                .attr("x", width - 200)
+    var text1 = detailsLabel.append("text")
+                .attr("x", width - 300)
                 .attr("y", 30)
                 .attr("class", "info-label")
                 .html(fDate)
                 .attr("font-family", "monospace")
                 .attr("font-size", "14px");
     // show data (views)
-    detailsLabel.append("text")
-                .attr("x", width - 200)
+    var text2 = detailsLabel.append("text")
+                .attr("x", width - 300)
                 .attr("y", 50)
                 .attr("class", "info-label")
                 .html("FILES: " + d.value + ' (' + name + ')')
                 .attr("font-family", "monospace")
                 .attr("font-size", "14px");
+
+    detailsLabel.insert("rect", "text")
+                .attr('class', 'bounding-rect')
+                .attr("x", text1.node().getBBox().x)
+                .attr("y", text1.node().getBBox().y)
+                .attr("width", text1.node().getBBox().width)
+                .attr("height", text1.node().getBBox().height)
+                .style("fill", "#fff");
+
+    detailsLabel.insert("rect", "text")
+                .attr('class', 'bounding-rect')
+                .attr("x", text2.node().getBBox().x)
+                .attr("y", text2.node().getBBox().y)
+                .attr("width", text2.node().getBBox().width)
+                .attr("height", text2.node().getBBox().height)
+                .style("fill", "#fff");
   }
 
   function brushFunction() {
