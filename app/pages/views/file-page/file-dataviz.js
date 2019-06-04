@@ -439,7 +439,7 @@ function lineChart(div, data, image_data) {
 
   // BRUSH SCALES
   var x2 = d3.scaleTime().range([0, width]);
-  var y2 = d3.scaleLinear().range([height2, 0]);
+  var y2 = d3.scaleLog().range([height2, 0]);
 
   // SET DOMAINS
   x.domain(d3.extent(data, function(d) { return d.date; }));
