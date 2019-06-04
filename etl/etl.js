@@ -25,7 +25,7 @@ var finalize = function (failure) {
         process.exit(65);
     }
 
-    glam.connection.query("select * from doMaintenance();", function (err, res) {
+    glam.connection.query("select * from doMaintenance(); refresh materialized view visualizations_stats;", function (err, res) {
         console.log("Process completed!");
         process.exit(0);
     });

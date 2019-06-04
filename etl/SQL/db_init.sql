@@ -4,3 +4,5 @@ CREATE table IF NOT EXISTS visualizations (media_id int references images(media_
 CREATE table IF NOT EXISTS annotations (annotation_date date primary key, annotation_value varchar(255));
 CREATE table IF NOT EXISTS usages (gil_wiki varchar(20),gil_page_title varchar(255),gil_to varchar(255), first_seen date,last_seen date, is_alive boolean, primary key(gil_to,gil_page_title,first_seen,gil_wiki));
 CREATE INDEX IF NOT EXISTS ad_GBy on visualizations(access_date);
+create materialized view if not exists visualizations_sum as select sum(accesses) as accesses_sum, access_date from visualizations group by access_date;
+create materialized view if not exists visualizations_stats as select i.img_name as img_name, sum(v.accesses) as tot, avg(v.accesses) as avg, PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER by v.accesses) as median from images as i, visualizations as v where i.media_id = v.media_id and i.is_alive = true group by i.img_name;

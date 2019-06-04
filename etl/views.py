@@ -68,6 +68,7 @@ def process(conn, date):
                 "'", "''") + "','" + date + "'," + arr[2] + "," + arr[22] + "," + arr[23] + ")"
             curse.execute(query)
 
+    curse.execute('refresh materialized view visualizations_sum')
     curse.close()
     source_file.close()
 
