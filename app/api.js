@@ -677,8 +677,8 @@ var usageTop = function (req, res, next, db) {
 
 // VIEWS
 var views = function (req, res, next, db) {
-    let query = `select sum(accesses) as sum, access_date, annotation_value
-                 from visualizations
+    let query = `select accesses_sum, access_date, annotation_value
+                 from visualizations_sum
                  LEFT OUTER JOIN annotations ON access_date = annotation_date`;
 
     let parameters = [];
@@ -697,7 +697,7 @@ var views = function (req, res, next, db) {
         parameters.push(req.query.end);
     }
 
-    query += " group by access_date, annotation_value order by access_date";
+    query += " order by access_date";
 
     db.query(query, parameters, (err, dbres) => {
         if (!err) {
@@ -705,7 +705,7 @@ var views = function (req, res, next, db) {
             dbres.rows.forEach(function (row) {
                 let date = {
                     "date": row.access_date.toISODateString(),
-                    "views": parseInt(row.sum),
+                    "views": parseInt(row.accesses_sum),
                 };
                 if (row.annotation_value !== null) {
                     date.annotation = row.annotation_value;
@@ -720,9 +720,9 @@ var views = function (req, res, next, db) {
 }
 
 var viewsDataset = function (req, res, next, db) {
-    let query = `select sum(accesses) as sum, access_date
-                 from visualizations
-                 group by access_date order by access_date`;
+    let query = `select accesses_sum, access_date
+                from visualizations_sum
+                order by access_date`;
 
     db.query(query, (err, dbres) => {
         if (!err) {
@@ -733,7 +733,7 @@ var viewsDataset = function (req, res, next, db) {
             dbres.rows.forEach(function (row) {
                 let line = [
                     row.access_date.toISODateString(),
-                    parseInt(row.sum)
+                    parseInt(row.accesses_sum)
                 ];
                 stringifier.write(line);
             })
@@ -787,28 +787,8 @@ var viewsByFile = function (req, res, next, db) {
 }
 
 var viewsSidebar = function (req, res, next, db) {
-    let query = `select i.img_name, sum(v.accesses) as tot, avg(v.accesses) as av, PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER by v.accesses) as median
-                  from images as i, visualizations as v
-                  where i.media_id = v.media_id
-                  and i.is_alive = true`;
-
-    let parameters = [];
-
-    if (req.query.start !== undefined) {
-        query += " and access_date >= $1";
-        parameters.push(req.query.start);
-    }
-
-    if (req.query.end !== undefined) {
-        if (req.query.start === undefined) {
-            res.sendStatus(400);
-            return;
-        }
-        query += " and access_date <= $2";
-        parameters.push(req.query.end);
-    }
-
-    query += " group by i.img_name";
+    let query = `select img_name, tot, avg, median
+                from visualizations_stats`;
 
     if (req.query.sort !== undefined) {
         if (req.query.sort === 'views') {
@@ -816,7 +796,7 @@ var viewsSidebar = function (req, res, next, db) {
         } else if (req.query.sort === 'median') {
             query += " order by median desc";
         } else if (req.query.sort === 'name') {
-            query += " order by i.img_name";
+            query += " order by img_name";
         } else {
             // Wrong value
             query += " order by tot desc";
@@ -840,14 +820,14 @@ var viewsSidebar = function (req, res, next, db) {
 
     query += " limit " + limit + " offset " + offset;
 
-    db.query(query, parameters, (err, dbres) => {
+    db.query(query, (err, dbres) => {
         if (!err) {
             let result = [];
             dbres.rows.forEach(function (row) {
                 let view = {
                     "img_name": row.img_name,
                     "tot": parseInt(row.tot),
-                    "av": parseFloat(row.av),
+                    "av": parseFloat(row.avg),
                     "median": parseFloat(row.median)
                 };
                 result.push(view);
@@ -861,8 +841,7 @@ var viewsSidebar = function (req, res, next, db) {
 
 var viewsStats = function (req, res, next, db) {
     let query = `select count(img_name) as count
-                from images as i
-                where is_alive = true`;
+                from visualizations_stats`;
 
     db.query(query, (err, dbres) => {
         if (!err) {
