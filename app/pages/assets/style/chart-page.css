@@ -129,6 +129,7 @@
 #chart-page-footer {
   display: flex;
   position: fixed;
+  max-height: 70px;
   left: 0;
   bottom: 0;
   width: 100%;
