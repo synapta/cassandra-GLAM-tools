@@ -407,6 +407,20 @@ mediaType: application/json
                     "date": "2006-01-01"
                   }
                 ]
+  /file/details/{file}:
+    description: Number of views and list of categories for the file with `name = {file}`.
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "tot": 9420,
+                  "avg": 13.437945791726106,
+                  "median": 13,
+                  "categories": ["Historical_images_of_Wasserkirche,_Zürich"]
+                }
   /views:
     description: List of total views per date.
     get:
