@@ -16,6 +16,11 @@ function getUrlDataset() {
 	return "/api/" + db + "/views/dataset";
 }
 
+function getUrlStats() {
+	var db = window.location.href.toString().split('/')[3];
+	return "/api/" + db + "/views/stats";
+}
+
 // function getUrlFiles(){
 // 	var db=window.location.href.toString().split('/')[3];
 // 	return "/api/"+db+"/views/files";
@@ -60,31 +65,22 @@ function getUrlSidebarPaginated(page, sort) {
 }
 
 function sidebar(type) {
-	$.getJSON(getUrlSidebarLimit(100000), function(stats) {
+	$.getJSON(getUrlStats(), function(stats) {
 		// is rendering
 		RENDERING = true;
 		// save total
-		TOTAL_IMAGES = stats.length;
+		TOTAL_IMAGES = stats.total;
 		// get tempalte
 		$.get("/views/page-views/tpl/views.tpl", function(tpl) {
 			$.getJSON(getUrlSidebar(FIRST_CALL_LIMIT, type), function(data) {
-
 				// render first part
 				renderSidebarItems(tpl, data);
-				// for (let i = 0; i < data.length; i++) {
-				// 		data[i].img_name_text = data[i].img_name.replace(/_/g," ");
-				// 		data[i].img_name_id = data[i].img_name.replace(".jpg", "");
-				// 		data[i].tot = nFormatter(+data[i].tot);
-				// 		data[i].av = nFormatter(+data[i].av);
-				// 		data[i].median = nFormatter(+data[i].median);
-				// }
-
 				//  set scroll handlers
 				if (FIRST_CALL_LIMIT < TOTAL_IMAGES) {
 					$('#right_sidebar_list').off('scroll').scroll(loadMoreOnScroll.bind($('#right_sidebar_list'), type));
 				}
 
-				highlight()
+				highlightOnClick()
 			});
 		});
 	});
@@ -128,7 +124,7 @@ function loadMoreOnScroll(sort_type) {
 					// last argument to true calls append() instead of html()
 					renderSidebarItems(tpl, data, true)
 					// manage click
-					highlight();
+					highlightOnClick();
 				});
 			});
 		} else {
@@ -198,7 +194,7 @@ function how_to_read(){
 	});
 };
 
-function highlight() {
+function highlightOnClick() {
 
 	if (ACTIVE_ITEM_ID !== undefined) {
 		$('#' + ACTIVE_ITEM_ID).closest('.list_item').addClass('list_item_active');
