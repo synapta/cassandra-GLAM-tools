@@ -7,7 +7,14 @@ var horizBarChartDraw = function(div, query, stats_data) {
     if (error) throw error;
     // sort
     data = data.sort(function(a, b) {
-      if (a.wiki === 'others') return -1; // put others column as last element
+      // put others column as last element
+      if (a.wiki === 'others') {
+        return -1;
+      }
+      if (b.wiki === 'others') {
+        return 1;
+      }
+      // sort
       return a.usage - b.usage;
     });
     // format the data
@@ -77,7 +84,6 @@ function drawHorizBars(data, div, totalPages) {
                 .style("text-anchor", "end")
                 .text("Value");
 
-
     // Y axis label:
   svg.append("text")
      .attr("text-anchor", "end")
@@ -118,7 +124,7 @@ function drawHorizBars(data, div, totalPages) {
                   .attr("dy", ".4em")
                   .text(d => {
                     let p = d.usage / totalPages * 100;
-                    return `${d.usage} (${p.toFixed(2)}%)`;
+                    return `${nFormatter(d.usage)} (${p.toFixed(2)}%)`;
                   });
 
      // animation
