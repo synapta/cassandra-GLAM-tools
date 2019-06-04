@@ -1,7 +1,8 @@
 <div class="file_details" id="{{image_id}}" data-wikilist="{{wiki_array}}">
 	<div class="file_details_intro">
 		<!-- <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/{{image}}/640px-{{image}}" alt="{{image_name}}"> -->
-		<img src="https://commons.wikimedia.org/wiki/Special:FilePath/{{image}}" alt="{{image_name}}">
+		<!-- <img src="https://commons.wikimedia.org/wiki/Special:FilePath/{{image}}" alt="{{image_name}}"> -->
+		<img src="{{thumbnail_url}}" alt="{{image_name}}">
 		<h1><a style="color: var(--main)" href="https://commons.wikimedia.org/wiki/File:{{image}}" target="_blank">{{image_name}}<a></h1>
 	</div>
 	<div class="file_details_projects file_details_section">

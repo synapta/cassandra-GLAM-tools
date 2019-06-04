@@ -39,13 +39,27 @@ function getFileViewsUrl() {
 
 function getImageCommonsUrlApi() {
 	var file = window.location.href.toString().split('/')[5];
-	var base_url = "https://commons.wikimedia.org/w/api.php?action=query&format=json&iiprop=url&prop=imageinfo&titles=File:";
+	var base_url = "https://commons.wikimedia.org/wiki/Special:FilePath/";
 	return base_url + file;
 }
 
-function getThumbnailUrl(img_url, size_in_px) {
+function getThumbnailUrl(size_in_px, callback) {
 	var file = window.location.href.toString().split('/')[5];
-	return img_url + "/" + size_in_px.toString() + "px-" + file;
+	var base_url = "https://upload.wikimedia.org/wikipedia/commons/thumb";
+
+	$.get('/api/md5/' + encodeURIComponent(file), function(hash) {
+		console.log(hash);
+		if (callback && typeof(callback) == "function") {
+			var img_url = base_url + "/" + hash.substring(0, 1) + "/" + hash.substring(0, 2) + "/" + fixedEncodeURIComponent(file).replace(/%25C3%25/g,"%C3%") + "/" + size_in_px.toString() + "px-thumbnail.jpg";
+			callback(img_url);
+		}
+	});
+}
+
+function fixedEncodeURIComponent(str) {
+  return encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
+    return '%' + c.charCodeAt(0).toString(16);
+  });
 }
 
 function populateSidebar() {
@@ -56,75 +70,80 @@ function populateSidebar() {
 			// get usage data
 			$.getJSON(getUsageDetailsUrl(), function(data) {
 				let file = data[0];
-				// add views and category
-				file.tot = nFormatter(details_data.tot);
-				file.av = nFormatter(details_data.avg);
-				file.median =  nFormatter(details_data.median);
-				file.cats = [];
-				details_data.categories.forEach((c) => {
-					let obj = {};
-					obj.cat_name = c.replace(/_/g, " ");
-					file.cats.push(obj);
-				})
-				file.cat_number = details_data.categories.length;
-				if (file.cat_number === 1) {
-					file.cat_title = "CATEGORY";
-				} else {
-					file.cat_title = "CATEGORIES";
-				}
-				// Format name and id
-				file.image_name = file.image.replace(/_/g," ");
-				file.image_id = cleanImageName(file.image);
-				// Format wiki pages list
-				let currentWiki = null;
-				file.wiki_array = [];
-				file.wikis = [];
-				// sort alphabetically
-				file.pages = file.pages.sort(function(a,b) {
-					if (a.wiki < b.wiki) return -1;
-					if (a.wiki > b.wiki) return 1;
-					return 0;
-				});
-				// loop through all pages
-				var wiki_obj = {};
-				file.pages.forEach(function(page) {
-					// format object
-					let link_obj = {};
-					// check if not already added
-					if (currentWiki !== page.wiki) {
-						// reset temp object
-						wiki_obj = {}
-						wiki_obj.wiki_links = [];
-						// update current wiki
-						currentWiki = page.wiki;
-						// page name
-						wiki_obj.wiki_name = currentWiki;
-						// links
-						link_obj.wiki_link =  `https://${currentWiki.replace("wiki","")}.wikipedia.org/w/index.php?title=${page.title}`;
-						link_obj.wiki_page = page.title.replace(/_/g, " ");
-						// push
-						wiki_obj.wiki_links.push(link_obj);
-						file.wikis.push(wiki_obj);
-						// save wiki list in an array (for highlighting bars in chart)
-						file.wiki_array.push(currentWiki);
-						WIKI_ARRAY.push(currentWiki);
+				// get image thumbnail
+				getThumbnailUrl(500, function(thumbnail_url) {
+					console.log(thumbnail_url);
+					file.thumbnail_url = thumbnail_url;
+					// add views and category
+					file.tot = nFormatter(details_data.tot);
+					file.av = nFormatter(details_data.avg);
+					file.median =  nFormatter(details_data.median);
+					file.cats = [];
+					details_data.categories.forEach((c) => {
+						let obj = {};
+						obj.cat_name = c.replace(/_/g, " ");
+						file.cats.push(obj);
+					})
+					file.cat_number = details_data.categories.length;
+					if (file.cat_number === 1) {
+						file.cat_title = "CATEGORY";
 					} else {
-						// add link to current wiki object
-						link_obj.wiki_link =  `https://${currentWiki.replace("wiki","")}.wikipedia.org/w/index.php?title=${page.title}`;
-						link_obj.wiki_page = page.title.replace(/_/g, " ");
-						// push current wiki object
-						wiki_obj.wiki_links.push(link_obj);
+						file.cat_title = "CATEGORIES";
 					}
+					// Format name and id
+					file.image_name = file.image.replace(/_/g," ");
+					file.image_id = cleanImageName(file.image);
+					// Format wiki pages list
+					let currentWiki = null;
+					file.wiki_array = [];
+					file.wikis = [];
+					// sort alphabetically
+					file.pages = file.pages.sort(function(a,b) {
+						if (a.wiki < b.wiki) return -1;
+						if (a.wiki > b.wiki) return 1;
+						return 0;
+					});
+					// loop through all pages
+					var wiki_obj = {};
+					file.pages.forEach(function(page) {
+						// format object
+						let link_obj = {};
+						// check if not already added
+						if (currentWiki !== page.wiki) {
+							// reset temp object
+							wiki_obj = {}
+							wiki_obj.wiki_links = [];
+							// update current wiki
+							currentWiki = page.wiki;
+							// page name
+							wiki_obj.wiki_name = currentWiki;
+							// links
+							link_obj.wiki_link =  `https://${currentWiki.replace("wiki","")}.wikipedia.org/w/index.php?title=${page.title}`;
+							link_obj.wiki_page = page.title.replace(/_/g, " ");
+							// push
+							wiki_obj.wiki_links.push(link_obj);
+							file.wikis.push(wiki_obj);
+							// save wiki list in an array (for highlighting bars in chart)
+							file.wiki_array.push(currentWiki);
+							WIKI_ARRAY.push(currentWiki);
+						} else {
+							// add link to current wiki object
+							link_obj.wiki_link =  `https://${currentWiki.replace("wiki","")}.wikipedia.org/w/index.php?title=${page.title}`;
+							link_obj.wiki_page = page.title.replace(/_/g, " ");
+							// push current wiki object
+							wiki_obj.wiki_links.push(link_obj);
+						}
+					});
+					file.wiki_array = JSON.stringify(file.wiki_array);
+
+					// compile template
+					var template = Handlebars.compile(tpl);
+
+					$('#right-column').html(template(file));
+
+					// draw data viz
+					usageDataViz(WIKI_ARRAY);
 				});
-				file.wiki_array = JSON.stringify(file.wiki_array);
-
-				// compile template
-				var template = Handlebars.compile(tpl);
-
-				$('#right-column').html(template(file));
-
-				// draw data viz
-				usageDataViz(WIKI_ARRAY);
 			});
 		});
 	});
