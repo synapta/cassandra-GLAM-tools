@@ -212,6 +212,7 @@ function lineChart(div, data) {
       // HIDE LINES
       verticalLine.select('line').remove();
       detailsLabel.selectAll('text').remove();
+      detailsLabel.selectAll('rect').remove();
     }
   });
 
@@ -260,37 +261,63 @@ function lineChart(div, data) {
   function displayDetails(time) {
     // remove previous
     detailsLabel.selectAll('text').remove();
+    detailsLabel.selectAll('rect').remove();
     // format data
-    let fT = moment(time).format("DD MMM YY, HH:mm");
+    let fT = moment(time).format("DD MMM YY");
     let views = data[bisect(data, time)].views;
     // show data (time)
-    detailsLabel.append("text")
-                .attr("x", width - 200)
+    var text1 = detailsLabel.append("text")
+                .attr("x", width - 300)
                 .attr("y", 30)
                 .attr("class", "info-label")
                 .html("DATE: " + fT)
                 .attr("font-family", "monospace")
                 .attr("font-size", "14px");
+
     // show data (views)
-    detailsLabel.append("text")
-                .attr("x", width - 200)
+    var text2 = detailsLabel.append("text")
+                .attr("x", width - 300)
                 .attr("y", 50)
                 .attr("class", "info-label")
                 .html("TOTAL VIEWS: " + views)
                 .attr("font-family", "monospace")
                 .attr("font-size", "14px");
 
+
+    detailsLabel.insert("rect", "text")
+                .attr('class', 'bounding-rect')
+                .attr("x", text1.node().getBBox().x)
+                .attr("y", text1.node().getBBox().y)
+                .attr("width", text1.node().getBBox().width)
+                .attr("height", text1.node().getBBox().height)
+                .style("fill", "#fff");
+    detailsLabel.insert("rect", "text")
+                .attr('class', 'bounding-rect')
+                .attr("x", text2.node().getBBox().x)
+                .attr("y", text2.node().getBBox().y)
+                .attr("width", text2.node().getBBox().width)
+                .attr("height", text2.node().getBBox().height)
+                .style("fill", "#fff");
+
     if (SHOWN_SEC_LINE) {
       let img_views = img_data[image_bisect(img_data, time)].sum;
       // show data (views)
-      detailsLabel.append("text")
-                  .attr("x", width - 200)
+      let text3 = detailsLabel.append("text")
+                  .attr("x", width - 300)
                   .attr("y", 70)
                   .attr("class", "info-label")
                   .html("IMAGE VIEWS: " + img_views)
                   .attr("font-family", "monospace")
                   .attr("font-size", "14px");
+      detailsLabel.insert("rect", "text")
+                  .attr('class', 'bounding-rect')
+                  .attr("x", text3.node().getBBox().x)
+                  .attr("y", text3.node().getBBox().y)
+                  .attr("width", text2.node().getBBox().width)
+                  .attr("height", text2.node().getBBox().height)
+                  .style("fill", "#fff");
     }
+
   }
 
   // x axis object
@@ -364,7 +391,12 @@ function lineChart(div, data) {
 
   window.hideFileLine = function() {
     d3.selectAll('.image_line').remove();
+    // update domain
     y.domain([d3.min(data, function(d) { return d.views; }), d3.max(data, function(d) { return d.views; })]);
+
+    // update axis
+    gY.call(yAxis);
+
     // update main line chart
     path.transition().attr("d", valueline);
     SHOWN_SEC_LINE = false;
