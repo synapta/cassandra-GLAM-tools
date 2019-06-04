@@ -254,7 +254,7 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
                 .attr("x", width - 300)
                 .attr("y", 50)
                 .attr("class", "info-label")
-                .html("FILES: " + d.value + ' (' + name + ')')
+                .html("FILES: " + nFormatter(d.value) + ' (' + name + ')')
                 .attr("font-family", "monospace")
                 .attr("font-size", "14px");
 

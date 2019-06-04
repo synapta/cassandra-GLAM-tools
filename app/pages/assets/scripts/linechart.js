@@ -19,8 +19,6 @@ var lineChartDraw = function(div, query) {
 
 function lineChart(div, data) {
 
-  // console.log(data);
-
   var margin = {};
   var margin2 = {};
   var kH;
@@ -279,7 +277,7 @@ function lineChart(div, data) {
                 .attr("x", width - 300)
                 .attr("y", 50)
                 .attr("class", "info-label")
-                .html("TOTAL VIEWS: " + views)
+                .html("TOTAL VIEWS: " + nFormatter(views))
                 .attr("font-family", "monospace")
                 .attr("font-size", "14px");
 
@@ -291,6 +289,7 @@ function lineChart(div, data) {
                 .attr("width", text1.node().getBBox().width)
                 .attr("height", text1.node().getBBox().height)
                 .style("fill", "#fff");
+
     detailsLabel.insert("rect", "text")
                 .attr('class', 'bounding-rect')
                 .attr("x", text2.node().getBBox().x)
@@ -306,7 +305,7 @@ function lineChart(div, data) {
                   .attr("x", width - 300)
                   .attr("y", 70)
                   .attr("class", "info-label")
-                  .html("IMAGE VIEWS: " + img_views)
+                  .html("FILE VIEWS: " + nFormatter(img_views))
                   .attr("font-family", "monospace")
                   .attr("font-size", "14px");
       detailsLabel.insert("rect", "text")
