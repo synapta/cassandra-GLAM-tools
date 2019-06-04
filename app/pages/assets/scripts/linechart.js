@@ -57,7 +57,7 @@ function lineChart(div, data) {
 
   // Zoom Function
   var zoom = d3.zoom()
-               .scaleExtent([1, 6])
+               .scaleExtent([1, 80])
                .translateExtent([[0, 0], [width, height]])
                .extent([[0, 0], [width, height]])
                .on("zoom", zoomFunction);
