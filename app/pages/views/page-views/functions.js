@@ -107,6 +107,10 @@ function renderSidebarItems(tpl, data, append) {
 	append ? $('#right_sidebar_list').append(template(obj)) : $('#right_sidebar_list').html(template(obj));
 	// set tatus to finished rendering
 	RENDERING = false;
+	// Prevent defaul when click on "view details"
+	$('.view-details-link').off('click').on('click', function(e) {
+		e.stopPropagation();
+	});
 }
 
 function loadMoreOnScroll(sort_type) {
