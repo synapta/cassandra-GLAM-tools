@@ -301,7 +301,6 @@ body {
   stroke-width: 1px;
 }
 
-
 .zoom-area {
   fill: none;
   pointer-events: all;
@@ -318,7 +317,7 @@ body {
 .file_details_intro h1 {
   font-size: 1.5rem;
   color: var(--main);
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .file_details img {
@@ -327,11 +326,13 @@ body {
   padding: 1rem 0;
   border-top: 1px solid rgba(100, 100, 100, .5);
   border-bottom: 1px solid rgba(100, 100, 100, .5);
+  max-height: 650px;
+  object-fit: cover;
 }
 
 .file_details_section {
   margin: .5rem 0;
-  padding: .5rem 0;
+  padding: 1.5rem 0;
   border-top: 1px solid rgba(100, 100, 100, .5);
 }
 
