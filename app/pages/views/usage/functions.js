@@ -24,12 +24,18 @@ function getUrl(limit, sort) {
 	return "/api/" + db + "/usage" + l + s + "&page=0";
 }
 
-function getUrlPaginated(page) {
+function getUrlPaginated(page, sort) {
+	let s;
+	if (sort === 'usage' || sort === 'projects' || sort === 'name') {
+		s = '&sort=' + sort;
+	} else {
+		s = "";
+	}
 	if (!Number.isInteger(page)) {
 		console.error("Invalid page number", page);
 	} else {
 		var db = window.location.href.toString().split('/')[3];
-		return "/api/" + db + "/usage?page=" + page;
+		return "/api/" + db + "/usage?page=" + page + s;
 	}
 }
 
@@ -62,18 +68,13 @@ function sidebar(type) {
 				renderImageListItems(tpl, data);
 				//  set scroll handlers
 				if (FIRST_CALL_LIMIT < TOTAL_IMAGES) {
-					$('#right_sidebar_list').scroll(loadMoreOnScroll);
+					$('#right_sidebar_list').off("scroll").scroll(loadMoreOnScroll.bind($('#right_sidebar_list'), type));
 				}
 				// Manage click
 				highlightOnClick();
 			});
 		});
 	});
-}
-
-function getPageFromElementIdx(element_idx) {
-	// calc in which page is an element with a given index
-	return Math.floor((element_idx - 1) / 10);
 }
 
 function renderImageListItems(tpl, data, append) {
@@ -139,22 +140,22 @@ function renderImageListItems(tpl, data, append) {
 }
 
 
-function loadMoreOnScroll() {
+function loadMoreOnScroll(sort_type) {
 	// if reached end of div
 	if (($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) && !RENDERING) {
 		// if there are more elements to load
 		if (IMAGES_RENDERED < TOTAL_IMAGES) {
 			// calc new page number
-			let page = getPageFromElementIdx(IMAGES_RENDERED + 1);
+			let page = getPageFromElementIdx(IMAGES_RENDERED + 1, 10);
 			//get template
 			$.get("/views/usage/tpl/usage.tpl", function(tpl) {
 				// get data
-				$.getJSON(getUrlPaginated(page), function(data) {
+				$.getJSON(getUrlPaginated(page, sort_type), function(data) {
 					RENDERING = true;
 					// last argument to true calls append() instead of html()
 					renderImageListItems(tpl, data, true)
 					// manage click
-					highlightOnClick('new elements');
+					highlightOnClick();
 				});
 			});
 		} else {
@@ -232,11 +233,6 @@ function sorting_sidebar() {
 			$("#by_proj").css("cursor","pointer");
 		}
 	})
-}
-
-function cleanImageName(name) {
-	// clean special characters in order to use image name as element ID
-	return name.replace(/jpg/i, "").replace(/png/i, "").replace(/[{()}]/g, "").replace(/\./g,"").replace(/\,/g,"").replace(/&/g,"").replace(/'/g,"").replace(/"/g,"");
 }
 
 function download(){

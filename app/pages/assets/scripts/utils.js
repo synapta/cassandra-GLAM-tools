@@ -79,3 +79,13 @@ String.prototype.hashCode = function() {
   }
   return hash;
 };
+
+function cleanImageName(name) {
+	// clean special characters in order to use image name as element ID
+	return name.replace(/jpg/i, "").replace(/png/i, "").replace(/[{()}]/g, "").replace(/\./g,"").replace(/\,/g,"").replace(/&/g,"").replace(/'/g,"").replace(/"/g,"");
+}
+
+function getPageFromElementIdx(element_idx, items_in_page) {
+	// calc in which page is an element with a given index
+	return Math.floor((element_idx - 1) / items_in_page);
+}

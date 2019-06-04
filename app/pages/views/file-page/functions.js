@@ -9,6 +9,12 @@ function getUsageUrl() {
 	return "/api/" + db + "/usage/top";
 }
 
+function getFileDetailsUrl() {
+	var db = window.location.href.toString().split('/')[3];
+	var file = window.location.href.toString().split('/')[5];
+	return "/api/" + db + "/file/details/" + file;
+}
+
 function getUsageDetailsUrl() {
 	var db = window.location.href.toString().split('/')[3];
 	var file = window.location.href.toString().split('/')[5];
@@ -31,19 +37,41 @@ function getFileViewsUrl() {
 	return "/api/" + db + "/views/file/" + file;
 }
 
-function cleanImageName(name) {
-	// clean special characters in order to use image name as element ID
-	return name.replace(/jpg/i, "").replace(/png/i, "").replace(/[{()}]/g, "").replace(/\./g,"").replace(/\,/g,"").replace(/&/g,"").replace(/'/g,"").replace(/"/g,"");
+function getImageCommonsUrlApi() {
+	var file = window.location.href.toString().split('/')[5];
+	var base_url = "https://commons.wikimedia.org/w/api.php?action=query&format=json&iiprop=url&prop=imageinfo&titles=File:";
+	return base_url + file;
+}
+
+function getThumbnailUrl(img_url, size_in_px) {
+	var file = window.location.href.toString().split('/')[5];
+	return img_url + "/" + size_in_px.toString() + "px-" + file;
 }
 
 function populateSidebar() {
 	var WIKI_ARRAY = [];
 	$.get("/views/file-page/tpl/file-template.tpl", function(tpl) {
-		// get data
-		$.getJSON(getUsageDetailsUrl(), function(data) {
-			// console.log(data);
-			// render first part
-			data.forEach(function(file) {
+		// get details on views and category
+		$.getJSON(getFileDetailsUrl(), function(details_data) {
+			// get usage data
+			$.getJSON(getUsageDetailsUrl(), function(data) {
+				let file = data[0];
+				// add views and category
+				file.tot = nFormatter(details_data.tot);
+				file.av = nFormatter(details_data.avg);
+				file.median =  nFormatter(details_data.median);
+				file.cats = [];
+				details_data.categories.forEach((c) => {
+					let obj = {};
+					obj.cat_name = c.replace(/_/g, " ");
+					file.cats.push(obj);
+				})
+				file.cat_number = details_data.categories.length;
+				if (file.cat_number === 1) {
+					file.cat_title = "CATEGORY";
+				} else {
+					file.cat_title = "CATEGORIES";
+				}
 				// Format name and id
 				file.image_name = file.image.replace(/_/g," ");
 				file.image_id = cleanImageName(file.image);
@@ -89,17 +117,15 @@ function populateSidebar() {
 					}
 				});
 				file.wiki_array = JSON.stringify(file.wiki_array);
+
+				// compile template
+				var template = Handlebars.compile(tpl);
+
+				$('#right-column').html(template(file));
+
+				// draw data viz
+				usageDataViz(WIKI_ARRAY);
 			});
-
-			// compile template
-			var obj = {};
-			obj.files = data;
-			var template = Handlebars.compile(tpl);
-
-			$('#right-column').html(template(obj));
-
-			// draw data viz
-			usageDataViz(WIKI_ARRAY);
 		});
 	});
 }
