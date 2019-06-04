@@ -73,6 +73,8 @@ function sidebar(type) {
 		// get tempalte
 		$.get("/views/page-views/tpl/views.tpl", function(tpl) {
 			$.getJSON(getUrlSidebar(FIRST_CALL_LIMIT, type), function(data) {
+				// scroll up
+				$('#right_sidebar_list').scrollTop(0);
 				// render first part
 				renderSidebarItems(tpl, data);
 				//  set scroll handlers

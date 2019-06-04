@@ -64,6 +64,8 @@ function sidebar(type) {
 		$.get("/views/usage/tpl/usage.tpl", function(tpl) {
 			// get data
 			$.getJSON(getUrl(FIRST_CALL_LIMIT, type), function(data) {
+				// scroll up
+				$('#right_sidebar_list').scrollTop(0);
 				// render first part
 				renderImageListItems(tpl, data);
 				//  set scroll handlers
