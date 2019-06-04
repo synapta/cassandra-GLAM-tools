@@ -32,14 +32,14 @@ Copy the file `config/config.example.json` to `config/config.json` and modify as
 The provided MongoDB collection must contain documents with the following format:
 ```
 {
-   "name":"ETH",
-   "fullname":"ETH Library of Zurich",
-   "category":"Media contributed by the ETH-Bibliothek",
-   "image":"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Aettenschwil_1953.jpg/640px-Aettenschwil_1953.jpg",
-   "database":"eth",
-   "http-auth":{
-      "username":"eth",
-      "password":"PASSWORD"
+   "name": "ETH",
+   "fullname": "ETH Library of Zurich",
+   "category": "Media contributed by the ETH-Bibliothek",
+   "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Aettenschwil_1953.jpg/640px-Aettenschwil_1953.jpg",
+   "database": "eth",
+   "http-auth": {
+      "username": "eth",
+      "password": "PASSWORD"
    }
 }
 ```

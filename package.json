@@ -1,7 +1,8 @@
 {
   "name": "cassandra",
-  "version": "0.2.0",
-  "author": "Alessio Melandri <alessio.melandri@synapta.it> (https://synapta.it/), Dario Salza <dsalza@hotmail.it> (https://synapta.it/)",
+  "version": "2.0.0",
+  "author": "Synapta Srl <info@synapta.it> (https://synapta.it/)",
+  "license" : "MIT",
   "private": true,
   "dependencies": {
     "@sentry/node": "^5.2.0",
