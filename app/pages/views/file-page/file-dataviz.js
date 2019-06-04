@@ -221,11 +221,15 @@ function drawHorizBars(data, div, totalPages, wiki_array) {
     // smartphones
     availH = $(div).outerHeight();
     margin = { top: 40, right: 10, bottom: 40, left: 30 };
-  } else {
+  } else if ($(window).width() < 1450) {
     // tablets and desktop
-    availH = $(div).outerHeight() * 0.85;
-    margin = { top: 40, right: 30, bottom: 20, left: 80 };
-  }
+    availH = $(div).outerHeight() * 0.9;
+    margin = { top: 40, right: 30, bottom: 20, left: 70 };
+  } else {
+		// Full HD screens
+		availH = $(div).outerHeight() * 0.85;
+		margin = { top: 40, right: 30, bottom: 20, left: 80 };
+	}
 
   var width = Math.round($(div).outerWidth()) - margin.left - margin.right,
       height = availH - margin.top - margin.bottom;

@@ -8,7 +8,7 @@ body {
 
 #visualizations {
   position: relative;
-  height: calc(100vh - 95px - 75px);
+  height: calc(100vh - 75px - 75px);
 }
 
 #visualizations > .row {
@@ -19,7 +19,7 @@ body {
 /* HEADER BAR */
 .top_bar {
   /* min-height: 3em; */
-  height: 95px;
+  height: 75px;
   top: 0;
   width: 100%;
   z-index: 1;
@@ -46,7 +46,7 @@ body {
 }
 
 #white-logo img {
-  width: 70px;
+  width: 50px;
   height: 63.22px;
 }
 
@@ -184,6 +184,7 @@ body {
   height: 100%;
   overflow-y: scroll;
   padding-bottom: 2rem;
+  border-left: 1px solid rgba(100, 100, 100, .5);
 }
 
 #right_sidebar_box {
@@ -278,8 +279,8 @@ body {
 }
 
 .file-dataviz-container {
-  padding: 2rem 1rem;
-  margin: 1rem;
+  padding: .5rem 0;
+  margin: 0 0 2rem;
   height: 700px;
   border-bottom: 1px solid var(--main);
 }

@@ -16,9 +16,9 @@ svg {
     font-style: italic;
 }
 
-#right_sidebar_list {
-  height: 74vh !important;
-}
+/* #right_sidebar_list {
+  height: 73vh !important;
+} */
 
 .list_item .list_item_panel {
   padding: 0;

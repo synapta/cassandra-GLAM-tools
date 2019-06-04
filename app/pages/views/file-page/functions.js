@@ -41,7 +41,7 @@ function populateSidebar() {
 	$.get("/views/file-page/tpl/file-template.tpl", function(tpl) {
 		// get data
 		$.getJSON(getUsageDetailsUrl(), function(data) {
-			console.log(data);
+			// console.log(data);
 			// render first part
 			data.forEach(function(file) {
 				// Format name and id
@@ -137,7 +137,7 @@ $(function() {
 	// sidebar
 	populateSidebar();
 	// category network
-	networkDataviz();
+	// networkDataviz();
 	// usage
 	// usageDataViz();
 	// views
