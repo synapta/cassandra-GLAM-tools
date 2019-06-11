@@ -47,13 +47,13 @@ function getThumbnailUrl(size_in_px, callback) {
 	var file = window.location.href.toString().split('/')[5];
 	var base_url = "https://upload.wikimedia.org/wikipedia/commons/thumb";
 
-	$.get('/api/md5/' + encodeURIComponent(file), function(hash) {
-		console.log(hash);
-		if (callback && typeof(callback) == "function") {
-			var img_url = base_url + "/" + hash.substring(0, 1) + "/" + hash.substring(0, 2) + "/" + fixedEncodeURIComponent(file).replace(/%25C3%25/g,"%C3%") + "/" + size_in_px.toString() + "px-thumbnail.jpg";
-			callback(img_url);
-		}
-	});
+	var hash = CryptoJS.MD5(decodeURIComponent(file)).toString(CryptoJS.enc.Hex); 
+	// console.log(hash);
+	if (callback && typeof(callback) == "function") {
+		var img_url = base_url + "/" + hash.substring(0, 1) + "/" + hash.substring(0, 2) + "/" + fixedEncodeURIComponent(file).replace(/%25C3%25/g,"%C3%") + "/" + size_in_px.toString() + "px-thumbnail.jpg";
+		callback(img_url);
+	}
+
 }
 
 function fixedEncodeURIComponent(str) {
@@ -72,7 +72,7 @@ function populateSidebar() {
 				let file = data[0];
 				// get image thumbnail
 				getThumbnailUrl(500, function(thumbnail_url) {
-					console.log(thumbnail_url);
+					// console.log(thumbnail_url);
 					file.thumbnail_url = thumbnail_url;
 					// add views and category
 					file.tot = nFormatter(details_data.tot);

@@ -1,7 +1,6 @@
 var express = require('express');
 var api = require('./api.js');
 var auth = require('http-auth');
-var crypto = require('crypto');
 
 var config = require('../config/config.js');
 
@@ -370,13 +369,6 @@ module.exports = function (app, apicache) {
         } else {
             res.sendStatus(400);
         }
-    });
-
-    app.get('/api/md5/:string', function (req, res, next) {
-        // res.send(md5(req.params.string));
-        let s = decodeURIComponent(req.params.string);
-        console.log(s);
-        res.send(crypto.createHash('md5').update(s.toString()).digest('hex'));
     });
 
     // NOT FOUND
