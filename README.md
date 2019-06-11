@@ -6,11 +6,6 @@ of the files inside.
 ## Installation
 Please note that the supported Node.js version is 11.
 
-Install Node.js global dependencies:
-```
-sudo npm install -g bower
-```
-
 Install Node.js project dependencies:
 ```
 npm install
@@ -19,12 +14,6 @@ npm install
 Install Python dependencies:
 ```
 pip3 install -r requirements.txt
-```
-
-Install Bower dependencies:
-```
-cd app/pages/assets
-bower install
 ```
 
 Copy the file `config/config.example.json` to `config/config.json` and modify as required.
