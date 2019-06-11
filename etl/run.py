@@ -34,7 +34,7 @@ def fail(collection, glam):
 
 
 def views_date():
-    date = datetime.utcnow() - timedelta(days=2)
+    date = datetime.utcnow() - timedelta(days=1)
     return date.strftime("%Y-%m-%d")
 
 
