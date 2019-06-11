@@ -30,14 +30,8 @@ var finalize = function (failure) {
             console.log(err);
             process.exit(1);
         }
-        glam.connection.query("refresh materialized view visualizations_stats;", function (err, res) {
-            if (err) {
-                console.log(err);
-                process.exit(1);
-            }
-            console.log("Process completed!");
-            process.exit(0);
-        });
+        console.log("Process completed!");
+        process.exit(0);
     });
 }
 

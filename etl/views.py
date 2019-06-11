@@ -69,6 +69,7 @@ def process(conn, date):
             curse.execute(query)
 
     curse.execute('refresh materialized view visualizations_sum')
+    curse.execute('refresh materialized view visualizations_stats')
     curse.close()
     source_file.close()
 
