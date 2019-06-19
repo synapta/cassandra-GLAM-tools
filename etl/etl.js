@@ -60,7 +60,7 @@ var wikiOpen = function (starting_cat) {
     console.log("===========================================");
     console.log("Loading categories...");
 
-    let temp_query = "select cat_subcats, cat_files from category where cat_title='" + starting_cat + "'";
+    let temp_query = "select cat_subcats, cat_files from category where cat_title='" + starting_cat.replace(/\'/g, "''") + "'";
     wikiCaller.query(temp_query, function (err, rows) {
         if (!err) {
             catQueue[0].cat_subcats = rows[0].cat_subcats;
