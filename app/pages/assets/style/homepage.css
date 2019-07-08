@@ -73,7 +73,9 @@
   transition: all .6s;
   opacity: 1;
 }
-
+.glam-container .text-block {
+  padding: 0 1em;
+}
 .text-block:hover {
   opacity: 0;
 }
