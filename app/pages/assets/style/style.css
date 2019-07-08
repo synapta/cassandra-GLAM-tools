@@ -427,6 +427,15 @@ footer {
   align-items: center;
 }
 
+.glam-title-container .glamName {
+  display: flex;
+  height: 2rem;
+}
+
+ .col-lg-3 .glam-title-desc {
+  height: 4rem;
+ }
+
 .glam-title-container #cat_url {
   color: #fff;
   text-decoration: underline;
@@ -578,9 +587,7 @@ footer {
     padding: .5rem 0;
   }
 
-  .glam-title-desc {
-    height: auto;
-  }
+
 
   #main-sidebar > .sidebar-links > ul {
     list-style-type: none;
