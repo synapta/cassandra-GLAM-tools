@@ -85,8 +85,21 @@ function lineChart(div, data) {
   x2.domain(x.domain());
   y2.domain(y.domain());
 
-  // AXIS
-  var xAxis = d3.axisBottom(x);
+  // AXIS, draw ticks
+  var xAxis;
+  var groupby2dateFormat = {
+    'day': ['%Y-%m-%d', 12],
+    // 'week': ['%Y w%W', 12],
+    'week': ['%Y-%m', 12],
+    'month': ['%Y-%m', 12],
+    'quarter': ['%Y-%m', 8],
+    'year': ['%Y', 2]
+  };
+  xAxis = d3.axisBottom().scale(x).tickFormat(d3.timeFormat(
+    groupby2dateFormat[$('#groupby-select').val()][0]
+  )).ticks(
+    groupby2dateFormat[$('#groupby-select').val()][1]
+  );
   var xAxis2 = d3.axisBottom(x2);
 
   // var yAxis = d3.axisLeft(y).ticks(20).tickFormat(d3.formatPrefix(".0", 1)).tickSize(6, 0);
@@ -261,7 +274,25 @@ function lineChart(div, data) {
     detailsLabel.selectAll('text').remove();
     detailsLabel.selectAll('rect').remove();
     // format data
-    let fT = moment(time).format("DD MMM YY");
+    // let fT = moment(time).format("DD MMM YY");
+    var groupby2dateFormat = {
+      'day': [
+        "ddd D MMM YYYY"
+      ],
+      'week': [
+        "[w]w YYYY"
+      ],
+      'month': [
+        "MMM YYYY"
+      ],
+      'quarter': [
+        "[Q]Q YYYY"
+      ],
+      'year': [
+        "YYYY"
+      ]
+    };
+    let fT = moment(time).format(groupby2dateFormat[$('#groupby-select').val()][0]);
     let views = data[bisect(data, time)].views;
     // show data (time)
     var text1 = detailsLabel.append("text")
