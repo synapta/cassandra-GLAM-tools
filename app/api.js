@@ -311,25 +311,25 @@ var categoryGraphDataset = function (req, res, next, db) {
     });
 }
 
-// USER CONTRIBUTIONS
-function parseGroupBy(groupby) {
-    if (groupby !== undefined) {
-        if (groupby === 'quarter') {
-            return 'quarter'
-        } else if (groupby === 'year') {
-            return 'year'
-        } else {
-            // Wrong value
-            return 'month'
-        }
-    } else {
-        // Default value
-        return 'month'
+// for USER CONTRIBUTIONS and VIEWS
+function parseGroupBy(groupby, defaultGroupBy) {
+    var parseGroupByWhitelist = [
+      'day',
+      'week',
+      'month',
+      'quarter',
+      'year',
+      'decade'  // available for future implementation
+    ];
+    if (parseGroupByWhitelist.indexOf(groupby) !== -1) {
+        return groupby;
     }
+    // Fallback for default or
+    return typeof defaultGroupBy === 'undefined' ? 'month' : defaultGroupBy;
 }
 
 var uploadDate = function (req, res, next, db) {
-    let groupby = parseGroupBy(req.query.groupby);
+    let groupby = parseGroupBy(req.query.groupby, 'month');
     let query = `select sum(img_count) as img_sum, img_user_text, array_agg(img_count) as img_count, array_agg(img_time) as img_time
         from (select count(*) as img_count, img_user_text, date_trunc('` + groupby + `', img_timestamp) as img_time
         from images`;
@@ -380,6 +380,9 @@ var uploadDate = function (req, res, next, db) {
     let offset = limit * page;
 
     query += " limit " + limit + " offset " + offset;
+
+    console.log(query);
+    console.log(parameters);
 
     db.query(query, parameters, (err, dbres) => {
         if (!err) {
@@ -677,14 +680,23 @@ var usageTop = function (req, res, next, db) {
 
 // VIEWS
 var views = function (req, res, next, db) {
-    let query = `select accesses_sum, access_date, annotation_value
+    // console.log(db);
+    let groupby = parseGroupBy(req.query.groupby, 'week');
+    /** let query = `select accesses_sum, access_date, annotation_value
                  from visualizations_sum
-                 LEFT OUTER JOIN annotations ON access_date = annotation_date`;
+                 LEFT OUTER JOIN annotations ON access_date = annotation_date`; **/
+    let query = `SELECT
+    SUM(accesses_sum) AS accesses_sum_total,
+    ARRAY_AGG(accesses_sum) AS accesses_sum_list,
+    ARRAY_AGG(access_date) AS accesses_date_list,
+    DATE_TRUNC('${groupby}', access_date) AS access_date_grouped
+FROM
+    visualizations_sum`;
 
     let parameters = [];
 
     if (req.query.start !== undefined) {
-        query += " where access_date >= $1";
+        query += " WHERE access_date >= $1";
         parameters.push(req.query.start);
     }
 
@@ -693,19 +705,26 @@ var views = function (req, res, next, db) {
             res.sendStatus(400);
             return;
         }
-        query += " and access_date <= $2";
+        query += " AND access_date <= $2";
         parameters.push(req.query.end);
     }
 
-    query += " order by access_date";
+    query += `
+    GROUP BY
+        access_date_grouped
+    ORDER BY
+        access_date_grouped`;
+
+    console.log(query);
+    console.log(parameters);
 
     db.query(query, parameters, (err, dbres) => {
         if (!err) {
             result = [];
             dbres.rows.forEach(function (row) {
                 let date = {
-                    "date": row.access_date.toISODateString(),
-                    "views": parseInt(row.accesses_sum),
+                    "date": row.access_date_grouped.toISODateString(),
+                    "views": parseInt(row.accesses_sum_total),
                 };
                 if (row.annotation_value !== null) {
                     date.annotation = row.annotation_value;
@@ -875,7 +894,7 @@ var fileDetails = function (req, res, next, db) {
             if (dbres.rows.length > 0) {
                 let result = {};
                 let row = dbres.rows[0];
-                
+
                 result['tot'] = parseInt(row.tot);
                 result['avg'] = parseFloat(row.avg);
                 result['median'] = parseFloat(row.median);

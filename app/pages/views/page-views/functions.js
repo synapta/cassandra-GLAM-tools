@@ -8,7 +8,8 @@ var ACTIVE_ITEM_ID;
 
 function getUrlAll() {
 	var db=window.location.href.toString().split('/')[3];
-	return "/api/" + db + "/views";
+	var groupby = $('#groupby-select').val();
+	return "/api/"+db+"/views?groupby=" + groupby;
 }
 
 function getUrlDataset() {
@@ -244,5 +245,9 @@ $(document).ready(function(){
 	switch_page();
 	sorting_sidebar();
 	lineChartDraw("main_views_container", getUrlAll());
+	$('#groupby-select').change(function() {
+		$("#main_views_container").empty();
+		lineChartDraw("main_views_container", getUrlAll());
+	});
 	statDraw();
 })
