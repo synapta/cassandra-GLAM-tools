@@ -410,7 +410,8 @@ var uploadDate = function (req, res, next, db) {
 }
 
 var uploadDateDataset = function (req, res, next, db) {
-    let groupby = parseGroupBy();
+    let groupby = parseGroupBy(req.params.timespan);
+    console.log(groupby);
     let query = `select sum(img_count) as img_sum, img_user_text, array_agg(img_count) as img_count, array_agg(img_time) as img_time
         from (select count(*) as img_count, img_user_text, date_trunc('` + groupby + `', img_timestamp) as img_time
         from images
@@ -739,9 +740,18 @@ FROM
 }
 
 var viewsDataset = function (req, res, next, db) {
-    let query = `select accesses_sum, access_date
-                from visualizations_sum
-                order by access_date`;
+    // console.log(req.params.timespan);
+    let query = `SELECT
+    SUM(accesses_sum) AS accesses_sum_total,
+    -- ARRAY_AGG(accesses_sum) AS accesses_sum_list,
+    -- ARRAY_AGG(access_date) AS accesses_date_list,
+    DATE_TRUNC('${req.params.timespan}', access_date)::DATE AS access_date_grouped
+FROM
+    visualizations_sum
+GROUP BY
+        access_date_grouped
+    ORDER BY
+        access_date_grouped`;
 
     db.query(query, (err, dbres) => {
         if (!err) {
@@ -751,8 +761,8 @@ var viewsDataset = function (req, res, next, db) {
             stringifier.write(["Date", "Views"]);
             dbres.rows.forEach(function (row) {
                 let line = [
-                    row.access_date.toISODateString(),
-                    parseInt(row.accesses_sum)
+                    row.access_date_grouped.toISODateString(),
+                    parseInt(row.accesses_sum_total)
                 ];
                 stringifier.write(line);
             })

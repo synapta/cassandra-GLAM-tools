@@ -254,7 +254,7 @@ module.exports = function (app, apicache) {
         }
     });
 
-    app.get('/api/:id/views/dataset', apicache("1 hour"), function (req, res, next) {
+    app.get('/api/:id/views/dataset/:timespan', apicache("1 hour"), function (req, res, next) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             api.viewsDataset(req, res, next, glam.connection);
@@ -299,7 +299,7 @@ module.exports = function (app, apicache) {
         }
     });
 
-    app.get('/api/:id/usage/dataset', apicache("1 hour"), function (req, res, next) {
+    app.get('/api/:id/usage/dataset', apicache("1 second"), function (req, res, next) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             api.usageDataset(req, res, next, glam.connection);
@@ -344,7 +344,7 @@ module.exports = function (app, apicache) {
         }
     });
 
-    app.get('/api/:id/file/upload-date/dataset', apicache("1 hour"), function (req, res, next) {
+    app.get('/api/:id/file/upload-date/dataset/:timespan', apicache("1 second"), function (req, res, next) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             api.uploadDateDataset(req, res, next, glam.connection);
