@@ -774,16 +774,20 @@ GROUP BY
 }
 
 var viewsByFile = function (req, res, next, db) {
-    let query = `select img_name, sum(accesses) as sum, access_date
+    let query = `select img_name, sum(accesses) as sum,
+                    DATE_TRUNC($1, access_date) AS access_date_grouped
                     from visualizations, images
                     where images.is_alive = true
                     and images.media_id = visualizations.media_id
-                    and img_name = $1`;
+                    and img_name = $2`;
 
-    let parameters = [req.params.file];
+    let parameters = [
+      req.query.groupby,
+      req.params.file
+    ];
 
     if (req.query.start !== undefined) {
-        query += " and access_date >= $2";
+        query += " and access_date >= $3";
         parameters.push(req.query.start);
     }
 
@@ -792,11 +796,11 @@ var viewsByFile = function (req, res, next, db) {
             res.sendStatus(400);
             return;
         }
-        query += " and access_date <= $3";
+        query += " and access_date <= $4";
         parameters.push(req.query.end);
     }
 
-    query += " group by img_name, access_date order by img_name, access_date";
+    query += " group by img_name, access_date_grouped order by img_name, access_date_grouped";
 
     db.query(query, parameters, (err, dbres) => {
         if (!err) {
@@ -804,7 +808,7 @@ var viewsByFile = function (req, res, next, db) {
             dbres.rows.forEach(function (row) {
                 let date = {
                     "sum": parseInt(row.sum),
-                    "access_date": row.access_date.toISODateString()
+                    "access_date": row.access_date_grouped.toISODateString()
                 };
                 result.push(date);
             });

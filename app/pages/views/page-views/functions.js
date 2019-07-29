@@ -218,7 +218,7 @@ function highlightOnClick() {
 
 		if ($(this).hasClass('list_item_active')) {
 			$(".list_item").removeClass("list_item_active");
-			ACTIVE_ITEM_ID = undefined;+
+			ACTIVE_ITEM_ID = undefined;
 			hideFileLine();
 		} else {
 			$(".list_item").removeClass("list_item_active");
