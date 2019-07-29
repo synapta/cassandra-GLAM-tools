@@ -1,10 +1,15 @@
 var FILE_QUERY
 var SHOWN_SEC_LINE = false;
 
+var queryParsed;
 
 var lineChartDraw = function(div, query) {
+  // console.log(query);
+  // adapt to timespan (quarter, year, ...)
+  queryParsed = document.createElement('a');
+  queryParsed.href = query;
 
-  FILE_QUERY = query + "/file/";
+  FILE_QUERY = queryParsed.pathname + "/file/";
 
   d3.json(query, function(error, data) {
     if (error) {
@@ -435,7 +440,7 @@ function lineChart(div, data) {
   window.showFileLine = function(filename) {
     d3.selectAll('.image_line').remove();
      if (filename !== undefined) {
-       d3.json(FILE_QUERY + filename, function(error, image_data) {
+       d3.json(FILE_QUERY + filename + queryParsed.search, function(error, image_data) {
          if (error) throw error;
 
          image_data.forEach(function(d) {

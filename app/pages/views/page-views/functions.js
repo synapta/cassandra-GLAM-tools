@@ -15,7 +15,7 @@ function getUrlAll() {
 function getUrlDataset() {
 	var groupby = $("#groupby-select").val();
 	var db=window.location.href.toString().split('/')[3];
-	console.log(groupby);
+	// console.log(groupby);
 	return "/api/" + db + "/views/dataset/" + groupby;
 }
 

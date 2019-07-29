@@ -411,7 +411,7 @@ var uploadDate = function (req, res, next, db) {
 
 var uploadDateDataset = function (req, res, next, db) {
     let groupby = parseGroupBy(req.params.timespan);
-    console.log(groupby);
+    // console.log(groupby);
     let query = `select sum(img_count) as img_sum, img_user_text, array_agg(img_count) as img_count, array_agg(img_time) as img_time
         from (select count(*) as img_count, img_user_text, date_trunc('` + groupby + `', img_timestamp) as img_time
         from images
