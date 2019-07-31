@@ -64,14 +64,16 @@ function dataviz() {
 				    .append("div")
 				    .style("margin-bottom", "2px");
 
+						// console.log(data.nodes.length);
+
 				legendRow.append("div")
 				    .html("&nbsp")
 				    .attr("class", "rect")
-						.style("opacity", function(d, i) { if (data.nodes.length > 100 && i > MAX_LEVEL) return "0.2"; else return "1"; })
+						.style("opacity", function(d, i) { if (data.nodes.length > 100 && i > MAX_LEVEL - 1) return "0.2"; else return "1"; })
 				    .style("background-color", (d, i) => color(i));
 
 				legendRow.append("div")
-				    .style("opacity", function(d, i) { if (data.nodes.length > 100 && i > MAX_LEVEL) return "0.2"; else return "1"; })
+				    .style("opacity", function(d, i) { if (data.nodes.length > 100 && i > MAX_LEVEL - 1) return "0.2"; else return "1"; })
 				    .html(d=> "lv. " + d);
 
 				//This code is for reduce graph size when too big
