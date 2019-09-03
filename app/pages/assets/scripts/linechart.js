@@ -243,7 +243,7 @@ function lineChart(div, data) {
      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
      .attr("clip-path", "url(#clip)");
 
-  $('#annotationButtons .edit_button').on('click', function() {
+  $('#annotationButtons').on('click', '.edit_button', function() {
     let note_id = $('#annotationButtons').data('noteid');
     let note_date = note_id.split('_')[0];
     let note = annotations.find(el => el.id === note_id);
@@ -410,7 +410,6 @@ function lineChart(div, data) {
 
   // get annotations from API
   $.get('/api/glams/' + glamId + '/annotations', function(annotations_data) {
-    console.log(annotations_data);
     if (annotations_data.length > 0) {
       annotations_data.forEach(note => {
         // calc views value
@@ -434,8 +433,6 @@ function lineChart(div, data) {
   $("#svg-graph").mousemove(function(event) {
 
     let mousePoint = {x: event.pageX, y: event.pageY };
-
-    // console.log(mousePoint);
 
     if (isInsideGraph(mousePoint)) {
       // MOVE VERTICAL LINE
@@ -491,7 +488,6 @@ function lineChart(div, data) {
 
     $('#annotation_dialog_form .cancel-button').off('click');
     $('#annotation_dialog_form .cancel-button').click(function() {
-      // console.log('cancel');
       restoreChart();
     });
 
