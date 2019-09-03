@@ -160,11 +160,13 @@ mediaType: application/json
                     [
                       {
                         "date": "2019-01-01",
-                        "annotation": "test"
+                        "annotation": "test",
+                        "position": "left"
                       },
                       {
                         "date": "2019-01-02",
-                        "annotation": "value"
+                        "annotation": "value",
+                        "position": "left"
                       }
                     ]
         /{date}:
@@ -178,7 +180,8 @@ mediaType: application/json
                     example: |
                       {
                         "date": "2019-01-01",
-                        "annotation": "test"
+                        "annotation": "test",
+                        "position": "left"
                       }
           put:
             description: Change the value of the annotation.
@@ -194,12 +197,17 @@ mediaType: application/json
                       "annotation": {
                         "type": "string",
                         "required": true
+                      },
+                      "position": {
+                        "type": "string",
+                        "required": true
                       }
                     }
                   }
                 example : |
                   {
-                    "annotation": "value"
+                    "annotation": "value",
+                    "position": "left"
                   }
           post:
             description: Create a new annotation.
@@ -215,12 +223,17 @@ mediaType: application/json
                       "annotation": {
                         "type": "string",
                         "required": true
+                      },
+                      "position": {
+                        "type": "string",
+                        "required": true
                       }
                     }
                   }
                 example : |
                   {
-                    "annotation": "value"
+                    "annotation": "value",
+                    "position": "left"
                   }
           delete:
             description: Delete the annotation.
