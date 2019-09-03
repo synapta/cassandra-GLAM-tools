@@ -143,6 +143,10 @@ module.exports = function (app, apicache) {
     });
 
     // API
+    app.get('/api/admin/auth', function (req, res) {
+      res.sendStatus(200);
+    });
+
     app.get('/api/glams', apicache("1 hour"), function (req, res) {
         api.glams(req, res, config.glams);
     });
