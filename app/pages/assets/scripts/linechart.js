@@ -276,7 +276,8 @@ function lineChart(div, data) {
           url: '/api/admin/glams/' + glamId + '/annotations/' + note_date,
           headers: { "Content-Type": "application/json" },
           data: JSON.stringify({
-            annotation: text
+            annotation: text,
+            position: pos
           }),
           success: function() {
             // Restore chart interactivity
@@ -418,7 +419,7 @@ function lineChart(div, data) {
         let annotation_object = composeAnnotation({
           annotation: note.annotation,
           date: new Date(note.date),
-          position: 'bottom',
+          position: note.position,
           value: yVal
         });
         annotations.push(annotation_object);
@@ -508,7 +509,8 @@ function lineChart(div, data) {
           url: '/api/admin/glams/' + glamId + '/annotations/' + date,
           headers: { 'Content-Type': 'application/json' },
           data: JSON.stringify({
-            annotation: text
+            annotation: text,
+            position: pos
           }),
           success: function(data) {
             // Restore chart
