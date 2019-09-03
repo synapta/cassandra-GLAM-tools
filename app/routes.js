@@ -173,7 +173,7 @@ module.exports = function (app, apicache) {
         }
     });
 
-    app.get('/api/admin/glams/:id/annotations', function (req, res, next) {
+    app.get('/api/glams/:id/annotations', function (req, res, next) {
         let glam = config.glams[req.params.id];
         if (glam !== undefined) {
             api.getAnnotations(req, res, next, glam);
