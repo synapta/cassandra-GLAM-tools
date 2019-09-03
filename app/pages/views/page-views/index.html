@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="/assets/style/linechart.css" />
 	<link rel="stylesheet" href="/assets/style/style.css" />
 	<link rel="stylesheet" href="/assets/style/chart-page.css" />
+	<link rel="stylesheet" href="/assets/style/annotation-switch.css" />
 	<base id="basebase" href="" />
 </head>
 
@@ -49,6 +50,15 @@
 						</select>
 					</div>
 				</div>
+				<div class="annotation_toggle_container">
+					ANNOTATION EDIT MODE
+					<div class="annotation_toggle">
+						<label class="annotation_toggle_switch">
+							<input id="annotationModeCheckbox" type="checkbox">
+							<span class="annotation_toggle_slider"></span>
+						</label>
+					</div>
+				</div>
 			</div>
 		</header>
 
@@ -74,7 +84,40 @@
 						<h5>How to use it</h5>
 						On the right menu you can order files by views, by median or by name.
 					</div>
-					<div id="main_views_container"></div>
+					<div id="main_views_container">
+						<form id="annotation_dialog_form">
+							<div class="form-group">
+								<h2 id="note-form-title">ADD NEW ANNOTATION</h2>
+							</div>
+							<div class="form-group">
+								<!-- <input id="note-title" class="my-2 p-2" type="text" name="annotation_title" placeholder="TITLE"> -->
+								<textarea id="note-text" class="my-2 p-2" name="annotation_text" placeholder="Annotation text" required></textarea>
+								<div class="d-flex justify-content-around align-items-center my-2">
+									<h5 style="margin:0;font-weight:500;">POSITION</h5>
+									<select id="note-pos" name="annotation_position">
+										<option value="left">Left</option>
+										<option value="right">Right</option>
+										<option value="top">Top</option>
+										<option selected value="bottom">Bottom</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="d-flex justify-content-around align-items-center">
+									<button class="cancel-button" type="button" name="cancel-button">CANCEL</button>
+									<button class="confirm-button" type="button" name="confirm-button">CONFIRM</button>
+								</div>
+							</div>
+						</form>
+						<div id="annotationButtons">
+							<div class="annotation_button edit_button">
+								<img src="/assets/img/pencil.svg" alt="Edit">
+							</div>
+							<div class="annotation_button delete_button">
+								<img src="/assets/img/trash.svg" alt="Delete">
+							</div>
+						</div>
+					</div>
 				</div>
 				<div id="right-column" class="col-12 col-lg-4">
 					<div id="right_sidebar_box">
@@ -122,6 +165,7 @@
 
 	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/d3/4.4.0/d3.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.3.2/d3-annotation.min.js"></script>
 	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
 	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
 	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.js"></script>

@@ -252,7 +252,7 @@ $(document).ready(function(){
 	lineChartDraw("main_views_container", getUrlAll());
 	$('#groupby-select').change(function() {
 		$("#right_sidebar_list .list_item_active").trigger("click");
-		$("#main_views_container").empty();
+		// $("#main_views_container").empty();
 		lineChartDraw("main_views_container", getUrlAll());
 		download();
 	});

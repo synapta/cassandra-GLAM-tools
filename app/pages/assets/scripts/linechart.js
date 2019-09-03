@@ -3,8 +3,31 @@ var SHOWN_SEC_LINE = false;
 
 var queryParsed;
 
+var makeAnnotations;
+var ANNOTATION_EDIT_MODE = false;
+
+let glamId = window.location.href.toString().split('/')[3];
+
+$('#annotationModeCheckbox').click(function() {
+  var self = this;
+  if (self.checked) { // switching on
+    $.get('/api/admin/auth', function(data) {
+      ANNOTATION_EDIT_MODE = true;
+      $('#svg-graph').css('cursor', 'pointer');
+    }).fail(function(err) {
+      // Authorization failed
+      self.checked = false;
+      ANNOTATION_EDIT_MODE = false;
+      $('#svg-graph').css('cursor', 'auto');
+    });
+  } else { // switching off
+    ANNOTATION_EDIT_MODE = false;
+    $('#svg-graph').css('cursor', 'auto');
+    $('#annotationButtons').css('opacity', 0);
+  }
+});
+
 var lineChartDraw = function(div, query) {
-  // console.log(query);
   // adapt to timespan (quarter, year, ...)
   queryParsed = document.createElement('a');
   queryParsed.href = query;
@@ -23,6 +46,8 @@ var lineChartDraw = function(div, query) {
 }
 
 function lineChart(div, data) {
+
+  $("#svg-graph").remove();
 
   var margin = {};
   var margin2 = {};
@@ -69,18 +94,21 @@ function lineChart(div, data) {
   var svg = d3.select("#" + div)
               .append("svg")
               .attr("id", "svg-graph")
+              .style('position', 'relative')
               .attr("width", width + margin.left + margin.right)
               .attr("height", height + margin.top + margin.bottom)
               .append("g")
               .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  // SCALE OBJECTS
+
+// SCALE OBJECTS
   var x = d3.scaleTime().range([0, width]);
   var y = d3.scaleLog().range([height, 0]);
 
   // BRUSH SCALES
   var x2 = d3.scaleTime().range([0, width]);
   var y2 = d3.scaleLog().range([height2, 0]);
+
 
   // SET DOMAINS
   x.domain(d3.extent(data, function(d) { return d.date; }));
@@ -204,6 +232,202 @@ function lineChart(div, data) {
     // Line across the plots on mouse pointer
   var verticalLine = focus.append("g").attr("class", "hover-line");
 
+  // ANNOTATIONS
+  const annotation_type = d3.annotationCalloutCircle;
+
+  var annotations = [];
+
+  // Append SVG group
+  svg.append("g")
+     .attr("class", "annotation-group")
+     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+     .attr("clip-path", "url(#clip)");
+
+  $('#annotationButtons .edit_button').on('click', function() {
+    let note_id = $('#annotationButtons').data('noteid');
+    let note_date = note_id.split('_')[0];
+    let note = annotations.find(el => el.id === note_id);
+    $('#note-form-title').text('EDIT ANNOTATION');
+    $('#annotation_dialog_form').fadeInFlex();
+
+    // Fill form with note data
+    $('#note-text').val(note.note.label);
+    $('#note-pos').val(note.note.position)
+
+    /*** CANCEL ***/
+    $('#annotation_dialog_form .cancel-button').off('click');
+    $('#annotation_dialog_form .cancel-button').click(function() {
+      // Restore chart interactivity
+      restoreChart();
+    });
+
+    /*** CONFIRM ***/
+    $('#annotation_dialog_form .confirm-button').off('click');
+    $('#annotation_dialog_form .confirm-button').click(function() {
+      if ($('#note-text').val() !== '') {
+        // Disable button to avoid multiple API calls
+        $('#annotation_dialog_form .confirm-button').addClass('full-disabled');
+        // Get new values
+        let text = $('#note-text').val();
+        let pos = $('#note-pos').val();
+        // API
+        $.ajax({
+          type: "PUT",
+          url: '/api/admin/glams/' + glamId + '/annotations/' + note_date,
+          headers: { "Content-Type": "application/json" },
+          data: JSON.stringify({
+            annotation: text
+          }),
+          success: function() {
+            // Restore chart interactivity
+            restoreChart();
+            // Remove old object
+            annotations = annotations.filter(el => el.id !== note_id);
+            // Compose new object
+            let annotation_object = composeAnnotation({
+              annotation: text,
+              position: pos,
+              date: note.data.date,
+              value: note.data.close
+            });
+            // Update list and redraw annotations
+            annotations.push(annotation_object);
+            doAnnotation(annotations);
+          },
+          error: function(err) {
+            alert("Something went wrong");
+            restoreChart();
+          }
+        });
+      } else {
+        alert('Cannot add annotation with empty text');
+      }
+    });
+  });
+
+  $('#annotationButtons .delete_button').on('click', function() {
+    let note_id = $('#annotationButtons').data('noteid');
+    let note_date = note_id.split('_')[0];
+    $.ajax({
+      url: '/api/admin/glams/' + glamId + '/annotations/' + note_date,
+      type: 'DELETE',
+      success: function() {
+        // Filter out and redraw annotations
+        annotations = annotations.filter(el => el.id !== note_id);
+        doAnnotation(annotations);
+        // Restore
+        restoreChart();
+      },
+      error: function(err) {
+        alert('Something went wrong');
+        // Restore
+        restoreChart();
+      }
+    });
+  });
+
+  function restoreChart() {
+    // Fade out menus
+    $('#annotation_dialog_form').fadeOut(200);
+    $('#annotationButtons').css('opacity', 0);
+    // Empty textarea
+    $('#note-text').val('');
+    // Restore zoom and brush
+    $('.zoom-area').removeClass('no-pointer-events');
+    $('.brush').removeClass('no-pointer-events');
+    // Restore buttons interactivity
+    $('#annotation_dialog_form .confirm-button').removeClass('full-disabled');
+    // Fade out temporary dots if present
+    d3.selectAll('.note-dot').remove();
+  }
+
+  function disableChartInteractivity() {
+    $('.zoom-area').addClass('no-pointer-events');
+    $('.brush').addClass('no-pointer-events');
+  }
+
+  let NOTE_OVER = false;
+
+  function doAnnotation(annotationsArray) {
+    makeAnnotations = d3.annotation()
+    // also can set and override in the note.padding property of the annotation object
+    .notePadding(15)
+    // .editMode(true)
+    .type(annotation_type)
+    // accessors & accessorsInverse not needed if using x, y in annotations JSON
+    .accessors({
+      x: d => x(parseTime(d.date)),
+      y: d => y(d.close)
+    }).accessorsInverse({
+       date: d => timeFormat(x.invert(d.x)),
+       close: d => y.invert(d.y)
+    }).annotations(annotationsArray)
+    .on('noteover', function(d) {
+      NOTE_OVER = true;
+      if (ANNOTATION_EDIT_MODE) this.select('.annotation-note-bg')
+                                    .transition().attr('fill', '#FFCDD2');
+    })
+    .on('noteout', function() {
+      NOTE_OVER = false;
+      if (ANNOTATION_EDIT_MODE) this.select('.annotation-note-bg')
+                                    .transition().attr('fill', '#fff');
+    })
+    .on('noteclick', function(d) {
+      if ($('#annotation_dialog_form').is(':visible')) {
+        $('#annotation_dialog_form .cancel-button').click();
+      }
+      if (ANNOTATION_EDIT_MODE) {
+        let note_id = $('#annotationButtons').data('noteid');
+        let buttons_visible = +$('#annotationButtons').css('opacity');
+        if (!buttons_visible) { // menu is hidden
+          // temporaily disable zoom and brush
+          disableChartInteractivity();
+          // show menu
+          $('#annotationButtons').css('top', d3.event.pageY - 100)
+                                 .css('left', d3.event.pageX + 50)
+                                 .css('opacity', 1);
+          // update data
+          $('#annotationButtons').data('noteid', d.id);
+        } else if (note_id !== d.id) { // menu is shown but click on another note
+          // move menu
+          $('#annotationButtons').css('top', d3.event.pageY - 100)
+                                 .css('left', d3.event.pageX + 50);
+          // update data
+          $('#annotationButtons').data('noteid', d.id);
+        } else { // menu is shown but click on same note
+          // restore chart
+          restoreChart();
+        }
+      }
+    });
+
+    // Do annotations!
+    d3.selectAll('.annotation-group')
+      .call(makeAnnotations);
+  }
+
+
+  // get annotations from API
+  $.get('/api/glams/' + glamId + '/annotations', function(annotations_data) {
+    console.log(annotations_data);
+    if (annotations_data.length > 0) {
+      annotations_data.forEach(note => {
+        // calc views value
+        let yVal = data[bisect(data, new Date(note.date))].views;
+        // compose annotations
+        let annotation_object = composeAnnotation({
+          annotation: note.annotation,
+          date: new Date(note.date),
+          position: 'bottom',
+          value: yVal
+        });
+        annotations.push(annotation_object);
+      });
+      doAnnotation(annotations);
+    }
+  });
+
+
   // MOUSE HANDLER
   // $(".zoom-area").mousemove(function(event) {
   $("#svg-graph").mousemove(function(event) {
@@ -233,44 +457,140 @@ function lineChart(div, data) {
   });
 
   // add circles for annotation
-  // $("#svg-graph").on("click", function(event) {
-  //
-  //   let mousePoint = {x: event.pageX, y: event.pageY };
-  //   let xCoord = mousePoint.x - margin.left * 2 - 15;
-  //   let yCoord = y(data[bisect(data, getValueForPositionXFromData(xCoord))].views);
-  //   let fT = moment(getValueForPositionXFromData(xCoord)).format("DD MMM YY, HH:mm");
-  //
-  //   var circle_data = {
-  //     x: xCoord,
-  //     y: yCoord,
-  //     time: fT,
-  //     text: "description"
-  //   };
-  //
-  //   // console.log(circle_data);
-  //
-  //   if (isInsideGraph(mousePoint)) {
-  //     addCircle(circle_data);
-  //   }
-  // });
+  $("#svg-graph").on("click", function(event) {
+    if (ANNOTATION_EDIT_MODE) {
+      let mousePoint = {x: event.pageX, y: event.pageY };
+      let xCoord = mousePoint.x - margin.left * 2 - 15;
+      let yValue = data[bisect(data, getValueForPositionXFromData(xCoord))].views;
+      let yCoord = y(yValue);
+      let fT = new Date(getValueForPositionXFromData(xCoord));
 
-  // focus.selectAll('.note-dot')
+      var circle_data = {
+        x: xCoord,
+        y: yCoord,
+        yValue: yValue,
+        time: fT
+      };
 
+      if (isInsideGraph(mousePoint) && !NOTE_OVER) {
+        showAnnotationDialog(circle_data);
+      }
+    }
+  });
 
-  // function addCircle(circle_data) {
-  //   focus.append("circle") // Uses the enter().append() method
-  //        .datum(circle_data)
-  //        .attr("class", "note-dot") // Assign a class for styling
-  //        .attr("cx", (d) => d.x)
-  //        .attr("cy", (d) => d.y)
-  //        .attr("r", 5)
-  //        .style("transition", "all .5s")
-  //        .on('mouseover', function(d) {
-  //          console.log(d);
-  //        }).on('mouseout', function(d) {
-  //
-  //        });
-  // }
+  function showAnnotationDialog(circle_data) {
+    // hide annotation edit menu
+    $('#annotationButtons').css('opacity', 0);
+    // temporaily
+    disableChartInteractivity();
+
+    $('#note-form-title').text('ADD NEW ANNOTATION');
+    $('#annotation_dialog_form').fadeInFlex();
+    d3.selectAll('.note-dot').remove();
+
+    $('#annotation_dialog_form .cancel-button').off('click');
+    $('#annotation_dialog_form .cancel-button').click(function() {
+      // console.log('cancel');
+      restoreChart();
+    });
+
+    $('#annotation_dialog_form .confirm-button').off('click');
+    $('#annotation_dialog_form .confirm-button').click(function() {
+      if ($('#note-text').val() !== '') {
+        $('#annotation_dialog_form .confirm-button').addClass('full-disabled');
+        // Save in DB
+        let text = $('#note-text').val();
+        let pos = $('#note-pos').val();
+        let date = moment(new Date(circle_data.time)).format('YYYY-MM-DD');
+
+        $.ajax({
+          type: 'POST',
+          url: '/api/admin/glams/' + glamId + '/annotations/' + date,
+          headers: { 'Content-Type': 'application/json' },
+          data: JSON.stringify({
+            annotation: text
+          }),
+          success: function(data) {
+            // Restore chart
+            restoreChart();
+            // Compose object
+            let annotation_object = composeAnnotation({
+              annotation: text,
+              position: pos,
+              date: circle_data.time,
+              value: circle_data.yValue
+            });
+            // Update list and redraw annotations
+            annotations.push(annotation_object);
+            doAnnotation(annotations);
+          },
+          error: function(err) {
+            alert("Something went wrong");
+            // Restore
+            restoreChart();
+          }
+        });
+      } else {
+        alert('Cannot add annotation with empty text');
+      }
+    });
+
+    // Show temporary marker
+    focus.append("circle")
+         .datum(circle_data)
+         .attr('fill', 'var(--accent-green)')
+         .attr('fill-opacity', 0.1)
+         .attr('stroke', 'var(--accent-green)')
+         .attr('stroke-width', 2)
+         .attr('stroke-dasharray', 4)
+         .attr("r", 14)
+         .attr("class", "note-dot")
+         .attr("cx", (d) => d.x)
+         .attr("cy", (d) => d.y)
+         .style("transition", "all .5s");
+  }
+
+  function composeAnnotation(options) {
+    let pos = {};
+
+    switch (options.position) {
+      case 'right':
+        pos.dx = 100;
+        pos.dy = -20
+        break;
+      case 'left':
+        pos.dx = -100;
+        pos.dy = 20
+        break;
+      case 'top':
+        pos.dx = -20;
+        pos.dy = -100
+        break;
+      case 'bottom':
+        pos.dx = 20;
+        pos.dy = 100
+        break;
+    }
+
+    let ann_obj = {
+          id: moment(options.date).format('YYYY-MM-DD') + '_' + options.value,
+          note: {
+            label: options.annotation,
+            position: options.position,
+            title: moment(options.date).format('ll')
+          },
+          // can use x, y directly instead of data
+          data: { date: options.date, close: options.value },
+          dx: pos.dx,
+          dy: pos.dy,
+          subject: {
+            radius: 10,
+            radiusPadding: 5
+          }
+        };
+
+    return ann_obj;
+  }
 
   // *** FUNCTIONS ***
   // display data in text box
@@ -279,7 +599,6 @@ function lineChart(div, data) {
     detailsLabel.selectAll('text').remove();
     detailsLabel.selectAll('rect').remove();
     // format data
-    // let fT = moment(time).format("DD MMM YY");
     var groupby2dateFormat = {
       'day': [
         "ddd D MMM YYYY"
@@ -357,12 +676,12 @@ function lineChart(div, data) {
 
   // x axis object
   function make_x_gridlines() {
-    return d3.axisBottom(x).ticks(5)
+    return d3.axisBottom(x).ticks(5);
   }
 
   // y axis object
   function make_y_gridlines() {
-    return d3.axisLeft(y).ticks(5)
+    return d3.axisLeft(y).ticks(5);
   }
 
   // invert x values
@@ -379,7 +698,6 @@ function lineChart(div, data) {
 
   // check if point is inside graph
   function isInsideGraph(point) {
-    // console.log(point);
     if (point.x > (margin.left * 2 + 15) && point.x < (width + margin.left * 2 + 15) &&
       point.y > ($('#svg-graph').offset().top + margin.top) &&
       point.y < (height + $('#svg-graph').offset().top + margin.top)) {
@@ -393,36 +711,47 @@ function lineChart(div, data) {
   // zoom behavior handler
   function zoomFunction() {
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return; // ignore zoom-by-brush
+
     var t = d3.event.transform;
+
     x.domain(t.rescaleX(x2).domain());
+
     path.attr("d", valueline);
+
     if (SHOWN_SEC_LINE) {
       image_path.attr("d", image_valueline);
     }
+
     gX.call(xAxis);
-    // update dots
-    let dots = focus.selectAll('.note-dot');
-    // console.log(dots);
-    dots.attr("cx", (d) => d.x)
-        .attr("cy", (d) => d.y);
 
     brushView.call(brush.move, x.range().map(t.invertX, t));
+
+    if (makeAnnotations) makeAnnotations.updatedAccessors();
   }
 
+  // brush behavior handler
   function brushFunction() {
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
+
     var s = d3.event.selection || x2.range();
+
     x.domain(s.map(x2.invert, x2));
+
     path.attr("d", valueline);
     if (SHOWN_SEC_LINE) {
       image_path.attr("d", image_valueline);
     }
+
     gX.call(xAxis);
+
     svg.select(".zoom-area")
        .call(zoom.transform, d3.zoomIdentity
        .scale(width / (s[1] - s[0]))
        .translate(-s[0], 0));
+
+    if (makeAnnotations) makeAnnotations.updatedAccessors();
   }
+
 
   window.hideFileLine = function() {
     d3.selectAll('.image_line').remove();
@@ -435,6 +764,9 @@ function lineChart(div, data) {
     // update main line chart
     path.transition().attr("d", valueline);
     SHOWN_SEC_LINE = false;
+
+    // Update annotations
+    if (makeAnnotations) makeAnnotations.updatedAccessors();
   }
 
   window.showFileLine = function(filename) {
@@ -474,7 +806,17 @@ function lineChart(div, data) {
                        .attr("class", "image_line")
                        .attr("d", image_valueline);
 
+
+         // Update annotations
+         if (makeAnnotations) makeAnnotations.updatedAccessors();
        });
      }
+
+
   }
+}
+
+$.fn.fadeInFlex = function(time) {
+  $(this).css('display', 'flex').hide().fadeIn(time);
+  return this;
 }

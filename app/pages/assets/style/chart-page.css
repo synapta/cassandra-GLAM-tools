@@ -222,7 +222,7 @@
 
 .how_to_read {
   display: none;
-  z-index: 1;
+  z-index: 9;
   position: absolute;
   margin: 1em;
   background-color: #fff;
@@ -407,6 +407,156 @@
 /* PAGE VIEWS CHART */
 #main_views_container {
   height: 100vh;
+  position: relative;
+}
+
+#annotation_dialog_form {
+  /* width: 30%; */
+  position: absolute;
+  margin: 1rem;
+  left: 0;
+  top: 0;
+  background: white;
+  padding: 0 0 1rem;
+  z-index: 1;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+  box-shadow: 3px 3px rgba(0, 0, 0, .3);
+  display: none;
+  flex-direction: column;
+  text-align: center;
+}
+
+#annotation_dialog_form .form-group:first-child {
+  background: var(--main);
+  color: #fff;
+  padding: 1rem;
+}
+
+#annotation_dialog_form .form-group:not(:first-child) {
+  padding: 0 1rem;
+}
+
+#annotation_dialog_form h2,
+#annotation_dialog_form h5 {
+  font-size: 1.2rem;
+  margin-bottom: 0;
+}
+
+#annotation_dialog_form textarea {
+  /* background: var(--bg-gray); */
+  padding: .5rem;
+}
+
+#annotation_dialog_form select {
+  background:  #fff;
+  padding: .5rem;
+}
+
+#annotation_dialog_form button {
+  padding: .4rem .7rem;
+  font-size: 1.2rem;
+  border: 1px solid;
+  cursor: pointer;
+  transition: all .3s;
+}
+
+#annotation_dialog_form button:hover {
+  box-shadow: 3px 3px var(--main-dark);
+}
+
+#annotation_dialog_form .cancel-button {
+  background-color: #fff;
+  border-color: #000;
+  color: #000;
+}
+
+#annotation_dialog_form .confirm-button {
+  background-color: var(--annotation-color);
+  border-color: var(--annotation-color);
+  color: #fff;
+}
+
+/* Annotations */
+.annotation path {
+  stroke: var(--annotation-color);
+  stroke-width: 1.5;
+  fill: none;
+}
+
+.annotation-note {
+  cursor: pointer;
+}
+
+.annotation-note-title {
+  font-weight: 800;
+  font-size: 1.1rem
+}
+
+.annotation-note-label {
+  font-weight: 200;
+}
+
+.annotation-note-title,
+.annotation-note-label {
+  fill: var(--annotation-color);
+}
+
+.annotation-note-bg {
+  fill-opacity: 1;
+}
+
+#annotationButtons {
+  position: absolute;
+  display: flex;
+  /* flex-direction: column; */
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: all;
+  transition: all .3s ease-in-out;
+}
+
+#annotationButtons .annotation_button {
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  z-index: 1;
+  width: 37px;
+  height: 37px;
+  line-height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: #FFCDD2;
+  border: 2px solid #FFCDD2;
+  margin: .5rem;
+}
+
+#annotationButtons .annotation_button:hover {
+  border: 2px solid var(--annotation-color);
+  transform: scale(1.1);
+}
+
+#annotationButtons .annotation_button img {
+  width: 14px;
+}
+
+.annotation_toggle_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* margin: 0 2rem; */
+  padding: 0 2rem;
+  border-left: 1px solid rgba(255, 255, 255, .5);
+  height: 63.22px;
+  font-size: 1em;
+  color: #fff;
+  text-transform: uppercase;
 }
 
 
@@ -517,7 +667,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 2rem;
+  margin: 0 0 0 2rem;
   padding: 0 2rem;
   border-left: 1px solid rgba(255, 255, 255, .5);
   height: 63.22px;
