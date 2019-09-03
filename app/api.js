@@ -184,7 +184,8 @@ var getAnnotations = function (req, res, next, glam) {
             let result = [];
             dbres.rows.forEach((row => {
                 result.push({'date': row['annotation_date'].toISODateString(),
-                             'annotation': row['annotation_value']});
+                             'annotation': row['annotation_value'],
+                             'position': row['annotation_position']});
             }));
             res.json(result);
         } else {
@@ -199,7 +200,8 @@ var getAnnotation = function (req, res, next, glam) {
             if (dbres.rows.length == 1) {
                 let row = dbres.rows[0];
                 let result = {'date': row['annotation_date'].toISODateString(),
-                              'annotation': row['annotation_value']};
+                              'annotation': row['annotation_value'],
+                              'position': row['annotation_position']};
                 res.json(result);
             } else {
                 res.sendStatus(404);
@@ -217,7 +219,13 @@ var modifyAnnotation = function (req, res, next, glam) {
         return;
     }
 
-    glam.connection.query('UPDATE annotations SET annotation_value = $2 WHERE annotation_date = $1', [req.params.date, annotation], (err, dbres) => {
+    let position = req.body['position'];
+    if (position === undefined || position === '') {
+        res.sendStatus(400);
+        return;
+    }
+
+    glam.connection.query('UPDATE annotations SET annotation_value = $2, annotation_position = $3 WHERE annotation_date = $1', [req.params.date, annotation, position], (err, dbres) => {
         if (!err) {
             res.sendStatus(200);
         } else {
@@ -233,7 +241,13 @@ var createAnnotation = function (req, res, next, glam) {
         return;
     }
 
-    glam.connection.query('INSERT INTO annotations (annotation_date, annotation_value) VALUES ($1, $2)', [req.params.date, annotation], (err, dbres) => {
+    let position = req.body['position'];
+    if (position === undefined || position === '') {
+        res.sendStatus(400);
+        return;
+    }
+
+    glam.connection.query('INSERT INTO annotations (annotation_date, annotation_value, annotation_position) VALUES ($1, $2, $3)', [req.params.date, annotation, position], (err, dbres) => {
         if (!err) {
             res.sendStatus(200);
         } else {
