@@ -636,4 +636,9 @@ footer {
     overflow: auto;
     height: 100%;
   }
+
+  .get-chart-info {
+    margin-top: .8rem;
+    font-size: 2.5rem;
+  }
 }

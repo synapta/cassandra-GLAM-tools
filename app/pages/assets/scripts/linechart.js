@@ -407,26 +407,26 @@ function lineChart(div, data) {
       .call(makeAnnotations);
   }
 
-
   // get annotations from API
-  $.get('/api/glams/' + glamId + '/annotations', function(annotations_data) {
-    if (annotations_data.length > 0) {
-      annotations_data.forEach(note => {
-        // calc views value
-        let yVal = data[bisect(data, new Date(note.date))].views;
-        // compose annotations
-        let annotation_object = composeAnnotation({
-          annotation: note.annotation,
-          date: new Date(note.date),
-          position: note.position,
-          value: yVal
+  if (!isMobile.any()) {
+    $.get('/api/glams/' + glamId + '/annotations', function(annotations_data) {
+      if (annotations_data.length > 0) {
+        annotations_data.forEach(note => {
+          // calc views value
+          let yVal = data[bisect(data, new Date(note.date))].views;
+          // compose annotations
+          let annotation_object = composeAnnotation({
+            annotation: note.annotation,
+            date: new Date(note.date),
+            position: note.position,
+            value: yVal
+          });
+          annotations.push(annotation_object);
         });
-        annotations.push(annotation_object);
-      });
-      doAnnotation(annotations);
-    }
-  });
-
+        doAnnotation(annotations);
+      }
+    });
+  }
 
   // MOUSE HANDLER
   // $(".zoom-area").mousemove(function(event) {

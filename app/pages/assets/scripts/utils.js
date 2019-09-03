@@ -89,3 +89,49 @@ function getPageFromElementIdx(element_idx, items_in_page) {
 	// calc in which page is an element with a given index
 	return Math.floor((element_idx - 1) / items_in_page);
 }
+
+var isMobile = {
+  Android: function() {
+    var m = navigator.userAgent.match(/Android/i);
+    if (m === null) {
+      return false;
+    } else {
+      return true;
+    }
+  },
+  BlackBerry: function() {
+    var m = navigator.userAgent.match(/BlackBerry/i);
+    if (m === null) {
+      return false;
+    } else {
+      return true;
+    }
+  },
+  iOS: function() {
+    var m = navigator.userAgent.match(/iPhone|iPad|iPod/i);
+    if (m === null) {
+      return false;
+    } else {
+      return true;
+    }
+  },
+  Opera: function() {
+    var m = navigator.userAgent.match(/Opera Mini/i);
+    if (m === null) {
+      return false;
+    } else {
+      return true;
+    }
+  },
+  Windows: function() {
+    var m = navigator.userAgent.match(/IEMobile/i);
+    if (m === null) {
+      return false;
+    } else {
+      return true;
+    }
+  },
+  any: function() {
+    return (this.Android() || this.BlackBerry() || this.iOS() || this.Opera() || this.Windows());
+  }
+}
