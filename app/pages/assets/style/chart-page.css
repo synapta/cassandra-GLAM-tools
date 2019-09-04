@@ -137,7 +137,7 @@
   color: var(--main);
   box-shadow: 0 -1px 15px 0px rgba(0,0,0,.1);
   border-top: 1px solid rgba(0,0,0,.1);
-  padding: 1.2rem 2rem;
+  padding: 0.7rem 2rem;
   align-items: center;
   justify-content: space-between;
 }
@@ -196,11 +196,12 @@
 }
 
 #chart-page-footer .chart-title img {
-  height: 35px;
+  height: 30px;
 }
 
 #chart-page-footer .chart-title h5 {
   margin: 0;
+  font-size: 1rem;
 }
 
 #chart-page-footer .commons-category h6 {
@@ -369,6 +370,12 @@
   stroke-width: 3px;
 }
 
+#legend {
+  width: 10%;
+  float: left;
+  margin: 2em 0 0 1.5em;
+}
+
 /* USAGE CHART */
 #usage_stat {
   padding-bottom: .5rem;
@@ -518,11 +525,12 @@
 
 .annotation-note-title {
   font-weight: 800;
-  font-size: 1.1rem
+  font-size: 1rem
 }
 
 .annotation-note-label {
   font-weight: 200;
+  font-size: .9rem;
 }
 
 .annotation-note-title,
@@ -665,6 +673,19 @@
     margin: auto;
   }
 
+  /* category network */
+  #category_network_container {
+    height: 400px;
+    padding: .2rem;
+  }
+
+  #legend {
+    width: 100%;
+    margin: 2rem 0;
+    display: flex;
+    justify-content: space-around;
+  }
+
   /* charts container */
   #main_views_container,
   #main_contributions_container  {
@@ -676,21 +697,59 @@
     position: relative;
     flex-direction: column;
     max-height: unset;
+    padding: 0;
   }
 
   #chart-page-footer > div {
     margin: 1rem 0;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #chart-page-footer > div:first-child {
+    margin: 1rem 0 0;
+  }
+
+  #chart-page-footer .chart-title img {
+    height: 30px;
+    margin: 0 0 1rem;
   }
 
   #chart-page-footer .chart-title, #chart-page-footer .commons-category {
     flex-direction: column;
+    border: none;
+    margin: 0;
+    padding: 0;
   }
 
   #chart-page-footer .commons-category {
-    align-items: flex-start;
+    align-items: center;
+    margin-top: 1rem;
+  }
+
+  #chart-page-footer .help, #chart-page-footer .download {
+    margin: .5rem 0;
   }
 
   .annotation_toggle_container {
     display: none;
+  }
+
+  .annotation-note-title {
+    font-weight: 600;
+    font-size: 0.8rem
+  }
+
+  .annotation-note-label {
+    font-weight: 200;
+    font-size: .6rem;
+  }
+
+  .how_to_read {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 0 0 1.5em 1.5em;
+    word-break: break-word;
   }
 }

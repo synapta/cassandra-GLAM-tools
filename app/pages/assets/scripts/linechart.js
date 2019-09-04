@@ -49,19 +49,21 @@ function lineChart(div, data) {
 
   $("#svg-graph").remove();
 
+  let WINDOW_WIDTH = $(window).width();
+
   var margin = {};
   var margin2 = {};
   var kH;
   var availH;
 
-  if ($(window).width() < 576) {  // smartphones
+  if (WINDOW_WIDTH < 576) {  // smartphones
     availH = $("#" + div).outerHeight();
-    margin = { top: 10, right: 40, bottom: 140, left: 20 };
-    margin2 = { top: availH - margin.bottom + 30, right: 40, bottom: 50, left: 20 };
+    margin = { top: 10, right: 15, bottom: 140, left: 15 };
+    margin2 = { top: availH - margin.bottom + 30, right: 15, bottom: 50, left: 15 };
   } else { // tablets and desktop
     availH = $("#" + div).outerHeight() * 0.82;
-    margin = { top: 10, right: 50, bottom: 140, left: 30 };
-    margin2 = { top: availH - margin.bottom + 30, right: 50, bottom: 50, left: 30 };
+    margin = { top: 10, right: 40, bottom: 140, left: 20 };
+    margin2 = { top: availH - margin.bottom + 30, right: 40, bottom: 50, left: 20 };
   }
 
   var width = Math.round($("#" + div).outerWidth()) - margin.left - margin.right,
@@ -137,7 +139,10 @@ function lineChart(div, data) {
 
   // var yAxis = d3.axisLeft(y).ticks(20).tickFormat(d3.formatPrefix(".0", 1)).tickSize(6, 0);
 
-  var yAxis = d3.axisLeft(y).ticks(20).tickFormat(d3.formatPrefix(".0", 1));
+  // var yAxis = d3.axisLeft(y).ticks(20).tickFormat(d3.formatPrefix(".0", 1));
+  var yAxis = d3.axisLeft(y)
+                .tickValues(y.ticks(20).slice(1, -1).concat(y.domain()))
+                .tickFormat(d3.format(".0s"));
 
   // Clip path (clip line outside axis)
   var clip = svg.append("defs")

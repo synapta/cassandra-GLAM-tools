@@ -36,7 +36,7 @@ function drawHorizBars(data, div, totalPages) {
   if ($(window).width() < 576) {
     // smartphones
     availH = $(div).outerHeight();
-    margin = { top: 40, right: 10, bottom: 40, left: 30 };
+    margin = { top: 40, right: 10, bottom: 40, left: 40 };
   } else {
     // tablets and desktop
     availH = $(div).outerHeight() * 0.85;
@@ -60,7 +60,7 @@ function drawHorizBars(data, div, totalPages) {
 
   y.domain(data.map(function(d) { return d.wiki; }));
 
-  var xAxis = d3.axisBottom().scale(x).tickValues(x.ticks(5).concat(x.domain()));
+  var xAxis = d3.axisBottom().scale(x).tickValues(x.ticks(6).slice(1, -1).concat(x.domain()));
 
   var yAxis = d3.axisLeft()
                 .scale(y)

@@ -38,6 +38,8 @@ function dataviz() {
 
 function barChart(data, minDate, maxDate, maxValue, div, userData) {
 
+  let WINDOW_WIDTH = $(window).width();
+
   var parseDate = d3.isoParse
 
   let minY = minDate.substring(0, 4);
@@ -70,16 +72,16 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
 	var kH;
 	var availH;
 
-	if ($(window).width() < 576) {
+	if (WINDOW_WIDTH < 576) {
 		// smartphones
 		availH = $(div).outerHeight();
 		margin = { top: 10, right: 10, bottom: 140, left: 30 };
-		margin2 = { top: availH - margin.bottom + 30, right: 40, bottom: 50, left: 20 };
+		margin2 = { top: availH - margin.bottom + 40, right: 10, bottom: 50, left: 30 };
 	} else {
 		// tablets and desktop
 		availH = $(div).outerHeight() * 0.9;
-		margin = { top: 20, right: 30, bottom: 160, left: 50 };
-		margin2 = { top: availH - margin.bottom + 30, right: 30, bottom: 30, left: 50 };
+		margin = { top: 20, right: 20, bottom: 160, left: 30 };
+		margin2 = { top: availH - margin.bottom + 30, right: 20, bottom: 30, left: 30 };
 	}
 
 	var width = Math.round($(div).outerWidth()) - margin.left - margin.right,
@@ -151,7 +153,10 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
   }
 
   var xAxis2 = d3.axisBottom().scale(x2).tickFormat(d3.timeFormat("%Y-%m")).ticks(10);
-  var yAxis = d3.axisLeft().scale(y).tickValues(y.ticks(3).concat(y.domain()));
+  var yAxis = d3.axisLeft()
+                .scale(y)
+                .tickValues(y.ticks(7).slice(1, -1).concat(y.domain()))
+                .tickFormat(d3.format("." + d3.precisionFixed(0.05) + "s"));
 
 	var focus = svg.append("g")
 								 .attr("class", "focus")
@@ -168,11 +173,9 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
 						    .attr("class", "x axis")
 						    .attr("transform", "translate(0," + height + ")")
 						    .call(xAxis.tickValues(tickValues3))
-						    .selectAll("text")
-						    .style("text-anchor", "end")
-						    .attr("dx", "-.8em")
-						    .attr("dy", "-.55em")
-						    .attr("transform", "rotate(-90)");
+						    .selectAll("text");
+						    // .attr("dx", "-.8em")
+						    // .attr("dy", "-.55em");
 
   var gX2 = context.append("g")
   						     .attr("class", "x axis")
@@ -415,8 +418,15 @@ function barChart(data, minDate, maxDate, maxValue, div, userData) {
           .selectAll("text")
           .style("text-anchor", "end")
           .attr("dx", "18")
-          .attr("dy", "8")
-          .attr("transform", "rotate(0)");
+          .attr("dy", "8");
+
+    if (WINDOW_WIDTH < 576) {
+      focus.select(".axis.x")
+           .selectAll("text")
+           .attr("dx", "-5")
+           .attr("dy", "5")
+           .attr("transform", "rotate(-45)");
+    }
   }
 
   function updateContext(min, max) {
