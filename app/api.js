@@ -754,12 +754,12 @@ FROM
 }
 
 var viewsDataset = function (req, res, next, db) {
-    // console.log(req.params.timespan);
+    let groupby = parseGroupBy(req.params.timespan);
     let query = `SELECT
     SUM(accesses_sum) AS accesses_sum_total,
     -- ARRAY_AGG(accesses_sum) AS accesses_sum_list,
     -- ARRAY_AGG(access_date) AS accesses_date_list,
-    DATE_TRUNC('${req.params.timespan}', access_date)::DATE AS access_date_grouped
+    DATE_TRUNC('${groupby}', access_date)::DATE AS access_date_grouped
 FROM
     visualizations_sum
 GROUP BY
@@ -788,6 +788,7 @@ GROUP BY
 }
 
 var viewsByFile = function (req, res, next, db) {
+    let groupby = parseGroupBy(req.query.groupby);
     let query = `select img_name, sum(accesses) as sum,
                     DATE_TRUNC($1, access_date) AS access_date_grouped
                     from visualizations, images
@@ -796,7 +797,7 @@ var viewsByFile = function (req, res, next, db) {
                     and img_name = $2`;
 
     let parameters = [
-      req.query.groupby,
+      groupby,
       req.params.file
     ];
 
