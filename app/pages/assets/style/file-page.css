@@ -349,6 +349,12 @@ body {
 
 @media screen and (max-width: 576px) {
 
+  #file-dataviz {
+    padding: 0;
+    height: unset;
+    order: 2;
+  }
+
   .top_bar {
     /* flex-direction: column; */
     /* align-items: baseline; */
@@ -381,6 +387,7 @@ body {
   #visualizations {
     display: flex;
     flex-direction: column;
+    height: auto;
   }
 
   #data_visualizations li {
@@ -406,6 +413,10 @@ body {
     float: none;
   }
 
+  .file-dataviz-container {
+    /* height: auto; */
+  }
+
   #visualizations #dataviz {
     width: 100%;
     height: auto;
@@ -421,6 +432,8 @@ body {
     border: 1px solid rgba(0, 0, 0, 0.1);
     width: 95%;
     margin: auto;
+    height: auto;
+    order: 1;
   }
 
   /* charts container */
@@ -433,17 +446,49 @@ body {
   #chart-page-footer {
     position: relative;
     flex-direction: column;
+    max-height: unset;
+    height: auto;
+    padding: 0;
   }
 
   #chart-page-footer > div {
-    margin: 1rem 0;
+    margin: 1.5rem 0;
+    padding: 0 1rem;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #chart-page-footer .commons-category h6,
+  #chart-page-footer .file-name h6 {
+    margin: .5rem 0;
+    font-size: 1rem;
+  }
+
+  #chart-page-footer > div > div {
+    margin: .7rem 0;
+  }
+
+  #chart-page-footer .file-name {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
   }
 
   #chart-page-footer .chart-title, #chart-page-footer .commons-category {
     flex-direction: column;
+    border: none;
+    margin: 0;
+    padding: 0;
   }
 
   #chart-page-footer .commons-category {
-    align-items: flex-start;
+    align-items: center;
+    margin-top: 1rem;
+  }
+
+  #chart-page-footer .help, #chart-page-footer .download {
+    margin: .5rem 0;
   }
 }

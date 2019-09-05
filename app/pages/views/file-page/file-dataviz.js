@@ -217,11 +217,13 @@ function drawHorizBars(data, div, totalPages, wiki_array) {
   var kH;
   var availH;
 
-  if ($(window).width() < 576) {
+	let WINDOW_WIDTH = $(window).width();
+
+  if (WINDOW_WIDTH < 576) {
     // smartphones
-    availH = $(div).outerHeight();
-    margin = { top: 40, right: 10, bottom: 40, left: 30 };
-  } else if ($(window).width() < 1450) {
+    availH = $(div).outerHeight() * 0.95;
+    margin = { top: 40, right: 10, bottom: 40, left: 40 };
+  } else if (WINDOW_WIDTH < 1450) {
     // tablets and desktop
     availH = $(div).outerHeight() * 0.9;
     margin = { top: 40, right: 30, bottom: 20, left: 70 };
@@ -274,11 +276,15 @@ function drawHorizBars(data, div, totalPages, wiki_array) {
 
 
     // Y axis label:
-  svg.append("text")
+  let ptojectsLabel = svg.append("text")
      .attr("text-anchor", "end")
      .attr("y", -15)
      .attr("x", -1)
-     .text("Projects")
+     .text("Projects");
+
+	if (WINDOW_WIDTH < 576) {
+		ptojectsLabel.attr("x", 15);
+	}
 
   svg.append("text")
      .attr("text-anchor", "end")
@@ -388,10 +394,12 @@ function lineChart(div, data, image_data) {
   var kH;
   var availH;
 
-  if ($(window).width() < 576) {  // smartphones
-    availH = $("#" + div).outerHeight();
-    margin = { top: 10, right: 40, bottom: 140, left: 20 };
-    margin2 = { top: availH - margin.bottom + 30, right: 40, bottom: 50, left: 20 };
+	let WINDOW_WIDTH = $(window).width();
+
+  if (WINDOW_WIDTH < 576) {  // smartphones
+    availH = $("#" + div).outerHeight() * 0.8;
+    margin = { top: 10, right: 40, bottom: 140, left: 16 };
+    margin2 = { top: availH - margin.bottom + 30, right: 40, bottom: 50, left: 16 };
   } else { // tablets and desktop
     availH = $("#" + div).outerHeight();
     margin = { top: 10, right: 50, bottom: 140, left: 30 };
@@ -455,7 +463,10 @@ function lineChart(div, data, image_data) {
 
   // var yAxis = d3.axisLeft(y).ticks(20).tickFormat(d3.formatPrefix(".0", 1)).tickSize(6, 0);
 
-  var yAxis = d3.axisLeft(y).ticks(20).tickFormat(d3.formatPrefix(".0", 1));
+	var yAxis = d3.axisLeft(y)
+								.scale(y)
+								.tickValues(y.ticks(20))
+								.tickFormat(d3.format(".0s"));
 
   // Clip path (clip line outside axis)
   var clip = svg.append("defs")
@@ -529,6 +540,18 @@ function lineChart(div, data, image_data) {
 
 	y.domain([min, max]);
 
+	let ticks = y.ticks(5);
+	ticks.splice(36, 1);
+	ticks.splice(27, 1);
+	ticks.splice(18, 1);
+	ticks.splice(9, 1);
+
+	yAxis = d3.axisLeft(y)
+						.scale(y)
+						.tickValues(ticks.slice(1, -1).concat(y.domain()))
+						.tickFormat(d3.format(".0s"));
+
+
 	// update axis
 	gY.call(yAxis);
 
@@ -564,7 +587,7 @@ function lineChart(div, data, image_data) {
   var legendLabel = focus.append("g").attr("class", "legend-container");
 
 	legendLabel.append("g")
-						 .attr("transform", `translate(${width - 170}, ${20})`)
+						 .attr("transform", `translate(${width - 250}, ${0})`)
 						 .attr("class", "legend-label1")
 						 .append('circle')
 						 .style('fill','var(--main)')
@@ -580,7 +603,7 @@ function lineChart(div, data, image_data) {
 														 .attr('dx', '15');
 
 	legendLabel.append("g")
-						 .attr("transform", `translate(${width - 170}, ${50})`)
+						 .attr("transform", `translate(${width - 100}, ${0})`)
 						 .attr("class", "legend-label2")
 						 .append('circle')
 						 .style('fill','var(--accent-green)')

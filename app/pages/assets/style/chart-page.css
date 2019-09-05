@@ -598,6 +598,9 @@
 @media screen and (max-width: 768px) {}
 
 @media screen and (max-width: 576px) {
+  h1 {
+    text-align: left;
+  }
 
   .top_bar {
     /* flex-direction: column; */
