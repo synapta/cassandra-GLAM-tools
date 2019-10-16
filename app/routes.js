@@ -375,6 +375,15 @@ module.exports = function (app, apicache) {
         }
     });
 
+    app.get('/api/:id/search/:query', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            api.search(req, res, next, glam.connection);
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
     // NOT FOUND
     app.get('*', function (req, res) {
         res.sendStatus(404);

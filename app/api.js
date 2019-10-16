@@ -945,6 +945,41 @@ var fileDetails = function (req, res, next, db) {
     });
 }
 
+// SEARCH
+var search = function (req, res, next, db) {
+    let query = `SELECT img_name
+                FROM images
+                WHERE img_name ILIKE $1
+                AND is_alive = TRUE
+                ORDER BY img_name`;
+    
+    let page = 0;
+    if (req.query.page !== undefined) {
+        page = parseInt(req.query.page);
+    }
+
+    let limit = 100;
+    if (req.query.limit !== undefined) {
+        limit = parseInt(req.query.limit);
+    }
+
+    let offset = limit * page;
+
+    query += " LIMIT " + limit + " OFFSET " + offset;
+
+    db.query(query, [req.params.query], (err, dbres) => {
+        if (!err) {
+            let result = [];
+            dbres.rows.forEach(function (row) {
+                result.push(row['img_name']);
+            });
+            res.json(result);
+        } else {
+            next(new Error(err));
+        }
+    });
+}
+
 exports.glams = glams;
 exports.getAdminGlam = getAdminGlam;
 exports.createGlam = createGlam;
@@ -971,3 +1006,4 @@ exports.viewsByFile = viewsByFile;
 exports.viewsSidebar = viewsSidebar;
 exports.viewsStats = viewsStats;
 exports.fileDetails = fileDetails;
+exports.search = search;

@@ -666,3 +666,29 @@ mediaType: application/json
                   "totalProjects": 47,
                   "totalPages": 783
                 }
+  /search/{query}:
+    description: List of active files that matches the `{query}`. The query is case-insensitive and it should end with a `%`.
+    get:
+      queryParameters:
+        page:
+          description: The page of the results.
+          type: integer
+          example: 0
+          required: false
+        limit:
+          description: The number of results per page.
+          type: integer
+          example: 10
+          required: false
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                [
+                  "Bahnhofstrasse_-_SNB_Zürich_&_Heimatwerk_2012-09-18_15-27-04_(P7000).JPG",
+                  "Bahnhofstrasse_-_SNB_Zürich_&_Heimatwerk_2012-09-18_15-28-22_(P7000).JPG",
+                  "Bahnhofstrasse_Zürich_-_Bürkliplatz-SNB_2010-09-21_15-05-52.JPG",
+                  "Bahnhof_Zürich_1847_(Originalscan)-2.jpg",
+                  "Bahnhof_Zürich_1883.jpg"
+                ]
