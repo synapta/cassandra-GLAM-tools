@@ -2,7 +2,7 @@
   "name": "cassandra",
   "version": "2.0.0",
   "author": "Synapta Srl <info@synapta.it> (https://synapta.it/)",
-  "license" : "MIT",
+  "license": "MIT",
   "private": true,
   "dependencies": {
     "@sentry/node": "^5.2.0",
