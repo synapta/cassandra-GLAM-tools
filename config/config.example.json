@@ -15,7 +15,7 @@
         "port": 3306,
         "user": "",
         "password": "",
-        "db": "commonswiki_p"
+        "database": "commonswiki_p"
     },
     "admin": {
         "username": "admin",

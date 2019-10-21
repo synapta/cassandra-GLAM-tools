@@ -1,4 +1,3 @@
-var utf8 = require('utf8');
 var config = require('../config/config.js');
 
 const CONST_USE_PER_QUERY = 10;
@@ -103,8 +102,8 @@ var getLevelChilds = function () {
             return;
         }
         for (var k = 0; k < rows.length; k++) {
-            var newPage = utf8.decode(rows[k].page_title);
-            var father = utf8.decode(rows[k].cl_to);
+            var newPage = rows[k].page_title.toString();
+            var father = rows[k].cl_to.toString();
             if (searchCatQueue(newPage) == -1) { //prevent loops
                 var fatherIndex = searchCatQueue(father);
                 catQueue[catFreeTail] = new Object();
@@ -182,11 +181,11 @@ var loadImages = function () {
         }
         for (var k = 0; k < rows.length; k++) {
             images[imgIndex] = new Object();
-            images[imgIndex].img_name = utf8.decode(rows[k].img_name);
-            images[imgIndex].img_user_text = utf8.decode(rows[k].img_user_text);
+            images[imgIndex].img_name = rows[k].img_name.toString();
+            images[imgIndex].img_user_text = rows[k].img_user_text.toString();
             images[imgIndex].img_timestamp = convertTimestamp(rows[k].img_timestamp);
             images[imgIndex].img_size = rows[k].img_size;
-            images[imgIndex].cl_to = utf8.decode(rows[k].cl_to);
+            images[imgIndex].cl_to = rows[k].cl_to.toString();
             imgIndex++;
             countImages++;
         }
@@ -196,7 +195,8 @@ var loadImages = function () {
     });
 }
 
-var convertTimestamp = function (TS) {
+var convertTimestamp = function (timestamp) {
+    const TS = timestamp.toString();
     let retval = TS.substring(0, 4) + "-" + TS.substring(4, 6) + "-" + TS.substring(6, 8) + " " + TS.substring(8, 10) + ":" + TS.substring(10, 12) + ":" + TS.substring(12, 14);
     return retval;
 }
@@ -245,8 +245,8 @@ var loadUsages = function () {
         for (var k = 0; k < rows.length; k++) {
             usages[usagindex] = new Object();
             usages[usagindex].gil_wiki = rows[k].gil_wiki;
-            usages[usagindex].gil_page_title = utf8.decode(rows[k].gil_page_title);
-            usages[usagindex].gil_to = utf8.decode(rows[k].gil_to);
+            usages[usagindex].gil_page_title = rows[k].gil_page_title.toString();
+            usages[usagindex].gil_to = rows[k].gil_to.toString();
             usagindex++;
         }
         loadUsages();

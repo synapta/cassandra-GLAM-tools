@@ -1,10 +1,10 @@
 var MongoClient = require('mongodb').MongoClient;
-var MariaClient = require('mariasql');
+const mariadb = require('mariadb/callback');
 var { Pool, Client } = require('pg');
 var fs = require('fs');
 
 var config = JSON.parse(fs.readFileSync("../config/config.json"));
-exports.connectionToWMF = new MariaClient(config['wmflabs']);
+exports.connectionToWMF = mariadb.createConnection(config['wmflabs']);
 
 config.admin['realm'] = 'Admin area';
 exports.admin = config.admin;
