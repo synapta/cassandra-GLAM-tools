@@ -91,35 +91,3 @@ python3 fix_views.py
 cd app
 node server
 ```
-
-## Run with Docker
-
-Create a new Docker image:
-
-```
-sudo docker image build -t glam .
-```
-
-Install Node.js project dependencies:
-
-```
-sudo docker run -v "$PWD":/src -w /src glam npm install
-```
-
-Run the server:
-
-```
-sudo docker run -d --name glam_app --net=host -v "$PWD":/src -w /src/app glam node server.js
-```
-
-Show the logs:
-
-```
-sudo docker logs --follow glam_app
-```
-
-Manage the server:
-
-```
-sudo docker [start|stop|restart] glam_app
-```
