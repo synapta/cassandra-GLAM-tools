@@ -57,7 +57,8 @@ def views(name, date):
 
 
 def process_glam(collection, glam):
-    if datetime.utcnow() < glam['lastrun'] + timedelta(days=1):
+    # mediacounts are available around 2:00 UTC
+    if datetime.utcnow() < glam['lastrun'] + timedelta(days=1) and glam['lastrun'].hour > 2:
         logging.info('Glam %s is already updated', glam['name'])
         return
 
