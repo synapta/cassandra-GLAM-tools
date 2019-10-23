@@ -1,4 +1,5 @@
-var config = require('../config/config.js');
+const config = require('../config/config.js');
+const mariadb = require('mariadb/callback');
 
 const CONST_USE_PER_QUERY = 10;
 const CONST_CAT_PER_QUERY = 40;
@@ -315,7 +316,7 @@ config.loadGlams(() => {
     }
 
     console.log("Application launched...");
-    wikiCaller = config.connectionToWMF;
+    wikiCaller = mariadb.createConnection(config.wmflabs);
 
     console.log("Working for " + glam.fullname);
     wikiOpen(glam.category.replace(/ /g, "_"));

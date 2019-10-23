@@ -1,21 +1,21 @@
 var MongoClient = require('mongodb').MongoClient;
-const mariadb = require('mariadb/callback');
 var { Pool, Client } = require('pg');
 var fs = require('fs');
 
 var config = JSON.parse(fs.readFileSync("../config/config.json"));
-exports.connectionToWMF = mariadb.createConnection(config['wmflabs']);
 
 config.admin['realm'] = 'Admin area';
+
 exports.admin = config.admin;
 exports.limits = config.limits;
+exports.wmflabs = config.wmflabs;
 
 const client = new MongoClient(config['mongodb']['url'], { useNewUrlParser: true });
 
 var glams = {};
 
 function isConnected(client) {
-  return !!client && !!client.topology && client.topology.isConnected()
+  return !!client && !!client.topology && client.topology.isConnected();
 }
 
 function loadGlams(callback) {
