@@ -277,8 +277,26 @@ function arrayMin(arr) {
     return min;
 };
 
+function categoryGraphQuery(unused) {
+    let query = `SELECT page_title, cat_files, cl_to[0:10], cat_level[0:10]
+                FROM categories
+                ORDER BY cat_level, page_title`;
+
+    if (unused === 'true') {
+        query = `SELECT c.page_title, COUNT(DISTINCT i.img_name) AS cat_files, c.cl_to[0:10], c.cat_level[0:10]
+                FROM categories c
+                JOIN images i ON c.page_title = ANY(i.cl_to)
+                JOIN usages u ON i.img_name = u.gil_to
+                WHERE u.is_alive = TRUE
+                GROUP BY page_title
+                ORDER BY cat_level, page_title`;
+    }
+
+    return query;
+}
+
 var categoryGraph = function (req, res, next, db) {
-    db.query('SELECT page_title, cat_files, cl_to[0:10], cat_level[0:10] from categories', (err, dbres) => {
+    db.query(categoryGraphQuery(req.query.unused), (err, dbres) => {
         if (!err) {
             let result = {};
             result.nodes = [];
@@ -305,7 +323,7 @@ var categoryGraph = function (req, res, next, db) {
 }
 
 var categoryGraphDataset = function (req, res, next, db) {
-    db.query('SELECT page_title, cat_files, cl_to[0:10], cat_level[0:10] from categories', (err, dbres) => {
+    db.query(categoryGraphQuery(req.query.unused), (err, dbres) => {
         if (!err) {
             res.set('Content-Type', 'text/csv');
             let stringifier = stringify({'delimiter': ';', 'record_delimiter': 'windows'});

@@ -253,6 +253,12 @@ mediaType: application/json
   /category:
     description: List of the categories with their names and the number of available files.
     get:
+      queryParameters:
+        unused:
+          description: Count unused files only.
+          type: string
+          example: "true"
+          required: false
       responses:
         200:
           body:
@@ -294,6 +300,12 @@ mediaType: application/json
     /dataset:
       description: Number of files and category level per category as a CSV file.
       get:
+        queryParameters:
+          unused:
+            description: Count unused files only.
+            type: string
+            example: "true"
+            required: false
         responses: 
           200:
             body:
