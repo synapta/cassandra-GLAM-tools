@@ -283,11 +283,12 @@ function categoryGraphQuery(unused) {
                 ORDER BY cat_level, page_title`;
 
     if (unused === 'true') {
-        query = `SELECT c.page_title, COUNT(DISTINCT i.img_name) AS cat_files, c.cl_to[0:10], c.cat_level[0:10]
+        query = `SELECT c.page_title, COUNT(DISTINCT u.gil_to) AS cat_files, c.cl_to[0:10], c.cat_level[0:10]
                 FROM categories c
-                JOIN images i ON c.page_title = ANY(i.cl_to)
-                JOIN usages u ON i.img_name = u.gil_to
+                LEFT JOIN images i ON c.page_title = ANY(i.cl_to)
+                LEFT JOIN usages u ON i.img_name = u.gil_to
                 WHERE u.is_alive = TRUE
+                OR u.is_alive IS NULL
                 GROUP BY page_title
                 ORDER BY cat_level, page_title`;
     }
@@ -304,7 +305,7 @@ var categoryGraph = function (req, res, next, db) {
             dbres.rows.forEach(function (row) {
                 let node = {};
                 node.id = row.page_title;
-                node.files = row.cat_files;
+                node.files = parseInt(row.cat_files);
                 node.group = arrayMin(row.cat_level);
                 row.cl_to.forEach(function (target) {
                     let edge = {};
