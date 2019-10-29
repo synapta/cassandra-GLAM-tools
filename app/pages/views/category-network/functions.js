@@ -5,6 +5,8 @@ var width = 900, ///w.outerWidth,
 height = Math.round(width - (width / 3));
 
 const MAX_LEVEL = 3;
+var UNUSED_MODE = false;
+var SORT_BY = "by_name";
 
 var margin = {top: 50, right: 50, bottom: 50, left: 50},
 nomargin_w = width - (margin.left + margin.right),
@@ -16,16 +18,21 @@ var h_1 = h[h.length-2]
 var home = baseurl.replace(h_1 + "/","")
 
 function getUrl() {
-		var db=window.location.href.toString().split('/')[3];
-		return "/api/"+db+"/category";
+	var db=window.location.href.toString().split('/')[3];
+	const query = UNUSED_MODE ? "?unused=true" : "";
+	return "/api/"+db+"/category" + query;
 }
 
 function getUrlDataset() {
 	var db=window.location.href.toString().split('/')[3];
-	return "/api/"+db+"/category/dataset";
+	const query = UNUSED_MODE ? "?unused=true" : "";
+	return "/api/"+db+"/category/dataset" + query;
 }
 
 function dataviz() {
+		$('#legend').empty();
+		$('#category_network_container').empty();
+
 		var data_source = getUrl();
 
 		var width = $("#category_network_container").width(),
@@ -64,7 +71,7 @@ function dataviz() {
 				    .append("div")
 				    .style("margin-bottom", "2px");
 
-						// console.log(data.nodes.length);
+				//console.log(data.nodes.length);
 
 				legendRow.append("div")
 				    .html("&nbsp")
@@ -220,7 +227,7 @@ function sorting_sidebar(){
 
 	$("#by_name").on("click", function(){
 		if ($("#by_name").hasClass("active_order") ) {
-      //console.log("già selezionato")
+      		//console.log("già selezionato")
 		} else {
 			$("#by_name").toggleClass("active_order");
 			$("#desc_order").toggleClass("active_order");
@@ -233,6 +240,11 @@ function sorting_sidebar(){
 }
 
 function sidebar(order) {
+	if (order === undefined) {
+		order = SORT_BY;
+	} else {
+		SORT_BY = order;
+	}
 
 	var template_source = "/views/category-network/tpl/category-network.tpl";
 	var data_source = getUrl();
@@ -338,17 +350,33 @@ function sidebar(order) {
 }
 
 function download() {
-	$('<a href="' + getUrlDataset() + '" download="' + "category_network.csv" + '">Download dataset</a>').appendTo('#download_dataset');
+	$('#download_dataset_link').remove();
+	$('<a id="download_dataset_link" href="' + getUrlDataset() + '" download="' + "category_network.csv" + '">Download dataset</a>').appendTo('#download_dataset');
 }
 
 $("#how_to_read_button").click(function(){
 	$(".how_to_read").toggleClass("show");
 });
 
+$('#unusedModeCheckbox').click(function() {
+	var self = this;
+	if (self.checked) { // switching on
+		UNUSED_MODE = true;
+		dataviz();
+		sidebar();
+		download();
+	} else { // switching off
+		UNUSED_MODE = false;
+		dataviz();
+		sidebar();
+		download();
+	}
+  });
+
 $(document).ready(function(){
 	dataviz();
 	switch_page();
-	sidebar("by_name");
+	sidebar();
 	download();
 	setCategory();
 })
