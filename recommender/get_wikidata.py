@@ -75,6 +75,6 @@ with gzip.open('wikidata.json.gz', 'rt') as fp_json:
                 entity_description_de = unidecode(entity['descriptions']['de']['value']).lower()
                 entity_de = entity_label_de + " " + entity_description_de
 
-                writer.writerow([entity['title'], entity_en, entity_de])
+                writer.writerow([entity['id'], entity_en, entity_de])
             except KeyError:
                 continue
