@@ -2,3 +2,4 @@ psycopg2-binary
 mwclient
 mwparserfromhell
 unidecode
+langid

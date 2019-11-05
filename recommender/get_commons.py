@@ -1,5 +1,6 @@
 import csv
 import json
+import langid
 
 import mwclient
 import mwparserfromhell
@@ -41,10 +42,16 @@ with open('commons.csv', mode='w') as fp:
             wikicode = mwparserfromhell.parse(text)
             templates = wikicode.filter_templates(matches="{{Information")
             if len(templates) > 0:
-                description = templates[0].get("Description").value.strip_code(keep_template_params=True)
+                description = templates[0].get("Description").value
+                wikicode = mwparserfromhell.parse(description)
+                en_templates = wikicode.filter_templates(matches="{{en")
+                if len(en_templates) > 0:
+                    description = en_templates[0].get("1").value
+                description = description.strip_code(keep_template_params=True)
                 description = " ".join(description.split())
                 description = unidecode(description).lower()
+                language = langid.classify(description)
                 if len(description) > 0:
-                    writer.writerow([image[0], description])
+                    writer.writerow([image[0], language[0], description])
         except ValueError:
             pass
