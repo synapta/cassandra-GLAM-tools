@@ -27,6 +27,18 @@ with gzip.open('wikidata.json.gz', 'rt') as fp_json:
 
             entity = json.loads(line)
 
+            if 'sitelinks' not in entity:
+                continue
+
+            if 'claims' not in entity:
+                continue
+
+            if 'labels' not in entity:
+                continue
+
+            if 'descriptions' not in entity:
+                continue
+
             # no sitelinks
             if len(entity['sitelinks']) == 0:
                 continue
