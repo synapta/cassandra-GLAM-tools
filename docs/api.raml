@@ -314,6 +314,35 @@ mediaType: application/json
                   Category;Files;Level
                   Historical_images_of_buildings_in_the_canton_of_Zürich;6;0
                   Historical_images_of_churches_in_the_canton_of_Zürich;22;1
+    /{category}:
+      description: List of files contained in `{category}`.
+      get:
+        queryParameters:
+          unused:
+            description: Count unused files only.
+            type: string
+            example: "true"
+            required: false
+          page:
+            description: The page of the results.
+            type: integer
+            example: 0
+            required: false
+          limit:
+            description: The number of results per page.
+            type: integer
+            example: 100
+            required: false
+        responses: 
+          200:
+            body:
+              application/json:
+                example: |
+                  [
+                    "AdliswilponsI.jpg",
+                    "Fabrikation_Reishauerscher_Werkzeuge.jpg",
+                    "Johann_Hamza_Bauerninterieur_Zürich_1899.jpg"
+                  ]
   /file/upload-date:
     description: Number of files grouped by upload date and user.
     get:
