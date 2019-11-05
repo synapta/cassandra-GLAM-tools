@@ -1,44 +1,71 @@
+import json
+
 import mwclient
+import psycopg2
 import requests
 
-site = mwclient.Site('commons.wikimedia.org')
+database = 'cassandradb'
 
-page = site.images['Hundert Jahre Bilder aus der Stadt Zürich - Zürich vom Hotel Schwert aus 1835.jpg']
+with open('../config/config.json', 'r') as fp:
+    config = json.load(fp)
 
-entities = []
+conn = psycopg2.connect(host=config['postgres']['host'],
+                        port=config['postgres']['port'],
+                        dbname=database,
+                        user=config['postgres']['user'],
+                        password=config['postgres']['password'])
 
-for cat in page.categories(show='!hidden'):
-    iwlinks = cat.iwlinks()
-    for iw in iwlinks:
-        if iw[0] == 'd':
-            entities.append(iw[1])
+cur = conn.cursor()
 
-print(entities)
+cur.execute("""SELECT img_name
+                FROM images i
+                JOIN usages u ON i.img_name = u.gil_to
+                WHERE u.is_alive = TRUE
+                GROUP BY img_name""")
 
-for e in entities:
-    url = 'https://www.wikidata.org/wiki/Special:EntityData/{}.json'.format(e)
-    json = requests.get(url=url).json()
+images = cur.fetchall()
 
-    try:
-        entity = json['entities'][e]
+client = mwclient.Site('commons.wikimedia.org')
 
-        if 'sitelinks' not in entity:
-            continue
+for image in images:
+    entities = []
+    print(image[0])
 
-        if 'claims' not in entity:
-            continue
+    page = client.images[image[0]]
 
-        # no instance of
-        if 'P31' not in entity['claims']:
-            continue
+    for cat in page.categories(show='!hidden'):
+        iwlinks = cat.iwlinks()
+        for iw in iwlinks:
+            if iw[0] == 'd':
+                entities.append(iw[1])
 
-        # Wikimedia category
-        if entity['claims']['P31'][0]['mainsnak']['datavalue']['value']['id'] == 'Q4167836':
-            continue
+    for e in entities:
+        url = 'https://www.wikidata.org/wiki/Special:EntityData/{}.json'.format(e)
+        json = requests.get(url=url).json()
 
-        for sitelink in entity['sitelinks']:
-            if sitelink in ['enwiki', 'dewiki']:
-                print(entity['sitelinks'][sitelink]['url'])
+        try:
+            entity = json['entities'][e]
 
-    except KeyError:
-        pass
+            if 'sitelinks' not in entity:
+                continue
+
+            if 'claims' not in entity:
+                continue
+
+            # no instance of
+            if 'P31' not in entity['claims']:
+                continue
+
+            # Wikimedia category
+            if entity['claims']['P31'][0]['mainsnak']['datavalue']['value']['id'] == 'Q4167836':
+                continue
+
+            for site in entity['sitelinks']:
+                if site in ['enwiki', 'dewiki']:
+                    sitelink = entity['sitelinks'][site]
+                    cur.execute("""INSERT INTO recommendations
+                                    (img_name, site, title, url)
+                                    VALUES(%s, %s, %s, %s)""", (image[0], sitelink['site'], sitelink['title'], sitelink['url']))
+                    conn.commit()
+        except KeyError:
+            pass
