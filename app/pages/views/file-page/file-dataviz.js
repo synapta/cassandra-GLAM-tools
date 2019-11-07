@@ -494,7 +494,7 @@ function lineChart(div, data, image_data) {
   var valueline = d3.line()
                     .x(function(d) { return x(d.date); })
                     .y(function(d) { return y(d.views); })
-                    .curve(d3.curveLinear);
+                    .curve(d3.curveStepBefore);
 
   var valueline2 = d3.line()
                      .x(function(d) { return x2(d.date); })
@@ -562,7 +562,7 @@ function lineChart(div, data, image_data) {
 	image_valueline = d3.line()
 										.x(function(d) { return x(d.access_date); })
 										.y(function(d) { return y(d.sum); })
-										.curve(d3.curveLinear);
+										.curve(d3.curveStepBefore);
 
 	image_path = lineChart.append("path")
 								.datum(image_data)
