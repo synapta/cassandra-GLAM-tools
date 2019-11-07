@@ -607,7 +607,7 @@ function lineChart(div, data, image_data) {
 						 .attr('r', 7);
 
 	d3.select('.legend-label1').append('text')
-														 .html("GLAM VIEWS")
+														 .html("TOTAL VIEWS")
 														 .attr("font-family", "monospace")
 														 .attr("font-size", "13px")
 														 .attr('text-anchor', 'start')
