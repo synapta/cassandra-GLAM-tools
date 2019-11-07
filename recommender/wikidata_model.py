@@ -63,7 +63,7 @@ with gzip.open('wikidata.json.gz', 'rt') as fp_json:
             entity_label = entity['labels']['en']['value']
             entity_description = entity['descriptions']['en']['value']
             entity_str = entity_label + " " + entity_description
-            train_en.append(tokenizer(entity_str))
+            train_en.append(tokenize(entity_str))
             id2entity_en[counter_en] = entity['id']
             counter_en += 1
         except KeyError:
@@ -73,7 +73,7 @@ with gzip.open('wikidata.json.gz', 'rt') as fp_json:
             entity_label = entity['labels']['de']['value']
             entity_description = entity['descriptions']['de']['value']
             entity_str = entity_label + " " + entity_description
-            train_de.append(tokenizer(entity_str))
+            train_de.append(tokenize(entity_str))
             id2entity_de[counter_de] = entity['id']
             counter_de += 1
         except KeyError:
