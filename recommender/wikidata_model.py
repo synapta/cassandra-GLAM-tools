@@ -81,7 +81,7 @@ with gzip.open('wikidata.json.gz', 'rt') as fp_json:
 
 def save_model(id2entity, train_corpus, name):
     with open(name + '.pkl', 'wb') as fp:
-    pickle.dump(id2entity, fp)
+        pickle.dump(id2entity, fp)
 
     dictionary = corpora.Dictionary(train_corpus)
     dictionary.save(name + '.dict')
