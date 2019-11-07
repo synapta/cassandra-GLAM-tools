@@ -1,4 +1,4 @@
-var FILE_QUERY
+var FILE_QUERY;
 var SHOWN_SEC_LINE = false;
 
 var queryParsed;

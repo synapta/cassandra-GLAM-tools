@@ -584,6 +584,18 @@ function lineChart(div, data, image_data) {
                     .call(zoom);
 
   //  Label to display details (right top corner)
+  var detailsLabel = focus.append("g").attr("class", "dateLabel");
+  var bisect = function (data, value) {
+      return d3.bisector(function(d) { return d.date; }).left(data, value) - 1;
+  }
+  var image_bisect = function (data, value) {
+      return d3.bisector(function(d) { return d.access_date; }).left(data, value) - 1;
+  }
+
+    // Line across the plots on mouse pointer
+  var verticalLine = focus.append("g").attr("class", "hover-line");
+
+  //  Label to display details (right top corner)
   var legendLabel = focus.append("g").attr("class", "legend-container");
 
 	legendLabel.append("g")
@@ -630,6 +642,17 @@ function lineChart(div, data, image_data) {
     return yValue;
   }
 
+  // check if point is inside graph
+  function isInsideGraph(point) {
+    if (point.x > (margin.left * 2 + 15) && point.x < (width + margin.left * 2 + 15) &&
+      point.y > ($('#svg-graph').offset().top + margin.top) &&
+      point.y < (height + $('#svg-graph').offset().top + margin.top)) {
+      return true;
+    } else {
+      return false;
+    }
+    return true;
+  }
 
   // zoom behavior handler
   function zoomFunction() {
@@ -670,6 +693,108 @@ function lineChart(div, data, image_data) {
   //   path.transition().attr("d", valueline);
   //   SHOWN_IMAGE = false;
   // }
-	//
+  //
+  
+  // MOUSE HANDLER
+  // $(".zoom-area").mousemove(function(event) {
+    $("#svg-graph").mousemove(function(event) {
 
+      let mousePoint = {x: event.pageX, y: event.pageY };
+  
+      if (isInsideGraph(mousePoint)) {
+        // MOVE VERTICAL LINE
+        let mouseX = mousePoint.x - margin.left * 2 - 30;
+        verticalLine.select('line').remove();
+        verticalLine.append("line")
+                    .attr("x1", mouseX).attr("x2", mouseX)
+                    .attr("y1", 5).attr("y2", height - 5)
+                    .style("stroke", "DarkViolet")
+                    .style("stroke-width", 0.5);
+  
+        // DISPLAY DATA
+        displayDetails(getValueForPositionXFromData(mouseX));
+      } else {
+        // HIDE LINES
+        verticalLine.select('line').remove();
+        detailsLabel.selectAll('text').remove();
+        detailsLabel.selectAll('rect').remove();
+      }
+    });
+
+  // *** FUNCTIONS ***
+  // display data in text box
+  function displayDetails(time) {
+    // remove previous
+    detailsLabel.selectAll('text').remove();
+    detailsLabel.selectAll('rect').remove();
+    // format date
+    var formatDate = function (time, groupby) {
+      if (groupby == 'week') {
+        const from_date = moment(time).startOf('week').isoWeekday(1);
+        const to_date = moment(time).endOf('week').isoWeekday(0);
+        return from_date.format("D") + "-" + to_date.format("D MMM YYYY");
+      }
+      var format = {
+        'day': "ddd D MMM YYYY",
+        'month': "MMM YYYY",
+        'quarter': "[Q]Q YYYY",
+        'year': "YYYY"
+      };
+      return moment(time).format(format[groupby]);
+    }
+    let fT = formatDate(time, 'day');
+    let views = data[bisect(data, time)].views;
+    // show data (time)
+    var text1 = detailsLabel.append("text")
+                .attr("x", width - 300)
+                .attr("y", 30)
+                .attr("class", "info-label")
+                .html("DATE: " + fT)
+                .attr("font-family", "monospace")
+                .attr("font-size", "14px");
+
+    // show data (views)
+    var text2 = detailsLabel.append("text")
+                .attr("x", width - 300)
+                .attr("y", 50)
+                .attr("class", "info-label")
+                .html("TOTAL VIEWS: " + nFormatter(views))
+                .attr("font-family", "monospace")
+                .attr("font-size", "14px");
+
+
+    detailsLabel.insert("rect", "text")
+                .attr('class', 'bounding-rect')
+                .attr("x", text1.node().getBBox().x)
+                .attr("y", text1.node().getBBox().y)
+                .attr("width", text1.node().getBBox().width)
+                .attr("height", text1.node().getBBox().height)
+                .style("fill", "#fff");
+
+    detailsLabel.insert("rect", "text")
+                .attr('class', 'bounding-rect')
+                .attr("x", text2.node().getBBox().x)
+                .attr("y", text2.node().getBBox().y)
+                .attr("width", text2.node().getBBox().width)
+                .attr("height", text2.node().getBBox().height)
+                .style("fill", "#fff");
+
+      let img_views = image_data[image_bisect(image_data, time)].sum;
+      // show data (views)
+      let text3 = detailsLabel.append("text")
+                  .attr("x", width - 300)
+                  .attr("y", 70)
+                  .attr("class", "info-label")
+                  .html("FILE VIEWS: " + nFormatter(img_views))
+                  .attr("font-family", "monospace")
+                  .attr("font-size", "14px");
+      detailsLabel.insert("rect", "text")
+                  .attr('class', 'bounding-rect')
+                  .attr("x", text3.node().getBBox().x)
+                  .attr("y", text3.node().getBBox().y)
+                  .attr("width", text2.node().getBBox().width)
+                  .attr("height", text2.node().getBBox().height)
+                  .style("fill", "#fff");
+
+  }
 }
