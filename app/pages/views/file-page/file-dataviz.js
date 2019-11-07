@@ -369,9 +369,9 @@ function drawHorizBars(data, div, totalPages, wiki_array) {
 //******************************************************************
 var lineChartDraw = function() {
 
-  var data_source = getViewsUrl();
+  var data_source = getViewsUrl() + '?groupby=day';
 
-	var file_query = getFileViewsUrl();
+	var file_query = getFileViewsUrl() + '?groupby=day';
 
   d3.json(data_source, function(error, data) {
     if (error) throw error;
@@ -379,7 +379,7 @@ var lineChartDraw = function() {
 		d3.json(file_query, function(error, image_data) {
 			if (error) throw error;
 
-			lineChart('file_main_views_container', data, image_data);
+			lineChart('file_main_views_container', fixDataViz(data, 'date'), fixDataViz(image_data, 'access_date'));
 
     });
   });
@@ -494,7 +494,7 @@ function lineChart(div, data, image_data) {
   var valueline = d3.line()
                     .x(function(d) { return x(d.date); })
                     .y(function(d) { return y(d.views); })
-                    .curve(d3.curveStepBefore);
+                    .curve(d3.curveStepAfter);
 
   var valueline2 = d3.line()
                      .x(function(d) { return x2(d.date); })
@@ -562,7 +562,7 @@ function lineChart(div, data, image_data) {
 	image_valueline = d3.line()
 										.x(function(d) { return x(d.access_date); })
 										.y(function(d) { return y(d.sum); })
-										.curve(d3.curveStepBefore);
+										.curve(d3.curveStepAfter);
 
 	image_path = lineChart.append("path")
 								.datum(image_data)

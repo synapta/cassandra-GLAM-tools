@@ -135,3 +135,14 @@ var isMobile = {
     return (this.Android() || this.BlackBerry() || this.iOS() || this.Opera() || this.Windows());
   }
 }
+
+// Trick to improve the visualization
+var fixDataViz = function (data, field) {
+  if (data.length > 1) {
+    data.shift();
+    let dateDelta = moment(data[data.length - 1][field]).diff(moment(data[data.length - 2][field]));
+    data.push(Object.assign({}, data[data.length - 1]));
+    data[data.length - 1][field] = moment(data[data.length - 1][field]).add(dateDelta);
+  }
+  return data;
+}
