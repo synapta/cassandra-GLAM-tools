@@ -644,7 +644,7 @@ function lineChart(div, data, image_data) {
 
   // check if point is inside graph
   function isInsideGraph(point) {
-    if (point.x > (margin.left * 2 + 15) && point.x < (width + margin.left * 2 + 15) &&
+    if (point.x > (margin.left * 2 + 30) && point.x < (width + margin.left * 2 + 30) &&
       point.y > ($('#svg-graph').offset().top + margin.top) &&
       point.y < (height + $('#svg-graph').offset().top + margin.top)) {
       return true;
