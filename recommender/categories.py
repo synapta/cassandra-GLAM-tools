@@ -1,10 +1,15 @@
 import json
+import logging
+from datetime import date
 
 import mwclient
 import psycopg2
 import requests
 
 database = 'cassandradb'
+
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s %(levelname)s %(message)s')
 
 with open('../config/config.json', 'r') as fp:
     config = json.load(fp)
@@ -17,6 +22,8 @@ conn = psycopg2.connect(host=config['postgres']['host'],
 
 cur = conn.cursor()
 
+logging.info("reading the images from the database")
+
 cur.execute("""SELECT img_name
                 FROM images i
                 JOIN usages u ON i.img_name = u.gil_to
@@ -24,12 +31,16 @@ cur.execute("""SELECT img_name
                 GROUP BY img_name""")
 
 images = cur.fetchall()
+image_counter = 0
 
 client = mwclient.Site('commons.wikimedia.org')
 
 for image in images:
     entities = []
-    print(image[0])
+    
+    if image_counter % 100 == 0:
+        logging.info('working with image %s of %s', image_counter, len(images))
+    image_counter += 1
 
     page = client.images[image[0]]
 
@@ -52,7 +63,7 @@ for image in images:
             if 'claims' not in entity:
                 continue
 
-            # no instance of
+            # instance of
             if 'P31' not in entity['claims']:
                 continue
 
@@ -60,12 +71,18 @@ for image in images:
             if entity['claims']['P31'][0]['mainsnak']['datavalue']['value']['id'] == 'Q4167836':
                 continue
 
-            for site in entity['sitelinks']:
-                if site in ['enwiki', 'dewiki']:
-                    sitelink = entity['sitelinks'][site]
-                    cur.execute("""INSERT INTO recommendations
-                                    (img_name, site, title, url)
-                                    VALUES(%s, %s, %s, %s)""", (image[0], sitelink['site'], sitelink['title'], sitelink['url']))
-                    conn.commit()
+            cur.execute("""INSERT INTO recommendations
+                (img_name, site, title, url, score, last_update)
+                VALUES(%s, %s, %s, %s, %s, %s)""", (image[0], 'wikidata', e, 'https://www.wikidata.org/wiki/' + e, 1, date.today()))
+
+            # for site in entity['sitelinks']:
+            #     if site in ['enwiki', 'dewiki', 'frwiki', 'itwiki']:
+            #         sitelink = entity['sitelinks'][site]
+            #         cur.execute("""INSERT INTO recommendations
+            #                         (img_name, site, title, url, score, last_update)
+            #                         VALUES(%s, %s, %s, %s, %s, %s)""", (image[0], sitelink['site'], sitelink['title'], sitelink['url'], 1, date.today()))
+
         except KeyError:
             pass
+
+    conn.commit()
