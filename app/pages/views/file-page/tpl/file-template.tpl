@@ -43,7 +43,7 @@
 		<table>
 			<tbody>
 				<tr>
-					<td>TOTAL VIEWS:</td>
+					<td>TOTAL VIEWS</td>
 					<td style="padding-left:2em"><span>{{tot}}</span></td>
 				</tr>
 				<tr>
@@ -51,7 +51,7 @@
 					<td style="padding-left:2em"><span>{{av}}</span></td>
 				</tr>
 				<tr>
-					<td>MEDIAN</td>
+					<td>DAILY MEDIAN</td>
 					<td style="padding-left:2em"><span>{{median}}</span></td>
 				</tr>
 			</tbody>

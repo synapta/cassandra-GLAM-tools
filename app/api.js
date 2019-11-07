@@ -788,7 +788,7 @@ GROUP BY
 }
 
 var viewsByFile = function (req, res, next, db) {
-    let groupby = parseGroupBy(req.query.groupby);
+    let groupby = parseGroupBy(req.query.groupby, 'week');
     let query = `select img_name, sum(accesses) as sum,
                     DATE_TRUNC($1, access_date) AS access_date_grouped
                     from visualizations, images

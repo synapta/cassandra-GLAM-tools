@@ -1,4 +1,4 @@
-var FILE_QUERY
+var FILE_QUERY;
 var SHOWN_SEC_LINE = false;
 
 var queryParsed;
@@ -40,7 +40,7 @@ var lineChartDraw = function(div, query) {
     };
 
     $(document).ready(function() {
-      lineChart(div, data);
+      lineChart(div, fixDataViz(data, 'date'));
     });
   });
 }
@@ -170,7 +170,7 @@ function lineChart(div, data) {
   var valueline = d3.line()
                     .x(function(d) { return x(d.date); })
                     .y(function(d) { return y(d.views); })
-                    .curve(d3.curveStepBefore);
+                    .curve(d3.curveStepAfter);
 
   var valueline2 = d3.line()
                      .x(function(d) { return x2(d.date); })
@@ -231,8 +231,12 @@ function lineChart(div, data) {
 
   //  Label to display details (right top corner)
   var detailsLabel = focus.append("g").attr("class", "dateLabel");
-  var bisect = d3.bisector(function(d) { return d.date; }).left;
-  var image_bisect = d3.bisector(function(d) { return d.access_date; }).left;
+  var bisect = function (data, value) {
+      return d3.bisector(function(d) { return d.date; }).left(data, value) - 1;
+  }
+  var image_bisect = function (data, value) {
+      return d3.bisector(function(d) { return d.access_date; }).left(data, value) - 1;
+  }
 
     // Line across the plots on mouse pointer
   var verticalLine = focus.append("g").attr("class", "hover-line");
@@ -601,25 +605,22 @@ function lineChart(div, data) {
     // remove previous
     detailsLabel.selectAll('text').remove();
     detailsLabel.selectAll('rect').remove();
-    // format data
-    var groupby2dateFormat = {
-      'day': [
-        "ddd D MMM YYYY"
-      ],
-      'week': [
-        "[w]w YYYY"
-      ],
-      'month': [
-        "MMM YYYY"
-      ],
-      'quarter': [
-        "[Q]Q YYYY"
-      ],
-      'year': [
-        "YYYY"
-      ]
-    };
-    let fT = moment(time).format(groupby2dateFormat[$('#groupby-select').val()][0]);
+    // format date
+    var formatDate = function (time, groupby) {
+      if (groupby == 'week') {
+        const from_date = moment(time).startOf('week').isoWeekday(1);
+        const to_date = moment(time).endOf('week').isoWeekday(0);
+        return from_date.format("D") + "-" + to_date.format("D MMM YYYY");
+      }
+      var format = {
+        'day': "ddd D MMM YYYY",
+        'month': "MMM YYYY",
+        'quarter': "[Q]Q YYYY",
+        'year': "YYYY"
+      };
+      return moment(time).format(format[groupby]);
+    }
+    let fT = formatDate(time, $('#groupby-select').val());
     let views = data[bisect(data, time)].views;
     // show data (time)
     var text1 = detailsLabel.append("text")
@@ -778,7 +779,7 @@ function lineChart(div, data) {
        d3.json(FILE_QUERY + filename + queryParsed.search, function(error, image_data) {
          if (error) throw error;
 
-         image_data.forEach(function(d) {
+         fixDataViz(image_data, 'access_date').forEach(function(d) {
            d.access_date = parseTime(d.access_date);
            d.sum = +d.sum;
          });
@@ -802,7 +803,7 @@ function lineChart(div, data) {
          image_valueline = d3.line()
                            .x(function(d) { return x(d.access_date); })
                            .y(function(d) { return y(d.sum); })
-                           .curve(d3.curveStepBefore);
+                           .curve(d3.curveStepAfter);
 
          image_path = lineChart.append("path")
                        .datum(image_data)
