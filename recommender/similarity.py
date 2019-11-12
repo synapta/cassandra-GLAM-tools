@@ -1,4 +1,3 @@
-import csv
 import json
 import logging
 import pickle
@@ -75,9 +74,6 @@ def load_model(name):
     index = similarities.Similarity.load(name + '.index')
     return id2entity, dictionary, model, index
 
-metamodel_en = load_model('en/model')
-metamodel_de = load_model('de/model')
-
 def compute_similarity(metamodel, description):
     id2entity, dictionary, model, index = metamodel
 
@@ -106,15 +102,70 @@ def compute_similarity(metamodel, description):
         
     return entities, scores
 
+def compute_category(image):
+    entities = []
+
+    page = client.images[image]
+
+    for cat in page.categories(show='!hidden'):
+        iwlinks = cat.iwlinks()
+        for iw in iwlinks:
+            if iw[0] == 'd':
+                entities.append(iw[1])
+
+    return entities
+
+def process_entities(image, entities, scores):
+    for e in entities:
+        try:
+            r = requests.get('http://www.wikidata.org/wiki/Special:EntityData/' + e + '.json')
+            entity = r.json()['entities'][e]
+            
+            if 'sitelinks' not in entity:
+                continue
+            
+            if 'claims' not in entity:
+                continue
+
+            if len(entity['sitelinks']) == 0:
+                continue
+
+            # instance of
+            if 'P31' not in entity['claims']:
+                continue
+                
+            instance_of = entity['claims']['P31'][0]['mainsnak']['datavalue']['value']['id']
+
+            # disambiguation or category        
+            if instance_of == 'Q4167410' or instance_of == 'Q4167836':
+                continue
+
+        except (ValueError, KeyError):
+            continue
+
+        if scores is not None:
+            cur.execute("""INSERT INTO recommendations
+                        (img_name, site, title, url, score, last_update)
+                        VALUES(%s, %s, %s, %s, %s, %s)""", (image, 'wikidata', e, 'https://www.wikidata.org/wiki/' + e, float(scores[e]), date.today()))
+        else:
+            cur.execute("""INSERT INTO recommendations
+                        (img_name, site, title, url, last_update)
+                        VALUES(%s, %s, %s, %s, %s)""", (image, 'wikidata', e, 'https://www.wikidata.org/wiki/' + e, date.today()))
+
+metamodel_en = load_model('en/model')
+metamodel_de = load_model('de/model')
+
 for image in images:
     logging.info('Processing image %s of %s: %s', image_counter, len(images), image[0])
     image_counter += 1
 
-    cur.execute("""DELETE FROM recommendations
-                WHERE img_name = %s
-                AND score IS NOT NULL""", (image[0],))
-
     try:
+        cur.execute("""DELETE FROM recommendations
+                    WHERE img_name = %s""", (image[0],))
+
+        entities = compute_category(image[0])
+        process_entities(image[0], entities, None)
+
         language, description = get_description(image[0])
 
         if description is not None:
@@ -123,38 +174,7 @@ for image in images:
             else:
                 entities, scores = compute_similarity(metamodel_en, image[0] + ' ' + description)
 
-            for e in entities:
-                try:
-                    r = requests.get('http://www.wikidata.org/wiki/Special:EntityData/' + e + '.json')
-                    entity = r.json()['entities'][e]
-                    
-                    if 'sitelinks' not in entity:
-                        continue
-                    
-                    if 'claims' not in entity:
-                        continue
-
-                    if len(entity['sitelinks']) == 0:
-                        continue
-
-                    # instance of
-                    if 'P31' not in entity['claims']:
-                        continue
-                        
-                    instance_of = entity['claims']['P31'][0]['mainsnak']['datavalue']['value']['id']
-
-                    # disambiguation or category        
-                    if instance_of == 'Q4167410' or instance_of == 'Q4167836':
-                        continue
-
-                except (ValueError, KeyError):
-                    continue
-
-                cur.execute("""INSERT INTO recommendations
-                    (img_name, site, title, url, score, last_update)
-                    VALUES(%s, %s, %s, %s, %s, %s)""", (image[0], 'wikidata', e, 'https://www.wikidata.org/wiki/' + e, float(scores[e]), date.today()))
-
-            conn.commit()
+        conn.commit()
 
     except ValueError:
-        pass
+        continue
