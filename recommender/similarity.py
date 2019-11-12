@@ -47,7 +47,7 @@ cur.execute("""SELECT i.img_name
             GROUP BY i.img_name""", (last_update,))
 
 images = cur.fetchall()
-image_counter = 0
+image_counter = 1
 
 site = mwclient.Site('commons.wikimedia.org')
 

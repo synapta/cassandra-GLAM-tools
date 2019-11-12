@@ -1,7 +1,0 @@
-psycopg2-binary
-mwclient
-mwparserfromhell
-unidecode
-langid
-gensim
-requests
