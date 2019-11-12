@@ -174,6 +174,8 @@ for image in images:
             else:
                 entities, scores = compute_similarity(metamodel_en, image[0] + ' ' + description)
 
+            process_entities(image[0], entities, scores)
+
         conn.commit()
 
     except ValueError:
