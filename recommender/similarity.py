@@ -40,9 +40,9 @@ last_update = date.today() - timedelta(days=7)
 
 cur.execute("""SELECT i.img_name
             FROM images i
-            JOIN usages u ON i.img_name = u.gil_to
+            LEFT JOIN usages u ON i.img_name = u.gil_to
             LEFT JOIN recommendations r ON i.img_name = r.img_name
-            WHERE u.is_alive = TRUE
+            WHERE (u.is_alive = FALSE OR u.gil_to IS NULL)
             AND (r.last_update < %s OR r.last_update IS NULL)
             GROUP BY i.img_name""", (last_update,))
 
