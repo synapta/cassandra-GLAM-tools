@@ -105,7 +105,7 @@ def compute_similarity(metamodel, description):
 def compute_category(image):
     entities = []
 
-    page = client.images[image]
+    page = site.images[image]
 
     for cat in page.categories(show='!hidden'):
         iwlinks = cat.iwlinks()
