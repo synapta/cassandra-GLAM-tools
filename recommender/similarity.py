@@ -8,6 +8,7 @@ import mwclient
 import mwparserfromhell
 import psycopg2
 import requests
+from psycopg2.errors import UniqueViolation
 
 from gensim import corpora, models, similarities
 from tokenizer import tokenize
@@ -143,14 +144,17 @@ def process_entities(image, entities, scores):
         except (ValueError, KeyError):
             continue
 
-        if scores is not None:
-            cur.execute("""INSERT INTO recommendations
-                        (img_name, site, title, url, score, last_update)
-                        VALUES(%s, %s, %s, %s, %s, %s)""", (image, 'wikidata', e, 'https://www.wikidata.org/wiki/' + e, float(scores[e]), date.today()))
-        else:
-            cur.execute("""INSERT INTO recommendations
-                        (img_name, site, title, url, last_update)
-                        VALUES(%s, %s, %s, %s, %s)""", (image, 'wikidata', e, 'https://www.wikidata.org/wiki/' + e, date.today()))
+        try:
+            if scores is not None:
+                cur.execute("""INSERT INTO recommendations
+                            (img_name, site, title, url, score, last_update)
+                            VALUES(%s, %s, %s, %s, %s, %s)""", (image, 'wikidata', e, 'https://www.wikidata.org/wiki/' + e, float(scores[e]), date.today()))
+            else:
+                cur.execute("""INSERT INTO recommendations
+                            (img_name, site, title, url, last_update)
+                            VALUES(%s, %s, %s, %s, %s)""", (image, 'wikidata', e, 'https://www.wikidata.org/wiki/' + e, date.today()))
+        except UniqueViolation:
+            continue
 
 metamodel_en = load_model('en/model')
 metamodel_de = load_model('de/model')
