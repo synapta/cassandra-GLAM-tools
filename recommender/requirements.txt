@@ -4,3 +4,4 @@ mwparserfromhell
 unidecode
 langid
 gensim
+requests

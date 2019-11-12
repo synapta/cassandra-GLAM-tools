@@ -2,13 +2,14 @@ import csv
 import json
 import logging
 import pickle
+from datetime import date
 
 import langid
 import mwclient
 import mwparserfromhell
 import psycopg2
+import requests
 
-from datetime import date
 from gensim import corpora, models, similarities
 from tokenizer import tokenize
 
@@ -113,6 +114,32 @@ for image in images:
                 entities, scores = compute_similarity(metamodel_en, image[0] + ' ' + description)
 
             for e in entities:
+                try:
+                    r = requests.get(' http://www.wikidata.org/wiki/Special:EntityData/' + e + '.json')
+                    entity = r.json()['entities'][e]
+                    
+                    if 'sitelinks' not in entity:
+                        continue
+                    
+                    if 'claims' not in entity:
+                        continue
+
+                    if len(entity['sitelinks']) == 0:
+                        continue
+
+                    # instance of
+                    if 'P31' not in entity['claims']:
+                        continue
+                        
+                    instance_of = entity['claims']['P31'][0]['mainsnak']['datavalue']['value']['id']
+
+                    # disambiguation or category        
+                    if instance_of == 'Q4167410' or instance_of == 'Q4167836':
+                        continue
+
+                except (ValueError, KeyError):
+                    continue
+
                 cur.execute("""INSERT INTO recommendations
                     (img_name, site, title, url, score, last_update)
                     VALUES(%s, %s, %s, %s, %s, %s)""", (image[0], 'wikidata', e, 'https://www.wikidata.org/wiki/' + e, float(scores[e]), date.today()))
