@@ -27,6 +27,8 @@ conn = psycopg2.connect(host=config['postgres']['host'],
                         user=config['postgres']['user'],
                         password=config['postgres']['password'])
 
+conn.set_session(autocommit=True)
+
 cur = conn.cursor()
 
 last_update = date.today() - timedelta(days=7)
@@ -179,8 +181,6 @@ for image in images:
                 entities, scores = compute_similarity(metamodel_en, image[0] + ' ' + description)
 
             process_entities(image[0], entities, scores)
-
-        conn.commit()
 
     except ValueError:
         continue
