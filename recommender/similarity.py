@@ -69,9 +69,7 @@ def load_model(name):
     index = similarities.Similarity.load(name + '.index')
     return id2entity, dictionary, model, index
 
-logging.info('Loading English model')
 metamodel_en = load_model('en/model')
-logging.info('Loading Deutsch model')
 metamodel_de = load_model('de/model')
 
 def compute_similarity(metamodel, description):
@@ -103,7 +101,7 @@ def compute_similarity(metamodel, description):
     return entities, scores
 
 for image in images:
-    logging.info("Processing image %s", image)
+    logging.info("Processing image %s", image[0])
 
     try:
         language, description = get_description(image[0])
@@ -117,7 +115,7 @@ for image in images:
             for e in entities:
                 cur.execute("""INSERT INTO recommendations
                     (img_name, site, title, url, score, last_update)
-                    VALUES(%s, %s, %s, %s, %s, %s)""", (image[0], 'wikidata', e, 'https://www.wikidata.org/wiki/' + e, scores[e], date.today()))
+                    VALUES(%s, %s, %s, %s, %s, %s)""", (image[0], 'wikidata', e, 'https://www.wikidata.org/wiki/' + e, float(scores[e]), date.today()))
 
             conn.commit()
 
