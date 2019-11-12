@@ -1,6 +1,7 @@
 import json
 import logging
 import pickle
+import sys
 from datetime import date, timedelta
 
 import langid
@@ -13,7 +14,11 @@ from psycopg2.errors import UniqueViolation
 from gensim import corpora, models, similarities
 from tokenizer import tokenize
 
-database = 'cassandradb'
+if len(sys.argv) == 1:
+    print('Missing database')
+    sys.exit(1)
+
+database = sys.argv[1]
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(levelname)s %(message)s')
@@ -46,6 +51,7 @@ image_counter = 0
 
 site = mwclient.Site('commons.wikimedia.org')
 
+
 def get_description(image):
     wikipage = site.images[image]
     text = wikipage.text()
@@ -69,13 +75,15 @@ def get_description(image):
 
     return None, None
 
+
 def load_model(name):
-    with open(name + '.pkl','rb') as fp:
+    with open(name + '.pkl', 'rb') as fp:
         id2entity = pickle.load(fp)
     dictionary = corpora.Dictionary.load(name + '.dict')
     model = models.TfidfModel.load(name + '.tfidf')
     index = similarities.Similarity.load(name + '.index')
     return id2entity, dictionary, model, index
+
 
 def compute_similarity(metamodel, description):
     id2entity, dictionary, model, index = metamodel
@@ -102,8 +110,9 @@ def compute_similarity(metamodel, description):
         id_entity = id2entity[entity[0]]
         entities.append(id_entity)
         scores[id_entity] = entity[1]
-        
+
     return entities, scores
+
 
 def compute_category(image):
     entities = []
@@ -118,15 +127,17 @@ def compute_category(image):
 
     return entities
 
+
 def process_entities(image, entities, scores):
     for e in entities:
         try:
-            r = requests.get('http://www.wikidata.org/wiki/Special:EntityData/' + e + '.json')
+            r = requests.get(
+                'http://www.wikidata.org/wiki/Special:EntityData/' + e + '.json')
             entity = r.json()['entities'][e]
-            
+
             if 'sitelinks' not in entity:
                 continue
-            
+
             if 'claims' not in entity:
                 continue
 
@@ -136,10 +147,10 @@ def process_entities(image, entities, scores):
             # instance of
             if 'P31' not in entity['claims']:
                 continue
-                
+
             instance_of = entity['claims']['P31'][0]['mainsnak']['datavalue']['value']['id']
 
-            # disambiguation or category        
+            # disambiguation or category
             if instance_of == 'Q4167410' or instance_of == 'Q4167836':
                 continue
 
@@ -157,6 +168,7 @@ def process_entities(image, entities, scores):
                             VALUES(%s, %s, %s, %s, %s)""", (image, 'wikidata', e, 'https://www.wikidata.org/wiki/' + e, date.today()))
         except UniqueViolation:
             continue
+
 
 metamodel_en = load_model('en/model')
 metamodel_de = load_model('de/model')
