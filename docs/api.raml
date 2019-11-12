@@ -666,3 +666,21 @@ mediaType: application/json
                   "totalProjects": 47,
                   "totalPages": 783
                 }
+  /recommender/{file}:
+    description: List of Wikidata entities related with `{file}`.
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                [
+                  {
+                    "title": "Q124907",
+                    "url": "https://www.wikidata.org/wiki/Q124907"
+                  },
+                  {
+                    "title": "Q808118",
+                    "url": "https://www.wikidata.org/wiki/Q808118"
+                  }
+                ]

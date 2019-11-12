@@ -945,6 +945,33 @@ var fileDetails = function (req, res, next, db) {
     });
 }
 
+// RECOMMENDER
+var recommender = function (req, res, next, db) {
+    let query = `SELECT title, url
+                FROM recommendations
+                WHERE img_name = $1
+                ORDER BY score DESC`;
+
+    db.query(query, [req.params.file], (err, dbres) => {
+        if (!err) {
+            if (dbres.rows.length > 0) {
+                let result = [];
+
+                dbres.rows.forEach(function (row) {
+                    result.push(row);
+                });
+
+                res.json(result);
+            } else {
+                res.sendStatus(404);
+            }
+
+        } else {
+            next(new Error(err));
+        }
+    });
+}
+
 exports.glams = glams;
 exports.getAdminGlam = getAdminGlam;
 exports.createGlam = createGlam;
@@ -971,3 +998,4 @@ exports.viewsByFile = viewsByFile;
 exports.viewsSidebar = viewsSidebar;
 exports.viewsStats = viewsStats;
 exports.fileDetails = fileDetails;
+exports.recommender = recommender;
