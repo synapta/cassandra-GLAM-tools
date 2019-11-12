@@ -8,6 +8,7 @@ import mwclient
 import mwparserfromhell
 import psycopg2
 
+from datetime import date
 from gensim import corpora, models, similarities
 from tokenizer import tokenize
 

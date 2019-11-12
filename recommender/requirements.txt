@@ -3,3 +3,4 @@ mwclient
 mwparserfromhell
 unidecode
 langid
+gensim
