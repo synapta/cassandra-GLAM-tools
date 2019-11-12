@@ -1,9 +1,13 @@
 import gzip
 import json
+import logging
 import pickle
 
 from gensim import corpora, models, similarities
 from tokenizer import tokenize
+
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s %(levelname)s %(message)s')
 
 counter = 0
 counter_en = 0
@@ -29,7 +33,7 @@ with gzip.open('wikidata.json.gz', 'rt') as fp_json:
         counter += 1
 
         if counter % 10000 == 0:
-            print("Wikidata entity:", counter)
+            logging.info("Wikidata entity: %s", counter)
 
         entity = json.loads(line)
 

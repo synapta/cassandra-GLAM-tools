@@ -68,7 +68,9 @@ def load_model(name):
     index = similarities.Similarity.load(name + '.index')
     return id2entity, dictionary, model, index
 
+logging.info('Loading English model')
 metamodel_en = load_model('en/model')
+logging.info('Loading Deutsch model')
 metamodel_de = load_model('de/model')
 
 def compute_similarity(metamodel, description):
@@ -100,6 +102,8 @@ def compute_similarity(metamodel, description):
     return entities, scores
 
 for image in images:
+    logging.info("Processing image %s", image)
+
     try:
         language, description = get_description(image[0])
 
