@@ -153,8 +153,8 @@ def process_entities(image, entities, scores):
 
             instance_of = entity['claims']['P31'][0]['mainsnak']['datavalue']['value']['id']
 
-            # disambiguation or category
-            if instance_of == 'Q4167410' or instance_of == 'Q4167836':
+            # disambiguation or category or events
+            if instance_of == 'Q4167410' or instance_of == 'Q4167836' or instance_of == 'Q18340514':
                 continue
 
         except (ValueError, KeyError):
