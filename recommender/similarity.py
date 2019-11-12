@@ -144,6 +144,9 @@ def process_entities(image, entities, scores):
             if len(entity['sitelinks']) == 0:
                 continue
 
+            if not ('enwiki' in entity['sitelinks'] or 'dewiki' in entity['sitelinks'] or 'frwiki' in entity['sitelinks'] or 'itwiki' in entity['sitelinks']):
+                continue
+
             # instance of
             if 'P31' not in entity['claims']:
                 continue
