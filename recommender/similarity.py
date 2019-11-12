@@ -2,7 +2,7 @@ import csv
 import json
 import logging
 import pickle
-from datetime import date
+from datetime import date, timedelta
 
 import langid
 import mwclient
@@ -29,13 +29,18 @@ conn = psycopg2.connect(host=config['postgres']['host'],
 
 cur = conn.cursor()
 
-cur.execute("""SELECT img_name
-                FROM images i
-                JOIN usages u ON i.img_name = u.gil_to
-                WHERE u.is_alive = TRUE
-                GROUP BY img_name""")
+last_update = date.today() - timedelta(days=7)
+
+cur.execute("""SELECT i.img_name
+            FROM images i
+            JOIN usages u ON i.img_name = u.gil_to
+            LEFT JOIN recommendations r ON i.img_name = r.img_name
+            WHERE u.is_alive = TRUE
+            AND (r.last_update < %s OR r.last_update IS NULL)
+            GROUP BY i.img_name""", (last_update,))
 
 images = cur.fetchall()
+image_counter = 0
 
 site = mwclient.Site('commons.wikimedia.org')
 
@@ -102,7 +107,12 @@ def compute_similarity(metamodel, description):
     return entities, scores
 
 for image in images:
-    logging.info("Processing image %s", image[0])
+    logging.info('Processing image %s of %s: %s', image_counter, len(images), image[0])
+    image_counter += 1
+
+    cur.execute("""DELETE FROM recommendations
+                WHERE img_name = %s
+                AND score IS NOT NULL""", (image[0],))
 
     try:
         language, description = get_description(image[0])
@@ -115,7 +125,7 @@ for image in images:
 
             for e in entities:
                 try:
-                    r = requests.get(' http://www.wikidata.org/wiki/Special:EntityData/' + e + '.json')
+                    r = requests.get('http://www.wikidata.org/wiki/Special:EntityData/' + e + '.json')
                     entity = r.json()['entities'][e]
                     
                     if 'sitelinks' not in entity:

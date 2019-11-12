@@ -1,6 +1,6 @@
 import json
 import logging
-from datetime import date
+from datetime import date, timedelta
 
 import mwclient
 import psycopg2
@@ -22,13 +22,15 @@ conn = psycopg2.connect(host=config['postgres']['host'],
 
 cur = conn.cursor()
 
-logging.info("reading the images from the database")
+last_update = date.today() - timedelta(days=7)
 
-cur.execute("""SELECT img_name
-                FROM images i
-                JOIN usages u ON i.img_name = u.gil_to
-                WHERE u.is_alive = TRUE
-                GROUP BY img_name""")
+cur.execute("""SELECT i.img_name
+            FROM images i
+            JOIN usages u ON i.img_name = u.gil_to
+            LEFT JOIN recommendations r ON i.img_name = r.img_name
+            WHERE u.is_alive = TRUE
+            AND (r.last_update < %s OR r.last_update IS NULL)
+            GROUP BY i.img_name""", (last_update,))
 
 images = cur.fetchall()
 image_counter = 0
@@ -36,11 +38,14 @@ image_counter = 0
 client = mwclient.Site('commons.wikimedia.org')
 
 for image in images:
-    entities = []
-    
-    if image_counter % 100 == 0:
-        logging.info('working with image %s of %s', image_counter, len(images))
+    logging.info('Processing image %s of %s: %s', image_counter, len(images), image[0])
     image_counter += 1
+
+    cur.execute("""DELETE FROM recommendations
+                WHERE img_name = %s
+                AND score IS NULL""", (image[0],))
+
+    entities = []
 
     page = client.images[image[0]]
 
@@ -51,11 +56,9 @@ for image in images:
                 entities.append(iw[1])
 
     for e in entities:
-        url = 'https://www.wikidata.org/wiki/Special:EntityData/{}.json'.format(e)
-        json = requests.get(url=url).json()
-
         try:
-            entity = json['entities'][e]
+            r = requests.get('http://www.wikidata.org/wiki/Special:EntityData/' + e + '.json')
+            entity = r.json()['entities'][e]
 
             if 'sitelinks' not in entity:
                 continue
@@ -63,26 +66,24 @@ for image in images:
             if 'claims' not in entity:
                 continue
 
+            if len(entity['sitelinks']) == 0:
+                continue
+
             # instance of
             if 'P31' not in entity['claims']:
                 continue
 
-            # Wikimedia category
-            if entity['claims']['P31'][0]['mainsnak']['datavalue']['value']['id'] == 'Q4167836':
+            instance_of = entity['claims']['P31'][0]['mainsnak']['datavalue']['value']['id']
+
+            # disambiguation or category        
+            if instance_of == 'Q4167410' or instance_of == 'Q4167836':
                 continue
 
-            cur.execute("""INSERT INTO recommendations
-                (img_name, site, title, url, score, last_update)
-                VALUES(%s, %s, %s, %s, %s, %s)""", (image[0], 'wikidata', e, 'https://www.wikidata.org/wiki/' + e, 1, date.today()))
+        except (ValueError, KeyError):
+            continue
 
-            # for site in entity['sitelinks']:
-            #     if site in ['enwiki', 'dewiki', 'frwiki', 'itwiki']:
-            #         sitelink = entity['sitelinks'][site]
-            #         cur.execute("""INSERT INTO recommendations
-            #                         (img_name, site, title, url, score, last_update)
-            #                         VALUES(%s, %s, %s, %s, %s, %s)""", (image[0], sitelink['site'], sitelink['title'], sitelink['url'], 1, date.today()))
-
-        except KeyError:
-            pass
+        cur.execute("""INSERT INTO recommendations
+            (img_name, site, title, url, last_update)
+            VALUES(%s, %s, %s, %s, %s)""", (image[0], 'wikidata', e, 'https://www.wikidata.org/wiki/' + e, date.today()))
 
     conn.commit()
