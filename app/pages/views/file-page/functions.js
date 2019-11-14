@@ -5,7 +5,6 @@ function getCategoryUrl() {
 
 function getUsageUrl() {
 	var db = window.location.href.toString().split('/')[3];
-	// var file = window.location.href.toString().split('/')[5];
 	return "/api/" + db + "/usage/top";
 }
 
@@ -19,6 +18,12 @@ function getUsageDetailsUrl() {
 	var db = window.location.href.toString().split('/')[3];
 	var file = window.location.href.toString().split('/')[5];
 	return "/api/" + db + "/usage/file/" + file;
+}
+
+function getRecommenderUrl() {
+	var db = window.location.href.toString().split('/')[3];
+	var file = window.location.href.toString().split('/')[5];
+	return "/api/" + db + "/recommender/" + file;
 }
 
 function getUsageStatsUrl() {
@@ -68,81 +73,88 @@ function populateSidebar() {
 		// get details on views and category
 		$.getJSON(getFileDetailsUrl(), function(details_data) {
 			// get usage data
-			$.getJSON(getUsageDetailsUrl(), function(data) {
-				let file = data[0];
-				// get image thumbnail
-				getThumbnailUrl(500, function(thumbnail_url) {
-					// console.log(thumbnail_url);
-					file.thumbnail_url = thumbnail_url;
-					// add views and category
-					file.tot = nFormatter(details_data.tot);
-					file.av = nFormatter(details_data.avg);
-					file.median =  nFormatter(details_data.median);
-					file.cats = [];
-					details_data.categories.forEach((c) => {
-						let obj = {};
-						obj.cat_name = c.replace(/_/g, " ");
-						file.cats.push(obj);
-					})
-					file.cat_number = details_data.categories.length;
-					if (file.cat_number === 1) {
-						file.cat_title = "CATEGORY";
-					} else {
-						file.cat_title = "CATEGORIES";
-					}
-					// Format name and id
-					file.image_name = file.image.replace(/_/g," ");
-					file.image_id = cleanImageName(file.image);
-					// Format wiki pages list
-					let currentWiki = null;
-					file.wiki_array = [];
-					file.wikis = [];
-					// sort alphabetically
-					file.pages = file.pages.sort(function(a,b) {
-						if (a.wiki < b.wiki) return -1;
-						if (a.wiki > b.wiki) return 1;
-						return 0;
-					});
-					// loop through all pages
-					var wiki_obj = {};
-					file.pages.forEach(function(page) {
-						// format object
-						let link_obj = {};
-						// check if not already added
-						if (currentWiki !== page.wiki) {
-							// reset temp object
-							wiki_obj = {}
-							wiki_obj.wiki_links = [];
-							// update current wiki
-							currentWiki = page.wiki;
-							// page name
-							wiki_obj.wiki_name = currentWiki;
-							// links
-							link_obj.wiki_link =  `https://${currentWiki.replace("wiki","")}.wikipedia.org/w/index.php?title=${page.title}`;
-							link_obj.wiki_page = page.title.replace(/_/g, " ");
-							// push
-							wiki_obj.wiki_links.push(link_obj);
-							file.wikis.push(wiki_obj);
-							// save wiki list in an array (for highlighting bars in chart)
-							file.wiki_array.push(currentWiki);
-							WIKI_ARRAY.push(currentWiki);
+			$.getJSON(getUsageDetailsUrl(), function(usage_data) {
+				// get recommender data
+				$.getJSON(getRecommenderUrl(), function(rec_data) {
+					let file = usage_data[0];
+					// get image thumbnail
+					getThumbnailUrl(500, function(thumbnail_url) {
+						// console.log(thumbnail_url);
+						file.thumbnail_url = thumbnail_url;
+						// add views and category
+						file.tot = nFormatter(details_data.tot);
+						file.av = nFormatter(details_data.avg);
+						file.median =  nFormatter(details_data.median);
+						file.cats = [];
+						details_data.categories.forEach((c) => {
+							let obj = {};
+							obj.cat_name = c.replace(/_/g, " ");
+							file.cats.push(obj);
+						})
+						file.cat_number = details_data.categories.length;
+						if (file.cat_number === 1) {
+							file.cat_title = "CATEGORY";
 						} else {
-							// add link to current wiki object
-							link_obj.wiki_link =  `https://${currentWiki.replace("wiki","")}.wikipedia.org/w/index.php?title=${page.title}`;
-							link_obj.wiki_page = page.title.replace(/_/g, " ");
-							// push current wiki object
-							wiki_obj.wiki_links.push(link_obj);
+							file.cat_title = "CATEGORIES";
 						}
+						// Format name and id
+						file.image_name = file.image.replace(/_/g," ");
+						file.image_id = cleanImageName(file.image);
+						// Format wiki pages list
+						let currentWiki = null;
+						file.wiki_array = [];
+						file.wikis = [];
+						// sort alphabetically
+						file.pages = file.pages.sort(function(a,b) {
+							if (a.wiki < b.wiki) return -1;
+							if (a.wiki > b.wiki) return 1;
+							return 0;
+						});
+						// loop through all pages
+						var wiki_obj = {};
+						file.pages.forEach(function(page) {
+							// format object
+							let link_obj = {};
+							// check if not already added
+							if (currentWiki !== page.wiki) {
+								// reset temp object
+								wiki_obj = {}
+								wiki_obj.wiki_links = [];
+								// update current wiki
+								currentWiki = page.wiki;
+								// page name
+								wiki_obj.wiki_name = currentWiki;
+								// links
+								link_obj.wiki_link =  `https://${currentWiki.replace("wiki","")}.wikipedia.org/w/index.php?title=${page.title}`;
+								link_obj.wiki_page = page.title.replace(/_/g, " ");
+								// push
+								wiki_obj.wiki_links.push(link_obj);
+								file.wikis.push(wiki_obj);
+								// save wiki list in an array (for highlighting bars in chart)
+								file.wiki_array.push(currentWiki);
+								WIKI_ARRAY.push(currentWiki);
+							} else {
+								// add link to current wiki object
+								link_obj.wiki_link =  `https://${currentWiki.replace("wiki","")}.wikipedia.org/w/index.php?title=${page.title}`;
+								link_obj.wiki_page = page.title.replace(/_/g, " ");
+								// push current wiki object
+								wiki_obj.wiki_links.push(link_obj);
+							}
+						});
+						file.wiki_array = JSON.stringify(file.wiki_array);
+
+						// recommender
+						file.recommender = rec_data;
+						console.log(file);
+
+						// compile template
+						var template = Handlebars.compile(tpl);
+
+						$('#right-column').html(template(file));
+
+						// draw data viz
+						usageDataViz(WIKI_ARRAY);
 					});
-					file.wiki_array = JSON.stringify(file.wiki_array);
-
-					// compile template
-					var template = Handlebars.compile(tpl);
-
-					$('#right-column').html(template(file));
-
-					// draw data viz
-					usageDataViz(WIKI_ARRAY);
 				});
 			});
 		});
@@ -155,16 +167,16 @@ function setDetails() {
   	var jsonurl = "/api/" + db;
 
   	$.getJSON(jsonurl, function(d) {
-				$('#totalMediaNum').text(formatter(d.files));
-				// file name
+		$('#totalMediaNum').text(formatter(d.files));
+		// file name
       	$('#file_url').text(file.replace(/_/g, " "));
       	$("#file_url").attr("href", "https://commons.wikimedia.org/wiki/File:" + file);
       	$("#file_url").attr("title", file.replace(/_/g, " "));
-				// category
+		// category
       	$('#cat_url').text(decodeURIComponent(d.category).replace("Category:",""));
       	$("#cat_url").attr("href", "https://commons.wikimedia.org/wiki/"+d.category);
       	$("#cat_url").attr("title", decodeURIComponent(d.category));
-				// instittion name
+		// institution name
         $(".glamName").text(d.fullname);
         $(".glamName").attr('href', '/' + db);
         $('#cover').css('background-image', 'url(' + d.image + ')');

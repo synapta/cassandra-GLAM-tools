@@ -950,22 +950,18 @@ var recommender = function (req, res, next, db) {
     let query = `SELECT title, url
                 FROM recommendations
                 WHERE img_name = $1
-                ORDER BY score DESC`;
+                ORDER BY score DESC
+                LIMIT 10`;
 
     db.query(query, [req.params.file], (err, dbres) => {
         if (!err) {
-            if (dbres.rows.length > 0) {
-                let result = [];
+            let result = [];
 
-                dbres.rows.forEach(function (row) {
-                    result.push(row);
-                });
+            dbres.rows.forEach(function (row) {
+                result.push(row);
+            });
 
-                res.json(result);
-            } else {
-                res.sendStatus(404);
-            }
-
+            res.json(result);
         } else {
             next(new Error(err));
         }
