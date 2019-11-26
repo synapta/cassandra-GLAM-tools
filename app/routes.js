@@ -240,6 +240,15 @@ module.exports = function (app, apicache) {
         }
     });
 
+    app.get('/api/:id/category/:category', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            api.categoryFiles(req, res, next, glam.connection);
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
     app.get('/api/:id', apicache("1 hour"), function (req, res, next) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
