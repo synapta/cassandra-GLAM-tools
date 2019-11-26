@@ -163,7 +163,26 @@ var updateGlam = function (req, res, config) {
 };
 
 var getGlam = function (req, res, next, glam) {
-    glam.connection.query('SELECT COUNT(*) as value from images', (err, dbres) => {
+    let query = 'SELECT COUNT(*) as value from images';
+
+    let parameters = [];
+
+    if (req.query.cat !== undefined) {
+        query += ` where cl_to && array( 
+        with recursive subcategories as (
+        select page_title, cl_to
+        from categories
+        where page_title = $1
+        union
+        select c.page_title, c.cl_to
+        from categories c
+        inner join subcategories s on s.page_title = any(c.cl_to))
+        select distinct page_title
+        from subcategories)`;
+        parameters.push(req.query.cat);
+    }
+
+    glam.connection.query(query, parameters, (err, dbres) => {
         if (!err) {
             let result = {};
             result.fullname = glam.fullname;
@@ -349,10 +368,12 @@ var uploadDate = function (req, res, next, db) {
         from images`;
 
     let parameters = [];
+    let param_index = 1;
 
     if (req.query.start !== undefined) {
-        query += " where img_timestamp >= $1";
+        query += " where img_timestamp >= $" + param_index;
         parameters.push(req.query.start);
+        param_index++;
     }
 
     if (req.query.end !== undefined) {
@@ -360,8 +381,25 @@ var uploadDate = function (req, res, next, db) {
             res.sendStatus(400);
             return;
         }
-        query += " and img_timestamp <= $2";
+        query += " and img_timestamp <= $" + param_index;
         parameters.push(req.query.end);
+        param_index++;
+    }
+
+    if (req.query.cat !== undefined) {
+        query += ` where cl_to && array( 
+        with recursive subcategories as (
+        select page_title, cl_to
+        from categories
+        where page_title = $` + param_index +`
+        union
+        select c.page_title, c.cl_to
+        from categories c
+        inner join subcategories s on s.page_title = any(c.cl_to))
+        select distinct page_title
+        from subcategories)`;
+        parameters.push(req.query.cat);
+        param_index++;
     }
 
     query += ` group by img_user_text, img_time order by img_time) t
@@ -395,9 +433,6 @@ var uploadDate = function (req, res, next, db) {
 
     query += " limit " + limit + " offset " + offset;
 
-    console.log(query);
-    console.log(parameters);
-
     db.query(query, parameters, (err, dbres) => {
         if (!err) {
             let result = [];
@@ -425,15 +460,33 @@ var uploadDate = function (req, res, next, db) {
 
 var uploadDateDataset = function (req, res, next, db) {
     let groupby = parseGroupBy(req.params.timespan);
-    // console.log(groupby);
+
     let query = `select sum(img_count) as img_sum, img_user_text, array_agg(img_count) as img_count, array_agg(img_time) as img_time
         from (select count(*) as img_count, img_user_text, date_trunc('` + groupby + `', img_timestamp) as img_time
-        from images
-        group by img_user_text, img_time order by img_time) t
+        from images`;
+
+    let parameters = [];
+
+    if (req.query.cat !== undefined) {
+        query += ` where cl_to && array( 
+        with recursive subcategories as (
+        select page_title, cl_to
+        from categories
+        where page_title = $1
+        union
+        select c.page_title, c.cl_to
+        from categories c
+        inner join subcategories s on s.page_title = any(c.cl_to))
+        select distinct page_title
+        from subcategories)`;
+        parameters.push(req.query.cat);
+    }
+
+    query += ` group by img_user_text, img_time order by img_time) t
         group by img_user_text
         order by img_sum desc`;
 
-    db.query(query, (err, dbres) => {
+    db.query(query, parameters, (err, dbres) => {
         if (!err) {
             res.set('Content-Type', 'text/csv');
             let stringifier = stringify({'delimiter': ';', 'record_delimiter': 'windows'});
@@ -469,16 +522,36 @@ var uploadDateAll = function (req, res, next, db) {
                     from min_max),
                 date_counts as (
                     select count(*) as count_value, date_trunc('` + groupby + `', img_timestamp) as date_count
-                    from images group by date_count)
+                    from images`;
+    
+    let parameters = [];
+    let param_index = 1;
+
+    if (req.query.cat !== undefined) {
+        query += ` where cl_to && array( 
+        with recursive subcategories as (
+        select page_title, cl_to
+        from categories
+        where page_title = $` + param_index + `
+        union
+        select c.page_title, c.cl_to
+        from categories c
+        inner join subcategories s on s.page_title = any(c.cl_to))
+        select distinct page_title
+        from subcategories)`;
+        parameters.push(req.query.cat);
+        param_index++;
+    }              
+                    
+    query += ` group by date_count)
                 select coalesce(count_value, 0) as count, date_value as date
                 from date_range
                 left outer join date_counts on date_value = date_count`;
 
-    let parameters = [];
-
     if (req.query.start !== undefined) {
-        query += " where date_value >= $1";
+        query += " where date_value >= $" + param_index;
         parameters.push(req.query.start);
+        param_index++;
     }
 
     if (req.query.end !== undefined) {
@@ -486,8 +559,9 @@ var uploadDateAll = function (req, res, next, db) {
             res.sendStatus(400);
             return;
         }
-        query += " and date_value <= $2";
+        query += " and date_value <= $" + param_index;
         parameters.push(req.query.end);
+        param_index++;
     }
 
     query += " order by date_value";
@@ -530,9 +604,30 @@ function getUsage(row) {
 var usage = function (req, res, next, db) {
     let query = `select gil_to, array_agg(gil_wiki) as gil_wiki, array_agg(gil_page_title) as gil_page_title,
                     count(gil_page_title) as usage, count(distinct gil_wiki) as projects
-                    from usages
-                    where is_alive = true
-                    group by gil_to`;
+                    from usages u`;
+
+    let parameters = []
+
+    if (req.query.cat !== undefined) {
+        query += ` left join images on gil_to = img_name
+                    where u.is_alive = true
+                    and cl_to && array( 
+                    with recursive subcategories as (
+                    select page_title, cl_to
+                    from categories
+                    where page_title = $1
+                    union
+                    select c.page_title, c.cl_to
+                    from categories c
+                    inner join subcategories s on s.page_title = any(c.cl_to))
+                    select distinct page_title
+                    from subcategories)`;
+        parameters.push(req.query.cat);
+    } else {
+        query += ` where u.is_alive = true`;
+    }
+
+    query += ` group by gil_to`;
 
     if (req.query.sort !== undefined) {
         if (req.query.sort === 'usage') {
@@ -564,7 +659,7 @@ var usage = function (req, res, next, db) {
 
     query += " limit " + limit + " offset " + offset;
 
-    db.query(query, (err, dbres) => {
+    db.query(query, parameters, (err, dbres) => {
         if (!err) {
             let result = [];
             dbres.rows.forEach(function (row) {
@@ -580,12 +675,33 @@ var usage = function (req, res, next, db) {
 var usageDataset = function (req, res, next, db) {
     let query = `select gil_to, array_agg(gil_wiki) as gil_wiki, array_agg(gil_page_title) as gil_page_title,
                     count(gil_page_title) as usage, count(distinct gil_wiki) as projects
-                    from usages
-                    where is_alive = true
-                    group by gil_to
-                    order by usage desc, gil_to`;
+                    from usages u`;
 
-    db.query(query, (err, dbres) => {
+    let parameters = [];
+
+    if (req.query.cat !== undefined) {
+        query += ` left join images on gil_to = img_name
+                    where u.is_alive = true
+                    and cl_to && array( 
+                    with recursive subcategories as (
+                    select page_title, cl_to
+                    from categories
+                    where page_title = $1
+                    union
+                    select c.page_title, c.cl_to
+                    from categories c
+                    inner join subcategories s on s.page_title = any(c.cl_to))
+                    select distinct page_title
+                    from subcategories)`;
+        parameters.push(req.query.cat);
+    } else {
+        query += ` where u.is_alive = true`;
+    }
+
+    query += ` group by gil_to
+                order by usage desc, gil_to`;
+
+    db.query(query, parameters, (err, dbres) => {
         if (!err) {
             res.set('Content-Type', 'text/csv');
             let stringifier = stringify({'delimiter': ';', 'record_delimiter': 'windows'});
@@ -632,27 +748,37 @@ var usageFile = function (req, res, next, db) {
 }
 
 var usageStats = function (req, res, next, db) {
-    let totalUsageQuery = `select count(*) as c, count(distinct gil_to) as d
-                            from usages
-                            where is_alive = true`;
-    let totalProjectsQuery = `select count(distinct gil_wiki) as c, count(gil_to) as p
-                              from usages
-                              where is_alive = true`;
+    let query = `select count(distinct gil_to) as images, count(distinct gil_wiki) as projects, count(gil_to) as pages
+                    from usages u`;
 
-    db.query(totalUsageQuery, (err, totalUsage) => {
+    let parameters = [];
+
+    if (req.query.cat !== undefined) {
+        query += ` left join images on gil_to = img_name
+                    where u.is_alive = true
+                    and cl_to && array( 
+                    with recursive subcategories as (
+                    select page_title, cl_to
+                    from categories
+                    where page_title = $1
+                    union
+                    select c.page_title, c.cl_to
+                    from categories c
+                    inner join subcategories s on s.page_title = any(c.cl_to))
+                    select distinct page_title
+                    from subcategories)`;
+        parameters.push(req.query.cat);
+    } else {
+        query += ` where u.is_alive = true`;
+    }
+
+    db.query(query, parameters, (err, dbres) => {
         if (!err) {
-            db.query(totalProjectsQuery, (err, totalProjects) => {
-                if (!err) {
-                    let result = {};
-                    result.totalUsage = parseInt(totalUsage.rows[0].c);
-                    result.totalImagesUsed = parseInt(totalUsage.rows[0].d);
-                    result.totalProjects = parseInt(totalProjects.rows[0].c);
-                    result.totalPages = parseInt(totalProjects.rows[0].p);
-                    res.json(result);
-                } else {
-                    next(new Error(err));
-                }
-            });
+            let result = {};
+            result.totalImagesUsed = parseInt(dbres.rows[0].images);
+            result.totalProjects = parseInt(dbres.rows[0].projects);
+            result.totalPages = parseInt(dbres.rows[0].pages);
+            res.json(result);
         } else {
             next(new Error(err));
         }
@@ -662,21 +788,61 @@ var usageStats = function (req, res, next, db) {
 var usageTop = function (req, res, next, db) {
     let query = `with top10 as
                 (select gil_wiki as wiki, count(*) as usage
-                from usages
-                where is_alive = true
-                group by gil_wiki
+                from usages u`;
+
+    let parameters = [];
+
+    if (req.query.cat !== undefined) {
+        query += ` left join images on gil_to = img_name
+                    where u.is_alive = true
+                    and cl_to && array( 
+                    with recursive subcategories as (
+                    select page_title, cl_to
+                    from categories
+                    where page_title = $1
+                    union
+                    select c.page_title, c.cl_to
+                    from categories c
+                    inner join subcategories s on s.page_title = any(c.cl_to))
+                    select distinct page_title
+                    from subcategories)`;
+        parameters.push(req.query.cat);
+    } else {
+        query += ` where u.is_alive = true`;
+    }
+
+    query += ` group by gil_wiki
                 order by usage desc
                 limit 10)
                 select *
                 from top10
                 union all
                 select 'others' as wiki, count(*) as usage
-                from usages
-                where gil_wiki not in
-                (select wiki
-                from top10)`;
+                from usages`;
+                
+    if (req.query.cat !== undefined) {
+        query += ` left join images on gil_to = img_name
+                    where cl_to && array( 
+                    with recursive subcategories as (
+                    select page_title, cl_to
+                    from categories
+                    where page_title = $1
+                    union
+                    select c.page_title, c.cl_to
+                    from categories c
+                    inner join subcategories s on s.page_title = any(c.cl_to))
+                    select distinct page_title
+                    from subcategories)
+                    and gil_wiki not in
+                    (select wiki
+                    from top10)`;
+    } else {
+        query += ` where gil_wiki not in
+                    (select wiki
+                    from top10)`;
+    }
 
-    db.query(query, (err, dbres) => {
+    db.query(query, parameters, (err, dbres) => {
         if (!err) {
             let result = [];
             dbres.rows.forEach(function (row) {
@@ -695,11 +861,8 @@ var usageTop = function (req, res, next, db) {
 
 // VIEWS
 var views = function (req, res, next, db) {
-    // console.log(db);
     let groupby = parseGroupBy(req.query.groupby, 'week');
-    /** let query = `select accesses_sum, access_date, annotation_value
-                 from visualizations_sum
-                 LEFT OUTER JOIN annotations ON access_date = annotation_date`; **/
+
     let query = `SELECT
     SUM(accesses_sum) AS accesses_sum_total,
     ARRAY_AGG(accesses_sum) AS accesses_sum_list,
@@ -729,9 +892,6 @@ FROM
         access_date_grouped
     ORDER BY
         access_date_grouped`;
-
-    console.log(query);
-    console.log(parameters);
 
     db.query(query, parameters, (err, dbres) => {
         if (!err) {
@@ -835,8 +995,26 @@ var viewsByFile = function (req, res, next, db) {
 }
 
 var viewsSidebar = function (req, res, next, db) {
-    let query = `select img_name, tot, avg, median
-                from visualizations_stats`;
+    let query = `select vs.img_name, tot, avg, median
+                from visualizations_stats vs`;
+
+    let parameters = [];
+
+    if (req.query.cat !== undefined) {
+        query += ` left join images i on vs.img_name = i.img_name
+                    where cl_to && array( 
+                    with recursive subcategories as (
+                    select page_title, cl_to
+                    from categories
+                    where page_title = $1
+                    union
+                    select c.page_title, c.cl_to
+                    from categories c
+                    inner join subcategories s on s.page_title = any(c.cl_to))
+                    select distinct page_title
+                    from subcategories)`;
+        parameters.push(req.query.cat);
+    }
 
     if (req.query.sort !== undefined) {
         if (req.query.sort === 'views') {
@@ -868,7 +1046,7 @@ var viewsSidebar = function (req, res, next, db) {
 
     query += " limit " + limit + " offset " + offset;
 
-    db.query(query, (err, dbres) => {
+    db.query(query, parameters, (err, dbres) => {
         if (!err) {
             let result = [];
             dbres.rows.forEach(function (row) {

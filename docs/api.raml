@@ -240,6 +240,12 @@ mediaType: application/json
 /{glam}:
   description: Entity representing the Glam with `name = {glam}`.
   get:
+    queryParameters:
+      cat:
+        description: The subcategory used to filter the results.
+        type: string
+        example: "Kloster_Oetenbach"
+        required: false
     responses: 
       200:
         body:
@@ -336,6 +342,11 @@ mediaType: application/json
           type: integer
           example: 10
           required: false
+        cat:
+          description: The subcategory used to filter the results.
+          type: string
+          example: "Kloster_Oetenbach"
+          required: false
       responses:
         200:
           body:
@@ -374,6 +385,12 @@ mediaType: application/json
     /dataset:
       description: Number of files grouped by upload date and user as a CSV file.
       get:
+        queryParameters:
+          cat:
+            description: The subcategory used to filter the results.
+            type: string
+            example: "Kloster_Oetenbach"
+            required: false
         responses:
           200:
             body:
@@ -400,6 +417,11 @@ mediaType: application/json
           description: The date group by criteria among month, quarter, and year.
           type: string
           example: "month"
+          required: false
+        cat:
+          description: The subcategory used to filter the results.
+          type: string
+          example: "Kloster_Oetenbach"
           required: false
       responses:
         200:
@@ -494,6 +516,11 @@ mediaType: application/json
             type: integer
             example: 100
             required: false
+          cat:
+            description: The subcategory used to filter the results.
+            type: string
+            example: "Kloster_Oetenbach"
+            required: false
         responses: 
           200:
             body:
@@ -572,6 +599,11 @@ mediaType: application/json
           type: integer
           example: 10
           required: false
+        cat:
+          description: The subcategory used to filter the results.
+          type: string
+          example: "Kloster_Oetenbach"
+          required: false
       responses:
         200:
           body:
@@ -597,6 +629,12 @@ mediaType: application/json
     /dataset:
       description: List of the pages in which each file is used as a CSV file.
       get:
+        queryParameters:
+          cat:
+            description: The subcategory used to filter the results.
+            type: string
+            example: "Kloster_Oetenbach"
+            required: false
         responses:
           200:
             body:
@@ -633,6 +671,12 @@ mediaType: application/json
     /top:
       description: List of the number of files used per wiki, limited to 10 results.
       get:
+        queryParameters:
+          cat:
+            description: The subcategory used to filter the results.
+            type: string
+            example: "Kloster_Oetenbach"
+            required: false
         responses:
           200:
             body:
@@ -655,13 +699,18 @@ mediaType: application/json
     /stats:
       description: Entity with some statistics about the files used.
       get:
+        queryParameters:
+          cat:
+            description: The subcategory used to filter the results.
+            type: string
+            example: "Kloster_Oetenbach"
+            required: false
         responses: 
           200:
             body:
               application/json:
                example: |
                 {
-                  "totalUsage": 783,
                   "totalImagesUsed": 351,
                   "totalProjects": 47,
                   "totalPages": 783
