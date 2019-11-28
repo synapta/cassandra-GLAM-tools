@@ -42,7 +42,8 @@ cur.execute("""SELECT i.img_name
             FROM images i
             LEFT JOIN usages u ON i.img_name = u.gil_to
             LEFT JOIN recommendations r ON i.img_name = r.img_name
-            WHERE (u.is_alive = FALSE OR u.gil_to IS NULL)
+            WHERE (i.is_alive = TRUE OR i.is_alive IS NULL)
+            AND u.is_alive IS NULL
             AND (r.last_update < %s OR r.last_update IS NULL)
             GROUP BY i.img_name""", (last_update,))
 
