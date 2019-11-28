@@ -306,8 +306,8 @@ function categoryGraphQuery(unused) {
                 FROM categories c
                 LEFT JOIN images i ON c.page_title = ANY(i.cl_to)
                 LEFT JOIN usages u ON i.img_name = u.gil_to
-                WHERE u.is_alive = FALSE
-                OR u.is_alive IS NULL
+                WHERE i.is_alive = TRUE
+                AND u.is_alive IS NULL
                 GROUP BY page_title
                 ORDER BY cat_level, page_title`;
     }
