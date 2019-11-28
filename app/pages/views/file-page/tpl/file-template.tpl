@@ -57,4 +57,21 @@
 			</tbody>
 		</table>
 	</div>
+	{{#if recommender.length}}
+	<div class="file_details_projects file_details_section">
+		<h2>RELATED WIKIDATA ENTITIES</h2>
+		<table>
+			<tbody>
+				{{#each recommender}}
+					<tr>
+						<td>
+							<a href="{{url}}" target="_blank">{{title}}</a>
+						</td>
+					</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	</div>
+	{{else}}
+	{{/if}}
 </div>

@@ -1215,9 +1215,34 @@ var search = function (req, res, next, db) {
     db.query(query, [req.params.query], (err, dbres) => {
         if (!err) {
             let result = [];
+
             dbres.rows.forEach(function (row) {
                 result.push(row['img_name']);
             });
+            
+            res.json(result);
+        } else {
+            next(new Error(err));
+        }
+    });
+}
+
+// RECOMMENDER
+var recommender = function (req, res, next, db) {
+    let query = `SELECT title, url
+                FROM recommendations
+                WHERE img_name = $1
+                ORDER BY score DESC
+                LIMIT 10`;
+
+    db.query(query, [req.params.file], (err, dbres) => {
+        if (!err) {
+            let result = [];
+
+            dbres.rows.forEach(function (row) {
+                result.push(row);
+            });
+
             res.json(result);
         } else {
             next(new Error(err));
@@ -1253,3 +1278,4 @@ exports.viewsSidebar = viewsSidebar;
 exports.viewsStats = viewsStats;
 exports.fileDetails = fileDetails;
 exports.search = search;
+exports.recommender = recommender;
