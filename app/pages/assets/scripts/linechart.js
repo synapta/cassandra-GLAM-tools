@@ -608,8 +608,8 @@ function lineChart(div, data) {
     // format date
     var formatDate = function (time, groupby) {
       if (groupby == 'week') {
-        const from_date = moment(time).startOf('week').isoWeekday(1);
-        const to_date = moment(time).endOf('week').isoWeekday(0);
+        const from_date = moment(time).utc(true).startOf('isoWeek').isoWeekday(1);
+        const to_date = moment(time).utc(true).endOf('isoWeek').isoWeekday(7);
         return from_date.format("D") + "-" + to_date.format("D MMM YYYY");
       }
       var format = {
@@ -618,7 +618,7 @@ function lineChart(div, data) {
         'quarter': "[Q]Q YYYY",
         'year': "YYYY"
       };
-      return moment(time).format(format[groupby]);
+      return moment(time).utc(true).format(format[groupby]);
     }
     let fT = formatDate(time, $('#groupby-select').val());
     let views = data[bisect(data, time)].views;
