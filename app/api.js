@@ -369,7 +369,7 @@ var categoryGraph = function (req, res, next, db) {
                     let edge = {};
                     edge.target = target;
                     edge.source = row.page_title;
-                    if (edge.target != "ROOT" && edge.target != req.query.cat)
+                    if (edge.target != "ROOT")
                         result.edges.push(edge);
                 });
                 result.nodes.push(node);
