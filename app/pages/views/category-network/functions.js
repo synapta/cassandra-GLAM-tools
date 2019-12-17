@@ -20,13 +20,15 @@ let home = baseurl.replace(h_1 + "/", "");
 
 function getUrl() {
     const urlSplit = window.location.href.toString().split('/');
-    const query = UNUSED_MODE ? "?unused=true" : "";
+    let query = UNUSED_MODE ? "?unused=true" : "";
     const db = urlSplit[3];
     let category = urlSplit[urlSplit.length-1];
-    if (category !== 'category-network'){
+    if (category && category !== 'category-network'){
 	console.log( subcategoryName);
 	subcategoryName = category;
+	query = UNUSED_MODE ? "?unused=true&cat="+ subcategoryName : "?cat="+subcategoryName;
     }
+    console.log(query);
     return "/api/"+db+"/category" + query;
 }
 
@@ -70,6 +72,7 @@ function dataviz() {
 	    subcategoryName = data.nodes[0].id;
 	}
 	
+	console.log(data)
 	let levels = [];
 	data.nodes.forEach(function(node) {
 	    levels.push(
@@ -102,16 +105,17 @@ function dataviz() {
 	    .style("opacity", function(d, i) { if (data.nodes.length > 100 && i > MAX_LEVEL - 1) return "0.2"; else return "1"; })
 	    .html(d=> "lv. " + d);
 	
+	let nodi = [];
+	let archi = [];
 	//This code is for reduce graph size when too big
 	if (data.nodes.length > 100) {
-	    let nodi = [];
-	    let archi = [];
 	    for (let i = 0; i < data.nodes.length; i++) {
 		if (data.nodes[i].group < MAX_LEVEL) {
 		    nodi.push(data.nodes[i]);
 		}
 	    }
 	    data.nodes = nodi;
+	}
 	    for (let j = 0; j < data.edges.length; j++) {
 		let sourceNode = false, targetNode = false;
 		for (let i = 0; i < data.nodes.length; i++) {
@@ -123,7 +127,7 @@ function dataviz() {
 		}
 	    }
 	    data.edges = archi;
-	}
+	// }
 	
 	let files = [];
 	data.nodes.forEach(function(node) {
@@ -137,6 +141,7 @@ function dataviz() {
 	
 	let simulation = d3.forceSimulation()
 	    .force("link", d3.forceLink().id(function (d) {
+	        console.log(d.id);
 		    return d.id;
 		})
 		    .distance(function (d, i) {
