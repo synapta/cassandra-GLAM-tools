@@ -1,4 +1,5 @@
 let ACTIVE_ITEM_ID;
+const glam = window.location.href.toString().split('/')[3];
 let subcategoryName;
 const w = window;
 let width = 900; ///w.outerWidth,
@@ -18,13 +19,13 @@ let h_1 = h[h.length - 2];
 let home = baseurl.replace(h_1 + "/", "");
 
 function getUrl() {
-    const db = window.location.href.toString().split('/')[3];
+    const urlSplit = window.location.href.toString().split('/');
     const query = UNUSED_MODE ? "?unused=true" : "";
-    subcategoryName =  window.location.href.toString().split('/')[5];
-    if (subcategoryName){
+    const db = urlSplit[3];
+    let category = urlSplit[urlSplit.length-1];
+    if (category !== 'category-network'){
 	console.log( subcategoryName);
-    } else {
-	subcategoryName = db;
+	subcategoryName = category;
     }
     return "/api/"+db+"/category" + query;
 }
@@ -63,6 +64,10 @@ function dataviz() {
     d3.json(data_source, function(error, data) {
 	if (error){
 	    window.location.replace('/500');
+	}
+	
+	if (!subcategoryName){
+	    subcategoryName = data.nodes[0].id;
 	}
 	
 	let levels = [];
@@ -364,6 +369,7 @@ function sidebar(order) {
 		d.nodes[i].name = d.nodes[i].id.replace(/_/g," ");
 		d.nodes[i].files = nFormatter(d.nodes[i].files);
 		d.nodes[i].id_encoded = d.nodes[i].id.hashCode();
+		d.nodes[i].url = '/'+glam+'/category-network/'+d.nodes[i].id;
 	    }
 	    
 	    let template = Handlebars.compile(tpl);
