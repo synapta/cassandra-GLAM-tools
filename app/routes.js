@@ -42,8 +42,7 @@ module.exports = function (app, apicache) {
             let auth_basic = auth.basic({
                 realm: auth_config['realm']
             }, function (username, password, callback) {
-                callback(username === auth_config['username']
-                    && password === auth_config['password']);
+                callback(username === auth_config['username'] && password === auth_config['password']);
             });
             (auth.connect(auth_basic))(req, res, next);
         }
@@ -107,6 +106,15 @@ module.exports = function (app, apicache) {
     });
 
     app.get('/:id/category-network', apicache("1 hour"), function (req, res) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            res.sendFile(__dirname + '/pages/views/category-network/index.html');
+        } else {
+            res.sendStatus(400);
+        }
+    });
+    
+    app.get('/:id/category-network/:name', apicache("1 hour"), function (req, res) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             res.sendFile(__dirname + '/pages/views/category-network/index.html');

@@ -7,3 +7,5 @@ package-lock.json
 venv
 *.csv
 *.gz
+/cassandra-GLAM-tools.iml
+/.idea/
