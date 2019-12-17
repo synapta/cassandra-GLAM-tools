@@ -296,27 +296,66 @@ function arrayMin(arr) {
     return min;
 };
 
-function categoryGraphQuery(unused) {
+function categoryGraphQuery(unused, filter) {
     let query = `SELECT page_title, cat_files, cl_to[0:10], cat_level[0:10]
-                FROM categories
-                ORDER BY cat_level, page_title`;
+                FROM categories`;
 
-    if (unused === 'true') {
+    if (unused === true) {
         query = `SELECT c.page_title, COUNT(DISTINCT i.img_name) AS cat_files, c.cl_to[0:10], c.cat_level[0:10]
                 FROM categories c
                 LEFT JOIN images i ON c.page_title = ANY(i.cl_to)
                 LEFT JOIN usages u ON i.img_name = u.gil_to
                 WHERE (i.is_alive = TRUE OR i.is_alive IS NULL)
-                AND u.is_alive IS NULL
-                GROUP BY page_title
-                ORDER BY cat_level, page_title`;
+                AND u.is_alive IS NULL`;
     }
+    if (filter === true) {
+        if (unused === true) {
+            query += `
+                AND c.page_title `;
+        } else {
+            query += `
+                WHERE page_title `;
+        }
+
+        query += `in (
+                    with recursive subcategories as (
+                            select page_title, cl_to
+                            from categories
+                            where page_title = $1
+                            union
+                            select c.page_title, c.cl_to
+                            from categories c
+                            inner join subcategories s on s.page_title = any(c.cl_to))
+                            select distinct page_title
+                            from subcategories)`;
+    }
+
+    if (unused === true) {
+        query += `
+            GROUP BY page_title`;
+    }
+
+    query += `
+        ORDER BY cat_level, page_title`;
 
     return query;
 }
 
 var categoryGraph = function (req, res, next, db) {
-    db.query(categoryGraphQuery(req.query.unused), (err, dbres) => {
+    let unused = false;
+    let cat = false;
+    let parameters = [];
+
+    if (req.query.unused === 'true') {
+        unused = true;
+    }
+
+    if (req.query.cat !== undefined) {
+        cat = true;
+        parameters.push(req.query.cat);
+    }
+
+    db.query(categoryGraphQuery(unused, cat), parameters, (err, dbres) => {
         if (!err) {
             let result = {};
             result.nodes = [];
@@ -330,7 +369,7 @@ var categoryGraph = function (req, res, next, db) {
                     let edge = {};
                     edge.target = target;
                     edge.source = row.page_title;
-                    if (edge.target != "ROOT")
+                    if (edge.target != "ROOT" && edge.target != req.query.cat)
                         result.edges.push(edge);
                 });
                 result.nodes.push(node);
