@@ -5,7 +5,7 @@
             {{#each files}}
             <tr>
                 <td style="padding-left:2em">
-                    <a href="../file/{{this}}" style="font-size:0.8em;text-overflow: ellipsis">{{this}}</a>
+                    <a href="{{url}}" style="font-size:0.8em;text-overflow: ellipsis">{{file}}</a>
                 </td>
             </tr>
             {{/each}}

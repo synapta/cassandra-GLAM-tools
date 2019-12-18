@@ -270,8 +270,15 @@ function showUnusedFilesItem() {
 	$.get( template_source , tpl => {
 	    $.getJSON( unusedFilesLink(id,30) , d => {
 		let template = Handlebars.compile(tpl);
-		let temp = {files : d};
-		$(target).html(template(temp));
+		let temp = [];
+		d.forEach( file => {
+		    let url = '/'+glam+'/file/'+file;
+		    temp.push(  {
+			url: url,
+			file: file
+		    });
+		});
+		$(target).html(template({files : temp}));
 	    });
 	});
     }
@@ -416,8 +423,15 @@ $('#showUnused').click( () => {
 	$.get( template_source , tpl => {
 	    $.getJSON( unusedFilesLink(subcategoryName,100) , d => {
 		let template = Handlebars.compile(tpl);
-		let temp = {files : d};
-		$(target).html(template(temp));
+		let temp = [];
+		d.forEach( file => {
+		    let url = '/'+glam+'/file/'+file;
+		    temp.push(  {
+			url: url,
+			file: file
+		    });
+		});
+		$(target).html(template({files : temp}));
 	    });
 	});
 	$(target).show();
