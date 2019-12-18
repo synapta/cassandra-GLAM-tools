@@ -360,19 +360,27 @@ var categoryGraph = function (req, res, next, db) {
             let result = {};
             result.nodes = [];
             result.edges = [];
+            let ids = [];
+            let edges = [];
             dbres.rows.forEach(function (row) {
                 let node = {};
                 node.id = row.page_title;
+                ids.push(node.id);
                 node.files = parseInt(row.cat_files);
                 node.group = arrayMin(row.cat_level);
                 row.cl_to.forEach(function (target) {
                     let edge = {};
                     edge.target = target;
                     edge.source = row.page_title;
-                    if (edge.target != "ROOT" && edge.target != req.query.cat)
-                        result.edges.push(edge);
+                    if (edge.target != "ROOT")
+                        edges.push(edge);
                 });
                 result.nodes.push(node);
+            });
+            edges.forEach(function (edge) {
+                if (ids.includes(edge.target)) {
+                    result.edges.push(edge);
+                }
             });
             res.json(result);
         } else {
