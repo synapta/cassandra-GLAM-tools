@@ -1,5 +1,5 @@
 $(function() {
-  var x, i, j, selElmnt, a, b, c;
+  let x, i, j, selElmnt, a, b, c;
   /*look for any elements with the class "select-chart":*/
   x = document.getElementsByClassName("select-chart");
   for (i = 0; i < x.length; i++) {
@@ -23,11 +23,11 @@ $(function() {
       c.addEventListener("click", function(e) {
           /* when an item is clicked, update the original select box,
           and the selected item: */
-          var y, i, k, s, h;
+          let y, i, k, s, h;
           s = this.parentNode.parentNode.getElementsByTagName("select")[0];
           h = this.parentNode.previousSibling;
           for (i = 0; i < s.length; i++) {
-            if (s.options[i].innerHTML == this.innerHTML) {
+            if (s.options[i].innerHTML === this.innerHTML) {
               s.selectedIndex = i;
               h.innerHTML = this.innerHTML;
               y = this.parentNode.getElementsByClassName("same-as-selected");
@@ -50,15 +50,14 @@ $(function() {
         closeAllSelect(this);
         this.nextSibling.classList.toggle("select-hide");
         this.classList.toggle("select-arrow-active");
-
-        var baseurl = document.location.href;
-        var h = baseurl.split("/")
-        var h_1 = h[h.length - 1]
-        var home = baseurl.replace(h_1,"")
-        var page = $('#switch_page').val();
-
-        if (h_1 !== page) {
-          var url = home + page;
+    
+        let baseurl = document.location.href;
+        let h = baseurl.split("/");
+        let selection = h[4];
+        let page = $('#switch_page').val();
+    
+        if (selection !== page) {
+          let url = baseurl.replace(selection,page);
           if (url !== '') {
             window.location = url;
           }
@@ -72,8 +71,8 @@ $(function() {
     x = document.getElementsByClassName("select-items");
     y = document.getElementsByClassName("select-selected");
     for (i = 0; i < y.length; i++) {
-      if (elmnt == y[i]) {
-        arrNo.push(i)
+      if (elmnt === y[i]) {
+        arrNo.push(i);
       } else {
         y[i].classList.remove("select-arrow-active");
       }

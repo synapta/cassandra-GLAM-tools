@@ -104,8 +104,8 @@ module.exports = function (app, apicache) {
             res.sendStatus(400);
         }
     });
-
-    app.get('/:id/category-network', apicache("1 hour"), function (req, res) {
+    
+    app.get('/:id/category-network/:name?', apicache("1 hour"), function (req, res) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             res.sendFile(__dirname + '/pages/views/category-network/index.html');
@@ -114,16 +114,7 @@ module.exports = function (app, apicache) {
         }
     });
     
-    app.get('/:id/category-network/:name', apicache("1 hour"), function (req, res) {
-        let glam = config.glams[req.params.id];
-        if (isValidGlam(glam)) {
-            res.sendFile(__dirname + '/pages/views/category-network/index.html');
-        } else {
-            res.sendStatus(400);
-        }
-    });
-
-    app.get('/:id/user-contributions', apicache("1 hour"), function (req, res) {
+    app.get('/:id/user-contributions/:name?', apicache("1 hour"), function (req, res) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             res.sendFile(__dirname + '/pages/views/user-contributions/index.html');
@@ -132,7 +123,7 @@ module.exports = function (app, apicache) {
         }
     });
 
-    app.get('/:id/usage', apicache("1 hour"), function (req, res) {
+    app.get('/:id/usage/:name?', apicache("1 hour"), function (req, res) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             res.sendFile(__dirname + '/pages/views/usage/index.html');
