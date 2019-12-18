@@ -115,7 +115,7 @@ function dataviz() {
 		}
 	    }
 	    data.nodes = nodi;
-	}
+	// }
 	    for (let j = 0; j < data.edges.length; j++) {
 		let sourceNode = false, targetNode = false;
 		for (let i = 0; i < data.nodes.length; i++) {
@@ -127,7 +127,7 @@ function dataviz() {
 		}
 	    }
 	    data.edges = archi;
-	// }
+	}
 	
 	let files = [];
 	data.nodes.forEach(function(node) {
@@ -141,7 +141,6 @@ function dataviz() {
 	
 	let simulation = d3.forceSimulation()
 	    .force("link", d3.forceLink().id(function (d) {
-	        console.log(d.id);
 		    return d.id;
 		})
 		    .distance(function (d, i) {
