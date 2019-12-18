@@ -132,7 +132,7 @@ module.exports = function (app, apicache) {
         }
     });
 
-    app.get('/:id/page-views', apicache("1 hour"), function (req, res) {
+    app.get('/:id/page-views/:name?', apicache("1 hour"), function (req, res) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             res.sendFile(__dirname + '/pages/views/page-views/index.html');

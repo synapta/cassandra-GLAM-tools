@@ -7,21 +7,25 @@ var RENDERING = false;
 var ACTIVE_ITEM_ID;
 
 function getUrlAll() {
-    var db=window.location.href.toString().split('/')[3];
-    var groupby = $('#groupby-select').val();
-    return "/api/"+db+"/views?groupby=" + groupby;
+    const db = window.location.href.toString().split('/')[3];
+    const groupby = $('#groupby-select').val();
+    const subcat = window.location.href.toString().split('/')[5];
+    const subcatQ = subcat ? "&cat="+subcat : "";
+    return "/api/"+db+"/views?groupby=" + groupby + subcatQ;
 }
 
 function getUrlDataset() {
-    var groupby = $("#groupby-select").val();
-    var db=window.location.href.toString().split('/')[3];
+    const groupby = $("#groupby-select").val();
+    const db = window.location.href.toString().split('/')[3];
     // console.log(groupby);
     return "/api/" + db + "/views/dataset/" + groupby;
 }
 
 function getUrlStats() {
     var db = window.location.href.toString().split('/')[3];
-    return "/api/" + db + "/views/stats";
+    const subcat = window.location.href.toString().split('/')[5];
+    const subcatQ = subcat ? "?cat="+subcat : "";
+    return "/api/" + db + "/views/stats"+subcatQ;
 }
 
 // function getUrlFiles(){
@@ -50,8 +54,11 @@ function getUrlSidebar(limit, sort) {
     } else {
 	s = "";
     }
-    var db = window.location.href.toString().split('/')[3];
-    return "/api/" + db + "/views/sidebar" + l + s + "&page=0";
+    const db = window.location.href.toString().split('/')[3];
+    const subcat = window.location.href.toString().split('/')[5];
+    let query = subcat ? (l+s ? (l + s + "&cat="+subcat) : "?cat="+subcat) : l+s;
+    query = query ? query+ "&page=0" : "?page=0";
+    return "/api/" + db + "/views/sidebar" + query;
 }
 
 function getUrlSidebarPaginated(page, sort) {
@@ -64,8 +71,10 @@ function getUrlSidebarPaginated(page, sort) {
     if (!Number.isInteger(page)) {
 	console.error("Invalid page number", page);
     } else {
-	var db = window.location.href.toString().split('/')[3];
-	return "/api/" + db + "/views/sidebar?page=" + page + s;
+	const db = window.location.href.toString().split('/')[3];
+	const subcat = window.location.href.toString().split('/')[5];
+	let subcatQ = subcat ? "&cat="+subcat : "";
+	return "/api/" + db + "/views/sidebar?page=" + page + s + subcatQ;
     }
 }
 
@@ -87,7 +96,7 @@ function sidebar(type) {
 		    $('#right_sidebar_list').off('scroll').scroll(loadMoreOnScroll.bind($('#right_sidebar_list'), type));
 		}
 		
-		highlightOnClick()
+		highlightOnClick();
 	    });
 	});
     });
@@ -133,7 +142,7 @@ function loadMoreOnScroll(sort_type) {
 		$.getJSON(getUrlSidebarPaginated(page, sort_type), function(data) {
 		    RENDERING = true;
 		    // last argument to true calls append() instead of html()
-		    renderSidebarItems(tpl, data, true)
+		    renderSidebarItems(tpl, data, true);
 		    // manage click
 		    highlightOnClick();
 		});
@@ -160,7 +169,7 @@ function sorting_sidebar() {
 	    $("#by_name").css("cursor","pointer");
 	    $("#by_median").css("cursor","pointer");
 	}
-    })
+    });
     
     $("#by_median").on("click", function(){
 	if ($("#by_median").hasClass("active_order") ) {
@@ -174,7 +183,7 @@ function sorting_sidebar() {
 	    $("#by_num").css("cursor","pointer");
 	    $("#by_median").css("cursor","default");
 	}
-    })
+    });
     
     $("#by_name").on("click", function(){
 	if ($("#by_name").hasClass("active_order") ) {
@@ -188,7 +197,7 @@ function sorting_sidebar() {
 	    $("#by_num").css("cursor","pointer");
 	    $("#by_median").css("cursor","pointer");
 	}
-    })
+    });
 }
 
 function download(){
@@ -224,7 +233,7 @@ function highlightOnClick() {
 	    hideFileLine();
 	} else {
 	    $(".list_item").removeClass("list_item_active");
-	    $(this).addClass("list_item_active")
+	    $(this).addClass("list_item_active");
 	    ACTIVE_ITEM_ID = element;
 	    showFileLine($(this).data('imagename'));
 	}
