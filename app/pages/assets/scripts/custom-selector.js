@@ -86,4 +86,26 @@ $(function() {
   /* if the user clicks anywhere outside the select box,
   then close all select boxes: */
   document.addEventListener("click", closeAllSelect);
+    
+    function getCategories() {
+        let categories = [];
+        const urlSplit = window.location.href.toString().split('/');
+        const db = urlSplit[3];
+        let url = "/api/"+db+"/category";
+        
+        $.getJSON(url).then(res => {
+            if(res.nodes){
+                let opts = "";
+                res.nodes.forEach(cat =>{
+                    let name = cat.id.replace(/[_\-]+/g," ");
+                    opts += "<option>"+name+"</option>";
+                    categories.push(name);
+                });
+                $(".autocomplete-categories").html(opts);
+                $(".autocomplete-categories").selectpicker();
+                
+            }
+        });
+    }
+    getCategories();
 });

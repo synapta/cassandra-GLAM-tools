@@ -111,9 +111,9 @@ function highlight() {
     }
     
     $(".list_item").on("click", function() {
-    
+	
 	let element = $(this).find('.item').attr("id");
- 
+	
 	// highlight Sidebar and show bars
 	if ($(this).hasClass('list_item_active')) {
 	    hideUserContributionsBars();

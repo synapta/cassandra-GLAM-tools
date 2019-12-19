@@ -7,6 +7,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="Access-Control-Allow-Origin" content="*" />
 	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-select/1.13.12/css/bootstrap-select.min.css" />
 	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.css" />
 	<link rel="stylesheet" href="/assets/style/style.css" />
 	<link rel="stylesheet" href="/assets/style/chart-page.css" />
@@ -29,6 +30,7 @@
 				<h6>INSTITUTION</h6>
 				<h2><a class="glamName" href=".."></a></h2>
 				<span class="breadcrumb-separator"> > </span>
+				<select class="autocomplete-categories mr-2" data-live-search="true"></select>
 				<h6>CHART</h6>
 				<div class="select-chart">
 					<select id="switch_page">
@@ -128,6 +130,9 @@
 	</div>
 
 	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-select/1.13.12/js/bootstrap-select.min.js"></script>
 	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/d3/4.4.0/d3.min.js"></script>
 	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
 	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.js"></script>

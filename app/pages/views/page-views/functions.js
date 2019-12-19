@@ -1,10 +1,8 @@
 const FIRST_CALL_LIMIT = 100;
-
-var TOTAL_IMAGES;
-var IMAGES_RENDERED = 0;
-var RENDERING = false;
-
-var ACTIVE_ITEM_ID;
+let TOTAL_IMAGES;
+let IMAGES_RENDERED = 0;
+let RENDERING = false;
+let ACTIVE_ITEM_ID;
 
 function getUrlAll() {
     const db = window.location.href.toString().split('/')[3];
@@ -215,7 +213,7 @@ function how_to_read(){
 	box.toggleClass("show");
 	// console.log("click")
     });
-};
+}
 
 function highlightOnClick() {
     
@@ -268,4 +266,4 @@ $(document).ready(function(){
 	download();
     });
     statDraw();
-})
+});
