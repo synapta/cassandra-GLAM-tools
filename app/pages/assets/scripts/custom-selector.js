@@ -98,11 +98,19 @@ $(function() {
                 let opts = "";
                 res.nodes.forEach(cat =>{
                     let name = cat.id.replace(/[_\-]+/g," ");
+                    let ref = urlSplit[0]+'/'+urlSplit[1]+'/'+urlSplit[2]+'/'+ urlSplit[3] + '/'+urlSplit[4] + '/'+ cat.id ;
                     opts += "<option>"+name+"</option>";
-                    categories.push(name);
+                    categories.push(ref);
                 });
                 $(".autocomplete-categories").html(opts);
                 $(".autocomplete-categories").selectpicker();
+                $(".autocomplete-categories").on("change", el => {
+                    console.log(el);
+                    if (el && el.currentTarget && el.currentTarget.selectedIndex && categories[el.currentTarget.selectedIndex]){
+                        window.location.href = categories[el.currentTarget.selectedIndex];
+                    }
+                });
+                
                 
             }
         });
