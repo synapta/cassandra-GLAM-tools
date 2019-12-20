@@ -15,6 +15,17 @@ function getUrl(limit) {
     return "/api/" + db + "/usage" + query;
 }
 
+function getSubcategoryTotal() {
+    const urlSplit = window.location.href.toString().split('/');
+    if (urlSplit[5]){
+	let url = "/api/"+urlSplit[3]+"/category?cat"+urlSplit[5];
+	$.getJSON(url).then(res=>{
+	    let tot = res.nodes[0].files;
+	    $('#totalMediaNum').text(formatter(tot));
+	});
+    }
+}
+
 function getUrl(limit, sort) {
     let l = Number.isInteger(limit) ? "?limit=" + limit : "";
     let s;
@@ -271,12 +282,14 @@ function how_to_read() {
 
 function drawUsageDataViz() {
     d3.json(getUrlAll(), function(error, data) {
+        console.log(data)
 	// Manage error
 	if (error) window.location.href('/500');
 	// Draw stats data
 	drawStats(data);
 	// From utils.js
 	setCategory();
+	getSubcategoryTotal();
 	// Draw bar chart
 	horizBarChartDraw("usage_horiz_bars", getUrlTop20(), data);
     });

@@ -22,7 +22,7 @@ function setCategory() {
   	var jsonurl = "/api/" + db;
 
   	$.getJSON(jsonurl, function(d) {
-				$('#totalMediaNum').text(formatter(d.files));
+  	    $('#totalMediaNum').text(formatter(d.files));
       	$('#cat_url').text(decodeURIComponent(d.category).replace("Category:",""));
       	$("#cat_url").attr("href", "https://commons.wikimedia.org/wiki/"+d.category);
       	$("#cat_url").attr("title", decodeURIComponent(d.category));
