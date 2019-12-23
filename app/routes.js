@@ -42,8 +42,7 @@ module.exports = function (app, apicache) {
             let auth_basic = auth.basic({
                 realm: auth_config['realm']
             }, function (username, password, callback) {
-                callback(username === auth_config['username']
-                    && password === auth_config['password']);
+                callback(username === auth_config['username'] && password === auth_config['password']);
             });
             (auth.connect(auth_basic))(req, res, next);
         }
@@ -105,8 +104,17 @@ module.exports = function (app, apicache) {
             res.sendStatus(400);
         }
     });
-
-    app.get('/:id/category-network', apicache("1 hour"), function (req, res) {
+    
+    app.get('/:id/search/:query', apicache("1 hour"), function (req, res) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            res.sendFile(__dirname + '/pages/views/search-page/index.html');
+        } else {
+            res.sendStatus(400);
+        }
+    });
+    
+    app.get('/:id/category-network/:name?', apicache("1 hour"), function (req, res) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             res.sendFile(__dirname + '/pages/views/category-network/index.html');
@@ -114,8 +122,8 @@ module.exports = function (app, apicache) {
             res.sendStatus(400);
         }
     });
-
-    app.get('/:id/user-contributions', apicache("1 hour"), function (req, res) {
+    
+    app.get('/:id/user-contributions/:name?', apicache("1 hour"), function (req, res) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             res.sendFile(__dirname + '/pages/views/user-contributions/index.html');
@@ -124,7 +132,7 @@ module.exports = function (app, apicache) {
         }
     });
 
-    app.get('/:id/usage', apicache("1 hour"), function (req, res) {
+    app.get('/:id/usage/:name?', apicache("1 hour"), function (req, res) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             res.sendFile(__dirname + '/pages/views/usage/index.html');
@@ -133,7 +141,7 @@ module.exports = function (app, apicache) {
         }
     });
 
-    app.get('/:id/page-views', apicache("1 hour"), function (req, res) {
+    app.get('/:id/page-views/:name?', apicache("1 hour"), function (req, res) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             res.sendFile(__dirname + '/pages/views/page-views/index.html');

@@ -597,6 +597,56 @@ footer {
   display: none;
 }
 
+.autocomplete-categories {
+  width: 40% !important;
+}
+.btn-light.dropdown-toggle,.show>.btn-light.dropdown-toggle,.bootstrap-select .dropdown-menu  {
+  color: white;
+  background-color: var(--main);
+  border-color: white;
+  border-radius: 0;
+}
+.bs-searchbox .form-control {
+  border-radius: 0;
+  color: var(--main);
+}
+.dropdown-item.active, .dropdown-item:active, .dropdown-item:hover {
+  background-color: white;
+  color: var(--main) !important;
+}
+
+.bootstrap-select .dropdown-menu a {
+  z-index: 9999;
+}
+.bootstrap-select .dropdown-menu li .text {
+  float: none;
+}
+
+.bootstrap-select .dropdown-menu li {
+  padding: 0.5rem 0.1rem;
+  background-color: var(--main);
+  left: 0;
+  right: 0;
+  z-index: 99;
+  border-bottom: 1px solid white;
+}
+
+.search-btn{
+  background-color: var(--bg-gray);
+  color: var(--main);
+}
+
+.search-form{
+  display: flex;
+  position: relative;
+  width: 80%;
+  margin: auto;
+}
+
+.search-form input{
+  width: 90% !important;
+}
+
 @media screen and (max-width: 768px) {
   .glam-title-section {
     margin: .5rem 0;

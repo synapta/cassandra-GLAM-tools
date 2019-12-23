@@ -125,6 +125,18 @@
   background-color: rgba(0, 0, 0, 0.1);
 }
 
+#showUnused, #unusedList {
+  /*position: fixed;*/
+  display: flex;
+  left: 1rem;
+  background-color: #fff;
+  color: var(--main);
+  box-shadow: 0 -1px 15px 0px rgba(0,0,0,.1);
+  border-top: 1px solid rgba(0,0,0,.1);
+  padding: 1rem 1rem 0;
+  bottom: 5rem;
+}
+
 /* FOOTER */
 #chart-page-footer {
   display: flex;
@@ -240,9 +252,9 @@
 }
 
 /* CHART CONTAINER */
-#dataviz {
-  height: 90vh;
-}
+/*#dataviz {*/
+/*  height: 75vh;*/
+/*}*/
 
 /* RIGHT COLUMN */
 #right-column {
@@ -281,7 +293,7 @@
 #right_sidebar_list {
   overflow-y: auto;
   /* overflow-x: visible; */
-  height: 73vh;
+  height: 90vh;
   margin-right: -15px;
 }
 
@@ -337,7 +349,7 @@
 }
 
 #category_network_container {
-  height: 80%;
+  height: 60vh;
   overflow-y: hidden;
   padding: 1em;
 }

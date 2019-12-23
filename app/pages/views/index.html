@@ -168,8 +168,23 @@
 									</div>
 								</div>
 							</div>
+							<div class="col-12 col-xl-3 mt-5">
+								<!--							<div class="input-group mb-3">-->
+								<!--								<input type="text" class="form-control" placeholder="Search files" aria-label="Search files" aria-describedby="Search files">-->
+								<!--								<div class="input-group-append">-->
+								<!--									<button class="btn btn-outline-secondary" type="button"><i></i></button>-->
+								<!--								</div>-->
+								<!--							</div>-->
+							</div>
 						</div>
 					</div>
+				</div>
+<!--				<form class="form-inline search-form" onsubmit="searchFiles()">-->
+				<div class="search-form">
+					<input id="searchFilesInput" class="form-control" type="text" placeholder="Search" aria-label="Search" onkeypress="searchFiles()" >
+					<button class="btn btn-rounded search-btn" type="submit" onclick="searchFiles(true)">
+						<img src="/assets/img/search-24px.svg"/>
+					</button>
 				</div>
 			</section>
 		</main>

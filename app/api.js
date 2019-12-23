@@ -975,20 +975,49 @@ var usageTop = function (req, res, next, db) {
 
 // VIEWS
 var views = function (req, res, next, db) {
-    let groupby = parseGroupBy(req.query.groupby, 'week');
-
-    let query = `SELECT
-    SUM(accesses_sum) AS accesses_sum_total,
-    ARRAY_AGG(accesses_sum) AS accesses_sum_list,
-    ARRAY_AGG(access_date) AS accesses_date_list,
-    DATE_TRUNC('${groupby}', access_date) AS access_date_grouped
-FROM
-    visualizations_sum`;
-
+    let query;
+    let param_index = 0;
     let parameters = [];
 
+    let groupby = parseGroupBy(req.query.groupby, 'week');
+
+    if (req.query.cat === undefined) {
+        query = `SELECT SUM(accesses_sum) AS accesses_sum_total,
+                    -- ARRAY_AGG(accesses_sum) AS accesses_sum_list,
+                    -- ARRAY_AGG(access_date) AS accesses_date_list,
+                    DATE_TRUNC('${groupby}', access_date) AS access_date_grouped
+                FROM
+                    visualizations_sum`;
+    } else {
+        param_index++;
+        parameters.push(req.query.cat);
+        query = `SELECT SUM(accesses_sum) AS accesses_sum_total,
+                    -- ARRAY_AGG(accesses_sum) AS accesses_sum_list,
+                    -- ARRAY_AGG(access_date) AS accesses_date_list,
+                    DATE_TRUNC('${groupby}', access_date) AS access_date_grouped
+                FROM
+                (SELECT sum(visualizations.accesses) AS accesses_sum,
+                        visualizations.access_date
+                FROM visualizations
+                WHERE media_id IN
+                    (SELECT media_id
+                        FROM images i
+                        WHERE cl_to && array
+                            (WITH RECURSIVE subcategories AS
+                            (SELECT page_title, cl_to
+                                FROM categories
+                                WHERE page_title = $${param_index}
+                                UNION SELECT c.page_title, c.cl_to
+                                FROM categories c
+                                INNER JOIN subcategories s ON s.page_title = any(c.cl_to))
+                            SELECT DISTINCT page_title
+                            FROM subcategories))
+                GROUP BY visualizations.access_date) visualizations_sum`;
+    }
+
     if (req.query.start !== undefined) {
-        query += " WHERE access_date >= $1";
+        param_index++;
+        query += " WHERE access_date >= $" + param_index;
         parameters.push(req.query.start);
     }
 
@@ -997,7 +1026,8 @@ FROM
             res.sendStatus(400);
             return;
         }
-        query += " AND access_date <= $2";
+        param_index++;
+        query += " AND access_date <= $" + param_index;
         parameters.push(req.query.end);
     }
 
@@ -1015,9 +1045,6 @@ FROM
                     "date": row.access_date_grouped.toISODateString(),
                     "views": parseInt(row.accesses_sum_total),
                 };
-                if (row.annotation_value !== null) {
-                    date.annotation = row.annotation_value;
-                }
                 result.push(date);
             })
             res.json(result);

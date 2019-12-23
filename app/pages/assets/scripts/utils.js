@@ -22,7 +22,7 @@ function setCategory() {
   	var jsonurl = "/api/" + db;
 
   	$.getJSON(jsonurl, function(d) {
-				$('#totalMediaNum').text(formatter(d.files));
+  	    $('#totalMediaNum').text(formatter(d.files));
       	$('#cat_url').text(decodeURIComponent(d.category).replace("Category:",""));
       	$("#cat_url").attr("href", "https://commons.wikimedia.org/wiki/"+d.category);
       	$("#cat_url").attr("title", decodeURIComponent(d.category));
@@ -42,13 +42,13 @@ function how_to_read(){
   	$("#how_to_read_button").click(function() {
   		  box.toggleClass("show");
   	});
-};
+}
 
 function switch_page() {
     var baseurl = document.location.href;
   	var h = baseurl.split("/")
   	var h_1 = h[h.length-1]
-  	var home = baseurl.replace(h_1,"")
+  	var home = baseurl.replace(h_1,"");
 
   	$('#switch_page').change(function() {
     		var page = $(this).val();
@@ -59,7 +59,19 @@ function switch_page() {
     		}
     		return false;
   	});
-};
+}
+
+function searchFiles(force) {
+    let search = $("#searchFilesInput").val();
+    console.log(search,force);
+    if(event && event.keyCode === 13){
+        force = true;
+    }
+    if (search.length >= 3 || force){
+	let db = window.location.href.split("/")[3];
+	window.location.href = "/"+db+"/search/"+search;
+    }
+}
 
 // Check if object if empty
 function isEmpty(obj) {
