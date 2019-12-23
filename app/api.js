@@ -1037,8 +1037,6 @@ var views = function (req, res, next, db) {
     ORDER BY
         access_date_grouped`;
 
-    console.log(query);
-
     db.query(query, parameters, (err, dbres) => {
         if (!err) {
             result = [];
