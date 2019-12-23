@@ -199,7 +199,6 @@ function loadMoreOnScroll(sort_type) {
     }
 }
 
-
 function highlightOnClick(string) {
     
     if (ACTIVE_ITEM_ID !== undefined) {

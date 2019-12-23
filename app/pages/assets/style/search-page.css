@@ -1,0 +1,13 @@
+#visualizations h1{
+    margin-right: 5rem
+}
+
+#visualizations .row{
+    margin-left: 5rem;
+    height: 70vh;
+    overflow-y: scroll;
+}
+
+#resultsSearchBar {
+    width: 40%;
+}

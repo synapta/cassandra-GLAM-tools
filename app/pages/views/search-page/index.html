@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>File Overview | GLAM stat tool (Cassandra)</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*" />
+	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.css" />
+	<!-- <link rel="stylesheet" href="/assets/style/usage.css" /> -->
+	<link rel="stylesheet" href="/assets/style/style.css" />
+	<!-- <link rel="stylesheet" href="/assets/style/chart-page.css" /> -->
+	<link rel="stylesheet" href="/assets/style/file-page.css" />
+	<link rel="stylesheet" href="/assets/style/search-page.css" />
+	<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+	<base id="basebase" href="" />
+</head>
+
+<body>
+<div id="mobile-sidebar" class="ui left sidebar"></div>
+<div class="pusher">
+
+	<header id="mobile-header-bar"></header>
+
+	<header id="topbar" class="top_bar">
+		<a id="white-logo" href="/">
+			<img src="/assets/img/glam-logo-white.svg" alt="GLAM stat tool">
+		</a>
+		<div id="breadcrumbs">
+			<h6>INSTITUTION</h6>
+			<h2><a class="glamName" href=""></a></h2>
+			<!-- <span class="breadcrumb-separator"> > </span>
+      <h6>FILE</h6> -->
+		</div>
+		<div id="resultsSearchBar"  class="search-form">
+			<input id="searchFilesBar" class="form-control" type="text" placeholder="Search" aria-label="Search" onkeypress="searchFiles()" >
+			<button class="btn btn-rounded search-btn" type="submit" onclick="searchFiles(true)">
+				<img src="/assets/img/search-24px.svg"/>
+			</button>
+		</div>
+	</header>
+
+	<main id="visualizations">
+		<div class="col-12 text-center m-3">
+			<h1>FILES</h1>
+		</div>
+		<div id="resultsSearch" class="row w-100"></div>
+	</main>
+
+	<footer id="chart-page-footer">
+		<div>
+			<div class="file-name">
+				<h6>FILE SEARCH</h6>
+			</div>
+			<div class="commons-category">
+				<h6>CATEGORY IN COMMONS</h6>
+				<h2>
+					<a id="cat_url" href="" title="Mediawiki category" target="_blank"></a>
+					<img class="link-out-big" src="/assets/img/link-out.svg" alt="go">
+				</h2>
+			</div>
+		</div>
+	</footer>
+</div>
+
+<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/d3/4.4.0/d3.min.js"></script>
+<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="/assets/scripts/utils.js"></script>
+<script type="text/javascript" src="/views/search-page/functions.js"></script>
+</body>
+
+</html>

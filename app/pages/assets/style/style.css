@@ -631,6 +631,22 @@ footer {
   border-bottom: 1px solid white;
 }
 
+.search-btn{
+  background-color: var(--bg-gray);
+  color: var(--main);
+}
+
+.search-form{
+  display: flex;
+  position: relative;
+  width: 80%;
+  margin: auto;
+}
+
+.search-form input{
+  width: 90% !important;
+}
+
 @media screen and (max-width: 768px) {
   .glam-title-section {
     margin: .5rem 0;
