@@ -261,135 +261,143 @@ function sorting_sidebar(){
 }
 
 function showUnusedFilesItem() {
-    if (UNUSED_MODE){
-	let id = $('#' + ACTIVE_ITEM_ID).data("category");
-	console.log(id);
-	let template_source = "/views/category-network/tpl/unused-file-list.tpl";
-	let target = '#category'+ACTIVE_ITEM_ID;
-	
-	$.get( template_source , tpl => {
-	    $.getJSON( unusedFilesLink(id,30) , d => {
-		let template = Handlebars.compile(tpl);
-		let temp = [];
-		d.forEach( file => {
-		    let url = '/'+glam+'/file/'+file;
-		    temp.push(  {
-			url: url,
-			file: file
-		    });
+	if (UNUSED_MODE){
+		let id = $('#' + ACTIVE_ITEM_ID).data("category");
+		let template_source = "/views/category-network/tpl/unused-file-list.tpl";
+		let target = '#category'+ACTIVE_ITEM_ID;
+		
+		$.get( template_source , tpl => {
+			$.getJSON( unusedFilesLink(id,30) , d => {
+				let template = Handlebars.compile(tpl);
+				let temp = [];
+				d.forEach( file => {
+					let url = '/'+glam+'/file/'+file;
+					temp.push(  {
+						url: url,
+						file: file
+					});
+				});
+				$(target).html(template({files : temp}));
+			});
 		});
-		$(target).html(template({files : temp}));
-	    });
-	});
-    }
-}
-function sidebar(order) {
-    if (order === undefined) {
-	order = SORT_BY;
-    } else {
-	SORT_BY = order;
-    }
-    
-    let template_source = "/views/category-network/tpl/category-network.tpl";
-    let data_source = getUrl();
-    let target = "#right_sidebar_list";
-    
-    function highlight() {
-	if (ACTIVE_ITEM_ID !== undefined) {
-	    $('#' + ACTIVE_ITEM_ID).closest('.list_item').addClass('list_item_active');
-	    $("#category_network_container").find("." + ACTIVE_ITEM_ID).children(".circle").addClass("selected_circle");
-	    showUnusedFilesItem();
 	}
-	// from Sidebar to Graph
-	$(".list_item").on("click", function() {
-	    let element = $(this).find(".id").attr("id");
-	    if ($(this).hasClass('list_item_active')) {
-		// reset
-		resetHighlighted();
-		ACTIVE_ITEM_ID = undefined;
-	    } else {
-		// reset
-		resetHighlighted();
-		// highlight item
-		$(this).addClass('list_item_active');
-		// turn on circle
-		let node_selected = $("#category_network_container").find("." + element).children(".circle");
-		node_selected.toggleClass("selected_circle");
-		ACTIVE_ITEM_ID = element;
-		showUnusedFilesItem();
-	    }
-	});
+}
+
+function hideUnusedFilesItem() {
+	if (UNUSED_MODE){
+		let target = '#category'+ACTIVE_ITEM_ID;
+		$(target).html("");
+	}
+}
+
+function sidebar(order) {
+	if (order === undefined) {
+		order = SORT_BY;
+	} else {
+		SORT_BY = order;
+	}
 	
-	// from Graph to Sidebar
-	$(".node").on("click", function() {
-	    let e = $(this).attr("class");
-	    let element = e.split(" ",1);
-	    $('.list_item').removeClass('list_item_active');
-	    // reset Sidebar - Dataviz
-	    $("#right_sidebar_list .id").removeClass("selected_list_item");
-	    $("#category_network_container").find(".circle").removeClass("selected_circle");
-	    
-	    // highlight Graph
-	    let node_selected = $(this).children(".circle");
-	    node_selected.toggleClass("selected_circle");
-	    
-	    // highlight Sidebar
-	    let selected = $("#right_sidebar_list").find("#" + element);
-	    ACTIVE_ITEM_ID = element;
-	    // selected.toggleClass("selected_list_item");
-	    selected.closest('.list_item').addClass("list_item_active");
-	    showUnusedFilesItem();
-	    document.getElementById(element).scrollIntoView({
-		// behavior: "smooth",
-		block: "center"
-	    });
-	    document.getElementById('topbar').scrollIntoView();
+	let template_source = "/views/category-network/tpl/category-network.tpl";
+	let data_source = getUrl();
+	let target = "#right_sidebar_list";
+	
+	function highlight() {
+		if (ACTIVE_ITEM_ID !== undefined) {
+			$('#' + ACTIVE_ITEM_ID).closest('.list_item').addClass('list_item_active');
+			$("#category_network_container").find("." + ACTIVE_ITEM_ID).children(".circle").addClass("selected_circle");
+			showUnusedFilesItem();
+		}
+		// from Sidebar to Graph
+		$(".list_item").on("click", function() {
+			let element = $(this).find(".id").attr("id");
+			if ($(this).hasClass('list_item_active')) {
+				// reset
+				resetHighlighted();
+				ACTIVE_ITEM_ID = undefined;
+			} else {
+				// reset
+				resetHighlighted();
+				// highlight item
+				$(this).addClass('list_item_active');
+				// turn on circle
+				let node_selected = $("#category_network_container").find("." + element).children(".circle");
+				node_selected.toggleClass("selected_circle");
+				ACTIVE_ITEM_ID = element;
+				showUnusedFilesItem();
+			}
+		});
+		
+		// from Graph to Sidebar
+		$(".node").on("click", function() {
+			let e = $(this).attr("class");
+			let element = e.split(" ",1);
+			$('.list_item').removeClass('list_item_active');
+			// reset Sidebar - Dataviz
+			$("#right_sidebar_list .id").removeClass("selected_list_item");
+			$("#category_network_container").find(".circle").removeClass("selected_circle");
+			
+			// highlight Graph
+			let node_selected = $(this).children(".circle");
+			node_selected.toggleClass("selected_circle");
+			
+			// highlight Sidebar
+			let selected = $("#right_sidebar_list").find("#" + element);
+			ACTIVE_ITEM_ID = element;
+			// selected.toggleClass("selected_list_item");
+			selected.closest('.list_item').addClass("list_item_active");
+			showUnusedFilesItem();
+			document.getElementById(element).scrollIntoView({
+				// behavior: "smooth",
+				block: "center"
+			});
+			document.getElementById('topbar').scrollIntoView();
+		});
+	}
+	
+	function resetHighlighted() {
+		// reset item highlight
+		$('.list_item').removeClass('list_item_active');
+		// and circle
+		$("#category_network_container").find(".circle").removeClass("selected_circle");
+		hideUnusedFilesItem();
+	}
+	
+	$.get( template_source , function(tpl) {
+		$.getJSON( data_source , function(d) {
+			
+			if (order === "desc_order"){
+				d.nodes.sort( function(a,b) {
+					return b.files - a.files;
+				});
+			}
+			else if (order === "asc_order") {
+				d.nodes.sort( function(a,b) {
+					return a.files - b.files;
+				});
+			}
+			if (order === "by_name"){
+				d.nodes.sort( function(a,b) {
+					let res = a.group - b.group;
+					if(res === 0)
+						res = b.files-a.files;
+					return res;
+				});
+			}
+			
+			for (let i = 0; i < d.nodes.length; i++) {
+				d.nodes[i].name = d.nodes[i].id.replace(/_/g," ");
+				d.nodes[i].files = nFormatter(d.nodes[i].files);
+				d.nodes[i].id_encoded = d.nodes[i].id.hashCode();
+				d.nodes[i].url = '/'+glam+'/category-network/'+d.nodes[i].id;
+			}
+			
+			let template = Handlebars.compile(tpl);
+			$(target).html(template(d));
+			
+			sorting_sidebar();
+			highlight();
+		});
 	});
-    }
-    
-    function resetHighlighted() {
-	// reset item highlight
-	$('.list_item').removeClass('list_item_active');
-	// and circle
-	$("#category_network_container").find(".circle").removeClass("selected_circle");
-    }
-    
-    $.get( template_source , function(tpl) {
-	$.getJSON( data_source , function(d) {
-	    
-	    if (order === "desc_order"){
-		d.nodes.sort( function(a,b) {
-		    return b.files - a.files;
-		});
-	    }
-	    else if (order === "asc_order") {
-		d.nodes.sort( function(a,b) {
-		    return a.files - b.files;
-		});
-	    }
-	    if (order === "by_name"){
-		d.nodes.sort( function(a,b) {
-		    let res = a.group - b.group;
-		    if(res === 0)
-			res = b.files-a.files;
-		    return res;
-		});
-	    }
-	    
-	    for (let i = 0; i < d.nodes.length; i++) {
-		d.nodes[i].name = d.nodes[i].id.replace(/_/g," ");
-		d.nodes[i].files = nFormatter(d.nodes[i].files);
-		d.nodes[i].id_encoded = d.nodes[i].id.hashCode();
-		d.nodes[i].url = '/'+glam+'/category-network/'+d.nodes[i].id;
-	    }
-	    
-	    let template = Handlebars.compile(tpl);
-	    $(target).html(template(d));
-	    
-	    sorting_sidebar();
-	    highlight();
-	});
-    });
 }
 
 function download() {
