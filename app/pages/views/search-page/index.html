@@ -33,7 +33,9 @@
 			<!-- <span class="breadcrumb-separator"> > </span>
       <h6>FILE</h6> -->
 		</div>
-		<div id="resultsSearchBar"  class="search-form">
+		<div id="resultsSearchBar"  class="search-form"
+				 data-container="body" data-toggle="popover" data-placement="top"
+				 data-content="Enter at least 3 characters">
 			<input id="searchFilesBar" class="form-control" type="text" placeholder="Search" aria-label="Search" onkeypress="searchFiles()" >
 			<button class="btn btn-rounded search-btn" type="submit" onclick="searchFiles(true)">
 				<img src="/assets/img/search-24px.svg"/>
@@ -65,6 +67,7 @@
 </div>
 
 <script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/d3/4.4.0/d3.min.js"></script>
 <script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
 <script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>

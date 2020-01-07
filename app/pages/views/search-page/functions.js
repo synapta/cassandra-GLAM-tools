@@ -45,13 +45,16 @@ function search(append) {
 
 function searchFiles(force) {
 	let search = $("#searchFilesBar").val();
-	console.log(search,force);
 	if(event && event.keyCode === 13){
 		force = true;
 	}
-	if (search.length >= 3 || force){
-		let db = window.location.href.split("/")[3];
-		window.location.href = "/"+db+"/search/"+search;
+	if (force){
+		if (search.length >= 3){
+			let db = window.location.href.split("/")[3];
+			window.location.href = "/"+db+"/search/"+search;
+		} else {
+			$('#resultsSearchBar').popover('show');
+		}
 	}
 }
 

@@ -180,7 +180,10 @@
 					</div>
 				</div>
 <!--				<form class="form-inline search-form" onsubmit="searchFiles()">-->
-				<div class="search-form">
+				<div id="searchFilesInputForm" class="search-form"
+						 data-container="body" data-toggle="popover" data-placement="top"
+						 data-content="Enter at least 3 characters">
+					<label for="searchFilesInput">Search files</label>
 					<input id="searchFilesInput" class="form-control" type="text" placeholder="Search" aria-label="Search" onkeypress="searchFiles()" >
 					<button class="btn btn-rounded search-btn" type="submit" onclick="searchFiles(true)">
 						<img src="/assets/img/search-24px.svg"/>
@@ -192,6 +195,7 @@
 	<div class="futovac"></div>
 	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.js"></script>
+	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
 	<script type="text/javascript" src="/js/loader.js"></script>
 	<script type="text/javascript" src="/assets/scripts/utils.js"></script>
 	<script>
