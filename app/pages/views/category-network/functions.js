@@ -274,7 +274,7 @@ function showUnusedFilesItem() {
 					let url = '/'+glam+'/file/'+file;
 					temp.push(  {
 						url: url,
-						file: file
+						file: cleanImageName(file.replace(/_/g," "))
 					});
 				});
 				$(target).html(template({files : temp}));
@@ -436,7 +436,7 @@ $('#showUnused').click( () => {
 		    let url = '/'+glam+'/file/'+file;
 		    temp.push(  {
 			url: url,
-			file: file
+			file: cleanImageName(file.replace(/_/g," "))
 		    });
 		});
 		$(target).html(template({files : temp}));
