@@ -98,7 +98,7 @@ String.prototype.hashCode = function() {
 
 function cleanImageName(name) {
 	// clean special characters in order to use image name as element ID
-	return name.replace(/jpg/i, "").replace(/png/i, "").replace(/[{()}]/g, "").replace(/\./g,"").replace(/\,/g,"").replace(/&/g,"").replace(/'/g,"").replace(/"/g,"");
+	return name.replace(/jpg/i, "").replace(/png/i, "").replace(/tif/i, "").replace(/[{()}]/g, "").replace(/\./g,"").replace(/\,/g,"").replace(/&/g,"").replace(/'/g,"").replace(/"/g,"");
 }
 
 function getPageFromElementIdx(element_idx, items_in_page) {

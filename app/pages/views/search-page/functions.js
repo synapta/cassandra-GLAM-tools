@@ -8,7 +8,7 @@ function search(append) {
 	if (page === 0){
 		$('#resultsSearch').off("scroll").scroll(loadMoreOnScroll.bind($('#resultsSearch')));
 	}
-	$("#searchFilesBar").val(query);
+	$("#searchFilesBar").val(decodeURI(query));
 	// let template_source = "/views/category-network/tpl/unused-file-list-dropdown.tpl";
 	let target = '#resultsSearch';
 	let tpl = "    {{#each files}}\n" +
@@ -31,7 +31,7 @@ function search(append) {
 					let url = '/'+db+'/file/'+file;
 					temp.push(  {
 						url: url,
-						file: file
+						file: cleanImageName(file.replace(/_/g," "))
 					});
 				});
 				if (append){
@@ -59,7 +59,7 @@ function searchFiles(force) {
 }
 
 function loadMoreOnScroll() {
-	if (($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) && !limit) {
+	if (($("#resultsSearch").scrollTop() + $("#resultsSearch").innerHeight() >= $("#resultsSearch")[0].scrollHeight) && !limit) {
 		// if reached end of div
 		console.log("load more")	;
 		// if there are more elements to load
