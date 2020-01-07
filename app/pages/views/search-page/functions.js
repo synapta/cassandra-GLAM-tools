@@ -72,4 +72,6 @@ function loadMoreOnScroll() {
 $(function() {
 	search();
 	setCategory();
+	let db = window.location.href.toString().split('/')[3];
+	$("#institutionId").attr("href", "/"+db);
 });
