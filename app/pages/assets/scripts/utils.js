@@ -62,15 +62,19 @@ function switch_page() {
 }
 
 function searchFiles(force) {
-    let search = $("#searchFilesInput").val();
-    console.log(search,force);
-    if(event && event.keyCode === 13){
-        force = true;
-    }
-    if (search.length >= 3 || force){
-	let db = window.location.href.split("/")[3];
-	window.location.href = "/"+db+"/search/"+search;
-    }
+	let search = $("#searchFilesInput").val();
+	console.log(search,force,search.length);
+	if(event && event.keyCode === 13){
+		force = true;
+	}
+	if (force){
+		if (search.length >= 3){
+			let db = window.location.href.split("/")[3];
+			window.location.href = "/"+db+"/search/"+search;
+		} else {
+			$('#searchFilesInputForm').popover('show');
+		}
+	}
 }
 
 // Check if object if empty
@@ -94,7 +98,7 @@ String.prototype.hashCode = function() {
 
 function cleanImageName(name) {
 	// clean special characters in order to use image name as element ID
-	return name.replace(/jpg/i, "").replace(/png/i, "").replace(/[{()}]/g, "").replace(/\./g,"").replace(/\,/g,"").replace(/&/g,"").replace(/'/g,"").replace(/"/g,"");
+	return name.replace(/jpg/i, "").replace(/png/i, "").replace(/tif/i, "").replace(/[{()}]/g, "").replace(/\./g,"").replace(/\,/g,"").replace(/&/g,"").replace(/'/g,"").replace(/"/g,"");
 }
 
 function getPageFromElementIdx(element_idx, items_in_page) {

@@ -8,7 +8,7 @@ function search(append) {
 	if (page === 0){
 		$('#resultsSearch').off("scroll").scroll(loadMoreOnScroll.bind($('#resultsSearch')));
 	}
-	$("#searchFilesBar").val(query);
+	$("#searchFilesBar").val(decodeURI(query));
 	// let template_source = "/views/category-network/tpl/unused-file-list-dropdown.tpl";
 	let target = '#resultsSearch';
 	let tpl = "    {{#each files}}\n" +
@@ -31,7 +31,7 @@ function search(append) {
 					let url = '/'+db+'/file/'+file;
 					temp.push(  {
 						url: url,
-						file: file
+						file: cleanImageName(file.replace(/_/g," "))
 					});
 				});
 				if (append){
@@ -45,18 +45,21 @@ function search(append) {
 
 function searchFiles(force) {
 	let search = $("#searchFilesBar").val();
-	console.log(search,force);
 	if(event && event.keyCode === 13){
 		force = true;
 	}
-	if (search.length >= 3 || force){
-		let db = window.location.href.split("/")[3];
-		window.location.href = "/"+db+"/search/"+search;
+	if (force){
+		if (search.length >= 3){
+			let db = window.location.href.split("/")[3];
+			window.location.href = "/"+db+"/search/"+search;
+		} else {
+			$('#resultsSearchBar').popover('show');
+		}
 	}
 }
 
 function loadMoreOnScroll() {
-	if (($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) && !limit) {
+	if (($("#resultsSearch").scrollTop() + $("#resultsSearch").innerHeight() >= $("#resultsSearch")[0].scrollHeight) && !limit) {
 		// if reached end of div
 		console.log("load more")	;
 		// if there are more elements to load
@@ -69,4 +72,6 @@ function loadMoreOnScroll() {
 $(function() {
 	search();
 	setCategory();
+	let db = window.location.href.toString().split('/')[3];
+	$("#institutionId").attr("href", "/"+db);
 });

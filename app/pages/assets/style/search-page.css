@@ -4,10 +4,21 @@
 
 #visualizations .row{
     margin-left: 5rem;
-    height: 70vh;
-    overflow-y: scroll;
+    max-height: 70vh;
+    overflow-y: auto;
 }
 
 #resultsSearchBar {
     width: 40%;
+}
+
+.searchResults {
+    display: flex;
+    left: 1rem;
+    background-color: #fff;
+    color: var(--main);
+    box-shadow: 0 -1px 15px 0px rgba(0,0,0,.1);
+    border-top: 1px solid rgba(0,0,0,.1);
+    padding: 1rem 1rem 0;
+    bottom: 5rem;
 }
