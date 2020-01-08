@@ -22,11 +22,11 @@ function getUrl() {
     const urlSplit = window.location.href.toString().split('/');
     let query = UNUSED_MODE ? "?unused=true" : "";
     const db = urlSplit[3];
-    let category = urlSplit[urlSplit.length-1];
+    let category = urlSplit[urlSplit.length-1]?urlSplit[urlSplit.length-1] : urlSplit[urlSplit.length-2]
     if (category && category !== 'category-network'){
-	console.log( subcategoryName);
-	subcategoryName = category;
-	query = UNUSED_MODE ? "?unused=true&cat="+ subcategoryName : "?cat="+subcategoryName;
+			subcategoryName = decodeURI(category);
+			console.log(subcategoryName);
+			query = UNUSED_MODE ? "?unused=true&cat="+ subcategoryName : "?cat="+subcategoryName;
     }
     console.log(query);
     return "/api/"+db+"/category" + query;
@@ -265,7 +265,7 @@ function showUnusedFilesItem() {
 		let id = $('#' + ACTIVE_ITEM_ID).data("category");
 		let template_source = "/views/category-network/tpl/unused-file-list.tpl";
 		let target = '#category'+ACTIVE_ITEM_ID;
-		
+		$('#files' + ACTIVE_ITEM_ID).show();
 		$.get( template_source , tpl => {
 			$.getJSON( unusedFilesLink(id,30) , d => {
 				let template = Handlebars.compile(tpl);
@@ -287,6 +287,7 @@ function hideUnusedFilesItem() {
 	if (UNUSED_MODE){
 		let target = '#category'+ACTIVE_ITEM_ID;
 		$(target).html("");
+		$('#files' + ACTIVE_ITEM_ID).hide();
 	}
 }
 
@@ -364,32 +365,7 @@ function sidebar(order) {
 	
 	$.get( template_source , function(tpl) {
 		$.getJSON( data_source , function(d) {
-			
-			if (order === "desc_order"){
-				d.nodes.sort( function(a,b) {
-					return b.files - a.files;
-				});
-			}
-			else if (order === "asc_order") {
-				d.nodes.sort( function(a,b) {
-					return a.files - b.files;
-				});
-			}
-			if (order === "by_name"){
-				d.nodes.sort( function(a,b) {
-					let res = a.group - b.group;
-					if(res === 0)
-						res = b.files-a.files;
-					return res;
-				});
-			}
-			
-			for (let i = 0; i < d.nodes.length; i++) {
-				d.nodes[i].name = d.nodes[i].id.replace(/_/g," ");
-				d.nodes[i].files = nFormatter(d.nodes[i].files);
-				d.nodes[i].id_encoded = d.nodes[i].id.hashCode();
-				d.nodes[i].url = '/'+glam+'/category-network/'+d.nodes[i].id;
-			}
+			sortNodes(d,order);
 			
 			let template = Handlebars.compile(tpl);
 			$(target).html(template(d));

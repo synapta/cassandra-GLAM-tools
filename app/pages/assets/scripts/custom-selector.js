@@ -96,22 +96,28 @@ $(function() {
         $.getJSON(url).then(res => {
             if(res.nodes){
                 let opts = "";
+              if (urlSplit[5]){
+                let ref = urlSplit[0]+'/'+urlSplit[1]+'/'+urlSplit[2]+'/'+ urlSplit[3] + '/'+urlSplit[4] + '/'+ decodeURI(urlSplit[5])+ '/'+(urlSplit[6]?decodeURI(urlSplit[6]):'');;
+                categories.push(ref);
+                opts += "<option>"+decodeURI(urlSplit[5]).replace(/[_\-]+/g," ")+"</option>";
+              }
                 res.nodes.forEach(cat =>{
+                  if (cat.id !== urlSplit[5]){
                     let name = cat.id.replace(/[_\-]+/g," ");
-                    let ref = urlSplit[0]+'/'+urlSplit[1]+'/'+urlSplit[2]+'/'+ urlSplit[3] + '/'+urlSplit[4] + '/'+ cat.id ;
+                    let ref = urlSplit[0]+'/'+urlSplit[1]+'/'+urlSplit[2]+'/'+ urlSplit[3] + '/'+urlSplit[4] + '/'+ cat.id + '/'+(urlSplit[6]?decodeURI(urlSplit[6]):'');
                     opts += "<option>"+name+"</option>";
                     categories.push(ref);
+                  }
                 });
-                $(".autocomplete-categories").html(opts);
-                $(".autocomplete-categories").selectpicker();
-                $(".autocomplete-categories").on("change", el => {
-                    console.log(el);
+              $(".autocomplete-categories").html(opts);
+              $(".autocomplete-categories").selectpicker();
+              $(".autocomplete-categories").on("change", el => {
                     if (el && el.currentTarget && el.currentTarget.selectedIndex && categories[el.currentTarget.selectedIndex]){
                         window.location.href = categories[el.currentTarget.selectedIndex];
                     }
                 });
-                
-                
+              console.log(urlSplit[5]);
+              
             }
         });
     }

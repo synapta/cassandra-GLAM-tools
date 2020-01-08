@@ -162,3 +162,33 @@ var fixDataViz = function (data, field) {
   }
   return data;
 }
+
+function sortNodes(d,order) {
+	const glam = window.location.href.toString().split('/')[3];
+	if (order === "desc_order"){
+		d.nodes.sort( function(a,b) {
+			return b.files - a.files;
+		});
+	}
+	else if (order === "asc_order") {
+		d.nodes.sort( function(a,b) {
+			return a.files - b.files;
+		});
+	}
+	if (order === "by_name"){
+		d.nodes.sort( function(a,b) {
+			let res = a.group - b.group;
+			if(res === 0)
+				res = b.files-a.files;
+			return res;
+		});
+	}
+	
+	for (let i = 0; i < d.nodes.length; i++) {
+		d.nodes[i].name = d.nodes[i].id.replace(/_/g," ");
+		d.nodes[i].files = nFormatter(d.nodes[i].files);
+		d.nodes[i].id_encoded = d.nodes[i].id.hashCode();
+		d.nodes[i].url = '/'+glam+'/category-network/'+d.nodes[i].id;
+		d.nodes[i].urlUnused = '/'+glam+'/category-network/'+d.nodes[i].id+'/unused';
+	}
+}
