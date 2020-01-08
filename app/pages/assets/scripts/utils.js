@@ -19,13 +19,14 @@ function nFormatter(num) {
 
 function setCategory() {
   	var db = window.location.href.toString().split('/')[3];
+  	var subcat = window.location.href.toString().split('/')[5];
   	var jsonurl = "/api/" + db;
 
   	$.getJSON(jsonurl, function(d) {
   	    $('#totalMediaNum').text(formatter(d.files));
-      	$('#cat_url').text(decodeURIComponent(d.category).replace("Category:",""));
-      	$("#cat_url").attr("href", "https://commons.wikimedia.org/wiki/"+d.category);
-      	$("#cat_url").attr("title", decodeURIComponent(d.category));
+      	$('#cat_url').text(decodeURIComponent(subcat ? subcat :d.category).replace("Category:",""));
+      	$("#cat_url").attr("href", "https://commons.wikimedia.org/wiki/"+(subcat ? subcat :d.category));
+      	$("#cat_url").attr("title", decodeURIComponent((subcat ? subcat :d.category)));
         $(".glamName").text(d.fullname);
         $('#cover').css('background-image', 'url(' + d.image + ')');
   	});
