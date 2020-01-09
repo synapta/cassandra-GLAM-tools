@@ -50,6 +50,11 @@
 				<td>
 					<a href="{{url}}" target="_blank">{{label}}</a>
 				</td>
+				{{#each wikis}}
+				<td>
+					<a href="{{url}}" style="font-size:0.9em;margin-right:2em">{{site}}</a>
+				</td>
+			{{/each}}
 			</tr>
 			{{/each}}
 			</tbody>

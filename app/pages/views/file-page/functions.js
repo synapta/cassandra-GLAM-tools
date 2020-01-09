@@ -161,11 +161,17 @@ function populateSidebar() {
 							$.getJSON(getWikiDataUrl(rec_data), function (wikidata) {
 								for (let i = 0; i < rec_data.length; i++) {
 									let data = wikidata.entities[rec_data[i].title];
+									rec_data[i].wikis = [];
 									if (data.labels && !isEmpty(data.labels)) {
 										if (data.labels.en) {
 											rec_data[i].label = data.labels.en.value;
 										} else {
 											rec_data[i].label = data.labels[Object.keys(data.labels)[0]].value;
+										}
+									}
+									for (const prop in data.sitelinks){
+										if (data.sitelinks.hasOwnProperty(prop)){
+											rec_data[i].wikis.push(data.sitelinks[prop]);
 										}
 									}
 								}
