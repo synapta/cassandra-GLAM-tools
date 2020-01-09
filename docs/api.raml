@@ -792,9 +792,20 @@ mediaType: application/json
                   "Bahnhof_Zürich_1847_(Originalscan)-2.jpg",
                   "Bahnhof_Zürich_1883.jpg"
                 ]
-  /recommender/{file}:
-    description: List of Wikidata entities related with `{file}`.
+  /recommender:
+    description: List of unused files and the associated Wikidata items.
     get:
+      queryParameters:
+        page:
+          description: The page of the results.
+          type: integer
+          example: 0
+          required: false
+        limit:
+          description: The number of results per page.
+          type: integer
+          example: 10
+          required: false
       responses:
         200:
           body:
@@ -802,11 +813,30 @@ mediaType: application/json
               example: |
                 [
                   {
-                    "title": "Q124907",
-                    "url": "https://www.wikidata.org/wiki/Q124907"
-                  },
-                  {
-                    "title": "Q808118",
-                    "url": "https://www.wikidata.org/wiki/Q808118"
+                    "img_name": "Altartafeln_von_Hans_Leu_d.Ä._(Haus_zum_Rech)_-_linkes_Limmatufer_2011-08-17_15-26-46.jpg",
+                    "titles": [
+                      "Q10987378"
+                    ],
+                    "urls": [
+                      "https://www.wikidata.org/wiki/Q10987378"
+                    ]
                   }
                 ]
+    /{file}:
+      description: List of Wikidata entities related with `{file}`.
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  [
+                    {
+                      "title": "Q124907",
+                      "url": "https://www.wikidata.org/wiki/Q124907"
+                    },
+                    {
+                      "title": "Q808118",
+                      "url": "https://www.wikidata.org/wiki/Q808118"
+                    }
+                  ]

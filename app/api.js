@@ -1303,6 +1303,46 @@ var search = function (req, res, next, db) {
 
 // RECOMMENDER
 var recommender = function (req, res, next, db) {
+    let query = `SELECT r.img_name, array_agg(title) as titles, array_agg(url) as urls
+                    FROM categories c
+                    LEFT JOIN images i ON c.page_title = ANY(i.cl_to)
+                    LEFT JOIN usages u ON i.img_name = u.gil_to
+                    INNER JOIN recommendations r ON i.img_name = r.img_name
+                    WHERE (u.is_alive = FALSE
+                    OR u.is_alive IS NULL)
+                    GROUP BY r.img_name, last_update
+                    ORDER BY avg(score) DESC, last_update DESC, r.img_name`;
+
+    let page = 0;
+    if (req.query.page !== undefined) {
+        page = parseInt(req.query.page);
+    }
+
+    let limit = 5;
+    if (req.query.limit !== undefined) {
+        limit = parseInt(req.query.limit);
+    }
+
+    let offset = limit * page;
+
+    query += " LIMIT " + limit + " OFFSET " + offset;
+
+    db.query(query, (err, dbres) => {
+        if (!err) {
+            let result = [];
+
+            dbres.rows.forEach(function (row) {
+                result.push(row);
+            });
+
+            res.json(result);
+        } else {
+            next(new Error(err));
+        }
+    });
+}
+
+var recommenderByFile = function (req, res, next, db) {
     let query = `SELECT title, url
                 FROM recommendations
                 WHERE img_name = $1
@@ -1353,3 +1393,4 @@ exports.viewsStats = viewsStats;
 exports.fileDetails = fileDetails;
 exports.search = search;
 exports.recommender = recommender;
+exports.recommenderByFile = recommenderByFile;
