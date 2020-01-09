@@ -7,38 +7,39 @@ var RENDERING = false;
 
 var ACTIVE_ITEM_ID;
 
-function getUrl(limit) {
-    let l = Number.isInteger(limit) ? "?limit=" + limit : "";
-    const db = window.location.href.toString().split('/')[3];
-    const subcat = window.location.href.toString().split('/')[5];
-    let query = subcat ? (l ? l+ "&cat="+subcat : "?cat="+subcat) : l;
-    return "/api/" + db + "/usage" + query;
-}
 
 function getSubcategoryTotal() {
-    const urlSplit = window.location.href.toString().split('/');
-    if (urlSplit[5]){
-	let url = "/api/"+urlSplit[3]+"/category?cat"+urlSplit[5];
-	$.getJSON(url).then(res=>{
-	    let tot = res.nodes[0].files;
-	    $('#totalMediaNum').text(formatter(tot));
-	});
-    }
+	const urlSplit = window.location.href.toString().split('/');
+	if (urlSplit[5]){
+		let url = "/api/"+urlSplit[3]+"/category?cat"+urlSplit[5];
+		$.getJSON(url).then(res=>{
+			let tot = res.nodes[0].files;
+			$('#totalMediaNum').text(formatter(tot));
+		});
+	}
 }
 
+// function getUrl(limit) {
+//     let l = Number.isInteger(limit) ? "?limit=" + limit : "";
+//     const db = window.location.href.toString().split('/')[3];
+//     const subcat = window.location.href.toString().split('/')[5];
+//     let query = subcat ? (l ? l+ "&cat="+subcat : "?cat="+subcat) : l;
+//     return "/api/" + db + "/usage" + query;
+// }
+
 function getUrl(limit, sort) {
-    let l = Number.isInteger(limit) ? "?limit=" + limit : "";
-    let s;
-    if (sort === 'usage' || sort === 'projects' || sort === 'name') {
-	s = '&sort=' + sort;
-    } else {
-	s = "";
-    }
-    let db = window.location.href.toString().split('/')[3];
-    const subcat = window.location.href.toString().split('/')[5];
-    let query = subcat ? (l+s ? (l + s + "&cat="+subcat) : "?cat="+subcat) : l+s;
-    query = query ? query+ "&page=0" : "?page=0";
-    return "/api/" + db + "/usage" + query ;
+	const db = window.location.href.toString().split('/')[3];
+	const subcat = window.location.href.toString().split('/')[5];
+	let l = Number.isInteger(limit) ? "?limit=" + limit : "";
+	let s;
+	if (sort === 'usage' || sort === 'projects' || sort === 'name') {
+		s = limit ? '&sort=' + sort : '?sort=' + sort ;
+	} else {
+		s = "";
+	}
+	let query = subcat ? (l+s ? (l + s + "&cat="+subcat) : "?cat="+subcat) : l+s;
+	query = query ? query+ "&page=0" : "?page=0";
+	return "/api/" + db + "/usage" + query ;
 }
 
 function getUrlPaginated(page, sort) {
@@ -105,70 +106,70 @@ function sidebar(type) {
 }
 
 function renderImageListItems(tpl, data, append) {
-    // if append not provided, set to false
-    append = append || false;
-    // loop through data and display items
-    data.forEach(function(file) {
-	// Format name and id
-	file.url = '/'+glam+'/file/'+file.image;
-	file.image_name = file.image.replace(/_/g," ");
-	file.image_id = cleanImageName(file.image);
-	// Format wiki pages list
-	let currentWiki = null;
-	file.wiki_array = [];
-	file.wikis = [];
-	// sort alphabetically
-	file.pages = file.pages.sort(function(a,b) {
-	    if (a.wiki < b.wiki) return -1;
-	    if (a.wiki > b.wiki) return 1;
-	    return 0;
+	// if append not provided, set to false
+	append = append || false;
+	// loop through data and display items
+	data.forEach(function(file) {
+		// Format name and id
+		file.url = '/'+glam+'/file/'+file.image;
+		file.image_name = file.image.replace(/_/g," ");
+		file.image_id = cleanImageName(file.image);
+		// Format wiki pages list
+		let currentWiki = null;
+		file.wiki_array = [];
+		file.wikis = [];
+		// sort alphabetically
+		file.pages = file.pages.sort(function(a,b) {
+			if (a.wiki < b.wiki) return -1;
+			if (a.wiki > b.wiki) return 1;
+			return 0;
+		});
+		// loop through all pages
+		var wiki_obj = {};
+		file.pages.forEach(function(page) {
+			// format object
+			let link_obj = {};
+			// check if not already added
+			if (currentWiki !== page.wiki) {
+				// reset temp object
+				wiki_obj = {}
+				wiki_obj.wiki_links = [];
+				// update current wiki
+				currentWiki = page.wiki;
+				// page name
+				wiki_obj.wiki_name = currentWiki;
+				// links
+				link_obj.wiki_link =  `https://${currentWiki.replace("wiki","")}.wikipedia.org/w/index.php?title=${page.title}`;
+				link_obj.wiki_page = page.title.replace(/_/g, " ");
+				// push
+				wiki_obj.wiki_links.push(link_obj);
+				file.wikis.push(wiki_obj);
+				// save wiki list in an array (for highlighting bars in chart)
+				file.wiki_array.push(currentWiki);
+			} else {
+				// add link to current wiki object
+				link_obj.wiki_link =  `https://${currentWiki.replace("wiki","")}.wikipedia.org/w/index.php?title=${page.title}`;
+				link_obj.wiki_page = page.title.replace(/_/g, " ");
+				// push current wiki object
+				wiki_obj.wiki_links.push(link_obj);
+			}
+		});
+		file.wiki_array = JSON.stringify(file.wiki_array);
 	});
-	// loop through all pages
-	var wiki_obj = {};
-	file.pages.forEach(function(page) {
-	    // format object
-	    let link_obj = {};
-	    // check if not already added
-	    if (currentWiki !== page.wiki) {
-		// reset temp object
-		wiki_obj = {}
-		wiki_obj.wiki_links = [];
-		// update current wiki
-		currentWiki = page.wiki;
-		// page name
-		wiki_obj.wiki_name = currentWiki;
-		// links
-		link_obj.wiki_link =  `https://${currentWiki.replace("wiki","")}.wikipedia.org/w/index.php?title=${page.title}`;
-		link_obj.wiki_page = page.title.replace(/_/g, " ");
-		// push
-		wiki_obj.wiki_links.push(link_obj);
-		file.wikis.push(wiki_obj);
-		// save wiki list in an array (for highlighting bars in chart)
-		file.wiki_array.push(currentWiki);
-	    } else {
-		// add link to current wiki object
-		link_obj.wiki_link =  `https://${currentWiki.replace("wiki","")}.wikipedia.org/w/index.php?title=${page.title}`;
-		link_obj.wiki_page = page.title.replace(/_/g, " ");
-		// push current wiki object
-		wiki_obj.wiki_links.push(link_obj);
-	    }
+	// increment number of items rendered
+	IMAGES_RENDERED += data.length;
+	// compile template
+	var obj = {};
+	obj.files = data;
+	var template = Handlebars.compile(tpl);
+	// append existing content or replace html
+	append ? $('#right_sidebar_list').append(template(obj)) : $('#right_sidebar_list').html(template(obj));
+	// set tatus to finished rendering
+	RENDERING = false;
+	// Prevent defaul when click on "view details"
+	$('.view-details-link').off('click').on('click', function(e) {
+		e.stopPropagation();
 	});
-	file.wiki_array = JSON.stringify(file.wiki_array);
-    });
-    // increment number of items rendered
-    IMAGES_RENDERED += data.length;
-    // compile template
-    var obj = {};
-    obj.files = data;
-    var template = Handlebars.compile(tpl);
-    // append existing content or replace html
-    append ? $('#right_sidebar_list').append(template(obj)) : $('#right_sidebar_list').html(template(obj));
-    // set tatus to finished rendering
-    RENDERING = false;
-    // Prevent defaul when click on "view details"
-    $('.view-details-link').off('click').on('click', function(e) {
-	e.stopPropagation();
-    });
 }
 
 

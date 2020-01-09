@@ -1,4 +1,5 @@
 const FIRST_CALL_LIMIT = 100;
+const glam = window.location.href.toString().split('/')[3];
 let TOTAL_IMAGES;
 let IMAGES_RENDERED = 0;
 let RENDERING = false;
@@ -101,30 +102,31 @@ function sidebar(type) {
 }
 
 function renderSidebarItems(tpl, data, append) {
-    // if append not provided, set to false
-    append = append || false;
-    // process data
-    data.forEach(function(d) {
-	d.img_name_text = d.img_name.replace(/_/g," ");
-	d.img_name_id = d.img_name.replace(".jpg", "");
-	d.tot = nFormatter(+d.tot);
-	d.av = nFormatter(+d.av);
-	d.median = nFormatter(+d.median);
-    });
-    // increment number of items rendered
-    IMAGES_RENDERED += data.length;
-    // compile template
-    var obj = {};
-    obj.files = data;
-    var template = Handlebars.compile(tpl);
-    // append existing content or replace html
-    append ? $('#right_sidebar_list').append(template(obj)) : $('#right_sidebar_list').html(template(obj));
-    // set tatus to finished rendering
-    RENDERING = false;
-    // Prevent defaul when click on "view details"
-    $('.view-details-link').off('click').on('click', function(e) {
-	e.stopPropagation();
-    });
+	// if append not provided, set to false
+	append = append || false;
+	// process data
+	data.forEach(function(d) {
+		d.url = '/'+glam+'/file/'+d.img_name;
+		d.img_name_text = d.img_name.replace(/_/g," ");
+		d.img_name_id = d.img_name.replace(".jpg", "");
+		d.tot = nFormatter(+d.tot);
+		d.av = nFormatter(+d.av);
+		d.median = nFormatter(+d.median);
+	});
+	// increment number of items rendered
+	IMAGES_RENDERED += data.length;
+	// compile template
+	var obj = {};
+	obj.files = data;
+	var template = Handlebars.compile(tpl);
+	// append existing content or replace html
+	append ? $('#right_sidebar_list').append(template(obj)) : $('#right_sidebar_list').html(template(obj));
+	// set tatus to finished rendering
+	RENDERING = false;
+	// Prevent defaul when click on "view details"
+	$('.view-details-link').off('click').on('click', function(e) {
+		e.stopPropagation();
+	});
 }
 
 function loadMoreOnScroll(sort_type) {
