@@ -1,12 +1,3 @@
-<div id="sorting_options" class="row w-100">
-        <span class="col-10">CATEGORIES</span>
-        <span id="by_name" class="active_order">
-            by level
-          </span>
-        <span style="cursor:pointer;" id="desc_order">
-            by total
-          </span>
-      </div>
 {{#each nodes}}
 <div class="list_item">
 		<div class="row">

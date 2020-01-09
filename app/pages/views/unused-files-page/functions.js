@@ -1,12 +1,11 @@
+const glam = window.location.href.toString().split('/')[3];
+const db = window.location.href.toString().split('/')[3];
+const query = window.location.href.toString().split('/')[5];
 let page = 0;
 let ACTIVE_ITEM_ID;
 let SORT_BY = "by_name";
-const glam = window.location.href.toString().split('/')[3];
 let limit = true;
 let category;
-const db = window.location.href.toString().split('/')[3];
-const query = window.location.href.toString().split('/')[5];
-const params = "?page="+page+"&limit=100";
 
 function getUrl() {
 	const urlSplit = window.location.href.toString().split('/');
@@ -48,29 +47,28 @@ function resetHighlighted() {
 	hideUnusedFilesItem();
 }
 
-function sorting_sidebar(){
-	$("#desc_order").on("click", function(){
-		if ($("#desc_order").hasClass("active_order") ) {
-			//console.log("già selezionato")
+function sorting_table(){
+	$("#by_total").on("click", function(){
+		if ($("#by_total").hasClass("active_order") ) {
+			console.log("già selezionato");
 		} else {
-			$("#by_name").toggleClass("active_order");
-			$("#desc_order").toggleClass("active_order");
+			$("#by_level").toggleClass("active_order");
+			$("#by_total").toggleClass("active_order");
 			getCategories("desc_order");
-			$("#desc_order").css("cursor","default");
-			$("#by_name").css("cursor","pointer");
+			$("#by_total").css("cursor","default");
+			$("#by_level").css("cursor","pointer");
 		}
 	});
 	
-	$("#by_name").on("click", function(){
-		if ($("#by_name").hasClass("active_order") ) {
+	$("#by_level").on("click", function(){
+		if ($("#by_level").hasClass("active_order") ) {
 			//console.log("già selezionato")
 		} else {
-			$("#by_name").toggleClass("active_order");
-			$("#desc_order").toggleClass("active_order");
-			$("#category_network_container").find(".circle").removeClass("selected_circle");
+			$("#by_level").toggleClass("active_order");
+			$("#by_total").toggleClass("active_order");
+			$("#by_level").css("cursor","default");
+			$("#by_total").css("cursor","pointer");
 			getCategories("by_name");
-			$("#by_name").css("cursor","default");
-			$("#desc_order").css("cursor","pointer");
 		}
 	});
 }
@@ -129,7 +127,7 @@ function getCategories(order){
 			$.get( template_source , function(tpl) {
 				let template = Handlebars.compile(tpl);
 				$(target).html(template(d));
-				sorting_sidebar();
+				sorting_table(order);
 				highlight();
 			});
 		} else {
@@ -138,7 +136,7 @@ function getCategories(order){
 	});
 }
 
-$(function() {
+$(document).ready(function(){
 	setCategory();
 	let db = window.location.href.toString().split('/')[3];
 	$("#institutionId").attr("href", "/"+db);
