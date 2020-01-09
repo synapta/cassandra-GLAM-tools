@@ -14,10 +14,8 @@ function getUrl() {
 	const db = urlSplit[3];
 	category = urlSplit[5];
 	if (category){
-		console.log( category);
 		query = "?unused=true&cat="+ category;
 	}
-	console.log(query);
 	return "/api/"+db+"/category" + query;
 }
 

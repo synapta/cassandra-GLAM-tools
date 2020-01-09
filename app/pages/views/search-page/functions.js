@@ -60,9 +60,7 @@ function searchFiles(force) {
 
 function loadMoreOnScroll() {
 	if (($("#resultsSearch").scrollTop() + $("#resultsSearch").innerHeight() >= $("#resultsSearch")[0].scrollHeight) && !limit) {
-		// if reached end of div
-		console.log("load more")	;
-		// if there are more elements to load
+		// if reached end of div and there are more elements to load
 		// calc new page number
 		page++;
 		search(true);

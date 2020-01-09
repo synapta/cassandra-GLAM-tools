@@ -22,13 +22,11 @@ function getUrl() {
     const urlSplit = window.location.href.toString().split('/');
     let query = UNUSED_MODE ? "?unused=true" : "";
     const db = urlSplit[3];
-    let category = urlSplit[urlSplit.length-1]?urlSplit[urlSplit.length-1] : urlSplit[urlSplit.length-2]
+    let category = urlSplit[urlSplit.length-1]?urlSplit[urlSplit.length-1] : urlSplit[urlSplit.length-2];
     if (category && category !== 'category-network'){
 			subcategoryName = decodeURI(category);
-			console.log(subcategoryName);
 			query = UNUSED_MODE ? "?unused=true&cat="+ subcategoryName : "?cat="+subcategoryName;
     }
-    console.log(query);
     return "/api/"+db+"/category" + query;
 }
 
@@ -45,191 +43,187 @@ function unusedFilesLink(category,size) {
 }
 
 function dataviz() {
-    let  categoryNetworkContainer = $('#category_network_container');
-    $('#legend').empty();
-    categoryNetworkContainer.empty();
-    
-    let data_source = getUrl();
-    
-    let width = categoryNetworkContainer.width();
-    let height = categoryNetworkContainer.height();
-    
-    let svg = d3.select("#category_network_container")
-	.append("svg")
-	.attr("viewBox", "0 0 " + width + " " + height);
-    
-    let plot = svg.append("g")
-	.attr("id", "d3_plot");
-    
-    let color = d3.scaleOrdinal(d3.schemeCategory20);
-    
-    d3.json(data_source, function(error, data) {
-	if (error){
-	    window.location.replace('/500');
-	}
+	let  categoryNetworkContainer = $('#category_network_container');
+	$('#legend').empty();
+	categoryNetworkContainer.empty();
 	
-	if (!subcategoryName){
-	    subcategoryName = data.nodes[0].id;
-	}
+	let data_source = getUrl();
 	
-	console.log(data)
-	let levels = [];
-	data.nodes.forEach(function(node) {
-	    levels.push(
-		node.group
-	    );
-	});
-	let max_level = d3.max(levels);
-	let dataLegend = [];
-	for (let j = 0; j <= max_level; j++) {
-	    dataLegend.push(j);
-	}
+	let width = categoryNetworkContainer.width();
+	let height = categoryNetworkContainer.height();
 	
-	let legendDiv = d3.select("#legend");
+	let svg = d3.select("#category_network_container")
+		.append("svg")
+		.attr("viewBox", "0 0 " + width + " " + height);
 	
-	let legendRow = legendDiv.selectAll("test")
-	    .data(dataLegend)
-	    .enter()
-	    .append("div")
-	    .style("margin-bottom", "2px");
+	let plot = svg.append("g")
+		.attr("id", "d3_plot");
 	
-	//console.log(data.nodes.length);
+	let color = d3.scaleOrdinal(d3.schemeCategory20);
 	
-	legendRow.append("div")
-	    .html("&nbsp")
-	    .attr("class", "rect")
-	    .style("opacity", function(d, i) { if (data.nodes.length > 100 && i > MAX_LEVEL - 1) return "0.2"; else return "1"; })
-	    .style("background-color", (d, i) => color(i));
-	
-	legendRow.append("div")
-	    .style("opacity", function(d, i) { if (data.nodes.length > 100 && i > MAX_LEVEL - 1) return "0.2"; else return "1"; })
-	    .html(d=> "lv. " + d);
-	
-	let nodi = [];
-	let archi = [];
-	//This code is for reduce graph size when too big
-	if (data.nodes.length > 100) {
-	    for (let i = 0; i < data.nodes.length; i++) {
-		if (data.nodes[i].group < MAX_LEVEL) {
-		    nodi.push(data.nodes[i]);
+	d3.json(data_source, function(error, data) {
+		if (error){
+			window.location.replace('/500');
 		}
-	    }
-	    data.nodes = nodi;
-	// }
-	    for (let j = 0; j < data.edges.length; j++) {
-		let sourceNode = false, targetNode = false;
-		for (let i = 0; i < data.nodes.length; i++) {
-		    if (data.edges[j].source === data.nodes[i].id ) sourceNode = true;
-		    if (data.edges[j].target === data.nodes[i].id ) targetNode = true;
+		
+		if (!subcategoryName){
+			subcategoryName = data.nodes[0].id;
 		}
-		if (sourceNode && targetNode) {
-		    archi.push(data.edges[j]);
-		}
-	    }
-	    data.edges = archi;
-	}
-	
-	let files = [];
-	data.nodes.forEach(function(node) {
-	    files.push(
-		node.files
-	    );
-	});
-	
-	let max_file = d3.max(files),
-	    circle_size = width / max_file / data.nodes.length;
-	
-	let simulation = d3.forceSimulation()
-	    .force("link", d3.forceLink().id(function (d) {
-		    return d.id;
-		})
-		    .distance(function (d, i) {
-			return ((max_file * circle_size));
-		    })
-		    .strength(0.5)
-	    )
-	    .force("charge", d3.forceManyBody())
-	    .force("center", d3.forceCenter(width / 2, height / 2))
-	    .force("collide", d3.forceCollide((circle_size * max_file) + 5));
-	
-	let edges = plot.append("g")
-	    .attr("class", "edges")
-	    .selectAll("line")
-	    .data(data.edges)
-	    .enter()
-	    .append("line")
-	    .attr("class", "line")
-	    .attr("stroke", "#999");
-	
-	let nodes = plot.append("g")
-	    .attr("class", "nodes")
-	    .selectAll(".nodes")
-	    .data(data.nodes)
-	    .enter()
-	    .append("g")
-	    .attr("class", function (d, i) {
-		return d.id.hashCode() + " node";
-	    })
-	    .call(d3.drag()
-		.on("start", dragstarted)
-		.on("drag", dragged)
-		.on("end", dragended)
-	    );
-	
-	let node_circle = nodes.append("circle")
-	    .attr("r", function (d, i) {
-		return Math.min(100, 3 + (d.files * circle_size));
-	    })
-	    .attr("fill", function (d) {
-		return color(d.group);
-	    })
-	    .attr("class", function (d, i) {
-		return "circle " + d.files;
-	    });
-	
-	simulation.nodes(data.nodes).on("tick", ticked);
-	
-	simulation.force("link").links(data.edges);
-	
-	function ticked() {
-	    let x = 1;
-	    
-	    edges
-		.attr("x1", function(d) { return d.source.x * x; })
-		.attr("y1", function(d) { return d.source.y * x; })
-		.attr("x2", function(d) { return d.target.x * x; })
-		.attr("y2", function(d) { return d.target.y * x; });
-	    
-	    nodes
-		.attr("transform", function(d,i) {
-		    let radius = Math.min(100, 3 + (d.files  * circle_size));
-		    d.x = Math.max(radius, Math.min(width - radius, d.x));
-		    d.y = Math.max(radius, Math.min(height - radius, d.y));
-		    return "translate(" + (d.x * x) + "," + (d.y* x) + ")";
+		
+		let levels = [];
+		data.nodes.forEach(function(node) {
+			levels.push(
+				node.group
+			);
 		});
-	    
-	    let q = d3.quadtree(nodes),
-		i = 0,
-		n = nodes.length;
-	}
-	
-	function dragstarted(d) {
-	    if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-	    d.fx = d.x;
-	    d.fy = d.y;
-	}
-	
-	function dragged(d) {
-	    d.fx = d3.event.x;
-	    d.fy = d3.event.y;
-	}
-	
-	function dragended(d) {
-	    if (!d3.event.active) simulation.alphaTarget(0);
-	    d.fx = null;
-	    d.fy = null;
-	}
-    });
+		let max_level = d3.max(levels);
+		let dataLegend = [];
+		for (let j = 0; j <= max_level; j++) {
+			dataLegend.push(j);
+		}
+		
+		let legendDiv = d3.select("#legend");
+		
+		let legendRow = legendDiv.selectAll("test")
+			.data(dataLegend)
+			.enter()
+			.append("div")
+			.style("margin-bottom", "2px");
+		
+		legendRow.append("div")
+			.html("&nbsp")
+			.attr("class", "rect")
+			.style("opacity", function(d, i) { if (data.nodes.length > 100 && i > MAX_LEVEL - 1) return "0.2"; else return "1"; })
+			.style("background-color", (d, i) => color(i));
+		
+		legendRow.append("div")
+			.style("opacity", function(d, i) { if (data.nodes.length > 100 && i > MAX_LEVEL - 1) return "0.2"; else return "1"; })
+			.html(d=> "lv. " + d);
+		
+		let nodi = [];
+		let archi = [];
+		//This code is for reduce graph size when too big
+		if (data.nodes.length > 100) {
+			for (let i = 0; i < data.nodes.length; i++) {
+				if (data.nodes[i].group < MAX_LEVEL) {
+					nodi.push(data.nodes[i]);
+				}
+			}
+			data.nodes = nodi;
+			for (let j = 0; j < data.edges.length; j++) {
+				let sourceNode = false, targetNode = false;
+				for (let i = 0; i < data.nodes.length; i++) {
+					if (data.edges[j].source === data.nodes[i].id ) sourceNode = true;
+					if (data.edges[j].target === data.nodes[i].id ) targetNode = true;
+				}
+				if (sourceNode && targetNode) {
+					archi.push(data.edges[j]);
+				}
+			}
+			data.edges = archi;
+		}
+		
+		let files = [];
+		data.nodes.forEach(function(node) {
+			files.push(
+				node.files
+			);
+		});
+		
+		let max_file = d3.max(files),
+			circle_size = width / max_file / data.nodes.length;
+		
+		let simulation = d3.forceSimulation()
+			.force("link", d3.forceLink().id(function (d) {
+					return d.id;
+				})
+					.distance(function (d, i) {
+						return ((max_file * circle_size));
+					})
+					.strength(0.5)
+			)
+			.force("charge", d3.forceManyBody())
+			.force("center", d3.forceCenter(width / 2, height / 2))
+			.force("collide", d3.forceCollide((circle_size * max_file) + 5));
+		
+		let edges = plot.append("g")
+			.attr("class", "edges")
+			.selectAll("line")
+			.data(data.edges)
+			.enter()
+			.append("line")
+			.attr("class", "line")
+			.attr("stroke", "#999");
+		
+		let nodes = plot.append("g")
+			.attr("class", "nodes")
+			.selectAll(".nodes")
+			.data(data.nodes)
+			.enter()
+			.append("g")
+			.attr("class", function (d, i) {
+				return d.id.hashCode() + " node";
+			})
+			.call(d3.drag()
+				.on("start", dragstarted)
+				.on("drag", dragged)
+				.on("end", dragended)
+			);
+		
+		let node_circle = nodes.append("circle")
+			.attr("r", function (d, i) {
+				return Math.min(100, 3 + (d.files * circle_size));
+			})
+			.attr("fill", function (d) {
+				return color(d.group);
+			})
+			.attr("class", function (d, i) {
+				return "circle " + d.files;
+			});
+		
+		simulation.nodes(data.nodes).on("tick", ticked);
+		
+		simulation.force("link").links(data.edges);
+		
+		function ticked() {
+			let x = 1;
+			
+			edges
+				.attr("x1", function(d) { return d.source.x * x; })
+				.attr("y1", function(d) { return d.source.y * x; })
+				.attr("x2", function(d) { return d.target.x * x; })
+				.attr("y2", function(d) { return d.target.y * x; });
+			
+			nodes
+				.attr("transform", function(d,i) {
+					let radius = Math.min(100, 3 + (d.files  * circle_size));
+					d.x = Math.max(radius, Math.min(width - radius, d.x));
+					d.y = Math.max(radius, Math.min(height - radius, d.y));
+					return "translate(" + (d.x * x) + "," + (d.y* x) + ")";
+				});
+			
+			let q = d3.quadtree(nodes),
+				i = 0,
+				n = nodes.length;
+		}
+		
+		function dragstarted(d) {
+			if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+			d.fx = d.x;
+			d.fy = d.y;
+		}
+		
+		function dragged(d) {
+			d.fx = d3.event.x;
+			d.fy = d3.event.y;
+		}
+		
+		function dragended(d) {
+			if (!d3.event.active) simulation.alphaTarget(0);
+			d.fx = null;
+			d.fy = null;
+		}
+	});
 }
 
 function sorting_sidebar(){
