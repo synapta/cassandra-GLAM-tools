@@ -1,7 +1,7 @@
-let ACTIVE_ITEM_ID;
 const glam = window.location.href.toString().split('/')[3];
-let subcategoryName;
 const w = window;
+let ACTIVE_ITEM_ID;
+let subcategoryName;
 let width = 900; ///w.outerWidth,
 let height = Math.round(width - (width / 3));
 
@@ -227,31 +227,29 @@ function dataviz() {
 }
 
 function sorting_sidebar(){
-    $("#desc_order").on("click", function(){
-	if ($("#desc_order").hasClass("active_order") ) {
-	    //console.log("già selezionato")
-	} else {
-	    $("#by_name").toggleClass("active_order");
-	    $("#desc_order").toggleClass("active_order");
-	    $("#category_network_container").find(".circle").removeClass("selected_circle");
-	    sidebar("desc_order");
-	    $("#desc_order").css("cursor","default");
-	    $("#by_name").css("cursor","pointer");
-	}
-    });
-    
-    $("#by_name").on("click", function(){
-	if ($("#by_name").hasClass("active_order") ) {
-	    //console.log("già selezionato")
-	} else {
-	    $("#by_name").toggleClass("active_order");
-	    $("#desc_order").toggleClass("active_order");
-	    $("#category_network_container").find(".circle").removeClass("selected_circle");
-	    sidebar("by_name");
-	    $("#by_name").css("cursor","default");
-	    $("#desc_order").css("cursor","pointer");
-	}
-    });
+	let descOrderBtn = $("#desc_order");
+	let nameOrderBrn = $("#by_name");
+	descOrderBtn.on("click", function(){
+		if (!descOrderBtn.hasClass("active_order")) {
+			nameOrderBrn.toggleClass("active_order");
+			descOrderBtn.toggleClass("active_order");
+			$("#category_network_container").find(".circle").removeClass("selected_circle");
+			sidebar("desc_order");
+			descOrderBtn.css("cursor","default");
+			nameOrderBrn.css("cursor","pointer");
+		}
+	});
+	
+	nameOrderBrn.on("click", function(){
+		if (!nameOrderBrn.hasClass("active_order")){
+			nameOrderBrn.toggleClass("active_order");
+			descOrderBtn.toggleClass("active_order");
+			$("#category_network_container").find(".circle").removeClass("selected_circle");
+			sidebar("by_name");
+			nameOrderBrn.css("cursor","default");
+			descOrderBtn.css("cursor","pointer");
+		}
+	});
 }
 
 function showUnusedFilesItem() {

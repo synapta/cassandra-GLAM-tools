@@ -120,7 +120,11 @@ function renderSidebarItems(tpl, data, append) {
 	obj.files = data;
 	var template = Handlebars.compile(tpl);
 	// append existing content or replace html
-	append ? $('#right_sidebar_list').append(template(obj)) : $('#right_sidebar_list').html(template(obj));
+	if (append){
+		$('#right_sidebar_list').append(template(obj));
+	} else {
+		$('#right_sidebar_list').html(template(obj));
+	}
 	// set tatus to finished rendering
 	RENDERING = false;
 	// Prevent defaul when click on "view details"

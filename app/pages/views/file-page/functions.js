@@ -75,7 +75,6 @@ function populateSidebar() {
 	    // get usage data
 	    $.getJSON(getUsageDetailsUrl(), function(usage_data) {
 		// get recommender data
-		console.log(usage_data)
 		$.getJSON(getRecommenderUrl(), function(rec_data) {
 		    let file = usage_data[0] ? usage_data[0] : {usage: 0, projects: 0};
 		    // get image thumbnail
@@ -148,7 +147,6 @@ function populateSidebar() {
 			
 			// recommender
 			file.recommender = rec_data;
-			console.log(file);
 			
 			// compile template
 			var template = Handlebars.compile(tpl);

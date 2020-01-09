@@ -64,7 +64,6 @@ function switch_page() {
 
 function searchFiles(force) {
 	let search = $("#searchFilesInput").val();
-	console.log(search,force,search.length);
 	if(event && event.keyCode === 13){
 		force = true;
 	}

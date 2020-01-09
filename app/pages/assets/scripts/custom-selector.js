@@ -116,8 +116,6 @@ $(function() {
                         window.location.href = categories[el.currentTarget.selectedIndex];
                     }
                 });
-              console.log(urlSplit[5]);
-              
             }
         });
     }
