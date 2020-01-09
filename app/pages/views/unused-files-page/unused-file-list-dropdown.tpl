@@ -4,5 +4,4 @@
         <a href="{{url}}" style="text-overflow: ellipsis">{{file}}</a>
     </div>
     {{/each}}
-
 </div>
