@@ -1,0 +1,334 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    overflow-y: auto;
+}
+
+#visualizations {
+    position: relative;
+    height: calc(100vh - 75px - 75px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#visualizations h1{
+    margin-right: 5rem
+}
+
+/* HEADER BAR */
+.top_bar {
+    /* min-height: 3em; */
+    height: 75px;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+#breadcrumbs {
+    display: flex;
+    align-items: center;
+    margin-left: 2rem;
+    width: 100%;
+}
+
+#white-logo {
+    padding-right: 2rem;
+    border-right: 1px solid rgba(255, 255, 255, .5);
+    transition: opacity .5s;
+}
+
+#white-logo:hover {
+    opacity: .5;
+}
+
+#white-logo img {
+    width: 50px;
+    height: 63.22px;
+}
+
+#topbar {
+    background-color: var(--main);
+}
+
+#topbar a {
+    color: white;
+    text-decoration: underline;
+}
+
+#topbar h1 {
+    padding-left: 0.5em;
+}
+
+#topbar h6 {
+    margin: 0 .5rem 0 0;
+    color: #fff;
+    font-weight: 100;
+    font-size: 0.8rem;
+}
+
+#topbar h2 {
+    font-size: 1em;
+    margin: 0;
+}
+
+/* FOOTER */
+#chart-page-footer {
+    display: flex;
+    position: fixed;
+    height: 75px;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #fff;
+    color: var(--main);
+    box-shadow: 0 -1px 15px 0px rgba(0,0,0,.1);
+    border-top: 1px solid rgba(0,0,0,.1);
+    padding: 1.2rem 2rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#chart-page-footer > div {
+    display: flex;
+}
+
+#chart-page-footer h6 {
+    margin-bottom: 0;
+    font-weight: 100;
+    transition: opacity .5s;
+    cursor: pointer;
+}
+
+#chart-page-footer h6:hover {
+    opacity: .4;
+}
+
+#chart-page-footer img {
+    display: inline-block;
+    margin-right: .5rem;
+    position: relative;
+    top: -1px;
+    height: auto;
+}
+
+#chart-page-footer .commons-category{
+    display: flex;
+    align-items: center;
+}
+
+#chart-page-footer .commons-category h6 {
+    margin: 0 .5rem 0 0;
+    font-weight: 100;
+    font-size: 0.8rem;
+}
+
+#chart-page-footer .commons-category h2 {
+    margin: 0 1rem 0 0;
+    text-decoration: underline;
+}
+
+#resultsSearch {
+    /*overflow-y: auto;*/
+    /* overflow-x: visible; */
+    /*max-height: 65vh;*/
+    margin-right: -15px;
+}
+
+#resultsSearch ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#resultsSearch .list_item {
+    display: block;
+    cursor: pointer;
+    padding: 1rem;
+    margin: .5rem;
+    box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, .1);
+    border: 1px solid rgba(100,100,100,.1);
+    transition: all .4s;
+    border-right: 1px solid rgba(0,0,0,.2);
+    /*height: 200px;*/
+}
+
+.selected_list_item_div {
+    background-color: var(--accent-tt);
+}
+
+.itemUnused {
+    color: var(--main);
+
+}
+
+.thumb {
+    display: block;
+    margin: 1rem 0;
+    padding: 1rem 0;
+    max-height: 40vh;
+    max-width: 40vh
+}
+
+.wikis {
+    margin: 1rem 0;
+    padding: 1rem 0;
+}
+@media screen and (max-width: 768px) {}
+
+@media screen and (max-width: 576px) {
+
+    #file-dataviz {
+        padding: 0;
+        height: unset;
+        order: 2;
+    }
+
+    .top_bar {
+        /* flex-direction: column; */
+        /* align-items: baseline; */
+    }
+
+    #white-logo {
+        display: none;
+    }
+
+    #breadcrumbs {
+        flex-direction: column;
+        align-items: baseline;
+        margin-left: 0;
+    }
+
+    #topbar h2 {
+        margin-bottom: 1.3rem;
+    }
+
+    .breadcrumb-separator {
+        display: none;
+    }
+
+    .groupby_container {
+        margin: 1rem 0 .5rem;
+        padding: 0;
+        border: none;
+    }
+
+    #visualizations {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+    }
+
+    #data_visualizations li {
+        float: left;
+        display: block;
+        margin-right: 2.35765%;
+        width: 100%;
+    }
+
+    #data_visualizations li:last-child {
+        margin-right: 0;
+    }
+
+    #data_visualizations li:nth-child(1n) {
+        margin-right: 0;
+    }
+
+    #data_visualizations li:nth-child(1n+1) {
+        clear: left;
+    }
+
+    #sub_header > div {
+        float: none;
+    }
+
+    .file-dataviz-container {
+        /* height: auto; */
+    }
+
+    #visualizations #dataviz {
+        width: 100%;
+        height: auto;
+        margin-bottom: 1rem;
+        overflow: hidden;
+    }
+
+    #usage_horiz_bars {
+        overflow-y: hidden;
+    }
+
+    /* charts container */
+    #main_views_container,
+    #main_contributions_container  {
+        height: 400px;
+        margin-top: 1rem;
+    }
+
+    #chart-page-footer {
+        position: relative;
+        flex-direction: column;
+        max-height: unset;
+        height: auto;
+        padding: 0;
+    }
+
+    #chart-page-footer > div {
+        margin: 1.5rem 0;
+        padding: 0 1rem;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #chart-page-footer .commons-category h6,
+    #chart-page-footer .file-name h6 {
+        margin: .5rem 0;
+        font-size: 1rem;
+    }
+
+    #chart-page-footer > div > div {
+        margin: .7rem 0;
+    }
+
+    #chart-page-footer .file-name {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+
+    #chart-page-footer .chart-title, #chart-page-footer .commons-category {
+        flex-direction: column;
+        border: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    #chart-page-footer .commons-category {
+        align-items: center;
+        margin-top: 1rem;
+    }
+
+    #chart-page-footer .help, #chart-page-footer .download {
+        margin: .5rem 0;
+    }
+}
+
+.searchResults {
+    display: flex;
+    left: 1rem;
+    background-color: #fff;
+    color: var(--main);
+    box-shadow: 0 -1px 15px 0 rgba(0,0,0,.1);
+    border-top: 1px solid rgba(0,0,0,.1);
+    padding: 1rem 1rem 0;
+    /*bottom: 5rem;*/
+    margin-left: 5rem;
+    margin-right: 5rem;
+    /*max-height: 75vh;*/
+}

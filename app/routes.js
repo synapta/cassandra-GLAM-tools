@@ -132,6 +132,15 @@ module.exports = function (app, apicache) {
         }
     });
     
+    app.get('/:id/recommender', apicache("1 hour"), function (req, res) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            res.sendFile(__dirname + '/pages/views/recommender-page/index.html');
+        } else {
+            res.sendStatus(400);
+        }
+    });
+    
     app.get('/:id/user-contributions/:name?', apicache("1 hour"), function (req, res) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
