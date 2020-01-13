@@ -3,6 +3,7 @@ const db = window.location.href.toString().split('/')[3];
 const query = window.location.href.toString().split('/')[5];
 let page = 0;
 let limit = 5;
+let stopScroll = false;
 let category;
 
 function getThumbnailUrl(file, size_in_px, callback) {
@@ -41,6 +42,11 @@ function getUrl() {
 function getFiles() {
 	$.get("/views/recommender-page/recommender.tpl", function (tpl) {
 		$.getJSON(getUrl(), function (files) {
+			if (files.length === 0){
+				$('#resultsSearch').append('<h3 class="col-12 text-center">No more elements to load</h3>');
+				stopScroll = true;
+				// remove handler
+			}
 			// get image thumbnail
 			for (let i = 0; i < files.length; i++) {
 				getThumbnailUrl(files[i].img_name, 500, function (thumbnail_url) {
@@ -76,7 +82,12 @@ function getFiles() {
 							files[i].wikis[j].media = [];
 							for (const prop in data.sitelinks) {
 								if (data.sitelinks.hasOwnProperty(prop)) {
-									files[i].wikis[j].media.push(data.sitelinks[prop]);
+									let lang = prop.split("wiki")[0];
+									let wiki = {};
+									wiki.url = data.sitelinks[prop].url;
+									wiki.lang = lang;
+									wiki.label = data.sitelinks[prop].title;
+									files[i].wikis[j].media.push(wiki);
 								}
 							}
 						}
@@ -88,6 +99,15 @@ function getFiles() {
 			}
 		});
 	});
+}
+
+function loadMore() {
+	if (!stopScroll) {
+		// if reached end of div and there are more elements to load
+		// calc new page number
+		page++;
+		getFiles();
+	}
 }
 
 $(function() {

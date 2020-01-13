@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>File Overview | GLAM stat tool (Cassandra)</title>
+  <title>File Suggestions | GLAM stat tool (Cassandra)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="utf-8">
   <meta http-equiv="Access-Control-Allow-Origin" content="*" />
@@ -10,13 +10,13 @@
   <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-select/1.13.12/css/bootstrap-select.min.css" />
   <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.css" />
   <link rel="stylesheet" href="/assets/style/style.css" />
-  <!--	 <link rel="stylesheet" href="/assets/style/chart-page.css" />-->
+<!--  	 <link rel="stylesheet" href="/assets/style/chart-page.css" />-->
   <link rel="stylesheet" href="/assets/style/recommender-page.css" />
   <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
   <base id="basebase" href="" />
 </head>
 
-<body>
+<body class="overflow_hidden">
 <div id="mobile-sidebar" class="ui left sidebar"></div>
 <div class="pusher">
 
@@ -29,22 +29,33 @@
     <div id="breadcrumbs">
       <h6>INSTITUTION</h6>
       <h2><a id="institutionId" class="glamName" href=""></a></h2>
+      <span class="breadcrumb-separator"> > </span>
+      <h6>CHART</h6>
+      <div class="select-chart">
+        <select id="switch_page">
+          <option selected value="recommender">Suggestions</option>
+          <option value="category-network">Category network</option>
+          <option value="user-contributions">User contributions</option>
+          <option value="usage">Usage</option>
+          <option value="page-views">Views</option>
+        </select>
+      </div>
     </div>
   </header>
 
   <main id="visualizations">
-    <div class="col-12 text-center m-3">
-      <h1>UNUSED FILES SUGGESTIONS</h1>
-    </div>
-    <div class="searchResults row">
-      <div id="sorting_options" class="row w-100">
-        <div id="resultsSearch" class="w-100"></div>
-      </div>
+    <div id="resultsSearch" class="w-100"></div>
+    <div class="w-100">
+      <button id="loadMore" onclick="loadMore()">Load More</button>
     </div>
   </main>
 
   <footer id="chart-page-footer">
     <div>
+      <div class="chart-title">
+        <img src="/assets/img/category-network.svg" alt="UNUSED FILES SUGGESTIONS">
+        <h5>UNUSED FILES SUGGESTIONS</h5>
+      </div>
       <div class="commons-category">
         <h6>CATEGORY IN COMMONS</h6>
         <h2>
