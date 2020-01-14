@@ -10,11 +10,16 @@ var ACTIVE_ITEM_ID;
 
 function getSubcategoryTotal() {
 	const urlSplit = window.location.href.toString().split('/');
+	let jsonurl = "/api/" + glam;
 	if (urlSplit[5]){
-		let url = "/api/"+urlSplit[3]+"/category?cat"+urlSplit[5];
-		$.getJSON(url).then(res=>{
-			let tot = res.nodes[0].files;
-			$('#totalMediaNum').text(formatter(tot));
+		$.getJSON(jsonurl, function(d) {
+			if (d && d.category !== urlSplit[5]){
+				let url = "/api/"+urlSplit[3]+"/category?cat"+urlSplit[5];
+				$.getJSON(url).then(res=>{
+					let tot = res.nodes[0].files;
+					$('#totalMediaNum').text(formatter(tot));
+				});
+			}
 		});
 	}
 }
@@ -132,7 +137,7 @@ function renderImageListItems(tpl, data, append) {
 			// check if not already added
 			if (currentWiki !== page.wiki) {
 				// reset temp object
-				wiki_obj = {}
+				wiki_obj = {};
 				wiki_obj.wiki_links = [];
 				// update current wiki
 				currentWiki = page.wiki;
@@ -172,7 +177,6 @@ function renderImageListItems(tpl, data, append) {
 	});
 }
 
-
 function loadMoreOnScroll(sort_type) {
     // if reached end of div
     if (($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) && !RENDERING) {
@@ -186,7 +190,7 @@ function loadMoreOnScroll(sort_type) {
 		$.getJSON(getUrlPaginated(page, sort_type), function(data) {
 		    RENDERING = true;
 		    // last argument to true calls append() instead of html()
-		    renderImageListItems(tpl, data, true)
+		    renderImageListItems(tpl, data, true);
 		    // manage click
 		    highlightOnClick();
 		});
@@ -215,7 +219,7 @@ function highlightOnClick(string) {
 	    turnOffUsageBars();
 	} else {
 	    $(".list_item").removeClass("list_item_active");
-	    $(this).addClass("list_item_active")
+	    $(this).addClass("list_item_active");
 	    ACTIVE_ITEM_ID = $(this).attr("id");
 	    // from horiz-bar-chart.js
 	    highlightUsageBars($(this).data("wikilist"));
@@ -236,7 +240,7 @@ function sorting_sidebar() {
 	    $("#by_name").css("cursor","pointer");
 	    $("#by_proj").css("cursor","pointer");
 	}
-    })
+    });
     
     $("#by_proj").on("click", function(){
 	if ($("#by_proj").hasClass("active_order") ) {
@@ -250,7 +254,7 @@ function sorting_sidebar() {
 	    $("#by_num").css("cursor","pointer");
 	    $("#by_proj").css("cursor","default");
 	}
-    })
+    });
     
     $("#by_name").on("click", function(){
 	if ($("#by_name").hasClass("active_order") ) {
@@ -264,7 +268,7 @@ function sorting_sidebar() {
 	    $("#by_num").css("cursor","pointer");
 	    $("#by_proj").css("cursor","pointer");
 	}
-    })
+    });
 }
 
 function download(){
@@ -278,11 +282,11 @@ function how_to_read() {
     $("#how_to_read_button").click(function(){
 	box.toggleClass("show");
     });
-};
+}
 
 function drawUsageDataViz() {
     d3.json(getUrlAll(), function(error, data) {
-        console.log(data)
+        console.log(data);
 	// Manage error
 	if (error) window.location.href('/500');
 	// Draw stats data
