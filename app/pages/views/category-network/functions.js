@@ -49,18 +49,6 @@ function dataviz() {
 	
 	let data_source = getUrl();
 	
-	let width = categoryNetworkContainer.width();
-	let height = categoryNetworkContainer.height();
-	
-	let svg = d3.select("#category_network_container")
-		.append("svg")
-		.attr("viewBox", "0 0 " + width + " " + height);
-	
-	let plot = svg.append("g")
-		.attr("id", "d3_plot");
-	
-	let color = d3.scaleOrdinal(d3.schemeCategory20);
-	
 	d3.json(data_source, function(error, data) {
 		if (error){
 			window.location.replace('/500');
@@ -71,6 +59,23 @@ function dataviz() {
 		}
 		
 		let levels = [];
+		if (data.nodes.length === 0){
+			$("#category_network_container").append("<h1>No results with this filters</h1>");
+			$("#right-column").hide();
+			return;
+		}
+		
+		let width = categoryNetworkContainer.width();
+		let height = categoryNetworkContainer.height();
+		
+		let svg = d3.select("#category_network_container")
+			.append("svg")
+			.attr("viewBox", "0 0 " + width + " " + height);
+		
+		let plot = svg.append("g")
+			.attr("id", "d3_plot");
+		
+		let color = d3.scaleOrdinal(d3.schemeCategory20);
 		data.nodes.forEach(function(node) {
 			levels.push(
 				node.group
@@ -283,6 +288,67 @@ function hideUnusedFilesItem() {
 	}
 }
 
+function highlight() {
+	if (ACTIVE_ITEM_ID !== undefined) {
+		$('#' + ACTIVE_ITEM_ID).closest('.list_item').addClass('list_item_active');
+		$("#category_network_container").find("." + ACTIVE_ITEM_ID).children(".circle").addClass("selected_circle");
+		showUnusedFilesItem();
+	}
+	// from Sidebar to Graph
+	$(".list_item").on("click", function() {
+		let element = $(this).find(".id").attr("id");
+		if ($(this).hasClass('list_item_active')) {
+			// reset
+			resetHighlighted();
+			ACTIVE_ITEM_ID = undefined;
+		} else {
+			// reset
+			resetHighlighted();
+			// highlight item
+			$(this).addClass('list_item_active');
+			// turn on circle
+			let node_selected = $("#category_network_container").find("." + element).children(".circle");
+			node_selected.toggleClass("selected_circle");
+			ACTIVE_ITEM_ID = element;
+			showUnusedFilesItem();
+		}
+	});
+	
+	// from Graph to Sidebar
+	$(".node").on("click", function() {
+		let e = $(this).attr("class");
+		let element = e.split(" ",1);
+		$('.list_item').removeClass('list_item_active');
+		// reset Sidebar - Dataviz
+		$("#right_sidebar_list .id").removeClass("selected_list_item");
+		$("#category_network_container").find(".circle").removeClass("selected_circle");
+		
+		// highlight Graph
+		let node_selected = $(this).children(".circle");
+		node_selected.toggleClass("selected_circle");
+		
+		// highlight Sidebar
+		let selected = $("#right_sidebar_list").find("#" + element);
+		ACTIVE_ITEM_ID = element;
+		// selected.toggleClass("selected_list_item");
+		selected.closest('.list_item').addClass("list_item_active");
+		showUnusedFilesItem();
+		document.getElementById(element).scrollIntoView({
+			// behavior: "smooth",
+			block: "center"
+		});
+		document.getElementById('topbar').scrollIntoView();
+	});
+}
+
+function resetHighlighted() {
+	// reset item highlight
+	$('.list_item').removeClass('list_item_active');
+	// and circle
+	$("#category_network_container").find(".circle").removeClass("selected_circle");
+	hideUnusedFilesItem();
+}
+
 function sidebar(order) {
 	if (order === undefined) {
 		order = SORT_BY;
@@ -294,69 +360,11 @@ function sidebar(order) {
 	let data_source = getUrl();
 	let target = "#right_sidebar_list";
 	
-	function highlight() {
-		if (ACTIVE_ITEM_ID !== undefined) {
-			$('#' + ACTIVE_ITEM_ID).closest('.list_item').addClass('list_item_active');
-			$("#category_network_container").find("." + ACTIVE_ITEM_ID).children(".circle").addClass("selected_circle");
-			showUnusedFilesItem();
-		}
-		// from Sidebar to Graph
-		$(".list_item").on("click", function() {
-			let element = $(this).find(".id").attr("id");
-			if ($(this).hasClass('list_item_active')) {
-				// reset
-				resetHighlighted();
-				ACTIVE_ITEM_ID = undefined;
-			} else {
-				// reset
-				resetHighlighted();
-				// highlight item
-				$(this).addClass('list_item_active');
-				// turn on circle
-				let node_selected = $("#category_network_container").find("." + element).children(".circle");
-				node_selected.toggleClass("selected_circle");
-				ACTIVE_ITEM_ID = element;
-				showUnusedFilesItem();
-			}
-		});
-		
-		// from Graph to Sidebar
-		$(".node").on("click", function() {
-			let e = $(this).attr("class");
-			let element = e.split(" ",1);
-			$('.list_item').removeClass('list_item_active');
-			// reset Sidebar - Dataviz
-			$("#right_sidebar_list .id").removeClass("selected_list_item");
-			$("#category_network_container").find(".circle").removeClass("selected_circle");
-			
-			// highlight Graph
-			let node_selected = $(this).children(".circle");
-			node_selected.toggleClass("selected_circle");
-			
-			// highlight Sidebar
-			let selected = $("#right_sidebar_list").find("#" + element);
-			ACTIVE_ITEM_ID = element;
-			// selected.toggleClass("selected_list_item");
-			selected.closest('.list_item').addClass("list_item_active");
-			showUnusedFilesItem();
-			document.getElementById(element).scrollIntoView({
-				// behavior: "smooth",
-				block: "center"
-			});
-			document.getElementById('topbar').scrollIntoView();
-		});
-	}
-	
-	function resetHighlighted() {
-		// reset item highlight
-		$('.list_item').removeClass('list_item_active');
-		// and circle
-		$("#category_network_container").find(".circle").removeClass("selected_circle");
-		hideUnusedFilesItem();
-	}
-	
 	$.get( template_source , function(tpl) {
 		$.getJSON( data_source , function(d) {
+			if (d.nodes.length === 0){
+				return;
+			}
 			sortNodes(d,order);
 			
 			let template = Handlebars.compile(tpl);
