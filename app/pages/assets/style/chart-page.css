@@ -293,7 +293,7 @@
 #right_sidebar_list {
   overflow-y: auto;
   /* overflow-x: visible; */
-  height: 90vh;
+  height: 80vh;
   margin-right: -15px;
 }
 
