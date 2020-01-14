@@ -9,7 +9,7 @@
 					<a style="text-decoration:underline" href="https://commons.wikimedia.org/wiki/File:{{img_name}}" title="{{img_name_text}}" target="_blank">
 						view on Commons <img class="link-out-small" src="/assets/img/link-out.svg" alt="go">
 					</a>
-					<a class="view-details-link"style="text-decoration:underline; margin-left:1rem;" href="../file/{{img_name}}" title="{{name}}">
+					<a class="view-details-link"style="text-decoration:underline; margin-left:1rem;" href="{{url}}" title="{{img_name_text}}">
 						view details
 					</a>
 				</div>

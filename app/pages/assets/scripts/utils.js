@@ -19,13 +19,14 @@ function nFormatter(num) {
 
 function setCategory() {
   	var db = window.location.href.toString().split('/')[3];
+  	var subcat = window.location.href.toString().split('/')[5];
   	var jsonurl = "/api/" + db;
 
   	$.getJSON(jsonurl, function(d) {
   	    $('#totalMediaNum').text(formatter(d.files));
-      	$('#cat_url').text(decodeURIComponent(d.category).replace("Category:",""));
-      	$("#cat_url").attr("href", "https://commons.wikimedia.org/wiki/"+d.category);
-      	$("#cat_url").attr("title", decodeURIComponent(d.category));
+      	$('#cat_url').text(decodeURIComponent(subcat ? subcat :d.category).replace("Category:",""));
+      	$("#cat_url").attr("href", "https://commons.wikimedia.org/wiki/"+(subcat ? subcat :d.category));
+      	$("#cat_url").attr("title", decodeURIComponent((subcat ? subcat :d.category)));
         $(".glamName").text(d.fullname);
         $('#cover').css('background-image', 'url(' + d.image + ')');
   	});
@@ -60,10 +61,14 @@ function switch_page() {
     		return false;
   	});
 }
+function fixedEncodeURIComponent(str) {
+	return encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
+		return '%' + c.charCodeAt(0).toString(16);
+	});
+}
 
 function searchFiles(force) {
 	let search = $("#searchFilesInput").val();
-	console.log(search,force,search.length);
 	if(event && event.keyCode === 13){
 		force = true;
 	}
@@ -161,4 +166,34 @@ var fixDataViz = function (data, field) {
     data[data.length - 1][field] = moment(data[data.length - 1][field]).utc(true).add(dateDelta);
   }
   return data;
+}
+
+function sortNodes(d,order) {
+	const glam = window.location.href.toString().split('/')[3];
+	if (order === "desc_order"){
+		d.nodes.sort( function(a,b) {
+			return b.files - a.files;
+		});
+	}
+	else if (order === "asc_order") {
+		d.nodes.sort( function(a,b) {
+			return a.files - b.files;
+		});
+	}
+	if (order === "by_name"){
+		d.nodes.sort( function(a,b) {
+			let res = a.group - b.group;
+			if(res === 0)
+				res = b.files-a.files;
+			return res;
+		});
+	}
+	
+	for (let i = 0; i < d.nodes.length; i++) {
+		d.nodes[i].name = d.nodes[i].id.replace(/_/g," ");
+		d.nodes[i].files = nFormatter(d.nodes[i].files);
+		d.nodes[i].id_encoded = d.nodes[i].id.hashCode();
+		d.nodes[i].url = '/'+glam+'/category-network/'+d.nodes[i].id;
+		d.nodes[i].urlUnused = '/'+glam+'/category-network/'+d.nodes[i].id+'/unused';
+	}
 }

@@ -702,3 +702,6 @@ footer {
     font-size: 2.5rem;
   }
 }
+.w-20 {
+  max-width: 20%;
+}

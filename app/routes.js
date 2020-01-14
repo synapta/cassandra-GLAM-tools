@@ -123,6 +123,24 @@ module.exports = function (app, apicache) {
         }
     });
     
+    app.get('/:id/category-network/:name/unused', apicache("1 hour"), function (req, res) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            res.sendFile(__dirname + '/pages/views/unused-files-page/index.html');
+        } else {
+            res.sendStatus(400);
+        }
+    });
+    
+    app.get('/:id/recommender/:name?', apicache("1 hour"), function (req, res) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            res.sendFile(__dirname + '/pages/views/recommender-page/index.html');
+        } else {
+            res.sendStatus(400);
+        }
+    });
+    
     app.get('/:id/user-contributions/:name?', apicache("1 hour"), function (req, res) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
@@ -401,10 +419,19 @@ module.exports = function (app, apicache) {
         }
     });
 
-    app.get('/api/:id/recommender/:file', apicache("1 hour"), function (req, res, next) {
+    app.get('/api/:id/recommender', apicache("1 hour"), function (req, res, next) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             api.recommender(req, res, next, glam.connection);
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
+    app.get('/api/:id/recommender/:file', apicache("1 hour"), function (req, res, next) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            api.recommenderByFile(req, res, next, glam.connection);
         } else {
             res.sendStatus(400);
         }

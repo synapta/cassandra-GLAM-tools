@@ -19,6 +19,7 @@
 			</tbody>
 		</table>
 	</div>
+	{{#if usage}}
 	<div class="file_details_projects file_details_section">
 		<h2>USED IN <span>{{usage}}</span> PAGES OF <span>{{projects}}</span> PROJECTS</h2>
 		<table>
@@ -38,6 +39,29 @@
 			</tbody>
 		</table>
 	</div>
+	{{else}}
+	{{#if recommender.length}}
+	<div class="file_details_projects file_details_section">
+		<h2>RELATED WIKIDATA ENTITIES</h2>
+		<table>
+			<tbody>
+			{{#each recommender}}
+			<tr>
+				<td>
+					<a href="{{url}}" target="_blank">{{label}}</a>
+				</td>
+				{{#each wikis}}
+				<td>
+					<a href="{{url}}" style="font-size:0.9em;margin-right:2em">{{site}}</a>
+				</td>
+			{{/each}}
+			</tr>
+			{{/each}}
+			</tbody>
+		</table>
+	</div>
+	{{/if}}
+	{{/if}}
 	<div class="file_details_views file_details_section">
 		<h2>VIEWS STATS</h2>
 		<table>
@@ -57,21 +81,4 @@
 			</tbody>
 		</table>
 	</div>
-	{{#if recommender.length}}
-	<div class="file_details_projects file_details_section">
-		<h2>RELATED WIKIDATA ENTITIES</h2>
-		<table>
-			<tbody>
-				{{#each recommender}}
-					<tr>
-						<td>
-							<a href="{{url}}" target="_blank">{{title}}</a>
-						</td>
-					</tr>
-				{{/each}}
-			</tbody>
-		</table>
-	</div>
-	{{else}}
-	{{/if}}
 </div>

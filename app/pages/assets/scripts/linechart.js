@@ -37,7 +37,7 @@ var lineChartDraw = function(div, query) {
   d3.json(query, function(error, data) {
     if (error) {
       console.error(error);
-    };
+    }
 
     $(document).ready(function() {
       lineChart(div, fixDataViz(data, 'date'));
@@ -45,7 +45,7 @@ var lineChartDraw = function(div, query) {
   });
 }
 
-function lineChart(div, data) {
+function lineChart(div, data, min, max) {
 
   $("#svg-graph").remove();
 
@@ -114,7 +114,7 @@ function lineChart(div, data) {
 
   // SET DOMAINS
   x.domain(d3.extent(data, function(d) { return d.date; }));
-  y.domain([d3.min(data, function(d) { return d.views; }), d3.max(data, function(d) { return d.views; })]);
+  y.domain([d3.min(data, function(d) { return d.views; })*0.8, d3.max(data, function(d) { return d.views; })*1.2]);
 
   // BRUSH DOMAINS
   x2.domain(x.domain());
@@ -168,13 +168,29 @@ function lineChart(div, data) {
                    .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
   var valueline = d3.line()
-                    .x(function(d) { return x(d.date); })
-                    .y(function(d) { return y(d.views); })
+                    .x(function(d) {
+                      if (!d){
+                        return 0;
+                      } else {
+                        return x(d.date);
+                      }
+                      })
+                    .y(function(d) { if (!d){
+                      return 0;
+                    }  else {
+                      return y(d.views);
+                    } })
                     .curve(d3.curveStepAfter);
 
   var valueline2 = d3.line()
-                     .x(function(d) { return x2(d.date); })
-                     .y(function(d) { return y2(d.views); })
+                     .x(function(d) { if (!d){
+                       return 0;
+                     } else {
+                       return x2(d.date);} })
+                     .y(function(d) { if (!d){
+                       return 0;
+                     } else {
+                       return y2(d.views);} })
                      .curve(d3.curveLinear);
 
   // GRID INSIDE THE GRAPH
