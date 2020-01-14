@@ -111,8 +111,18 @@ function loadMore() {
 	}
 }
 
+function how_to_read(){
+	let button = $("#how_to_read_button");
+	let box = $(".how_to_read");
+	
+	button.click(function(){
+		box.toggleClass("show");
+	});
+}
+
 $(function() {
 	setCategory();
+	how_to_read();
 	let db = window.location.href.toString().split('/')[3];
 	$("#institutionId").attr("href", "/"+db);
 	getFiles();

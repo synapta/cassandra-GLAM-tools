@@ -45,6 +45,18 @@
   </header>
 
   <main id="visualizations">
+    <div class="how_to_read">
+      <span onclick='$(".how_to_read").toggleClass("show");' style="float:right; cursor:pointer">X</span>
+      <h5>Description</h5>
+      This page shows some unused files belonging to the selected category with links to wikidata and wikipedia pages where they can be used.
+      <br><br>
+      <h5>How to read it</h5>
+      In the column WikiData Suggestion there are the link to wikidata pages where you can use the selected image.
+      In the Wikipedia Pages column there are links to the wikipedia pages corresponding to that of wikidata on the same row, divided by language.
+      <br><br>
+      <h5>How to use it</h5>
+      On the right menu you can order files by views, by median or by name.
+    </div>
     <div id="resultsSearch" class="w-100"></div>
     <div class="w-100">
       <button id="loadMore" onclick="loadMore()">Load More</button>
@@ -65,6 +77,10 @@
         </h2>
       </div>
     </div>
+    <div>
+      <div class="help">
+        <h6 id="how_to_read_button"><img src="/assets/img/question-icon.svg" alt="help">HELP</h6>
+      </div>
   </footer>
 </div>
 <script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
