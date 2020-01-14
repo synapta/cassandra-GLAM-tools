@@ -1309,9 +1309,27 @@ var recommender = function (req, res, next, db) {
                     LEFT JOIN usages u ON i.img_name = u.gil_to
                     INNER JOIN recommendations r ON i.img_name = r.img_name
                     WHERE (u.is_alive = FALSE
-                    OR u.is_alive IS NULL)
-                    GROUP BY r.img_name, last_update
-                    ORDER BY avg(score) DESC, last_update DESC, r.img_name`;
+                    OR u.is_alive IS NULL)`;
+
+    let parameters = [];
+
+    if (req.query.cat !== undefined) {
+        query += ` AND i.cl_to && ARRAY( 
+                    WITH RECURSIVE subcategories AS (
+                    SELECT page_title, cl_to
+                    FROM categories
+                    WHERE page_title = $1
+                    UNION
+                    SELECT c.page_title, c.cl_to
+                    FROM categories c
+                    INNER JOIN subcategories s ON s.page_title = ANY(c.cl_to))
+                    SELECT DISTINCT page_title
+                    FROM subcategories)`;
+        parameters.push(req.query.cat);
+    }
+
+    query += ` GROUP BY r.img_name, last_update
+                ORDER BY avg(score) DESC, last_update DESC, r.img_name`;
 
     let page = 0;
     if (req.query.page !== undefined) {
@@ -1327,7 +1345,7 @@ var recommender = function (req, res, next, db) {
 
     query += " LIMIT " + limit + " OFFSET " + offset;
 
-    db.query(query, (err, dbres) => {
+    db.query(query, parameters, (err, dbres) => {
         if (!err) {
             let result = [];
 

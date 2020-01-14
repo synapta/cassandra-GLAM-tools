@@ -796,6 +796,11 @@ mediaType: application/json
     description: List of unused files and the associated Wikidata items.
     get:
       queryParameters:
+        cat:
+          description: The subcategory used to filter the results.
+          type: string
+          example: "Kloster_Oetenbach"
+          required: false
         page:
           description: The page of the results.
           type: integer
