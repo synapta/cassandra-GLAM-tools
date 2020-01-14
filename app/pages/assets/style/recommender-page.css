@@ -244,6 +244,30 @@ body {
     text-decoration: underline;
 }
 
+/* HOW  TO READ */
+#how_to_read_button:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.how_to_read {
+    display: none;
+    z-index: 9;
+    position: absolute;
+    margin: 1em;
+    background-color: #fff;
+    border: 3px dotted var(--accent-green);
+    padding: 2em;
+    font-size: 0.8em;
+    width: calc(100% - 3em);
+    box-shadow: 5px 5px 30px 0px rgba(0, 0, 0, .2);
+}
+
+.how_to_read h5 {
+    text-transform: uppercase;
+    color: var(--main);
+}
+
 #resultsSearch {
     /*overflow-y: auto;*/
     /* overflow-x: visible; */

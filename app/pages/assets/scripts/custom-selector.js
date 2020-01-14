@@ -102,7 +102,7 @@ $(function() {
                 opts += "<option>"+decodeURI(urlSplit[5]).replace(/[_\-]+/g," ")+"</option>";
               }
                 res.nodes.forEach(cat =>{
-                  if (cat.id !== urlSplit[5]){
+                  if (cat.id !== decodeURI(urlSplit[5])){
                     let name = cat.id.replace(/[_\-]+/g," ");
                     let ref = urlSplit[0]+'/'+urlSplit[1]+'/'+urlSplit[2]+'/'+ urlSplit[3] + '/'+urlSplit[4] + '/'+ cat.id + '/'+(urlSplit[6]?decodeURI(urlSplit[6]):'');
                     opts += "<option>"+name+"</option>";
