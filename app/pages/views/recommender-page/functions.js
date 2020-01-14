@@ -34,7 +34,7 @@ function getUrl() {
 	const db = urlSplit[3];
 	category = urlSplit[5];
 	if (category){
-		query = "?unused=true&cat="+ category;
+		query = query + "&cat="+ category;
 	}
 	return "/api/"+db+"/recommender" + query;
 }
@@ -44,6 +44,7 @@ function getFiles() {
 		$.getJSON(getUrl(), function (files) {
 			if (files.length === 0){
 				$('#resultsSearch').append('<h3 class="col-12 text-center">No more elements to load</h3>');
+				$('#loadMore').hide();
 				stopScroll = true;
 				// remove handler
 			}

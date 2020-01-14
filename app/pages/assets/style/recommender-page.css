@@ -280,8 +280,6 @@ body {
 
 .thumb {
     display: block;
-    margin: 1rem 0;
-    padding: 1rem 0;
     max-height: 40vh;
     max-width: 100%
 }
