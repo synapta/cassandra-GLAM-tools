@@ -25,7 +25,7 @@
             <a href="{{url}}"  title="{{label}}"  target="_blank">{{label}}</a>
           </div>
             {{#each media}}
-          <div class="col-3 text-truncate">
+          <div class="col-2 text-truncate">
             <span>{{lang}} : </span> <a href="{{url}}" title="{{label}}" style="font-size:0.9em;margin-right:2em">{{label}}</a>
           </div>
           {{/each}}

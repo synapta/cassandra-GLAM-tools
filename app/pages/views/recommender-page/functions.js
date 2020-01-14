@@ -19,8 +19,8 @@ function getThumbnailUrl(file, size_in_px, callback) {
 }
 
 function getWikiDataUrl(ids) {
-	const url = "https://www.wikidata.org/w/api.php?action=wbgetentities&props=labels|sitelinks/urls&languages=en|fr|de|it&sitefilter=enwiki|frwiki|dewiki|itwiki&format=json";
-	let idMerge = "&ids=";
+	const url = "/api/wikidata/";
+	let idMerge ="";
 	for (let i = 0; i<ids.length-1; i++){
 		idMerge += ids[i]+"|";
 	}

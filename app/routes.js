@@ -1,4 +1,5 @@
 var express = require('express');
+var request = require('request');
 var api = require('./api.js');
 var auth = require('http-auth');
 
@@ -435,6 +436,20 @@ module.exports = function (app, apicache) {
         } else {
             res.sendStatus(400);
         }
+    });
+    
+    app.get('/api/wikidata/:ids', apicache("1 hour"), function (req, res, next) {
+        let url = "https://www.wikidata.org/w/api.php?action=wbgetentities&props=labels|sitelinks/urls&languages=en|fr|de|it&sitefilter=enwiki|frwiki|dewiki|itwiki&format=json&ids="+req.params.ids;
+        request(url,function (error, response, body){
+            if (error){
+                if (response && response.statusCode) {
+                    res.error(error);
+                    res.sendStatus(response.statusCode);
+                }
+            } else {
+                res.json(JSON.parse(response.body));
+            }
+        });
     });
 
     // NOT FOUND
