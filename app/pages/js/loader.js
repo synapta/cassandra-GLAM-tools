@@ -23,7 +23,7 @@ $('#main-sidebar').load('/views/templates/sidebar.html', function() {
       if (glams.length > 0) {
         glams.forEach(function(g) {
           // create list element with link
-          let list_element = $('<li>');
+          var list_element = $('<li>');
           let a = $('<a>');
           // set attrs
           a.html(g['fullname']);
