@@ -43,7 +43,13 @@ module.exports = function (app, apicache) {
             let auth_basic = auth.basic({
                 realm: auth_config['realm']
             }, function (username, password, callback) {
-                callback(username === auth_config['username'] && password === auth_config['password']);
+                for (let i=0; i<auth_config.length; i++){
+                    if (username === auth_config[i]['username'] && password === auth_config[i]['password']){
+                        callback(true);
+                        return;
+                    }
+                }
+                callback(false);
             });
             (auth.connect(auth_basic))(req, res, next);
         }

@@ -17,10 +17,16 @@
         "password": "",
         "database": "commonswiki_p"
     },
-    "admin": {
-        "username": "admin",
-        "password": "PASSWORD"
-    },
+    "admin": [
+        {
+            "username": "admin",
+            "password": "PASSWORD"
+        },
+        {
+            "username": "glam",
+            "password": "PASSWORD"
+        }
+    ],
     "limits": {
         "categories": 1000,
         "images": 500000

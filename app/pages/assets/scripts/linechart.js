@@ -45,7 +45,7 @@ var lineChartDraw = function(div, query) {
   });
 }
 
-function lineChart(div, data, min, max) {
+function lineChart(div, data) {
 
   $("#svg-graph").remove();
 
@@ -53,12 +53,11 @@ function lineChart(div, data, min, max) {
 
   var margin = {};
   var margin2 = {};
-  var kH;
   var availH;
 
   if (WINDOW_WIDTH < 576) {  // smartphones
     availH = $("#" + div).outerHeight();
-    margin = { top: 10, right: 15, bottom: 140, left: 15 };
+    margin = { top: 10, right: 20, bottom: 140, left: 20 };
     margin2 = { top: availH - margin.bottom + 30, right: 15, bottom: 50, left: 15 };
   } else { // tablets and desktop
     availH = $("#" + div).outerHeight() * 0.82;
@@ -71,26 +70,28 @@ function lineChart(div, data, min, max) {
       height2 = availH - margin2.top - margin2.bottom;
 
   var parseTime = d3.isoParse;
-
+  
+  // SCALE OBJECTS
+  var x = d3.scaleTime().range([0, width]);
+  var y = d3.scaleLog().range([height, 0]);
+  
+  // BRUSH SCALES
+  var x2 = d3.scaleTime().range([0, width]);
+  var y2 = d3.scaleLog().range([height2, 0]);
+  
   var image_valueline, image_path, img_data;
-
-  // FORMAT DATA
-  data.forEach(function(d) {
-    d.date = parseTime(d.date);
-    d.views = +d.views;
-  });
-
+  
   // Brush function
   var brush = d3.brushX()
-                .extent([[0, 0], [width, height2]])
-                .on("brush end", brushFunction);
-
+    .extent([[0, 0], [width, height2]])
+    .on("brush end", brushFunction);
+  
   // Zoom Function
   var zoom = d3.zoom()
-               .scaleExtent([1, 80])
-               .translateExtent([[0, 0], [width, height]])
-               .extent([[0, 0], [width, height]])
-               .on("zoom", zoomFunction);
+    .scaleExtent([1, 80])
+    .translateExtent([[0, 0], [width, height]])
+    .extent([[0, 0], [width, height]])
+    .on("zoom", zoomFunction);
 
   // Main SVG
   var svg = d3.select("#" + div)
@@ -101,17 +102,15 @@ function lineChart(div, data, min, max) {
               .attr("height", height + margin.top + margin.bottom)
               .append("g")
               .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
-// SCALE OBJECTS
-  var x = d3.scaleTime().range([0, width]);
-  var y = d3.scaleLog().range([height, 0]);
-
-  // BRUSH SCALES
-  var x2 = d3.scaleTime().range([0, width]);
-  var y2 = d3.scaleLog().range([height2, 0]);
-
-
+  
+  
+  // FORMAT DATA
+  data.forEach(function(d) {
+    d.date = parseTime(d.date);
+    d.views = +d.views;
+  });
+  
+  
   // SET DOMAINS
   x.domain(d3.extent(data, function(d) { return d.date; }));
   y.domain([d3.min(data, function(d) { return d.views; })*0.8, d3.max(data, function(d) { return d.views; })*1.2]);
@@ -122,6 +121,7 @@ function lineChart(div, data, min, max) {
 
   // AXIS, draw ticks
   var xAxis;
+  var xAxis2 = d3.axisBottom(x2);
   var groupby2dateFormat = {
     'day': ['%Y-%m-%d', 12],
     // 'week': ['%Y w%W', 12],
@@ -135,7 +135,11 @@ function lineChart(div, data, min, max) {
   )).ticks(
     groupby2dateFormat[$('#groupby-select').val()][1]
   );
-  var xAxis2 = d3.axisBottom(x2);
+  
+
+  if ($('#groupby-select').val() === "year"){
+    xAxis2 =  d3.axisBottom().scale(x2).tickFormat(d3.timeFormat('%Y')).ticks(5);
+  }
 
   // var yAxis = d3.axisLeft(y).ticks(20).tickFormat(d3.formatPrefix(".0", 1)).tickSize(6, 0);
 
@@ -149,6 +153,7 @@ function lineChart(div, data, min, max) {
                 .append("svg:clipPath")
                 .attr("id", "clip")
                 .append("svg:rect")
+                .attr("id", "clip-rect")
                 .attr("width", width)
                 .attr("height", height)
                 .attr("x", 0)
@@ -635,7 +640,7 @@ function lineChart(div, data, min, max) {
         'year': "YYYY"
       };
       return moment(time).utc(true).format(format[groupby]);
-    }
+    };
     let fT = formatDate(time, $('#groupby-select').val());
     let views = data[bisect(data, time)].views;
     // show data (time)
@@ -735,8 +740,8 @@ function lineChart(div, data, min, max) {
     var t = d3.event.transform;
 
     x.domain(t.rescaleX(x2).domain());
-
-    path.attr("d", valueline);
+  
+    lineChart.select(".line").attr("d", valueline);
 
     if (SHOWN_SEC_LINE) {
       image_path.attr("d", image_valueline);
@@ -833,10 +838,10 @@ function lineChart(div, data, min, max) {
      }
 
 
-  }
+  };
 }
 
 $.fn.fadeInFlex = function(time) {
   $(this).css('display', 'flex').hide().fadeIn(time);
   return this;
-}
+};

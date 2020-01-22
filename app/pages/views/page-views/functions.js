@@ -258,18 +258,18 @@ function statDraw() {
 }
 
 $(document).ready(function(){
-    setCategory();
-    how_to_read();
-    sidebar("views");
-    download();
-    switch_page();
-    sorting_sidebar();
-    lineChartDraw("main_views_container", getUrlAll());
-    $('#groupby-select').change(function() {
-	$("#right_sidebar_list .list_item_active").trigger("click");
-	// $("#main_views_container").empty();
-	lineChartDraw("main_views_container", getUrlAll());
+	setCategory();
+	how_to_read();
+	sidebar("views");
 	download();
-    });
-    statDraw();
+	switch_page();
+	sorting_sidebar();
+	lineChartDraw("main_views_container", getUrlAll());
+	$('#groupby-select').change(function() {
+		$("#right_sidebar_list .list_item_active").trigger("click");
+		// $("#main_views_container").empty();
+		lineChartDraw("main_views_container", getUrlAll());
+		download();
+	});
+	statDraw();
 });
