@@ -79,6 +79,8 @@ function searchFiles(force) {
 	if (force){
 		if (search.length >= 3){
 			let db = window.location.href.split("/")[3];
+			search = search.replace(/\s/g,"_");
+			console.log(search)
 			window.location.href = "/"+db+"/search/"+search;
 		} else {
 			$('#searchFilesInputForm').popover('show');
@@ -88,10 +90,7 @@ function searchFiles(force) {
 
 // Check if object if empty
 function isEmpty(obj) {
-	if (Object.keys(obj).length > 0) {
-		return false;
-	}
-	return true;
+	return Object.keys(obj).length <= 0;
 }
 
 String.prototype.hashCode = function() {

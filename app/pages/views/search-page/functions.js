@@ -8,7 +8,7 @@ function search(append) {
 	if (page === 0){
 		$('#resultsSearch').off("scroll").scroll(loadMoreOnScroll.bind($('#resultsSearch')));
 	}
-	$("#searchFilesBar").val(decodeURI(query));
+	$("#searchFilesBar").val(decodeURI(query).replace("_"," "));
 	// let template_source = "/views/category-network/tpl/unused-file-list-dropdown.tpl";
 	let target = '#resultsSearch';
 	let tpl = "    {{#each files}}\n" +
@@ -51,6 +51,7 @@ function searchFiles(force) {
 	if (force){
 		if (search.length >= 3){
 			let db = window.location.href.split("/")[3];
+			search = search.replace(/\s/g,"_");
 			window.location.href = "/"+db+"/search/"+search;
 		} else {
 			$('#resultsSearchBar').popover('show');
