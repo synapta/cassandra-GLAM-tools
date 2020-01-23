@@ -36,9 +36,11 @@ function setCategory() {
 	});
 	
 	//XXX needed for correct urls
-	var baseUrl = window.location.href + "/";
-	baseUrl = baseUrl.replace(/\/\/$/,"/");
-	$("#basebase").attr("href", baseUrl);
+	// var baseUrl = window.location.href + "/";
+	// console.log(baseUrl)
+	// baseUrl = baseUrl.replace(/\/\/$/,"/");
+	// $("#basebase").attr("href", baseUrl);
+	// console.log($("#basebase").attr("href"))
 }
 
 function how_to_read(){

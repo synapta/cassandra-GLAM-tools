@@ -43,7 +43,7 @@ var lineChartDraw = function(div, query) {
       lineChart(div, fixDataViz(data, 'date'));
     });
   });
-}
+};
 
 function lineChart(div, data) {
 
@@ -254,10 +254,10 @@ function lineChart(div, data) {
   var detailsLabel = focus.append("g").attr("class", "dateLabel");
   var bisect = function (data, value) {
       return d3.bisector(function(d) { return d.date; }).left(data, value) - 1;
-  }
+  };
   var image_bisect = function (data, value) {
       return d3.bisector(function(d) { return d.access_date; }).left(data, value) - 1;
-  }
+  };
 
     // Line across the plots on mouse pointer
   var verticalLine = focus.append("g").attr("class", "hover-line");
@@ -272,7 +272,6 @@ function lineChart(div, data) {
      .attr("class", "annotation-group")
      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
      .attr("clip-path", "url(#clip)");
-
   $('#annotationButtons').on('click', '.edit_button', function() {
     let note_id = $('#annotationButtons').data('noteid');
     let note_date = note_id.split('_')[0];
@@ -282,7 +281,7 @@ function lineChart(div, data) {
 
     // Fill form with note data
     $('#note-text').val(note.note.label);
-    $('#note-pos').val(note.note.position)
+    $('#note-pos').val(note.note.position);
 
     /*** CANCEL ***/
     $('#annotation_dialog_form .cancel-button').off('click');
@@ -584,19 +583,19 @@ function lineChart(div, data) {
     switch (options.position) {
       case 'right':
         pos.dx = 100;
-        pos.dy = -20
+        pos.dy = -20;
         break;
       case 'left':
         pos.dx = -100;
-        pos.dy = 20
+        pos.dy = 20;
         break;
       case 'top':
         pos.dx = -20;
-        pos.dy = -100
+        pos.dy = -100;
         break;
       case 'bottom':
         pos.dx = 20;
-        pos.dy = 100
+        pos.dy = 100;
         break;
     }
 
@@ -792,7 +791,7 @@ function lineChart(div, data) {
 
     // Update annotations
     if (makeAnnotations) makeAnnotations.updatedAccessors();
-  }
+  };
 
   window.showFileLine = function(filename) {
     d3.selectAll('.image_line').remove();

@@ -27,15 +27,15 @@ function getUrlStats() {
     return "/api/" + db + "/views/stats"+subcatQ;
 }
 
-// function getUrlFiles(){
-// 	var db=window.location.href.toString().split('/')[3];
-// 	return "/api/"+db+"/views/files";
-// }
+function getUrlFiles(){
+	var db=window.location.href.toString().split('/')[3];
+	return "/api/"+db+"/views/files";
+}
 
-// function getUrlSidebar() {
-// 	var db=window.location.href.toString().split('/')[3];
-// 	return "/api/" + db + "/views/sidebar";
-// }
+function getUrlSidebar() {
+	var db=window.location.href.toString().split('/')[3];
+	return "/api/" + db + "/views/sidebar";
+}
 
 function getUrlSidebarLimit(limit) {
     let l = Number.isInteger(limit) ? "?limit=" + limit : "";
@@ -94,7 +94,7 @@ function sidebar(type) {
 		if (FIRST_CALL_LIMIT < TOTAL_IMAGES) {
 		    $('#right_sidebar_list').off('scroll').scroll(loadMoreOnScroll.bind($('#right_sidebar_list'), type));
 		}
-		
+
 		highlightOnClick();
 	    });
 	});
@@ -159,7 +159,7 @@ function loadMoreOnScroll(sort_type) {
 	}
     }
 }
-
+//
 function sorting_sidebar() {
     $("#by_num").on("click", function(){
 	if ($("#by_num").hasClass("active_order") ) {
@@ -174,7 +174,7 @@ function sorting_sidebar() {
 	    $("#by_median").css("cursor","pointer");
 	}
     });
-    
+
     $("#by_median").on("click", function(){
 	if ($("#by_median").hasClass("active_order") ) {
 	    //console.log("già selezionato")
@@ -188,7 +188,7 @@ function sorting_sidebar() {
 	    $("#by_median").css("cursor","default");
 	}
     });
-    
+
     $("#by_name").on("click", function(){
 	if ($("#by_name").hasClass("active_order") ) {
 	    //console.log("già selezionato")
@@ -214,7 +214,7 @@ function download(){
 function how_to_read(){
     button = $("#how_to_read_button");
     box = $(".how_to_read");
-    
+
     $("#how_to_read_button").click(function(){
 	box.toggleClass("show");
 	// console.log("click")
@@ -222,15 +222,15 @@ function how_to_read(){
 }
 
 function highlightOnClick() {
-    
+
     if (ACTIVE_ITEM_ID !== undefined) {
 	$('#' + ACTIVE_ITEM_ID).closest('.list_item').addClass('list_item_active');
     }
-    
+
     // remove handler and set it on update elements
     $(".list_item").off("click").on("click", function() {
 	var element = $(this).find('.id.item').attr("id");
-	
+
 	if ($(this).hasClass('list_item_active')) {
 	    $(".list_item").removeClass("list_item_active");
 	    ACTIVE_ITEM_ID = undefined;
@@ -241,7 +241,7 @@ function highlightOnClick() {
 	    ACTIVE_ITEM_ID = element;
 	    showFileLine($(this).data('imagename'));
 	}
-	
+
     });
 }
 
