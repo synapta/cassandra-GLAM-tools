@@ -224,10 +224,10 @@ function setDetails() {
 	$('#cover').css('background-image', 'url(' + d.image + ')');
     });
     
-    //XXX needed for correct urls
-    let baseUrl = window.location.href + "/";
-    baseUrl = baseUrl.replace(/\/\/$/,"/");
-    $("#basebase").attr("href", baseUrl);
+    // //XXX needed for correct urls
+    // let baseUrl = window.location.href + "/";
+    // baseUrl = baseUrl.replace(/\/\/$/,"/");
+    // $("#basebase").attr("href", baseUrl);
 }
 
 $(function() {
