@@ -11,7 +11,7 @@ let glamId = window.location.href.toString().split('/')[3];
 $('#annotationModeCheckbox').click(function() {
   var self = this;
   if (self.checked) { // switching on
-    $.get('/api/admin/auth', function(data) {
+    $.get('/api/user/auth', function(data) {
       ANNOTATION_EDIT_MODE = true;
       $('#svg-graph').css('cursor', 'pointer');
     }).fail(function(err) {

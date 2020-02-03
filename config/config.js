@@ -4,9 +4,13 @@ var fs = require('fs');
 
 var config = JSON.parse(fs.readFileSync("../config/config.json"));
 
+config.glamUser['realm'] = 'User area';
+var glamUser = config.glamUser;
+glamUser.users.push(config.admin);
 config.admin['realm'] = 'Admin area';
 
 exports.admin = config.admin;
+exports.glamUser = glamUser;
 exports.limits = config.limits;
 exports.wmflabs = config.wmflabs;
 
