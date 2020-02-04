@@ -34,13 +34,6 @@ function setCategory() {
 		$(".glamName").text(d.fullname);
 		$('#cover').css('background-image', 'url(' + d.image + ')');
 	});
-	
-	//XXX needed for correct urls
-	// var baseUrl = window.location.href + "/";
-	// console.log(baseUrl)
-	// baseUrl = baseUrl.replace(/\/\/$/,"/");
-	// $("#basebase").attr("href", baseUrl);
-	// console.log($("#basebase").attr("href"))
 }
 
 function how_to_read(){
@@ -201,4 +194,13 @@ function sortNodes(d,order) {
 		d.nodes[i].url = '/'+glam+'/category-network/'+d.nodes[i].id;
 		d.nodes[i].urlUnused = '/'+glam+'/category-network/'+d.nodes[i].id+'/unused';
 	}
+}
+
+function fixBaseUrl() {
+	// XXX needed for correct urls
+	var baseUrl = window.location.href + "/";
+	console.log(baseUrl)
+	baseUrl = baseUrl.replace(/\/\/$/,"/");
+	$("#basebase").attr("href", baseUrl);
+	console.log($("#basebase").attr("href"));
 }
