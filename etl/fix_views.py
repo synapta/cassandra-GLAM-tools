@@ -5,7 +5,7 @@ import os
 import subprocess
 import sys
 import time
-from datetime import datetime, timedelta
+from datetime import date, timedelta
 from subprocess import SubprocessError
 
 import psycopg2
@@ -15,7 +15,8 @@ from psycopg2 import ProgrammingError
 from run import views
 
 config_file = '../config/config.json'
-views_dir = 'temp'
+min_date = date(2015, 1, 1)
+views_dir = 'temp_fix'
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(levelname)s %(message)s')
@@ -39,20 +40,15 @@ def process_glam(config, glam):
     if len(dates) == 0:
         return
 
-    min_date = dates[0]
     max_date = dates[len(dates) - 1]
-
     date_interval = [min_date + timedelta(days=x)
                      for x in range(0, (max_date - min_date).days)]
 
+    glam['missing_dates'] = []
+
     for date in date_interval:
         if date not in dates:
-            logging.info('Found missing date %s', date)
-
-            try:
-                views(glam['name'], date.strftime("%Y-%m-%d"))
-            except SubprocessError:
-                logging.error('Subprocess views.py failed')
+            glam['missing_dates'].append(date)
 
 
 def main():
@@ -61,6 +57,8 @@ def main():
     client = pymongo.MongoClient(config['mongodb']['url'])
     db = client[config['mongodb']['database']]
     collection = db[config['mongodb']['collection']]
+
+    glams = []
 
     for glam in collection.find():
         if 'status' in glam:
@@ -73,6 +71,30 @@ def main():
                 continue
 
             process_glam(config, glam)
+            glams.append(glam)
+
+    max_date = date.today() - timedelta(days=2)
+    date_interval = [min_date + timedelta(days=x)
+                     for x in range(0, (max_date - min_date).days)]
+
+    # for all dates
+    for date_value in date_interval:
+        logging.info('Working with date %s', date_value)
+
+        for glam in glams:
+            logging.info('Working with GLAM %s', glam['name'])
+
+            if date_value in glam['missing_dates']:
+                try:
+                    subprocess.run(['python3', 'views.py', glam['name'], date_value.strftime(
+                        "%Y-%m-%d"), '--dir', views_dir], check=True)
+                except SubprocessError:
+                    logging.error('Subprocess views.py failed')
+
+        views_path = os.path.join(
+            views_dir, date_value.strftime("%Y-%m-%d") + '.tsv.bz2')
+        if os.path.isfile(views_path):
+            os.remove(views_path)
 
 
 if __name__ == '__main__':
