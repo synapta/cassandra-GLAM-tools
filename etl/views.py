@@ -17,11 +17,11 @@ def reporter(first, second, third):
         print("Download progress: " + str(first * second * 100 // third) + "%")
 
 
-def download(date):
-    if not os.path.exists("temp"):
-        os.makedirs("temp")
+def download(date, folder):
+    if not os.path.exists(folder):
+        os.makedirs(folder)
 
-    filename = 'temp/' + date + '.tsv.bz2'
+    filename = os.path.join(folder, date + '.tsv.bz2')
 
     year, month, day = date.split("-")
     baseurl = "https://dumps.wikimedia.org/other/mediacounts/daily/"
@@ -44,8 +44,8 @@ def download(date):
     return filename
 
 
-def process(conn, date):
-    filename = download(date)
+def process(conn, date, folder):
+    filename = download(date, folder)
     print("Loading visualizations from file", filename)
 
     source_file = bz2.BZ2File(filename, "r")
@@ -92,6 +92,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('glam', type=str)
     parser.add_argument('date', type=str)
+    parser.add_argument('--dir', type=str, required=False, default='temp')
     args = parser.parse_args()
 
     # read settings
@@ -114,7 +115,7 @@ def main():
     pgconnection.autocommit = True
 
     loadImages(pgconnection)
-    process(pgconnection, args.date)
+    process(pgconnection, args.date, args.dir)
 
     pgconnection.close()
     print("Process completed")
