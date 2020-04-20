@@ -28,8 +28,8 @@ function setCategory() {
 			subcat = d.category;
 		}
 		$('#totalMediaNum').text(formatter(d.files));
-		$('#cat_url').text(decodeURIComponent(subcat ? subcat :d.category).replace("Category:",""));
-		$("#cat_url").attr("href", "https://commons.wikimedia.org/wiki/"+(subcat ? subcat :d.category));
+		$('#cat_url').text(decodeURIComponent(subcat ? subcat : d.category).replace("Category:",""));
+		$("#cat_url").attr("href", "https://commons.wikimedia.org/wiki/"+(subcat ? ("Category:" + subcat) : d.category));
 		$("#cat_url").attr("title", decodeURIComponent((subcat ? subcat :d.category)).replace(/[_-]/g," "));
 		$(".glamName").text(d.fullname);
 		$('#cover').css('background-image', 'url(' + d.image + ')');
