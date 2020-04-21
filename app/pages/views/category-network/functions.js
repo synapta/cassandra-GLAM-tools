@@ -93,7 +93,7 @@ function dataviz() {
 			.data(dataLegend)
 			.enter()
 			.append("div")
-			.style("margin-bottom", "2px");
+			.style("margin-bottom", "0.5rem");
 		
 		legendRow.append("div")
 			.html("&nbsp")
