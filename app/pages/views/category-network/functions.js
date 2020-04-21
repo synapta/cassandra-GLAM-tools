@@ -400,12 +400,10 @@ $('#unusedModeCheckbox').click(function() {
     if (self.checked) { // switching on
 	UNUSED_MODE = true;
 	dataviz();
-	sidebar();
 	download();
     } else { // switching off
 	UNUSED_MODE = false;
 	dataviz();
-	sidebar();
 	download();
     }
 });
