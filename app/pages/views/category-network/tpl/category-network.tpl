@@ -11,7 +11,7 @@
 					</a>
 					{{#unless hideDetails}}
                     <a class="view-details-link" style="text-decoration:underline; margin-left:1rem;" href="{{url}}" title="{{name}}">
-						view details
+						drilldown
 					</a>
 					{{/unless}}
 				</div>
