@@ -47,7 +47,10 @@ function dataviz() {
 	$('#legend').empty();
 	categoryNetworkContainer.empty();
 	
-	let data_source = getUrl();
+	const urlSplit = window.location.href.toString().split('/');
+	let query = UNUSED_MODE ? "?unused=true" : "";
+	const db = urlSplit[3];
+	let data_source =  "/api/"+db+"/category" + query;
 	
 	d3.json(data_source, function(error, data) {
 		if (error){
@@ -64,6 +67,8 @@ function dataviz() {
 			$("#right-column").hide();
 			return;
 		}
+		
+		sidebar();
 		
 		let width = categoryNetworkContainer.width();
 		let height = categoryNetworkContainer.height();
@@ -183,7 +188,7 @@ function dataviz() {
 				return color(d.group);
 			})
 			.attr("class", function (d, i) {
-				return "circle " + d.files;
+				return "disabled_circle circle " + d.files;
 			});
 		
 		simulation.nodes(data.nodes).on("tick", ticked);
@@ -360,8 +365,8 @@ function sidebar(order) {
 	let data_source = getUrl();
 	let target = "#right_sidebar_list";
 	
-	$.get( template_source , function(tpl) {
-		$.getJSON( data_source , function(d) {
+	$.get(template_source , function(tpl) {
+		$.getJSON(data_source , function(d) {
 			if (d.nodes.length === 0){
 				return;
 			}
@@ -371,6 +376,11 @@ function sidebar(order) {
 			$(target).html(template(d));
 			
 			sorting_sidebar();
+			d.nodes.forEach(node => {
+				let node_selected = $("#category_network_container").find("." + node.id_encoded).children(".circle");
+				node_selected.removeClass("disabled_circle");
+			});
+			
 			highlight();
 		});
 	});
@@ -401,33 +411,32 @@ $('#unusedModeCheckbox').click(function() {
 });
 
 $('#showUnused').click( () => {
-    let template_source = "/views/category-network/tpl/unused-file-list-dropdown.tpl";
-    let target = '#unusedList';
-    if ($(target).is(":hidden")){
-	$.get( template_source , tpl => {
-	    $.getJSON( unusedFilesLink(subcategoryName,100) , d => {
-		let template = Handlebars.compile(tpl);
-		let temp = [];
-		d.forEach( file => {
-		    let url = '/'+glam+'/file/'+file;
-		    temp.push(  {
-			url: url,
-			file: cleanImageName(file.replace(/_/g," "))
-		    });
+	let template_source = "/views/category-network/tpl/unused-file-list-dropdown.tpl";
+	let target = '#unusedList';
+	if ($(target).is(":hidden")){
+		$.get( template_source , tpl => {
+			$.getJSON( unusedFilesLink(subcategoryName,100) , d => {
+				let template = Handlebars.compile(tpl);
+				let temp = [];
+				d.forEach( file => {
+					let url = '/'+glam+'/file/'+file;
+					temp.push(  {
+						url: url,
+						file: cleanImageName(file.replace(/_/g," "))
+					});
+				});
+				$(target).html(template({files : temp}));
+			});
 		});
-		$(target).html(template({files : temp}));
-	    });
-	});
-	$(target).show();
-    } else {
-	$(target).hide();
-    }
+		$(target).show();
+	} else {
+		$(target).hide();
+	}
 });
 
 $(document).ready(function(){
     dataviz();
     switch_page();
-    sidebar();
     download();
     setCategory();
 });

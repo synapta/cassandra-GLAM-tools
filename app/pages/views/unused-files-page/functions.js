@@ -8,14 +8,12 @@ let limit = true;
 let category;
 
 function getUrl() {
-	const urlSplit = window.location.href.toString().split('/');
-	let query = "?unused=true";
-	const db = urlSplit[3];
+	let queryS = "?unused=true";
 	category = urlSplit[5];
 	if (category){
-		query = "?unused=true&cat="+ category;
+		queryS = "?unused=true&cat="+ category;
 	}
-	return "/api/"+db+"/category" + query;
+	return "/api/"+db+"/category" + queryS;
 }
 
 function highlight() {
@@ -49,7 +47,7 @@ function resetHighlighted() {
 
 function sorting_table(){
 	$("#by_total").on("click", function(){
-		if ($("#by_total").hasClass("active_order") ) {
+		if ($("#by_total").hasClass("active_order")){
 			console.log("già selezionato");
 		} else {
 			$("#by_level").toggleClass("active_order");
@@ -73,10 +71,9 @@ function sorting_table(){
 	});
 }
 
-function unusedFilesLink(category,size,page) {
-	const db = window.location.href.toString().split('/')[3];
-	const query = "?unused=true&limit="+size+"&page="+page;
-	return "/api/"+db+"/category/" +category+ "/"+ query;
+function unusedFilesLink(id,size,pageSel) {
+	const queryS = "?unused=true&limit="+size+"&page="+pageSel;
+	return "/api/"+db+"/category/" +id+ "/"+ queryS;
 }
 function getFiles(id,target,templateSource,total) {
 	$.get( templateSource , tpl => {
@@ -120,14 +117,14 @@ function getCategories(order){
 	}
 	let data_source = getUrl();
 	let target = "#resultsSearch";
-	$.getJSON( data_source , function(d) {
+	$.getJSON(data_source , function(d) {
 		sortNodes(d,order);
 		if (d.nodes.length > 0){
 			let template_source = "/views/unused-files-page/categories.tpl";
 			$.get( template_source , function(tpl) {
 				let template = Handlebars.compile(tpl);
 				$(target).html(template(d));
-				sorting_table(order);
+				sorting_table();
 				highlight();
 			});
 		} else {
@@ -138,7 +135,6 @@ function getCategories(order){
 
 $(document).ready(function(){
 	setCategory();
-	let db = window.location.href.toString().split('/')[3];
 	$("#institutionId").attr("href", "/"+db);
 	getCategories();
 });
