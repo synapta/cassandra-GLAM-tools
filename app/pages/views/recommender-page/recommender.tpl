@@ -16,7 +16,7 @@
       </div>
       <div class="col-9 wikis">
         <div class="row">
-          <h6 class="col-3">WikiData Suggestion</h6>
+          <h6 class="col-3">Wikidata suggestion</h6>
           <h6 class="col-4">Wikipedia pages</h6>
         </div>
           {{#each wikis}}

@@ -48,12 +48,18 @@
     <div class="how_to_read">
       <span onclick='$(".how_to_read").toggleClass("show");' style="float:right; cursor:pointer">X</span>
       <h5>Description</h5>
-      This page shows some unused files belonging to the selected category with links to wikidata and wikipedia pages where they can be used.
+      This page shows some unused files belonging to the selected category with links to Wikidata and Wikipedia pages where they can be possibly used.
+      <br><br>
+      <h5>Recommendation approaches</h5>
+      This tool follows two recommendation approaches. The first one is based on the Commons categories of the target file. Wikipedia articles connected 
+      on Wikidata with the categories of the target file are selected with the highest confidence. The second approach is based on the description of the
+      file on Commons. Additional Wikipedia articles connected with the Wikidata entities having a textual description similar to the one of the target file
+      are also selected.
       <br><br>
       <h5>How to read it</h5>
-      In the column WikiData Suggestion there are the link to wikidata pages where you can use the selected image.
+      In the column Wikidata suggestion there are the links to Wikidata pages where you can use the selected image.
       <br>
-      In the Wikipedia Pages column there are links to the wikipedia pages corresponding to that of wikidata on the same row, divided by language.
+      In the Wikipedia pages column there are the links to the Wikipedia pages corresponding to the Wikidata entity on the same row, divided by language.
     </div>
     <div id="resultsSearch" class="w-100"></div>
     <div class="w-100">
