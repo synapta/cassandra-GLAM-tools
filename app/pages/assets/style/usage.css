@@ -28,7 +28,8 @@ svg {
 
 .list_item_active .list_item_panel {
   padding: 1.5rem 0 0;
-  max-height: 800px;
+  max-height: 65vh;
+  overflow-y : auto
 }
 
 .wiki_column table tbody tr:not(:last-child) {

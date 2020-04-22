@@ -18,26 +18,27 @@ function nFormatter(num) {
 }
 
 function setCategory() {
-	var db = window.location.href.toString().split('/')[3];
-	var subcat = window.location.href.toString().split('/')[5];
-	var page = window.location.href.toString().split('/')[4];
-	var jsonurl = "/api/" + db;
+	const db = window.location.href.toString().split('/')[3];
+	let subcat = window.location.href.toString().split('/')[5];
+	const page = window.location.href.toString().split('/')[4];
+	const jsonUrl = "/api/" + db;
+	const catUrl = $('#cat_url');
 	
-	$.getJSON(jsonurl, function(d) {
+	$.getJSON(jsonUrl, function(d) {
 		if (page && page === "search"){
 			subcat = d.category;
 		}
 		$('#totalMediaNum').text(formatter(d.files));
-		$('#cat_url').text(decodeURIComponent(subcat ? subcat :d.category).replace("Category:",""));
-		$("#cat_url").attr("href", "https://commons.wikimedia.org/wiki/"+(subcat ? subcat :d.category));
-		$("#cat_url").attr("title", decodeURIComponent((subcat ? subcat :d.category)).replace(/[_-]/g," "));
+		catUrl.text(decodeURIComponent(subcat ? subcat : d.category).replace("Category:",""));
+		catUrl.attr("href", "https://commons.wikimedia.org/wiki/"+(subcat ? ("Category:" + subcat) : d.category));
+		catUrl.attr("title", decodeURIComponent((subcat ? subcat :d.category)).replace(/[_-]/g," "));
 		$(".glamName").text(d.fullname);
 		$('#cover').css('background-image', 'url(' + d.image + ')');
 	});
 }
 
 function how_to_read(){
-	box = $(".how_to_read");
+	const box = $(".how_to_read");
 	
 	$("#how_to_read_button").click(function() {
 		box.toggleClass("show");
@@ -45,21 +46,22 @@ function how_to_read(){
 }
 
 function switch_page() {
-	var baseurl = document.location.href;
-	var h = baseurl.split("/")
-	var h_1 = h[h.length-1]
-	var home = baseurl.replace(h_1,"");
+	const baseurl = document.location.href;
+	const h = baseurl.split("/");
+	const h_1 = h[h.length - 1];
+	const home = baseurl.replace(h_1, "");
 	
 	$('#switch_page').change(function() {
-		var page = $(this).val();
-		var url = home + page;
+		const page = $(this).val();
+		const url = home + page;
 		
-		if (url != '') {
+		if (url !== '') {
 			window.location = url;
 		}
 		return false;
 	});
 }
+
 function fixedEncodeURIComponent(str) {
 	return encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
 		return '%' + c.charCodeAt(0).toString(16);
@@ -75,7 +77,6 @@ function searchFiles(force) {
 		if (search.length >= 3){
 			let db = window.location.href.split("/")[3];
 			search = search.replace(/\s/g,"_");
-			console.log(search)
 			window.location.href = "/"+db+"/search/"+search;
 		} else {
 			$('#searchFilesInputForm').popover('show');
@@ -109,8 +110,8 @@ function getPageFromElementIdx(element_idx, items_in_page) {
 	return Math.floor((element_idx - 1) / items_in_page);
 }
 
-var isMobile = {
-	Android: function() {
+const isMobile = {
+	Android: function () {
 		var m = navigator.userAgent.match(/Android/i);
 		if (m === null) {
 			return false;
@@ -118,7 +119,7 @@ var isMobile = {
 			return true;
 		}
 	},
-	BlackBerry: function() {
+	BlackBerry: function () {
 		var m = navigator.userAgent.match(/BlackBerry/i);
 		if (m === null) {
 			return false;
@@ -126,7 +127,7 @@ var isMobile = {
 			return true;
 		}
 	},
-	iOS: function() {
+	iOS: function () {
 		var m = navigator.userAgent.match(/iPhone|iPad|iPod/i);
 		if (m === null) {
 			return false;
@@ -134,7 +135,7 @@ var isMobile = {
 			return true;
 		}
 	},
-	Opera: function() {
+	Opera: function () {
 		var m = navigator.userAgent.match(/Opera Mini/i);
 		if (m === null) {
 			return false;
@@ -142,7 +143,7 @@ var isMobile = {
 			return true;
 		}
 	},
-	Windows: function() {
+	Windows: function () {
 		var m = navigator.userAgent.match(/IEMobile/i);
 		if (m === null) {
 			return false;
@@ -150,13 +151,13 @@ var isMobile = {
 			return true;
 		}
 	},
-	any: function() {
+	any: function () {
 		return (this.Android() || this.BlackBerry() || this.iOS() || this.Opera() || this.Windows());
 	}
-}
+};
 
 // Trick to improve the visualization
-var fixDataViz = function (data, field) {
+const fixDataViz = function (data, field) {
 	if (data.length > 1) {
 		data.shift();
 		let dateDelta = moment(data[data.length - 1][field]).utc(true).diff(moment(data[data.length - 2][field]));
@@ -164,7 +165,7 @@ var fixDataViz = function (data, field) {
 		data[data.length - 1][field] = moment(data[data.length - 1][field]).utc(true).add(dateDelta);
 	}
 	return data;
-}
+};
 
 function sortNodes(d,order) {
 	const glam = window.location.href.toString().split('/')[3];
@@ -194,13 +195,12 @@ function sortNodes(d,order) {
 		d.nodes[i].url = '/'+glam+'/category-network/'+d.nodes[i].id;
 		d.nodes[i].urlUnused = '/'+glam+'/category-network/'+d.nodes[i].id+'/unused';
 	}
+	d.nodes[0].hideDetails = true;
 }
 
 function fixBaseUrl() {
 	// XXX needed for correct urls
-	var baseUrl = window.location.href + "/";
-	console.log(baseUrl)
+	let baseUrl = window.location.href + "/";
 	baseUrl = baseUrl.replace(/\/\/$/,"/");
 	$("#basebase").attr("href", baseUrl);
-	console.log($("#basebase").attr("href"));
 }

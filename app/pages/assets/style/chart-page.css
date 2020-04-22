@@ -382,6 +382,10 @@
   stroke-width: 3px;
 }
 
+.disabled_circle {
+  opacity: 0.3;
+}
+
 #legend {
   width: 10%;
   float: left;
