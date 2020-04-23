@@ -646,7 +646,11 @@ footer {
 .search-form input{
   width: 90% !important;
 }
-
+@media screen and (max-width: 1440px){
+  .autocomplete-categories {
+    max-width: 240px;
+  }
+}
 @media screen and (max-width: 768px) {
   .glam-title-section {
     margin: .5rem 0;
