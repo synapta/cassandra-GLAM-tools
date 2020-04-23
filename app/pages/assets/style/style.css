@@ -598,7 +598,7 @@ footer {
 }
 
 .autocomplete-categories {
-  width: 40% !important;
+  width: auto !important;
 }
 .btn-light.dropdown-toggle,.show>.btn-light.dropdown-toggle,.bootstrap-select .dropdown-menu  {
   color: white;

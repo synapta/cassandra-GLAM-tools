@@ -26,20 +26,30 @@
 			<a id="white-logo" href="/">
 				<img src="/assets/img/glam-logo-white.svg" alt="GLAM stat tool">
 			</a>
-			<div id="breadcrumbs">
-				<h6>INSTITUTION</h6>
-				<h2><a class="glamName" href=".."></a></h2>
-				<span class="breadcrumb-separator"> > </span>
-				<select class="autocomplete-categories mr-2" data-live-search="true"></select>
-				<h6>CHART</h6>
-				<div class="select-chart">
-					<select id="switch_page">
+			<div id="breadcrumbs" class="row align-items-center w-100">
+				<div class="col-xs-12 col-lg-6">
+					<div class="row align-items-center">
+<!--						<div>-->
+							<h6>INSTITUTION</h6>
+							<h2><a class="glamName" href=".."></a></h2>
+<!--						</div>-->
+						<span class="breadcrumb-separator"> > </span>
+						<select class="autocomplete-categories mx-2" data-live-search="true"></select>
+					</div>
+				</div>
+				<div class="col-6 col-lg-3">
+					<div class="row align-items-center">
+						<h6>CHART</h6>
+						<div class="select-chart">
+							<select id="switch_page">
 						<option selected value="usage">Usage</option>
 						<option value="category-network">Category network</option>
-						<option value="user-contributions">User contributions</option>
-						<option value="page-views">Views</option>
-						<option value="recommender">Suggestions</option>
-					</select>
+								<option value="user-contributions">User contributions</option>
+								<option value="page-views">Views</option>
+								<option value="recommender">Suggestions</option>
+							</select>
+						</div>
+					</div>
 				</div>
 			</div>
 		</header>
