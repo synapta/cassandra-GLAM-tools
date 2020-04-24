@@ -597,9 +597,6 @@ footer {
   display: none;
 }
 
-.autocomplete-categories {
-  width: auto !important;
-}
 .btn-light.dropdown-toggle,.show>.btn-light.dropdown-toggle,.bootstrap-select .dropdown-menu  {
   color: white;
   background-color: var(--main);
@@ -647,11 +644,6 @@ footer {
   width: 90% !important;
 }
 
-@media screen and (max-width: 576px){
-  .autocomplete-categories {
-    max-width: 40%;
-  }
-}
 @media screen and (max-width: 768px) {
   .glam-title-section {
     margin: .5rem 0;

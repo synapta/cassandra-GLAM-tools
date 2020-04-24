@@ -355,35 +355,6 @@ body {
     order: 2;
   }
 
-  .top_bar {
-    /* flex-direction: column; */
-    /* align-items: baseline; */
-  }
-
-  #white-logo {
-    display: none;
-  }
-
-  #breadcrumbs {
-    flex-direction: column;
-    align-items: baseline;
-    margin-left: 0;
-  }
-
-  #topbar h2 {
-    margin-bottom: 1.3rem;
-  }
-
-  .breadcrumb-separator {
-    display: none;
-  }
-
-  .groupby_container {
-    margin: 1rem 0 .5rem;
-    padding: 0;
-    border: none;
-  }
-
   #visualizations {
     display: flex;
     flex-direction: column;

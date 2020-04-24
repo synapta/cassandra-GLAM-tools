@@ -8,10 +8,3 @@
   fill: none;
   /* pointer-events: all; */
 }
-
-#groupby-select {
-  margin: 0 .5rem;
-  background-color: var(--main);
-  padding: .3rem;
-  color: #fff;
-}
