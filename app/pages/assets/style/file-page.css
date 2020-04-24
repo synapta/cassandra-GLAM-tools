@@ -317,6 +317,7 @@ body {
 .file_details_intro h1 {
   font-size: 1.5rem;
   color: var(--main);
+  margin-top: 1rem;
   margin-bottom: 1.5rem;
 }
 
