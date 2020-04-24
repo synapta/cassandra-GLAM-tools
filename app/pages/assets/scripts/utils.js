@@ -195,7 +195,9 @@ function sortNodes(d,order) {
 		d.nodes[i].url = '/'+glam+'/category-network/'+d.nodes[i].id;
 		d.nodes[i].urlUnused = '/'+glam+'/category-network/'+d.nodes[i].id+'/unused';
 	}
-	d.nodes[0].hideDetails = true;
+	if (d.nodes[0]){
+		d.nodes[0].hideDetails = true;
+	}
 }
 
 function fixBaseUrl() {

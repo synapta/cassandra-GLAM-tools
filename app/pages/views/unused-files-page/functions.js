@@ -5,13 +5,11 @@ let page = 0;
 let ACTIVE_ITEM_ID;
 let SORT_BY = "by_name";
 let limit = true;
-let category;
 
-function getUrl() {
+function getUnusedUrl() {
 	let queryS = "?unused=true";
-	category = urlSplit[5];
-	if (category){
-		queryS = "?unused=true&cat="+ category;
+	if (query){
+		queryS = "?unused=true&cat="+ query;
 	}
 	return "/api/"+db+"/category" + queryS;
 }
@@ -115,7 +113,7 @@ function getCategories(order){
 	} else {
 		SORT_BY = order;
 	}
-	let data_source = getUrl();
+	let data_source = getUnusedUrl();
 	let target = "#resultsSearch";
 	$.getJSON(data_source , function(d) {
 		sortNodes(d,order);
