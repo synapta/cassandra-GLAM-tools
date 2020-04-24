@@ -27,8 +27,8 @@
 			<img src="/assets/img/glam-logo-white.svg" alt="GLAM stat tool">
 		</a>
 		<div id="breadcrumbs" class="row align-items-center w-100">
-			<div class="col-xs-12 col-md-6">
-				<div class="row align-items-center">
+			<div>
+				<div class="row align-items-center flex-nowrap flex-sm-wrap">
 					<div>
 						<h6>INSTITUTION</h6>
 						<h2><a class="glamName" href=".."></a></h2>
@@ -37,31 +37,26 @@
 					<select class="autocomplete-categories mx-2" data-live-search="true"></select>
 				</div>
 			</div>
-			<div class="col-5 col-md-3">
-				<div class="row align-items-center">
-					<h6>CHART</h6>
-					<div class="select-chart">
-						<select id="switch_page">
+			<div class="chart_select_container col-xs-4 col-md-4 col-lg-3">
+				<h6>CHART</h6>
+				<div class="select-chart category-selected">
+					<select id="switch_page">
 						<option selected value="category-network">Category network</option>
-							<option value="user-contributions">User contributions</option>
+						<option value="user-contributions">User contributions</option>
 						<option value="usage">Usage</option>
-							<option value="page-views">Views</option>
-							<option value="recommender">Suggestions</option>
-						</select>
-					</div>
+						<option value="page-views">Views</option>
+						<option value="recommender">Suggestions</option>
+					</select>
 				</div>
 			</div>
-			<div class="col-3">
-				<div class="row align-items-center">
-					<div class="breadcrumb-separator"></div>
-					<div class="annotation_toggle_container">
-						UNUSED MEDIA ONLY
-						<div class="annotation_toggle">
-							<label class="annotation_toggle_switch">
-								<input id="unusedModeCheckbox" type="checkbox">
-								<span class="annotation_toggle_slider"></span>
-							</label>
-						</div>
+			<div class="annotation_container col-xs-4 col-md-4  col-lg-1">
+				<div class="annotation_toggle_container">
+					UNUSED MEDIA ONLY
+					<div class="annotation_toggle">
+						<label class="annotation_toggle_switch">
+							<input id="unusedModeCheckbox" type="checkbox">
+							<span class="annotation_toggle_slider"></span>
+						</label>
 					</div>
 				</div>
 			</div>

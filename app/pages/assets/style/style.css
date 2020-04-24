@@ -646,9 +646,10 @@ footer {
 .search-form input{
   width: 90% !important;
 }
-@media screen and (max-width: 1440px){
+
+@media screen and (max-width: 576px){
   .autocomplete-categories {
-    max-width: 240px;
+    max-width: 40%;
   }
 }
 @media screen and (max-width: 768px) {

@@ -81,7 +81,7 @@
 .select-selected:after {
   position: absolute;
   content: "";
-  top: 15px;
+  top: 13px;
   right: 12px;
   width: 0;
   height: 0;
@@ -97,15 +97,30 @@
 
 /*style the items (options), including the selected item:*/
 .select-items div,.select-selected {
-  width: 175px;
   font-size: 0.9rem;
   color: #fff;
-  padding: .5rem 1.4rem .5rem 1.2rem;
+  padding: .5rem 2rem .5rem 1.2rem;
   border-bottom: 1px solid #fff;
   cursor: pointer;
   user-select: none;
 }
 
+@media screen and (min-width: 1024px) {
+  .select-items div, .select-selected {
+    width: 150px;
+  }
+}
+
+@media screen and (min-width: 1441px) {
+  .select-items div, .select-selected{
+    width: 175px;
+  }
+}
+@media screen and (max-width: 1023px) {
+  .select-items div, .select-selected {
+    width: 95px;
+  }
+}
 /*style items (options):*/
 .select-items {
   position: absolute;
@@ -426,13 +441,16 @@
   justify-content: center;
   align-items: center;
 }
-
+.chart_select_container{
+  display: flex;
+  align-items: center;
+  height: 63.22px;
+}
 .groupby_container {
   display: flex;
-  justify-content: center;
   align-items: center;
-  margin: 0 0 0 1rem;
-  padding: 0 1rem;
+  /*margin: 0 0 0 1rem;*/
+  /*padding: 0 1rem;*/
   border-left: 1px solid rgba(255, 255, 255, .5);
   height: 63.22px;
 }
@@ -444,6 +462,8 @@
   align-items: center;
   justify-content: center;
   text-transform: uppercase;
+  /*margin-left: 1rem;*/
+  /*margin-right: 1rem;*/
 }
 
 #groupby-select {
@@ -596,31 +616,33 @@
 #annotationButtons .annotation_button img {
   width: 14px;
 }
-
+.annotation_container{
+  display: flex;
+  align-items: center;
+  border-left: 1px solid rgba(255, 255, 255, .5);
+  height: 63.22px;
+}
 .annotation_toggle_container {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* margin: 0 2rem; */
-  padding: 0 2rem;
-  border-left: 1px solid rgba(255, 255, 255, .5);
-  height: 63.22px;
+  /*margin-left: 2rem;*/
+  /*margin-right: 1rem;*/
   font-size: 1em;
   color: #fff;
   text-transform: uppercase;
 }
 
-
 @media screen and (max-width: 768px) {
   #breadcrumbs {
-    margin-left: 0;
+    margin-left: 0
   }
 }
-@media screen and (max-width: 1440px) {
-  #breadcrumbs {
-    margin-left: 0;
-  }
-}
+/*@media screen and (max-width: 1440px) {*/
+/*  #breadcrumbs {*/
+/*    margin-left: 0;*/
+/*  }*/
+/*}*/
 
 @media screen and (max-width: 576px) {
   h1 {
@@ -760,7 +782,7 @@
     margin: .5rem 0;
   }
 
-  .annotation_toggle_container {
+  .annotation_toggle_container,.annotation_container {
     display: none;
   }
 
