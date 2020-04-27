@@ -78,11 +78,25 @@ cd etl
 python3 run.py
 ```
 
-If some dates are missing from the views chart, you can process them again.
+To process the dates from the views chart, you can run:
 
 ```
 cd etl
-python3 fix_views.py
+python3 run_views.py
+```
+
+To create the recommendation model, you need to download the Wikidata JSON dump and then run:
+
+```
+cd recommender
+python3 model.py
+```
+
+To create the recommendations, you can run:
+
+```
+cd recommender
+python3 run.py
 ```
 
 ## Run webservices
