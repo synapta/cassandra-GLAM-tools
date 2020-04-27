@@ -1,31 +1,36 @@
-var TOP_WIKIS = [];
+const TOP_WIKIS = [];
 
-var horizBarChartDraw = function(div, query, stats_data) {
-  // get data
-  d3.json(query, function(error, data) {
-    // manage error
-    if (error) throw error;
-    // sort
-    data = data.sort(function(a, b) {
-      // put others column as last element
-      if (a.wiki === 'others') {
-        return -1;
-      }
-      if (b.wiki === 'others') {
-        return 1;
-      }
-      // sort
-      return a.usage - b.usage;
+const horizBarChartDraw = function (div, query, stats_data) {
+    // get data
+    d3.json(query, function (error, data) {
+        // manage error
+        if (error) throw error;
+        // sort
+        data = data.sort(function (a, b) {
+            // put others column as last element
+            if (a.wiki === 'others') {
+                return -1;
+            }
+            if (b.wiki === 'others') {
+                return 1;
+            }
+            // sort
+            return a.usage - b.usage;
+        });
+        // format the data
+        data.forEach(function (d) {
+            if(d.wiki === 'wikidatawiki'){
+              d.wiki = 'wikidata';
+            }
+            if (d.wiki !== 'others') {
+                TOP_WIKIS.push(d.wiki);
+            }
+            d.usage = +d.usage;
+        });
+        // draw
+        drawHorizBars(data, '#' + div, stats_data.totalPages);
     });
-    // format the data
-    data.forEach(function(d) {
-      if (d.wiki !== 'others') TOP_WIKIS.push(d.wiki);
-      d.usage = +d.usage;
-    });
-    // draw
-    drawHorizBars(data, '#' + div, stats_data.totalPages);
-  });
-}
+};
 
 function drawHorizBars(data, div, totalPages) {
   // Graph dimensions
@@ -152,9 +157,9 @@ function drawHorizBars(data, div, totalPages) {
     if (difference.length > 0) {
       d3.select('#others').attr('stroke', 'red');
     }
-  }
+  };
 
   window.turnOffUsageBars = function(array) {
     bars.attr('stroke', '#080d5a');
-  }
+  };
 }

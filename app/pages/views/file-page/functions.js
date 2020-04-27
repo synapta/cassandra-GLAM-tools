@@ -81,7 +81,7 @@ function fixedEncodeURIComponent(str) {
 }
 
 function populateSidebar() {
-	var WIKI_ARRAY = [];
+	const WIKI_ARRAY = [];
 	$.get("/views/file-page/tpl/file-template.tpl", function(tpl) {
 		// get details on views and category
 		$.getJSON(getFileDetailsUrl(), function (details_data) {
@@ -135,11 +135,11 @@ function populateSidebar() {
 									wiki_obj = {};
 									wiki_obj.wiki_links = [];
 									// update current wiki
-									currentWiki = page.wiki;
+									currentWiki = (page.wiki === 'wikidatawiki') ? 'wikidata': page.wiki;
 									// page name
 									wiki_obj.wiki_name = currentWiki;
 									// links
-									link_obj.wiki_link = `https://${currentWiki.replace("wiki", "")}.wikipedia.org/w/index.php?title=${page.title}`;
+									link_obj.wiki_link = (currentWiki === 'wikidata') ? `https://wikidata.org/w/index.php?title=${page.title}` : `https://${currentWiki.replace("wiki", "")}.wikipedia.org/w/index.php?title=${page.title}`;
 									link_obj.wiki_page = page.title.replace(/_/g, " ");
 									// push
 									wiki_obj.wiki_links.push(link_obj);
@@ -149,7 +149,7 @@ function populateSidebar() {
 									WIKI_ARRAY.push(currentWiki);
 								} else {
 									// add link to current wiki object
-									link_obj.wiki_link = `https://${currentWiki.replace("wiki", "")}.wikipedia.org/w/index.php?title=${page.title}`;
+									link_obj.wiki_link = (currentWiki === 'wikidata') ? `https://wikidata.org/w/index.php?title=${page.title}` : `https://${currentWiki.replace("wiki", "")}.wikipedia.org/w/index.php?title=${page.title}`;
 									link_obj.wiki_page = page.title.replace(/_/g, " ");
 									// push current wiki object
 									wiki_obj.wiki_links.push(link_obj);
@@ -192,7 +192,7 @@ function populateSidebar() {
 							file.recommender = rec_data;
 							
 							// compile template
-							var template = Handlebars.compile(tpl);
+							const template = Handlebars.compile(tpl);
 							
 							$('#right-column').html(template(file));
 							
