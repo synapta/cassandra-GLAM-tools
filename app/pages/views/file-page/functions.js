@@ -63,7 +63,7 @@ function getThumbnailUrl(size_in_px, callback) {
 	const base_url = "https://upload.wikimedia.org/wikipedia/commons/thumb";
 	const hash = CryptoJS.MD5(decodeURIComponent(file)).toString(CryptoJS.enc.Hex);
 	if (callback && typeof(callback) == "function") {
-		const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.tif|\.tiff)$/i;
+		const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.tif|\.tiff|\.svg)$/i;
 		if(!allowedExtensions.exec(file)){
 			callback('');
 		} else {
