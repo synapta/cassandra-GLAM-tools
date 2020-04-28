@@ -59,14 +59,17 @@ function getImageCommonsUrlApi() {
 }
 
 function getThumbnailUrl(size_in_px, callback) {
-    var file = window.location.href.toString().split('/')[5];
-    var base_url = "https://upload.wikimedia.org/wikipedia/commons/thumb";
-    
-    var hash = CryptoJS.MD5(decodeURIComponent(file)).toString(CryptoJS.enc.Hex);
-    // console.log(hash);
-    if (callback && typeof(callback) == "function") {
-	var img_url = base_url + "/" + hash.substring(0, 1) + "/" + hash.substring(0, 2) + "/" + fixedEncodeURIComponent(file).replace(/%25C3%25/g,"%C3%") + "/" + size_in_px.toString() + "px-thumbnail.jpg";
-	callback(img_url);
+	const file = window.location.href.toString().split('/')[5];
+	const base_url = "https://upload.wikimedia.org/wikipedia/commons/thumb";
+	const hash = CryptoJS.MD5(decodeURIComponent(file)).toString(CryptoJS.enc.Hex);
+	if (callback && typeof(callback) == "function") {
+		const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.tif|\.tiff|\.svg)$/i;
+		if(!allowedExtensions.exec(file)){
+			callback('');
+		} else {
+			const file_url = base_url + "/" + hash.substring(0, 1) + "/" + hash.substring(0, 2) + "/" + fixedEncodeURIComponent(file).replace(/%25C3%25/g, "%C3%") + "/" + size_in_px.toString() + "px-thumbnail.jpg";
+			callback(file_url);
+		}
     }
     
 }
@@ -78,7 +81,7 @@ function fixedEncodeURIComponent(str) {
 }
 
 function populateSidebar() {
-	var WIKI_ARRAY = [];
+	const WIKI_ARRAY = [];
 	$.get("/views/file-page/tpl/file-template.tpl", function(tpl) {
 		// get details on views and category
 		$.getJSON(getFileDetailsUrl(), function (details_data) {
@@ -132,11 +135,11 @@ function populateSidebar() {
 									wiki_obj = {};
 									wiki_obj.wiki_links = [];
 									// update current wiki
-									currentWiki = page.wiki;
+									currentWiki = (page.wiki === 'wikidatawiki') ? 'wikidata': page.wiki;
 									// page name
 									wiki_obj.wiki_name = currentWiki;
 									// links
-									link_obj.wiki_link = `https://${currentWiki.replace("wiki", "")}.wikipedia.org/w/index.php?title=${page.title}`;
+									link_obj.wiki_link = (currentWiki === 'wikidata') ? `https://wikidata.org/w/index.php?title=${page.title}` : `https://${currentWiki.replace("wiki", "")}.wikipedia.org/w/index.php?title=${page.title}`;
 									link_obj.wiki_page = page.title.replace(/_/g, " ");
 									// push
 									wiki_obj.wiki_links.push(link_obj);
@@ -146,7 +149,7 @@ function populateSidebar() {
 									WIKI_ARRAY.push(currentWiki);
 								} else {
 									// add link to current wiki object
-									link_obj.wiki_link = `https://${currentWiki.replace("wiki", "")}.wikipedia.org/w/index.php?title=${page.title}`;
+									link_obj.wiki_link = (currentWiki === 'wikidata') ? `https://wikidata.org/w/index.php?title=${page.title}` : `https://${currentWiki.replace("wiki", "")}.wikipedia.org/w/index.php?title=${page.title}`;
 									link_obj.wiki_page = page.title.replace(/_/g, " ");
 									// push current wiki object
 									wiki_obj.wiki_links.push(link_obj);
@@ -189,7 +192,7 @@ function populateSidebar() {
 							file.recommender = rec_data;
 							
 							// compile template
-							var template = Handlebars.compile(tpl);
+							const template = Handlebars.compile(tpl);
 							
 							$('#right-column').html(template(file));
 							

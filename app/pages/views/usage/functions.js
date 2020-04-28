@@ -30,14 +30,6 @@ function getSubcategoryTotal() {
 	}
 }
 
-// function getUrl(limit) {
-//     let l = Number.isInteger(limit) ? "?limit=" + limit : "";
-//     const db = window.location.href.toString().split('/')[3];
-//     const subcat = window.location.href.toString().split('/')[5];
-//     let query = subcat ? (l ? l+ "&cat="+subcat : "?cat="+subcat) : l;
-//     return "/api/" + db + "/usage" + query;
-// }
-
 function getUrl(limit, sort) {
 	const db = window.location.href.toString().split('/')[3];
 	const subcat = window.location.href.toString().split('/')[5];
@@ -136,7 +128,7 @@ function renderImageListItems(tpl, data, append) {
 			return 0;
 		});
 		// loop through all pages
-		var wiki_obj = {};
+		let wiki_obj = {};
 		file.pages.forEach(function(page) {
 			// format object
 			let link_obj = {};
@@ -146,11 +138,11 @@ function renderImageListItems(tpl, data, append) {
 				wiki_obj = {};
 				wiki_obj.wiki_links = [];
 				// update current wiki
-				currentWiki = page.wiki;
+				currentWiki = page.wiki === 'wikidatawiki' ? 'wikidata' : page.wiki;
 				// page name
 				wiki_obj.wiki_name = currentWiki;
 				// links
-				link_obj.wiki_link =  `https://${currentWiki.replace("wiki","")}.wikipedia.org/w/index.php?title=${page.title}`;
+				link_obj.wiki_link =  page.wiki === 'wikidatawiki' ? `https://wikidata.org/w/index.php?title=${page.title}` : `https://${currentWiki.replace("wiki","")}.wikipedia.org/w/index.php?title=${page.title}`;
 				link_obj.wiki_page = page.title.replace(/_/g, " ");
 				// push
 				wiki_obj.wiki_links.push(link_obj);
@@ -159,7 +151,7 @@ function renderImageListItems(tpl, data, append) {
 				file.wiki_array.push(currentWiki);
 			} else {
 				// add link to current wiki object
-				link_obj.wiki_link =  `https://${currentWiki.replace("wiki","")}.wikipedia.org/w/index.php?title=${page.title}`;
+				link_obj.wiki_link =   page.wiki === 'wikidatawiki' ? `https://wikidata.org/w/index.php?title=${page.title}` : `https://${currentWiki.replace("wiki","")}.wikipedia.org/w/index.php?title=${page.title}`;
 				link_obj.wiki_page = page.title.replace(/_/g, " ");
 				// push current wiki object
 				wiki_obj.wiki_links.push(link_obj);
@@ -170,9 +162,9 @@ function renderImageListItems(tpl, data, append) {
 	// increment number of items rendered
 	IMAGES_RENDERED += data.length;
 	// compile template
-	var obj = {};
+	const obj = {};
 	obj.files = data;
-	var template = Handlebars.compile(tpl);
+	const template = Handlebars.compile(tpl);
 	// append existing content or replace html
 	append ? $('#right_sidebar_list').append(template(obj)) : $('#right_sidebar_list').html(template(obj));
 	// set tatus to finished rendering
@@ -210,7 +202,7 @@ function loadMoreOnScroll(sort_type) {
 	}
 }
 
-function highlightOnClick(string) {
+function highlightOnClick() {
 	
 	if (ACTIVE_ITEM_ID !== undefined) {
 		$('#' + ACTIVE_ITEM_ID).addClass('list_item_active');
@@ -282,10 +274,10 @@ function download(){
 }
 
 function how_to_read() {
-	button = $("#how_to_read_button");
-	box = $(".how_to_read");
+	const button = $("#how_to_read_button");
+	const box = $(".how_to_read");
 	
-	$("#how_to_read_button").click(function(){
+	button.click(function(){
 		box.toggleClass("show");
 	});
 }

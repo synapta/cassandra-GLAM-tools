@@ -56,17 +56,23 @@ function getFiles() {
 					// add views and category;
 					files[i].image_name = files[i].img_name ? files[i].img_name.replace(/_/g, " ") : "";
 					files[i].image_id = files[i].img_name ? cleanImageName(files[i].img_name) : "";
+					const distinctFiles = [];
+					files[i].titles.forEach(title => {
+						if(!distinctFiles.includes(title)){
+							distinctFiles.push(title);
+						}
+					});
 					
 					// recommender
 					//get data from wiki
-					$.getJSON(getWikiDataUrl(files[i].titles), function (wikidata) {
+					$.getJSON(getWikiDataUrl(distinctFiles), function (wikidata) {
 						let base = "https://www.wikidata.org/wiki/";
 						files[i].wikis = [];
-						for (let j = 0; j < files[i].titles.length; j++) {
+						for (let j = 0; j < distinctFiles.length; j++) {
 							files[i].wikis.push(
 								{
-									title: files[i].titles[j],
-									url: base + files[i].titles[j]
+									title: distinctFiles[j],
+									url: base + distinctFiles[j]
 								}
 							);
 						}

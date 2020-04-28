@@ -11,26 +11,32 @@
 	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.css" />
 	<link rel="stylesheet" href="/assets/style/usage.css" />
 	<link rel="stylesheet" href="/assets/style/style.css" />
+	<link rel="stylesheet" href="/assets/style/header.css" />
 	<link rel="stylesheet" href="/assets/style/chart-page.css" />
 	<link href="https://tools-static.wmflabs.org/fontcdn/css?family=Raleway" rel="stylesheet">
 	<base id="basebase" href="" />
 </head>
 
 <body class="overflow_hidden">
-	<div id="mobile-sidebar" class="ui left sidebar"></div>
-	<div class="pusher">
+<div id="mobile-sidebar" class="ui left sidebar"></div>
+<div class="pusher">
 
-		<header id="mobile-header-bar"></header>
+	<header id="mobile-header-bar"></header>
 
-		<header id="topbar" class="top_bar">
-			<a id="white-logo" href="/">
-				<img src="/assets/img/glam-logo-white.svg" alt="GLAM stat tool">
-			</a>
-			<div id="breadcrumbs">
-				<h6>INSTITUTION</h6>
-				<h2><a class="glamName" href=".."></a></h2>
-				<span class="breadcrumb-separator"> > </span>
-				<select class="autocomplete-categories mr-2" data-live-search="true"></select>
+	<header id="topbar" class="top_bar">
+		<a id="white-logo" href="/">
+			<img src="/assets/img/glam-logo-white.svg" alt="GLAM stat tool">
+		</a>
+		<div id="breadcrumbs" class="row align-items-center w-100">
+			<div>
+				<div class="institution row align-items-center">
+					<h6>INSTITUTION</h6>
+					<h2><a class="glamName" href=".."></a></h2>
+					<span class="breadcrumb-separator"> > </span>
+					<select class="autocomplete-categories mx-2" data-live-search="true"></select>
+				</div>
+			</div>
+			<div class="chart_select_container col-xs-4 col-md-4 col-lg-3">
 				<h6>CHART</h6>
 				<div class="select-chart">
 					<select id="switch_page">
@@ -42,105 +48,106 @@
 					</select>
 				</div>
 			</div>
-		</header>
+		</div>
+	</header>
 
-		<main id="visualizations">
-			<div class="row w-100 m-0">
-				<div id="dataviz" class="col-12 col-lg-8">
-					<div class="how_to_read" style="z-index:999">
-						<span onclick='$(".how_to_read").toggleClass("show");' style="float:right; cursor:pointer">X</span>
-						<h5>Description</h5>
-						This section show the usage of the media of the main category in Wikimedia projects.<br>
-						Every time a media is used in a Wikipedia article in any language or in any other sister projects like
-						Wikidata, Wikisource, etc. it counts 1 here. In this page you can investigate about how many files are
-						really used, in which projects and which are the most popular ones.<br>
-						This statistic is updated every day (max lag time 24h) and represents the actual scenario.
-						<br><br>
-						<h5>How to read it</h5>
-						On the left a bar chart show the top ten projects that are currently using these files. On the right
-						instead each file is detailed with a link to each page in which is used.
-						<br><br>
-						<h5>How to use it</h5>
-						On the right menu you can order files by usage or by number of distinct projects or by name.
-						If you click into a file name the correspondant detail will scroll up.
-						<br>
-						On the top bar you can also drill-down to a chosen subdirectory or select your preferred time dimension.
-						<br><br>
-						<h5>Use case</h5>
-						At first glance you can understand which linguistic community has used the major part of this files and,
-						maybe, better knows this collection. Moreover you can try to spread some useful files also in other
-						versions of Wikipedia where, today, the usage is smaller.
-					</div>
-					<div id="usage_stat" class="row">
-						<div class="col-12 col-md-4 text-center">
-							<div id="distinct-media" class="usage-stat"></div>
-						</div>
-						<div class="col-12 col-md-4 text-center">
-							<div id="total-projects" class="usage-stat"></div>
-						</div>
-						<div class="col-12 col-md-4 text-center">
-							<div id="total-pages" class="usage-stat"></div>
-						</div>
-					</div>
-					<!-- <div id="file_usage_container"></div> -->
-					<div id="usage_horiz_bars"></div>
+	<main id="visualizations">
+		<div class="row w-100 m-0">
+			<div id="dataviz" class="col-12 col-lg-8">
+				<div class="how_to_read" style="z-index:999">
+					<span onclick='$(".how_to_read").toggleClass("show");' style="float:right; cursor:pointer">X</span>
+					<h5>Description</h5>
+					This section show the usage of the media of the main category in Wikimedia projects.<br>
+					Every time a media is used in a Wikipedia article in any language or in any other sister projects like
+					Wikidata, Wikisource, etc. it counts 1 here. In this page you can investigate about how many files are
+					really used, in which projects and which are the most popular ones.<br>
+					This statistic is updated every day (max lag time 24h) and represents the actual scenario.
+					<br><br>
+					<h5>How to read it</h5>
+					On the left a bar chart show the top ten projects that are currently using these files. On the right
+					instead each file is detailed with a link to each page in which is used.
+					<br><br>
+					<h5>How to use it</h5>
+					On the right menu you can order files by usage or by number of distinct projects or by name.
+					If you click into a file name the correspondant detail will scroll up.
+					<br>
+					On the top bar you can also drill-down to a chosen subdirectory or select your preferred time dimension.
+					<br><br>
+					<h5>Use case</h5>
+					At first glance you can understand which linguistic community has used the major part of this files and,
+					maybe, better knows this collection. Moreover you can try to spread some useful files also in other
+					versions of Wikipedia where, today, the usage is smaller.
 				</div>
-				<div id="right-column" class="col-12 col-lg-4">
-					<div id="right_sidebar_box">
-						<div id="sorting_options">
+				<div id="usage_stat" class="row">
+					<div class="col-12 col-md-4 text-center">
+						<div id="distinct-media" class="usage-stat"></div>
+					</div>
+					<div class="col-12 col-md-4 text-center">
+						<div id="total-projects" class="usage-stat"></div>
+					</div>
+					<div class="col-12 col-md-4 text-center">
+						<div id="total-pages" class="usage-stat"></div>
+					</div>
+				</div>
+				<!-- <div id="file_usage_container"></div> -->
+				<div id="usage_horiz_bars"></div>
+			</div>
+			<div id="right-column" class="col-12 col-lg-4">
+				<div id="right_sidebar_box">
+					<div id="sorting_options">
 							<span id="by_num" class="active_order">
 								by usage
 							</span>
-							<span style="cursor:pointer;" id="by_proj">
+						<span style="cursor:pointer;" id="by_proj">
 								by projects
 							</span>
-							<span style="cursor:pointer;" id="by_name">
+						<span style="cursor:pointer;" id="by_name">
 								by name
 							</span>
-						</div>
-						<div id="right_sidebar_list"></div>
 					</div>
+					<div id="right_sidebar_list"></div>
 				</div>
 			</div>
-		</main>
+		</div>
+	</main>
 
-		<footer id="chart-page-footer">
-			<div>
-				<div class="chart-title">
-					<img src="/assets/img/usage.svg" alt="Usage">
-					<h5>USAGE CHART</h5>
-				</div>
-				<div class="commons-category">
-					<h6>CATEGORY IN COMMONS</h6>
-					<h2>
-						<a id="cat_url" href="" title="Mediawiki category" target="_blank"></a>
-						<img class="link-out-big" src="/assets/img/link-out.svg" alt="go">
-					</h2>
-				</div>
+	<footer id="chart-page-footer">
+		<div>
+			<div class="chart-title">
+				<img src="/assets/img/usage.svg" alt="Usage">
+				<h5>USAGE CHART</h5>
 			</div>
-			<div>
-				<div class="help">
-					<h6 id="how_to_read_button"><img src="/assets/img/question-icon.svg" alt="help">HELP</h6>
-				</div>
-				<div class="download">
-					<h6 id="download_dataset"><img src="/assets/img/download-icon.svg" alt="download"></h6>
-				</div>
+			<div class="commons-category">
+				<h6>CATEGORY IN COMMONS</h6>
+				<h2>
+					<a id="cat_url" href="" title="Mediawiki category" target="_blank"></a>
+					<img class="link-out-big" src="/assets/img/link-out.svg" alt="go">
+				</h2>
 			</div>
-		</footer>
-	</div>
+		</div>
+		<div>
+			<div class="help">
+				<h6 id="how_to_read_button"><img src="/assets/img/question-icon.svg" alt="help">HELP</h6>
+			</div>
+			<div class="download">
+				<h6 id="download_dataset"><img src="/assets/img/download-icon.svg" alt="download"></h6>
+			</div>
+		</div>
+	</footer>
+</div>
 
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-select/1.13.12/js/bootstrap-select.min.js"></script>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/d3/4.4.0/d3.min.js"></script>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.js"></script>
-	<script type="text/javascript" src="/js/loader.js"></script>
-	<script type="text/javascript" src="/assets/scripts/utils.js"></script>
-	<script type="text/javascript" src="/assets/scripts/custom-selector.js"></script>
-	<script type="text/javascript" src="/assets/scripts/horiz-bar-chart.js"></script>
-	<script type="text/javascript" src="/views/usage/functions.js"></script>
+<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-select/1.13.12/js/bootstrap-select.min.js"></script>
+<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/d3/4.4.0/d3.min.js"></script>
+<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.js"></script>
+<script type="text/javascript" src="/js/loader.js"></script>
+<script type="text/javascript" src="/assets/scripts/utils.js"></script>
+<script type="text/javascript" src="/assets/scripts/custom-selector.js"></script>
+<script type="text/javascript" src="/assets/scripts/horiz-bar-chart.js"></script>
+<script type="text/javascript" src="/views/usage/functions.js"></script>
 </body>
 
 </html>

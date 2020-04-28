@@ -179,29 +179,33 @@ function networkDataviz() {
 						d.fx = null;
 						d.fy = null;
 				}
-		})
+		});
 }
 
 // ******************************************************************
 // ********************** USAGE *************************************
 //******************************************************************
-var TOP_WIKIS = [];
+const TOP_WIKIS = [];
 
-var usageDataViz = function(wiki_array) {
-	d3.json(getUsageStatsUrl(), function(error, stats_data) {
-		var data_source = getUsageUrl();
+const usageDataViz = function (wiki_array) {
+	d3.json(getUsageStatsUrl(), function (error, stats_data) {
+		const data_source = getUsageUrl();
 		// console.log(data_source);
 		// get data
-		d3.json(data_source, function(error, data) {
+		d3.json(data_source, function (error, data) {
 			// manage error
 			if (error) throw error;
 			// sort
-			data = data.sort(function(a, b) {
+			data = data.sort(function (a, b) {
 				if (a.wiki === 'others') return -1; // put others column as last element
 				return a.usage - b.usage;
 			});
 			// format the data
 			data.forEach(function(d) {
+				if (d.wiki === 'wikidatawiki'){
+					d.wiki = 'wikidata';
+				}
+				
 				if (d.wiki !== 'others') TOP_WIKIS.push(d.wiki);
 				d.usage = +d.usage;
 			});
@@ -209,7 +213,7 @@ var usageDataViz = function(wiki_array) {
 			drawHorizBars(data, '#file_usage_horiz_bars', stats_data.totalPages, wiki_array);
 		});
 	});
-}
+};
 
 function drawHorizBars(data, div, totalPages, wiki_array) {
   // Graph dimensions

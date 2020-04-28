@@ -317,6 +317,7 @@ body {
 .file_details_intro h1 {
   font-size: 1.5rem;
   color: var(--main);
+  margin-top: 1rem;
   margin-bottom: 1.5rem;
 }
 
@@ -353,35 +354,6 @@ body {
     padding: 0;
     height: unset;
     order: 2;
-  }
-
-  .top_bar {
-    /* flex-direction: column; */
-    /* align-items: baseline; */
-  }
-
-  #white-logo {
-    display: none;
-  }
-
-  #breadcrumbs {
-    flex-direction: column;
-    align-items: baseline;
-    margin-left: 0;
-  }
-
-  #topbar h2 {
-    margin-bottom: 1.3rem;
-  }
-
-  .breadcrumb-separator {
-    display: none;
-  }
-
-  .groupby_container {
-    margin: 1rem 0 .5rem;
-    padding: 0;
-    border: none;
   }
 
   #visualizations {

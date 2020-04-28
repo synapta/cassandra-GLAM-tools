@@ -597,9 +597,6 @@ footer {
   display: none;
 }
 
-.autocomplete-categories {
-  width: 40% !important;
-}
 .btn-light.dropdown-toggle,.show>.btn-light.dropdown-toggle,.bootstrap-select .dropdown-menu  {
   color: white;
   background-color: var(--main);
