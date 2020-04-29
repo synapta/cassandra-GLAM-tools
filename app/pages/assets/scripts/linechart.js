@@ -54,7 +54,7 @@ function lineChart(div, data) {
   let margin = {};
   let margin2 = {};
   let availH;
-  let yTicksNum = 9;
+  let yTicksNum = 10;
 
   if (WINDOW_WIDTH < 576) {  // smartphones
     availH = $("#" + div).outerHeight();
@@ -76,8 +76,7 @@ function lineChart(div, data) {
 
   // SCALE OBJECTS
   const x = d3.scaleTime().range([0, width]);
-  const y = d3.scaleLog().range([height,0]);
-
+  const y = d3.scaleLog();
   // BRUSH SCALES
   const x2 = d3.scaleTime().range([0, width]);
   const y2 = d3.scaleLog().range([height2, 0]);
@@ -116,8 +115,13 @@ function lineChart(div, data) {
 
   // SET DOMAINS
   x.domain(d3.extent(data, function(d) { return d.date; }));
-  y.domain([d3.min(data, function(d) { return d.views; })*0.8, d3.max(data, function(d) { return d.views; })*1.2]);
-
+  const minR = d3.min(data, function(d) { return d.views; });
+  const minL = Math.log10(minR);
+  const min = Math.ceil(Math.pow(10,minL-0.18));
+  const maxR = d3.max(data, function(d) { return d.views; });
+  const maxL = Math.log10(maxR);
+  const max = Math.ceil(Math.pow(10,maxL+0.1));
+  y.domain([min,max]).rangeRound([height,0]).clamp(true);
   // BRUSH DOMAINS
   x2.domain(x.domain());
   y2.domain(y.domain());
@@ -145,10 +149,10 @@ function lineChart(div, data) {
   }
 
   const logFormat10 = y.tickFormat(yTicksNum);
-  let yTicks  = y.ticks().slice(1, -1).concat(y.domain()).map(logFormat10);
-  let yTicksFiltered = yTicks.filter(tick => tick !== "").map(tick => Number(tick)).sort((a,b) => a-b);
+  let yTicksFiltered = y.ticks().slice(1,y.ticks().length-2).map(logFormat10).filter(tick => tick !== "").map(tick => Number(tick));
+  let yTicksFilteredWithDomain = yTicksFiltered.concat([y.ticks()[0],y.ticks()[y.ticks().length-1]]).sort((a,b) => a-b);
   const yAxis = d3.axisLeft(y)
-      .tickValues(yTicksFiltered)
+      .tickValues(yTicksFilteredWithDomain)
       .tickFormat(d3.format(".0s"));
 
   // Clip path (clip line outside axis)
