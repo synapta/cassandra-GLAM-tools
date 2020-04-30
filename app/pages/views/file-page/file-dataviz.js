@@ -371,168 +371,172 @@ function drawHorizBars(data, div, totalPages, wiki_array) {
 // ******************************************************************
 // ********************** VIEWS *************************************
 //******************************************************************
-var lineChartDraw = function() {
+const lineChartDraw = function () {
 
-  var data_source = getViewsUrl() + '?groupby=day';
+	const data_source = getViewsUrl() + '?groupby=day';
 
-	var file_query = getFileViewsUrl() + '?groupby=day';
+	const file_query = getFileViewsUrl() + '?groupby=day';
 
-  d3.json(data_source, function(error, data) {
-    if (error) throw error;
+	d3.json(data_source, function (error, data) {
+		if (error) throw error;
 
-		d3.json(file_query, function(error, image_data) {
+		d3.json(file_query, function (error, image_data) {
 			if (error) throw error;
 
 			lineChart('file_main_views_container', fixDataViz(data, 'date'), fixDataViz(image_data, 'access_date'));
 
-    });
-  });
-}
-
+		});
+	});
+};
 
 
 function lineChart(div, data, image_data) {
 
-  var margin = {};
-  var margin2 = {};
-  var kH;
-  var availH;
+	let margin = {};
+	let margin2 = {};
+	let kH;
+	let availH;
+	let xTicksNum = 8;
+	let yTicksNum = 20;
 
 	let WINDOW_WIDTH = $(window).width();
 
-  if (WINDOW_WIDTH < 576) {  // smartphones
-    availH = $("#" + div).outerHeight() * 0.8;
-    margin = { top: 10, right: 40, bottom: 140, left: 16 };
-    margin2 = { top: availH - margin.bottom + 30, right: 40, bottom: 50, left: 16 };
-  } else { // tablets and desktop
-    availH = $("#" + div).outerHeight();
-    margin = { top: 10, right: 50, bottom: 140, left: 30 };
-    margin2 = { top: availH - margin.bottom + 30, right: 50, bottom: 50, left: 30 };
-  }
+	if (WINDOW_WIDTH < 576) {  // smartphones
+		availH = $("#" + div).outerHeight() * 0.8;
+		margin = { top: 10, right: 40, bottom: 140, left: 16 };
+		margin2 = { top: availH - margin.bottom + 30, right: 40, bottom: 50, left: 16 };
+		xTicksNum = 3;
+	} else { // tablets and desktop
+		availH = $("#" + div).outerHeight();
+		margin = { top: 10, right: 50, bottom: 140, left: 30 };
+		margin2 = { top: availH - margin.bottom + 30, right: 50, bottom: 50, left: 30 };
+	}
 
-  var width = Math.round($("#" + div).outerWidth()) - margin.left - margin.right,
-      height = availH - margin.top - margin.bottom,
-      height2 = availH - margin2.top - margin2.bottom;
+	const width = Math.round($("#" + div).outerWidth()) - margin.left - margin.right,
+			height = availH - margin.top - margin.bottom,
+			height2 = availH - margin2.top - margin2.bottom;
 
-  var parseTime = d3.isoParse;
+	const parseTime = d3.isoParse;
 
-  var image_valueline, image_path;
+	let image_valueline, image_path;
 
-  // FORMAT DATA
-  data.forEach(function(d) {
-    d.date = parseTime(d.date);
-    d.views = +d.views;
-  });
+	// FORMAT DATA
+	data.forEach(function(d) {
+		d.date = parseTime(d.date);
+		d.views = +d.views;
+	});
 
-  // Brush function
-  var brush = d3.brushX()
-                .extent([[0, 0], [width, height2]])
-                .on("brush end", brushFunction);
+	// Brush function
+	const brush = d3.brushX()
+			.extent([[0, 0], [width, height2]])
+			.on("brush end", brushFunction);
 
-  // Zoom Function
-  var zoom = d3.zoom()
-               .scaleExtent([1, Infinity])
-               .translateExtent([[0, 0], [width, height]])
-               .extent([[0, 0], [width, height]])
-               .on("zoom", zoomFunction);
+	// Zoom Function
+	const zoom = d3.zoom()
+			.scaleExtent([1, Infinity])
+			.translateExtent([[0, 0], [width, height]])
+			.extent([[0, 0], [width, height]])
+			.on("zoom", zoomFunction);
 
-  // Main SVG
-  var svg = d3.select("#" + div)
-              .append("svg")
-              .attr("id", "svg-graph")
-              .attr("width", width + margin.left + margin.right)
-              .attr("height", height + margin.top + margin.bottom)
-              .append("g")
-              .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	// Main SVG
+	const svg = d3.select("#" + div)
+			.append("svg")
+			.attr("id", "svg-graph")
+			.attr("width", width + margin.left + margin.right)
+			.attr("height", height + margin.top + margin.bottom)
+			.append("g")
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  // SCALE OBJECTS
-  var x = d3.scaleTime().range([0, width]);
-  var y = d3.scaleLog().range([height, 0]);
+	// SCALE OBJECTS
+	const x = d3.scaleTime().range([0, width]);
+	const y = d3.scaleLog().range([height, 0]);
 
-  // BRUSH SCALES
-  var x2 = d3.scaleTime().range([0, width]);
-  var y2 = d3.scaleLog().range([height2, 0]);
+	// BRUSH SCALES
+	const x2 = d3.scaleTime().range([0, width]);
+	const y2 = d3.scaleLog().range([height2, 0]);
 
-  // SET DOMAINS
-  x.domain(d3.extent(data, function(d) { return d.date; }));
-  y.domain([d3.min(data, function(d) { return d.views; }), d3.max(data, function(d) { return d.views; })]);
+	// SET DOMAINS
+	x.domain(d3.extent(data, function(d) { return d.date; }));
+	y.domain([d3.min(data, function(d) { return d.views; }), d3.max(data, function(d) { return d.views; })]);
 
-  // BRUSH DOMAINS
-  x2.domain(x.domain());
-  y2.domain(y.domain());
+	// BRUSH DOMAINS
+	x2.domain(x.domain());
+	y2.domain(y.domain());
 
-  // AXIS
-  var xAxis = d3.axisBottom(x);
-  var xAxis2 = d3.axisBottom(x2);
+	// AXIS
+	const xAxis = d3.axisBottom(x).ticks(xTicksNum);
+	const xAxis2 = d3.axisBottom(x2);
 
-  // var yAxis = d3.axisLeft(y).ticks(20).tickFormat(d3.formatPrefix(".0", 1)).tickSize(6, 0);
+	let yAxis = d3.axisLeft(y)
+				.scale(y)
+				.tickValues(y.ticks(yTicksNum))
+				.tickFormat(d3.format(".0s"));
 
-	var yAxis = d3.axisLeft(y)
-								.scale(y)
-								.tickValues(y.ticks(20))
-								.tickFormat(d3.format(".0s"));
+	// Clip path (clip line outside axis)
+	svg.append("defs")
+		.append("svg:clipPath")
+		.attr("id", "clip")
+		.append("svg:rect")
+		.attr("width", width)
+		.attr("height", height)
+		.attr("x", 0)
+		.attr("y", 0);
 
-  // Clip path (clip line outside axis)
-  var clip = svg.append("defs")
-                .append("svg:clipPath")
-                .attr("id", "clip")
-                .append("svg:rect")
-                .attr("width", width)
-                .attr("height", height)
-                .attr("x", 0)
-                .attr("y", 0);
+	const lineChart = svg.append("g")
+						.attr("class", "focus")
+						.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+						.attr("clip-path", "url(#clip)");
 
-  var lineChart = svg.append("g")
-                     .attr("class", "focus")
-                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-                     .attr("clip-path", "url(#clip)");
+	const focus = svg.append("g")
+					.attr("class", "focus")
+					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  var focus = svg.append("g")
-                 .attr("class", "focus")
-                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	const context = svg.append("g")
+						.attr("class", "context")
+						.attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
-  var context = svg.append("g")
-                   .attr("class", "context")
-                   .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+	const valueline = d3.line()
+			.x(function (d) {
+				return x(d.date);
+			})
+			.y(function (d) {
+				return y(d.views);
+			})
+			.curve(d3.curveStepAfter);
 
-  var valueline = d3.line()
-                    .x(function(d) { return x(d.date); })
-                    .y(function(d) { return y(d.views); })
-                    .curve(d3.curveStepAfter);
+  	const valueline2 = d3.line()
+						.x(function(d) { return x2(d.date); })
+                       	.y(function(d) { return y2(d.views); })
+                       	.curve(d3.curveLinear);
 
-  var valueline2 = d3.line()
-                     .x(function(d) { return x2(d.date); })
-                     .y(function(d) { return y2(d.views); })
-                     .curve(d3.curveLinear);
+	// DRAW AXIS
+	const gX = focus.append("g")
+					.attr("class", "axis axis--x")
+					.attr("transform", "translate(0," + height + ")")
+					.call(xAxis);
 
-  // DRAW AXIS
-  var gX = focus.append("g")
-                .attr("class", "axis axis--x")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis);
+	const gY = focus.append("g")
+					.attr("class", "axis axis--y")
+					.call(yAxis);
 
-  var gY = focus.append("g")
-                .attr("class", "axis axis--y")
-                .call(yAxis);
+	context.append("g")
+			.attr("class", "axis axis--x")
+			.attr("transform", "translate(0," + height2 + ")")
+			.call(xAxis2);
 
-  var gX2 = context.append("g")
-                   .attr("class", "axis axis--x")
-                   .attr("transform", "translate(0," + height2 + ")")
-                   .call(xAxis2);
+	// Append data to main graph...
+	const path = lineChart.append("path")
+						.datum(data)
+						.attr("class", "line")
+						.attr("d", valueline);
 
-  // Append data to main graph...
-  var path = lineChart.append("path")
-                .datum(data)
-                .attr("class", "line")
-                .attr("d", valueline);
+	// ...and to secondary graph
+	context.append("path")
+			.datum(data)
+			.attr("class", "line")
+			.attr("d", valueline2);
 
-  // ...and to secondary graph
-  var path2 = context.append("path")
-                .datum(data)
-                .attr("class", "line")
-                .attr("d", valueline2);
-
-  // IMAGE LINE
+	// IMAGE LINE
 	image_data.forEach(function(d) {
 		d.access_date = parseTime(d.access_date);
 		d.sum = +d.sum;
@@ -551,9 +555,9 @@ function lineChart(div, data, image_data) {
 	ticks.splice(9, 1);
 
 	yAxis = d3.axisLeft(y)
-						.scale(y)
-						.tickValues(ticks.slice(1, -1).concat(y.domain()))
-						.tickFormat(d3.format(".0s"));
+				.scale(y)
+				.tickValues(ticks.slice(1, -1).concat(y.domain()))
+				.tickFormat(d3.format(".0s"));
 
 
 	// update axis
@@ -564,241 +568,227 @@ function lineChart(div, data, image_data) {
 
 	// append new line
 	image_valueline = d3.line()
-										.x(function(d) { return x(d.access_date); })
-										.y(function(d) { return y(d.sum); })
-										.curve(d3.curveStepAfter);
+						.x(function(d) { return x(d.access_date); })
+						.y(function(d) { return y(d.sum); })
+						.curve(d3.curveStepAfter);
 
 	image_path = lineChart.append("path")
-								.datum(image_data)
-								.attr("class", "image_line")
-								.attr("d", image_valueline);
+							.datum(image_data)
+							.attr("class", "image_line")
+							.attr("d", image_valueline);
 
-  // append brush area
-  var brushView = context.append("g")
-                         .attr("class", "brush")
-                         .call(brush)
-                         .call(brush.move, x.range());
+	// append brush area
+	const brushView = context.append("g")
+							.attr("class", "brush")
+							.call(brush)
+							.call(brush.move, x.range());
 
-  // append zoom area
-  var zoomView = svg.append("rect")
-                    .attr("class", "zoom-area")
-                    .attr("width", width)
-                    .attr("height", height)
-                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-                    .call(zoom);
+	// append zoom area
+	svg.append("rect")
+		.attr("class", "zoom-area")
+		.attr("width", width)
+		.attr("height", height)
+		.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+		.call(zoom);
 
-  //  Label to display details (right top corner)
-  var detailsLabel = focus.append("g").attr("class", "dateLabel");
-  var bisect = function (data, value) {
-      return d3.bisector(function(d) { return d.date; }).left(data, value) - 1;
-  }
-  var image_bisect = function (data, value) {
-      return d3.bisector(function(d) { return d.access_date; }).left(data, value) - 1;
-  }
+	//  Label to display details (right top corner)
+	const detailsLabel = focus.append("g").attr("class", "dateLabel");
+	const bisect = function (data, value) {
+		return d3.bisector(function (d) {
+			return d.date;
+		}).left(data, value) - 1;
+	};
+	const image_bisect = function (data, value) {
+		return d3.bisector(function (d) {
+			return d.access_date;
+		}).left(data, value) - 1;
+	};
 
-    // Line across the plots on mouse pointer
-  var verticalLine = focus.append("g").attr("class", "hover-line");
+	// Line across the plots on mouse pointer
+	const verticalLine = focus.append("g").attr("class", "hover-line");
 
-  //  Label to display details (right top corner)
-  var legendLabel = focus.append("g").attr("class", "legend-container");
+	//  Label to display details (right top corner)
+	const legendLabel = focus.append("g").attr("class", "legend-container");
 
 	legendLabel.append("g")
-						 .attr("transform", `translate(${width - 250}, ${0})`)
-						 .attr("class", "legend-label1")
-						 .append('circle')
-						 .style('fill','var(--main)')
-						 .style('stroke','var(--main)')
-						 .attr('r', 7);
+				.attr("transform", `translate(${width - 250}, ${0})`)
+				.attr("class", "legend-label1")
+				.append('circle')
+				.style('fill','var(--main)')
+				.style('stroke','var(--main)')
+				.attr('r', 7);
 
 	d3.select('.legend-label1').append('text')
-														 .html("TOTAL VIEWS")
-														 .attr("font-family", "monospace")
-														 .attr("font-size", "13px")
-														 .attr('text-anchor', 'start')
-														 .attr('dy', '.32em')
-														 .attr('dx', '15');
+								.html("TOTAL VIEWS")
+								.attr("font-family", "monospace")
+								.attr("font-size", "13px")
+								.attr('text-anchor', 'start')
+								.attr('dy', '.32em')
+								.attr('dx', '15');
 
 	legendLabel.append("g")
-						 .attr("transform", `translate(${width - 100}, ${0})`)
-						 .attr("class", "legend-label2")
-						 .append('circle')
-						 .style('fill','var(--accent-green)')
-						 .style('stroke','var(--accent-green)')
-						 .attr('r', 7);
+				.attr("transform", `translate(${width - 100}, ${0})`)
+				.attr("class", "legend-label2")
+				.append('circle')
+				.style('fill','var(--accent-green)')
+				.style('stroke','var(--accent-green)')
+				.attr('r', 7);
 
 	d3.select('.legend-label2').append('text')
-														 .html("FILE VIEWS")
-														 .attr("font-family", "monospace")
-														 .attr("font-size", "13px")
-														 .attr('text-anchor', 'start')
-														 .attr('dy', '.3em')
-														 .attr('dx', '15');
+								.html("FILE VIEWS")
+								.attr("font-family", "monospace")
+								.attr("font-size", "13px")
+								.attr('text-anchor', 'start')
+								.attr('dy', '.3em')
+								.attr('dx', '15');
 
-  // invert x values
-  function getValueForPositionXFromData(xPosition) {
-    var xValue = x.invert(xPosition);
-    return xValue;
-  }
+	// invert x values
+	function getValueForPositionXFromData(xPosition) {
+		return x.invert(xPosition);
+	}
 
-  // invert y values
-  function getValueForPositionYFromData(yPosition) {
-    var yValue = y.invert(yPosition);
-    return yValue;
-  }
+	// invert y values
+	function getValueForPositionYFromData(yPosition) {
+		return y.invert(yPosition);
+	}
 
-  // check if point is inside graph
-  function isInsideGraph(point) {
-    if (point.x > (margin.left * 2 + 30) && point.x < (width + margin.left * 2 + 30) &&
-      point.y > ($('#svg-graph').offset().top + margin.top) &&
-      point.y < (height + $('#svg-graph').offset().top + margin.top)) {
-      return true;
-    } else {
-      return false;
-    }
-    return true;
-  }
+	// check if point is inside graph
+	function isInsideGraph(point) {
+		return point.x > (margin.left * 2 + 30) && point.x < (width + margin.left * 2 + 30) &&
+				point.y > ($('#svg-graph').offset().top + margin.top) &&
+				point.y < (height + $('#svg-graph').offset().top + margin.top);
+	}
 
-  // zoom behavior handler
-  function zoomFunction() {
-    if (d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return; // ignore zoom-by-brush
-    var t = d3.event.transform;
-    x.domain(t.rescaleX(x2).domain());
-    path.attr("d", valueline);
+	// zoom behavior handler
+	function zoomFunction() {
+		if (d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return; // ignore zoom-by-brush
+		const t = d3.event.transform;
+		x.domain(t.rescaleX(x2).domain());
+		path.attr("d", valueline);
 
 		image_path.attr("d", image_valueline);
 
-    gX.call(xAxis);
-    // update dots
-    let dots = focus.selectAll('.note-dot');
-    // console.log(dots);
-    dots.attr("cx", (d) => d.x)
-        .attr("cy", (d) => d.y);
+		gX.call(xAxis);
+		// update dots
+		let dots = focus.selectAll('.note-dot');
+		// console.log(dots);
+		dots.attr("cx", (d) => d.x)
+				.attr("cy", (d) => d.y);
 
-    brushView.call(brush.move, x.range().map(t.invertX, t));
-  }
+		brushView.call(brush.move, x.range().map(t.invertX, t));
+	}
 
-  function brushFunction() {
-    if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
-    var s = d3.event.selection || x2.range();
-    x.domain(s.map(x2.invert, x2));
-    path.attr("d", valueline);
-    image_path.attr("d", image_valueline);
-    gX.call(xAxis);
-    svg.select(".zoom-area")
-       .call(zoom.transform, d3.zoomIdentity
-       .scale(width / (s[1] - s[0]))
-       .translate(-s[0], 0));
-  }
+	function brushFunction() {
+		if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
+		const s = d3.event.selection || x2.range();
+		x.domain(s.map(x2.invert, x2));
+		path.attr("d", valueline);
+		image_path.attr("d", image_valueline);
+		gX.call(xAxis);
+		svg.select(".zoom-area")
+			.call(zoom.transform, d3.zoomIdentity.scale(width / (s[1] - s[0])).translate(-s[0], 0));
+	}
 
-  // window.hideFileLine = function() {
-  //   d3.selectAll('.image_line').remove();
-  //   y.domain([d3.min(data, function(d) { return d.views; }), d3.max(data, function(d) { return d.views; })]);
-  //   // update main line chart
-  //   path.transition().attr("d", valueline);
-  //   SHOWN_IMAGE = false;
-  // }
-  //
-  
-  // MOUSE HANDLER
-  // $(".zoom-area").mousemove(function(event) {
-    $("#svg-graph").mousemove(function(event) {
+	// MOUSE HANDLER
+	// $(".zoom-area").mousemove(function(event) {
+	$("#svg-graph").mousemove(function(event) {
 
-      let mousePoint = {x: event.pageX, y: event.pageY };
-  
-      if (isInsideGraph(mousePoint)) {
-        // MOVE VERTICAL LINE
-        let mouseX = mousePoint.x - margin.left * 2 - 30;
-        verticalLine.select('line').remove();
-        verticalLine.append("line")
-                    .attr("x1", mouseX).attr("x2", mouseX)
-                    .attr("y1", 5).attr("y2", height - 5)
-                    .style("stroke", "DarkViolet")
-                    .style("stroke-width", 0.5);
-  
-        // DISPLAY DATA
-        displayDetails(getValueForPositionXFromData(mouseX));
-      } else {
-        // HIDE LINES
-        verticalLine.select('line').remove();
-        detailsLabel.selectAll('text').remove();
-        detailsLabel.selectAll('rect').remove();
-      }
-    });
+		let mousePoint = {x: event.pageX, y: event.pageY };
 
-  // *** FUNCTIONS ***
-  // display data in text box
-  function displayDetails(time) {
-    // remove previous
-    detailsLabel.selectAll('text').remove();
-    detailsLabel.selectAll('rect').remove();
-    // format date
-    var formatDate = function (time, groupby) {
-      if (groupby == 'week') {
-        const from_date = moment(time).startOf('week').isoWeekday(1);
-        const to_date = moment(time).endOf('week').isoWeekday(0);
-        return from_date.format("D") + "-" + to_date.format("D MMM YYYY");
-      }
-      var format = {
-        'day': "ddd D MMM YYYY",
-        'month': "MMM YYYY",
-        'quarter': "[Q]Q YYYY",
-        'year': "YYYY"
-      };
-      return moment(time).format(format[groupby]);
-    }
-    let fT = formatDate(time, 'day');
-    let views = data[bisect(data, time)].views;
-    // show data (time)
-    var text1 = detailsLabel.append("text")
-                .attr("x", width - 300)
-                .attr("y", 30)
-                .attr("class", "info-label")
-                .html("DATE: " + fT)
-                .attr("font-family", "monospace")
-                .attr("font-size", "14px");
+		if (isInsideGraph(mousePoint)) {
+			// MOVE VERTICAL LINE
+			let mouseX = mousePoint.x - margin.left * 2 - 30;
+			verticalLine.select('line').remove();
+			verticalLine.append("line")
+						.attr("x1", mouseX).attr("x2", mouseX)
+						.attr("y1", 5).attr("y2", height - 5)
+						.style("stroke", "DarkViolet")
+						.style("stroke-width", 0.5);
 
-    // show data (views)
-    var text2 = detailsLabel.append("text")
-                .attr("x", width - 300)
-                .attr("y", 50)
-                .attr("class", "info-label")
-                .html("TOTAL VIEWS: " + nFormatter(views))
-                .attr("font-family", "monospace")
-                .attr("font-size", "14px");
+			// DISPLAY DATA
+			displayDetails(getValueForPositionXFromData(mouseX));
+		} else {
+			// HIDE LINES
+			verticalLine.select('line').remove();
+			detailsLabel.selectAll('text').remove();
+			detailsLabel.selectAll('rect').remove();
+		}
+	});
+
+	// *** FUNCTIONS ***
+	// display data in text box
+	function displayDetails(time) {
+		// remove previous
+		detailsLabel.selectAll('text').remove();
+		detailsLabel.selectAll('rect').remove();
+		// format date
+		const formatDate = function (time, groupby) {
+			if (groupby === 'week') {
+				const from_date = moment(time).startOf('week').isoWeekday(1);
+				const to_date = moment(time).endOf('week').isoWeekday(0);
+				return from_date.format("D") + "-" + to_date.format("D MMM YYYY");
+			}
+			const format = {
+				'day': "ddd D MMM YYYY",
+				'month': "MMM YYYY",
+				'quarter': "[Q]Q YYYY",
+				'year': "YYYY"
+			};
+			return moment(time).format(format[groupby]);
+		};
+		let fT = formatDate(time, 'day');
+		let views = data[bisect(data, time)].views;
+		// show data (time)
+		const text1 = detailsLabel.append("text")
+									.attr("x", width - 300)
+									.attr("y", 30)
+									.attr("class", "info-label")
+									.html("DATE: " + fT)
+									.attr("font-family", "monospace")
+									.attr("font-size", "14px");
+
+		// show data (views)
+		const text2 = detailsLabel.append("text")
+				.attr("x", width - 300)
+				.attr("y", 50)
+				.attr("class", "info-label")
+				.html("TOTAL VIEWS: " + nFormatter(views))
+				.attr("font-family", "monospace")
+				.attr("font-size", "14px");
 
 
-    detailsLabel.insert("rect", "text")
-                .attr('class', 'bounding-rect')
-                .attr("x", text1.node().getBBox().x)
-                .attr("y", text1.node().getBBox().y)
-                .attr("width", text1.node().getBBox().width)
-                .attr("height", text1.node().getBBox().height)
-                .style("fill", "#fff");
+		detailsLabel.insert("rect", "text")
+					.attr('class', 'bounding-rect')
+					.attr("x", text1.node().getBBox().x)
+					.attr("y", text1.node().getBBox().y)
+					.attr("width", text1.node().getBBox().width)
+					.attr("height", text1.node().getBBox().height)
+					.style("fill", "#fff");
 
-    detailsLabel.insert("rect", "text")
-                .attr('class', 'bounding-rect')
-                .attr("x", text2.node().getBBox().x)
-                .attr("y", text2.node().getBBox().y)
-                .attr("width", text2.node().getBBox().width)
-                .attr("height", text2.node().getBBox().height)
-                .style("fill", "#fff");
+		detailsLabel.insert("rect", "text")
+					.attr('class', 'bounding-rect')
+					.attr("x", text2.node().getBBox().x)
+					.attr("y", text2.node().getBBox().y)
+					.attr("width", text2.node().getBBox().width)
+					.attr("height", text2.node().getBBox().height)
+					.style("fill", "#fff");
 
-      let img_views = image_data[image_bisect(image_data, time)].sum;
-      // show data (views)
-      let text3 = detailsLabel.append("text")
-                  .attr("x", width - 300)
-                  .attr("y", 70)
-                  .attr("class", "info-label")
-                  .html("FILE VIEWS: " + nFormatter(img_views))
-                  .attr("font-family", "monospace")
-                  .attr("font-size", "14px");
-      detailsLabel.insert("rect", "text")
-                  .attr('class', 'bounding-rect')
-                  .attr("x", text3.node().getBBox().x)
-                  .attr("y", text3.node().getBBox().y)
-                  .attr("width", text2.node().getBBox().width)
-                  .attr("height", text2.node().getBBox().height)
-                  .style("fill", "#fff");
+		let img_views = image_data[image_bisect(image_data, time)].sum;
+		// show data (views)
+		let text3 = detailsLabel.append("text")
+								.attr("x", width - 300)
+								.attr("y", 70)
+								.attr("class", "info-label")
+								.html("FILE VIEWS: " + nFormatter(img_views))
+								.attr("font-family", "monospace")
+								.attr("font-size", "14px");
+		detailsLabel.insert("rect", "text")
+					.attr('class', 'bounding-rect')
+					.attr("x", text3.node().getBBox().x)
+					.attr("y", text3.node().getBBox().y)
+					.attr("width", text2.node().getBBox().width)
+					.attr("height", text2.node().getBBox().height)
+					.style("fill", "#fff");
 
-  }
+	}
 }

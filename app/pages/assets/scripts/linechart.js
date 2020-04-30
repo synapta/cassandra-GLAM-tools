@@ -47,7 +47,9 @@ const lineChartDraw = function (div, query) {
 
 function lineChart(div, data) {
 
-  $("#svg-graph").remove();
+  const svgGraph = $("#svg-graph");
+  const divEl = $("#" + div);
+  svgGraph.remove();
 
   let WINDOW_WIDTH = $(window).width();
 
@@ -55,20 +57,37 @@ function lineChart(div, data) {
   let margin2 = {};
   let availH;
   let yTicksNum = 10;
+  let groupby2dateFormat = {
+    'day': ['%Y-%m-%d', 6],
+    // 'week': ['%Y w%W', 12],
+    'week': ['%Y-%m', 7],
+    'month': ['%Y-%m', 5],
+    'quarter': ['%Y-%m',6],
+    'year': ['%Y', 5]
+  };
 
   if (WINDOW_WIDTH < 576) {  // smartphones
-    availH = $("#" + div).outerHeight();
-    margin = { top: 10, right: 20, bottom: 140, left: 20 };
+    availH = divEl.outerHeight();
+    margin = { top: 10, right: 50, bottom: 140, left: 20 };
     margin2 = { top: availH - margin.bottom + 30, right: 15, bottom: 50, left: 15 };
     yTicksNum = 6;
+    groupby2dateFormat = {
+      'day': ['%Y-%m-%d', 3],
+      // 'week': ['%Y w%W', 12],
+      'week': ['%Y-%m', 3],
+      'month': ['%Y-%m', 4],
+      'quarter': ['%Y-%m', 4],
+      'year': ['%Y', 4]
+    };
   } else {
     // tablets and desktop
-    availH = $("#" + div).outerHeight() * 0.82;
+    availH = divEl.outerHeight() * 0.82;
     margin = { top: 10, right: 40, bottom: 140, left: 20 };
     margin2 = { top: availH - margin.bottom + 30, right: 40, bottom: 50, left: 20 };
+
   }
 
-  const width = Math.round($("#" + div).outerWidth()) - margin.left - margin.right,
+  const width = Math.round(divEl.outerWidth()) - margin.left - margin.right,
       height = availH - margin.top - margin.bottom,
       height2 = availH - margin2.top - margin2.bottom;
 
@@ -90,20 +109,20 @@ function lineChart(div, data) {
 
   // Zoom Function
   const zoom = d3.zoom()
-      .scaleExtent([1, 80])
-      .translateExtent([[0, 0], [width, height]])
-      .extent([[0, 0], [width, height]])
-      .on("zoom", zoomFunction);
+                  .scaleExtent([1, 80])
+                  .translateExtent([[0, 0], [width, height]])
+                  .extent([[0, 0], [width, height]])
+                  .on("zoom", zoomFunction);
 
   // Main SVG
   const svg = d3.select("#" + div)
-      .append("svg")
-      .attr("id", "svg-graph")
-      .style('position', 'relative')
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                .append("svg")
+                .attr("id", "svg-graph")
+                .style('position', 'relative')
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
   // FORMAT DATA
@@ -117,11 +136,11 @@ function lineChart(div, data) {
   x.domain(d3.extent(data, function(d) { return d.date; }));
   const minR = d3.min(data, function(d) { return d.views; });
   const minL = Math.log10(minR);
-  const min = Math.ceil(Math.pow(10,minL-0.18));
+  const minY = Math.ceil(Math.pow(10,minL-0.18));
   const maxR = d3.max(data, function(d) { return d.views; });
   const maxL = Math.log10(maxR);
-  const max = Math.ceil(Math.pow(10,maxL+0.1));
-  y.domain([min,max]).rangeRound([height,0]).clamp(true);
+  const maxY = Math.ceil(Math.pow(10,maxL+0.1));
+  y.domain([minY,maxY]).rangeRound([height,0]).clamp(true);
   // BRUSH DOMAINS
   x2.domain(x.domain());
   y2.domain(y.domain());
@@ -129,31 +148,29 @@ function lineChart(div, data) {
   // AXIS, draw ticks
   let xAxis;
   let xAxis2 = d3.axisBottom(x2);
-  const groupby2dateFormat = {
-    'day': ['%Y-%m-%d', 12],
-    // 'week': ['%Y w%W', 12],
-    'week': ['%Y-%m', 12],
-    'month': ['%Y-%m', 12],
-    'quarter': ['%Y-%m', 8],
-    'year': ['%Y', 2]
-  };
+  let groupBy = $('#groupby-select').val();
+  const minDate = d3.min(data, d => d.date);
+  const maxDate = d3.max(data, d => d.date);
   xAxis = d3.axisBottom().scale(x).tickFormat(d3.timeFormat(
-    groupby2dateFormat[$('#groupby-select').val()][0]
-  )).ticks(
-    groupby2dateFormat[$('#groupby-select').val()][1]
-  );
+      groupby2dateFormat[groupBy][0]
+  ))
+      .ticks(groupby2dateFormat[groupBy][1]);
 
-
-  if ($('#groupby-select').val() === "year"){
-    xAxis2 =  d3.axisBottom().scale(x2).tickFormat(d3.timeFormat('%Y')).ticks(5);
+  if ( groupBy === "year"){
+    xAxis2 =  d3.axisBottom(x2).tickFormat(d3.timeFormat('%Y')).ticks(5);
   }
 
-  const logFormat10 = y.tickFormat(yTicksNum);
-  let yTicksFiltered = y.ticks().slice(1,y.ticks().length-2).map(logFormat10).filter(tick => tick !== "").map(tick => Number(tick));
-  let yTicksFilteredWithDomain = yTicksFiltered.concat([y.ticks()[0],y.ticks()[y.ticks().length-1]]).sort((a,b) => a-b);
-  const yAxis = d3.axisLeft(y)
-      .tickValues(yTicksFilteredWithDomain)
-      .tickFormat(d3.format(".0s"));
+
+  // let yTicksFiltered = y.ticks().slice(1,y.ticks().length-2).map(logFormat10).filter(tick => tick !== "").map(tick => Number(tick));
+  // let yTicksFilteredWithDomain = yTicksFiltered.concat([y.ticks()[0],y.ticks()[y.ticks().length-1]]).sort((a,b) => a-b);
+  const yAxis = function (params){
+    const logFormat10 = y.tickFormat(yTicksNum);
+    let yTicksFiltered = y.ticks().slice(1,y.ticks().length-2).map(logFormat10).filter(tick => tick !== "").map(tick => Number(tick));
+    let yTicksFilteredWithDomain = yTicksFiltered.concat([y.ticks()[0],y.ticks()[y.ticks().length-1]]).sort((a,b) => a-b);
+    d3.axisLeft(y)
+        .tickValues(yTicksFilteredWithDomain)
+        .tickFormat(d3.format(".0s"))(params);
+  };
 
   // Clip path (clip line outside axis)
   svg.append("defs")
@@ -719,16 +736,6 @@ function lineChart(div, data) {
 
   }
 
-  // x axis object
-  function make_x_gridlines() {
-    return d3.axisBottom(x).ticks(5);
-  }
-
-  // y axis object
-  function make_y_gridlines() {
-    return d3.axisLeft(y).ticks(5);
-  }
-
   // invert x values
   function getValueForPositionXFromData(xPosition) {
     var xValue = x.invert(xPosition);
@@ -743,14 +750,9 @@ function lineChart(div, data) {
 
   // check if point is inside graph
   function isInsideGraph(point) {
-    if (point.x > (margin.left * 2 + 15) && point.x < (width + margin.left * 2 + 15) &&
-      point.y > ($('#svg-graph').offset().top + margin.top) &&
-      point.y < (height + $('#svg-graph').offset().top + margin.top)) {
-      return true;
-    } else {
-      return false;
-    }
-    return true;
+    return point.x > (margin.left * 2 + 15) && point.x < (width + margin.left * 2 + 15) &&
+        point.y > ($('#svg-graph').offset().top + margin.top) &&
+        point.y < (height + $('#svg-graph').offset().top + margin.top);
   }
 
   // zoom behavior handler
@@ -778,7 +780,7 @@ function lineChart(div, data) {
   function brushFunction() {
     if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
 
-    var s = d3.event.selection || x2.range();
+    const s = d3.event.selection || x2.range();
 
     x.domain(s.map(x2.invert, x2));
 
@@ -801,7 +803,7 @@ function lineChart(div, data) {
   window.hideFileLine = function() {
     d3.selectAll('.image_line').remove();
     // update domain
-    y.domain([d3.min(data, function(d) { return d.views; }), d3.max(data, function(d) { return d.views; })]);
+    y.domain([minY,maxY]).rangeRound([height,0]).clamp(true);
 
     // update axis
     gY.call(yAxis);
@@ -829,11 +831,10 @@ function lineChart(div, data) {
          img_data = image_data;
 
          // update domain
-         let min = Math.min(d3.min(image_data, function(d) { return d.sum; }), d3.min(data, function(d) { return d.views; }));
-         let max = Math.max(d3.max(image_data, function(d) { return d.sum; }), d3.max(data, function(d) { return d.views; }));
+         let min = Math.min(d3.min(image_data, function(d) { return d.sum; }), minY);
+         let max = Math.max(d3.max(image_data, function(d) { return d.sum; }), maxY);
 
-         y.domain([min, max]);
-
+         y.domain([min, max]).rangeRound([height,0]).clamp(true);
          // update axis
          gY.call(yAxis);
 
