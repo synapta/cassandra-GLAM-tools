@@ -1,6 +1,6 @@
 /* HEADER BAR */
 .top_bar {
-    min-height: 3em;
+    max-height: 13rem;
     top: 0;
     width: 100%;
     z-index: 1;
@@ -32,6 +32,9 @@
 
 #topbar {
     background-color: var(--main);
+    font-size: 1em;
+    line-height: 1 !important;
+
 }
 
 #topbar .breadcrumb-separator {
@@ -85,7 +88,7 @@
     right: 12px;
     width: 0;
     height: 0;
-    border: 6px solid transparent;
+    border: 6px solid;
     border-color: #fff transparent transparent transparent;
 }
 
@@ -97,7 +100,6 @@
 
 /*style the items (options), including the selected item:*/
 .select-items div,.select-selected {
-    font-size: 0.9rem;
     color: #fff;
     padding: .5rem 2rem .5rem 1.2rem;
     border-bottom: 1px solid #fff;
@@ -109,17 +111,6 @@
     width: auto !important;
 }
 
-@media screen and (min-width: 1024px) {
-    .select-items div, .select-selected {
-        width: 150px;
-    }
-}
-
-@media screen and (min-width: 1441px) {
-    .select-items div, .select-selected{
-        width: 175px;
-    }
-}
 
 /*style items (options):*/
 .select-items {
@@ -155,7 +146,6 @@
 .chart_select_container{
     display: flex;
     align-items: center;
-    height: 63.22px;
 }
 .groupby_container {
     display: flex;
@@ -163,7 +153,6 @@
     /*margin: 0 0 0 1rem;*/
     /*padding: 0 1rem;*/
     border-left: 1px solid rgba(255, 255, 255, .5);
-    height: 63.22px;
 }
 
 #groupby_options {
@@ -188,7 +177,6 @@
     display: flex;
     align-items: center;
     border-left: 1px solid rgba(255, 255, 255, .5);
-    height: 63.22px;
 }
 
 .annotation_toggle_container {
@@ -202,12 +190,6 @@
     text-transform: uppercase;
 }
 
-@media screen and (max-width: 768px) {
-    .chart_select_container{
-        padding: 0;
-        align-self: baseline;
-    }
-}
 
 @media screen and (max-width: 576px) {
     h1 {
@@ -226,7 +208,7 @@
     }
 
     .institution, #topbar h2, #topbar h6 {
-        margin-bottom: 1.3rem;
+        margin-bottom: 0.8rem;
     }
 
     .breadcrumb-separator {
@@ -241,5 +223,42 @@
 
     .autocomplete-categories,.bootstrap-select .dropdown-menu {
         max-width: 70%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .chart_select_container{
+        padding: 0;
+        align-self: baseline;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .autocomplete-categories {
+        margin-bottom: .5rem!important;
+    }
+}
+@media screen and (min-width: 1025px) {
+    .select-items div, .select-selected {
+        width: 115px;
+    }
+
+    .select-chart-large .select-items div, .select-chart-large .select-selected {
+        width: 160px;
+    }
+    .select-chart-medium .select-items div, .select-chart-medium .select-selected {
+        width: 160px;
+    }
+    .chart_select_container,.groupby_container,.annotation_container{
+        height: 63.219px
+    }
+}
+
+@media screen and (min-width: 1441px) {
+    .select-chart-medium .select-items div, .select-chart-medium .select-selected {
+        width: 180px;
+    }
+    .select-chart-large .select-items div, .select-chart-large .select-selected {
+        width: 200px;
     }
 }
