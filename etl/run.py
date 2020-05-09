@@ -16,7 +16,6 @@ import sentry_sdk
 from sentry_sdk.integrations.logging import LoggingIntegration
 
 config_file = '../config/config.json'
-views_dir = 'temp'
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(levelname)s %(message)s')
@@ -50,12 +49,6 @@ def etl(name):
     logging.info('Subprocess etl.js completed')
 
 
-def views(name, date):
-    logging.info('Running views.py for %s on %s', name, date)
-    subprocess.run(['python3', 'views.py', name, date], check=True)
-    logging.info('Subprocess views.py completed')
-
-
 def process_glam(collection, glam):
     if datetime.utcnow() < glam['lastrun'] + timedelta(days=1):
         logging.info('Glam %s is already updated', glam['name'])
@@ -81,31 +74,11 @@ def process_glam(collection, glam):
             fail(collection, glam)
             return
 
-    # Run views.py
-    try:
-        views(glam['name'], views_date())
-    except SubprocessError:
-        success = False
-        logging.error('Subprocess views.py failed')
-
     if success:
         logging.info('Completed scheduler for %s', glam['name'])
         update(collection, glam)
     else:
         logging.error('Failed scheduler for %s', glam['name'])
-
-
-def clean_downloads():
-    for f_name in os.listdir(views_dir):
-        path = os.path.join(views_dir, f_name)
-        if os.path.isfile(path):
-            try:
-                date = datetime.strptime(f_name[:10], '%Y-%m-%d')
-                if date < datetime.utcnow() - timedelta(days=10):
-                    logging.info('Deleting file %s', f_name)
-                    os.remove(path)
-            except ValueError:
-                pass
 
 
 def create_database(config, database):
@@ -127,34 +100,10 @@ def create_database(config, database):
         conn.close()
 
 
-def initial_views(name):
-    date_str = views_date()
-
-    # for all the files available
-    for f_name in os.listdir(views_dir):
-        path = os.path.join(views_dir, f_name)
-        if os.path.isfile(path):
-            try:
-                date = datetime.strptime(f_name[:10], '%Y-%m-%d')
-                if date_str == date.strftime("%Y-%m-%d"):
-                    # we have already processed this date
-                    continue
-            except ValueError:
-                # the file name is invalid
-                continue
-
-            try:
-                views(name, f_name[:10])
-            except SubprocessError:
-                logging.error('Subprocess views.py failed')
-
-
 def main():
     config = json.load(open(config_file))
 
     try:
-        logging.info('External error reporting enabled')
-
         sentry_logging = LoggingIntegration(
             level=logging.INFO,
             event_level=logging.ERROR
@@ -163,9 +112,9 @@ def main():
             dsn=config['raven']['glamtoolsetl']['DSN'],
             integrations=[sentry_logging]
         )
+        logging.info('External error reporting ENABLED')
     except KeyError:
         logging.info('External error reporting DISABLED')
-        pass
 
     client = pymongo.MongoClient(config['mongodb']['url'])
     db = client[config['mongodb']['database']]
@@ -196,10 +145,6 @@ def main():
                 continue
 
             process_glam(collection, glam)
-
-            initial_views(glam['name'])
-
-    clean_downloads()
 
 
 if __name__ == '__main__':

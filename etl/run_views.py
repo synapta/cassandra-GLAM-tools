@@ -12,17 +12,20 @@ import psycopg2
 import pymongo
 from psycopg2 import ProgrammingError
 
-from run import views
+import sentry_sdk
+from sentry_sdk.integrations.logging import LoggingIntegration
 
 config_file = '../config/config.json'
-min_date = date(2015, 1, 1)
-views_dir = 'temp_fix'
+
+global_min_date = date(2015, 1, 1)
+global_max_date = date.today() - timedelta(days=2)
+views_dir = 'temp'
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(levelname)s %(message)s')
 
 
-def process_glam(config, glam):
+def add_missing_dates(config, glam):
     logging.info('Processing glam %s', glam['name'])
 
     connstring = "dbname=" + glam['database'] + " user=" + config['postgres']['user'] + \
@@ -32,27 +35,46 @@ def process_glam(config, glam):
     conn = psycopg2.connect(connstring)
     conn.autocommit = True
     curse = conn.cursor()
+
+    # Find the dates already in the database
     curse.execute(
         "select distinct access_date from visualizations order by access_date")
-    dates = list(map(lambda x: x[0], curse.fetchall()))
+    current_dates = list(map(lambda x: x[0], curse.fetchall()))
+
+    # Find the date of the first image, if any
+    curse.execute("SELECT min(img_timestamp) FROM images")
+    try:
+        first_image = curse.fetchone()[0].date()
+    except TypeError:
+        first_image = global_min_date
     conn.close()
 
-    if len(dates) == 0:
-        return
-
-    max_date = dates[len(dates) - 1]
-    date_interval = [min_date + timedelta(days=x)
-                     for x in range(0, (max_date - min_date).days)]
+    min_date = max([first_image, global_min_date])
+    candidate_dates = [min_date + timedelta(days=x)
+                       for x in range(0, (global_max_date - min_date).days)]
 
     glam['missing_dates'] = []
 
-    for date in date_interval:
-        if date not in dates:
-            glam['missing_dates'].append(date)
+    for date_value in candidate_dates:
+        if date_value not in current_dates:
+            glam['missing_dates'].append(date_value)
 
 
 def main():
     config = json.load(open(config_file))
+
+    try:
+        sentry_logging = LoggingIntegration(
+            level=logging.INFO,
+            event_level=logging.ERROR
+        )
+        sentry_sdk.init(
+            dsn=config['raven']['glamtoolsetl']['DSN'],
+            integrations=[sentry_logging]
+        )
+        logging.info('External error reporting ENABLED')
+    except KeyError:
+        logging.info('External error reporting DISABLED')
 
     client = pymongo.MongoClient(config['mongodb']['url'])
     db = client[config['mongodb']['database']]
@@ -70,12 +92,11 @@ def main():
                 logging.info('Glam %s is failed', glam['name'])
                 continue
 
-            process_glam(config, glam)
+            add_missing_dates(config, glam)
             glams.append(glam)
 
-    max_date = date.today() - timedelta(days=2)
-    date_interval = [min_date + timedelta(days=x)
-                     for x in range(0, (max_date - min_date).days)]
+    date_interval = [global_min_date + timedelta(days=x)
+                     for x in range(0, (global_max_date - global_min_date).days)]
 
     # for all dates
     for date_value in date_interval:
@@ -103,4 +124,10 @@ if __name__ == '__main__':
     if script_dir != '':
         os.chdir(script_dir)
 
-    main()
+    try:
+        lockfile = open('/tmp/cassandra_views.lock', 'w')
+        fcntl.flock(lockfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        main()
+        fcntl.flock(lockfile, fcntl.LOCK_UN)
+    except IOError:
+        raise SystemExit('Views is already running')
