@@ -682,8 +682,8 @@ function lineChart(div, data) {
     let views = data[bisect(data, time)].views;
     // show data (time)
     const text1 = detailsLabel.append("text")
-                .attr("x", width - 300)
-                .attr("y", 30)
+                .attr("x", width-200)
+                .attr("y", height-90)
                 .attr("class", "info-label")
                 .html("DATE: " + fT)
                 .attr("font-family", "monospace")
@@ -691,8 +691,8 @@ function lineChart(div, data) {
 
     // show data (views)
     const text2 = detailsLabel.append("text")
-                .attr("x", width - 300)
-                .attr("y", 50)
+                .attr("x", width-200)
+                .attr("y", height-70)
                 .attr("class", "info-label")
                 .html("TOTAL VIEWS: " + nFormatter(views))
                 .attr("font-family", "monospace")
@@ -719,8 +719,8 @@ function lineChart(div, data) {
       let img_views = img_data[image_bisect(img_data, time)].sum;
       // show data (views)
       let text3 = detailsLabel.append("text")
-                  .attr("x", width - 300)
-                  .attr("y", 70)
+                  .attr("x", width - 200)
+                  .attr("y", height-50)
                   .attr("class", "info-label")
                   .html("FILE VIEWS: " + nFormatter(img_views))
                   .attr("font-family", "monospace")
