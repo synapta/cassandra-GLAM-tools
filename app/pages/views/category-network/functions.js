@@ -263,26 +263,24 @@ function sorting_sidebar(){
 }
 
 function showUnusedFilesItem() {
-	if (UNUSED_MODE){
-		let id = $('#' + ACTIVE_ITEM_ID).data("category");
-		let template_source = "/views/category-network/tpl/unused-file-list.tpl";
-		let target = '#category'+ACTIVE_ITEM_ID;
-		$('#files' + ACTIVE_ITEM_ID).show();
-		$.get( template_source , tpl => {
-			$.getJSON( unusedFilesLink(id,30) , d => {
-				let template = Handlebars.compile(tpl);
-				let temp = [];
-				d.forEach( file => {
-					let url = '/'+glam+'/file/'+file;
-					temp.push(  {
-						url: url,
-						file: cleanImageName(file.replace(/_/g," "))
-					});
+	let id = $('#' + ACTIVE_ITEM_ID).data("category");
+	let template_source = "/views/category-network/tpl/unused-file-list.tpl";
+	let target = '#category'+ACTIVE_ITEM_ID;
+	$('#files' + ACTIVE_ITEM_ID).show();
+	$.get( template_source , tpl => {
+		$.getJSON( unusedFilesLink(id,30) , d => {
+			let template = Handlebars.compile(tpl);
+			let temp = [];
+			d.forEach( file => {
+				let url = '/'+glam+'/file/'+file;
+				temp.push(  {
+					url: url,
+					file: cleanImageName(file.replace(/_/g," "))
 				});
-				$(target).html(template({files : temp}));
 			});
+			$(target).html(template({files : temp}));
 		});
-	}
+	});
 }
 
 function hideUnusedFilesItem() {
