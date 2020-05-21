@@ -81,8 +81,8 @@ function lineChart(div, data) {
     };
   } else {
     // tablets and desktop
-    availH = divEl.outerHeight() * 0.82;
-    margin = { top: 10, right: 40, bottom: 140, left: 20 };
+    availH = divEl.outerHeight() * 0.83;
+    margin = { top: 60, right: 40, bottom: 140, left: 20 };
     margin2 = { top: availH - margin.bottom + 30, right: 40, bottom: 50, left: 20 };
 
   }
@@ -122,7 +122,7 @@ function lineChart(div, data) {
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                .attr("transform", "translate(" + margin.left + ", 0)");
 
 
   // FORMAT DATA
@@ -149,8 +149,6 @@ function lineChart(div, data) {
   let xAxis;
   let xAxis2 = d3.axisBottom(x2);
   let groupBy = $('#groupby-select').val();
-  const minDate = d3.min(data, d => d.date);
-  const maxDate = d3.max(data, d => d.date);
   xAxis = d3.axisBottom().scale(x).tickFormat(d3.timeFormat(
       groupby2dateFormat[groupBy][0]
   ))
@@ -285,7 +283,7 @@ function lineChart(div, data) {
       .call(zoom);
 
   //  Label to display details (right top corner)
-  const detailsLabel = focus.append("g").attr("class", "dateLabel");
+  const detailsLabel = svg.append("g").attr("class", "dateLabel");
   const bisect = function (data, value) {
     return d3.bisector(function (d) {
       return d.date;
@@ -683,7 +681,7 @@ function lineChart(div, data) {
     // show data (time)
     const text1 = detailsLabel.append("text")
                 .attr("x", width-200)
-                .attr("y", height-90)
+                .attr("y", 20)
                 .attr("class", "info-label")
                 .html("DATE: " + fT)
                 .attr("font-family", "monospace")
@@ -692,7 +690,7 @@ function lineChart(div, data) {
     // show data (views)
     const text2 = detailsLabel.append("text")
                 .attr("x", width-200)
-                .attr("y", height-70)
+                .attr("y", 40)
                 .attr("class", "info-label")
                 .html("TOTAL VIEWS: " + nFormatter(views))
                 .attr("font-family", "monospace")
@@ -719,8 +717,8 @@ function lineChart(div, data) {
       let img_views = img_data[image_bisect(img_data, time)].sum;
       // show data (views)
       let text3 = detailsLabel.append("text")
-                  .attr("x", width - 200)
-                  .attr("y", height-50)
+                  .attr("x", width-200)
+                  .attr("y", 60)
                   .attr("class", "info-label")
                   .html("FILE VIEWS: " + nFormatter(img_views))
                   .attr("font-family", "monospace")
