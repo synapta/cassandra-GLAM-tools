@@ -263,10 +263,10 @@ function sorting_sidebar(){
 }
 
 function showUnusedFilesItem() {
+	if (UNUSED_MODE){
 	let id = $('#' + ACTIVE_ITEM_ID).data("category");
 	let template_source = "/views/category-network/tpl/unused-file-list.tpl";
 	let target = '#category'+ACTIVE_ITEM_ID;
-	$('#files' + ACTIVE_ITEM_ID).show();
 	$.get( template_source , tpl => {
 		$.getJSON( unusedFilesLink(id,30) , d => {
 			let template = Handlebars.compile(tpl);
@@ -281,14 +281,16 @@ function showUnusedFilesItem() {
 			$(target).html(template({files : temp}));
 		});
 	});
+	}
+	$('#files' + ACTIVE_ITEM_ID).show();
 }
 
 function hideUnusedFilesItem() {
 	if (UNUSED_MODE){
 		let target = '#category'+ACTIVE_ITEM_ID;
 		$(target).html("");
-		$('#files' + ACTIVE_ITEM_ID).hide();
 	}
+	$('#files' + ACTIVE_ITEM_ID).hide();
 }
 
 function highlight() {
