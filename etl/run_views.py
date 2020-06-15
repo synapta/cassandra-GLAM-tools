@@ -5,7 +5,7 @@ import os
 import subprocess
 import sys
 import time
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from subprocess import SubprocessError
 
 import psycopg2
@@ -49,10 +49,11 @@ def add_missing_dates(config, glam):
         first_image = global_min_date
     conn.close()
 
-    min_date = max([first_image, global_min_date])
-    # BUL glam has some early days with zero views
-    if glam['name'] == 'BUL':
-        min_date = date(2016, 1, 1)
+    try:
+        min_date = datetime.strptime(glam['min_date'], "%Y-%m-%d").date()
+    except KeyError:
+        min_date = max([first_image, global_min_date])
+
     candidate_dates = [min_date + timedelta(days=x)
                        for x in range(0, (global_max_date - min_date).days)]
 
@@ -61,6 +62,11 @@ def add_missing_dates(config, glam):
     for date_value in candidate_dates:
         if date_value not in current_dates:
             glam['missing_dates'].append(date_value)
+
+
+def update_min_date(collection, glam, date_str):
+    collection.update_one({'_id': glam['_id']}, {
+                        '$set': {'min_date': date_str}})
 
 
 def main():
@@ -107,16 +113,16 @@ def main():
 
         for glam in glams:
             logging.info('Working with GLAM %s', glam['name'])
+            date_str = date_value.strftime("%Y-%m-%d")
 
             if date_value in glam['missing_dates']:
                 try:
-                    subprocess.run(['python3', 'views.py', glam['name'], date_value.strftime(
-                        "%Y-%m-%d"), '--dir', views_dir], check=True)
+                    subprocess.run(['python3', 'views.py', glam['name'], date_str, '--dir', views_dir], check=True)
+                    update_min_date(collection, glam, date_str)
                 except SubprocessError:
                     logging.error('Subprocess views.py failed')
 
-        views_path = os.path.join(
-            views_dir, date_value.strftime("%Y-%m-%d") + '.tsv.bz2')
+        views_path = os.path.join(views_dir, date_str + '.tsv.bz2')
         if os.path.isfile(views_path):
             os.remove(views_path)
 
