@@ -50,6 +50,9 @@ def add_missing_dates(config, glam):
     conn.close()
 
     min_date = max([first_image, global_min_date])
+    # BUL glam has some early days with zero views
+    if glam['name'] == 'BUL':
+        min_date = date(2016, 1, 1)
     candidate_dates = [min_date + timedelta(days=x)
                        for x in range(0, (global_max_date - min_date).days)]
 
