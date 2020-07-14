@@ -4,6 +4,7 @@ let TOTAL_IMAGES;
 let IMAGES_RENDERED = 0;
 let RENDERING = false;
 let ACTIVE_ITEM_ID;
+let SUBCATEGORY;
 
 function getUrlAll() {
     const db = window.location.href.toString().split('/')[3];
@@ -18,6 +19,11 @@ function getUrlDataset() {
     const db = window.location.href.toString().split('/')[3];
     // console.log(groupby);
     return "/api/" + db + "/views/dataset/" + groupby;
+}
+
+function getFileName(subcat) {
+	let groupby = $('#groupby-select').val();
+	return subcat + ' - views - ' + groupby + 'ly.csv';
 }
 
 function getUrlStats() {
@@ -204,11 +210,16 @@ function sorting_sidebar() {
     });
 }
 
-function download(){
+function setCategoryCb(category) {
+	SUBCATEGORY = category;
+	download(category);
+}
+
+function download(category){
     // remove old link
     $("#download_dataset a").remove();
     // recreate download link based on timespan
-    $('<a href="' + getUrlDataset() + '" download="' + "views.csv" + '">Download dataset</a>').appendTo('#download_dataset');
+    $('<a href="' + getUrlDataset() + '" download="' + getFileName(category) + '">Download dataset</a>').appendTo('#download_dataset');
 }
 
 function how_to_read(){
@@ -258,10 +269,9 @@ function statDraw() {
 }
 
 $(document).ready(function(){
-	setCategory();
+	setCategory(setCategoryCb);
 	how_to_read();
 	sidebar("views");
-	download();
 	switch_page();
 	sorting_sidebar();
 	lineChartDraw("main_views_container", getUrlAll());
@@ -269,7 +279,7 @@ $(document).ready(function(){
 		$("#right_sidebar_list .list_item_active").trigger("click");
 		// $("#main_views_container").empty();
 		lineChartDraw("main_views_container", getUrlAll());
-		download();
+		download(SUBCATEGORY);
 	});
 	statDraw();
 });
