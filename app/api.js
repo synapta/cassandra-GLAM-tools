@@ -1329,21 +1329,14 @@ var recommender = function (req, res, next, db) {
     }
 
     query += ` GROUP BY r.img_name, last_update
-                ORDER BY avg(score) DESC, last_update DESC, r.img_name`;
-
-    let page = 0;
-    if (req.query.page !== undefined) {
-        page = parseInt(req.query.page);
-    }
+                ORDER BY RANDOM()`;
 
     let limit = 5;
     if (req.query.limit !== undefined) {
         limit = parseInt(req.query.limit);
     }
 
-    let offset = limit * page;
-
-    query += " LIMIT " + limit + " OFFSET " + offset;
+    query += " LIMIT " + limit;
 
     db.query(query, parameters, (err, dbres) => {
         if (!err) {
