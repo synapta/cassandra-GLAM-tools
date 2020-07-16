@@ -71,7 +71,7 @@ function sorting_table(){
 
 function unusedFilesLink(id,size,pageSel) {
 	const queryS = "?unused=true&limit="+size+"&page="+pageSel;
-	return "/api/"+db+"/category/" +id+ "/"+ queryS;
+	return "/api/"+db+"/category/" +encodeURIComponent(id)+ "/"+ queryS;
 }
 function getFiles(id,target,templateSource,total) {
 	$.get( templateSource , tpl => {
