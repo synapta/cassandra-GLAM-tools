@@ -195,8 +195,8 @@ function sortNodes(d,order) {
 		d.nodes[i].name = d.nodes[i].id.replace(/_/g," ");
 		d.nodes[i].files = nFormatter(d.nodes[i].files);
 		d.nodes[i].id_encoded = d.nodes[i].id.hashCode();
-		d.nodes[i].url = '/'+glam+'/category-network/'+d.nodes[i].id;
-		d.nodes[i].urlUnused = '/'+glam+'/category-network/'+d.nodes[i].id+'/unused';
+		d.nodes[i].url = '/'+glam+'/category-network/'+encodeURIComponent(d.nodes[i].id.toString());
+		d.nodes[i].urlUnused = '/'+glam+'/category-network/'+encodeURIComponent(d.nodes[i].id.toString())+'/unused';
 	}
 	if (d.nodes[0]){
 		d.nodes[0].hideDetails = true;
