@@ -1,11 +1,12 @@
-<div class="row list_item">
+<div class="row list_item" id="{{md5 img_name}}">
   <div class="row">
     <span class="col-1">
     File:
     </span>
-    <a class="col-11 itemUnused" href="https://commons.wikimedia.org/wiki/File:{{img_name}}" target="_blank">
+    <a class="col-10 itemUnused" href="https://commons.wikimedia.org/wiki/File:{{img_name}}" target="_blank">
       <h2>{{image_name}}</h2>
     </a>
+    <div class="col-1"><button id="ignoreSuggestion" type="submit" class="btn float-right" onclick="ignoreSuggestion('{{btoa img_name}}')">DISMISS</button></div>
   </div>
   <div class="w-100">
     <div class="row">

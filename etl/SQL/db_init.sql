@@ -6,5 +6,5 @@ CREATE table IF NOT EXISTS usages (gil_wiki varchar(20),gil_page_title varchar(2
 CREATE INDEX IF NOT EXISTS ad_GBy on visualizations(access_date);
 create materialized view if not exists visualizations_sum as select sum(accesses) as accesses_sum, access_date from visualizations group by access_date;
 create materialized view if not exists visualizations_stats as select i.img_name as img_name, sum(v.accesses) as tot, avg(v.accesses) as avg, PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER by v.accesses) as median from images as i, visualizations as v where i.media_id = v.media_id and i.is_alive = true group by i.img_name;
-CREATE TABLE IF NOT EXISTS recommendations (img_name varchar(255) NOT NULL, site varchar(20) NOT NULL, title varchar(255) NOT NULL,	url varchar(255) NOT NULL, score float4 NULL, last_update date NOT NULL, CONSTRAINT recommendations_fk FOREIGN KEY (img_name) REFERENCES images(img_name));
+CREATE TABLE IF NOT EXISTS recommendations (img_name varchar(255) NOT NULL, site varchar(20) NOT NULL, title varchar(255) NOT NULL,	url varchar(255) NOT NULL, score float4 NULL, last_update date NOT NULL, hidden bool NOT NULL DEFAULT false, CONSTRAINT recommendations_fk FOREIGN KEY (img_name) REFERENCES images(img_name));
 CREATE UNIQUE INDEX recommendations_img_name_idx ON recommendations USING btree (img_name, site, title);

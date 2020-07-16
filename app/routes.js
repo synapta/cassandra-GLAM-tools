@@ -458,7 +458,16 @@ module.exports = function (app, apicache) {
             res.sendStatus(400);
         }
     });
-    
+
+    app.delete('/api/:id/recommender/:file', function (req, res, next) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            api.hideRecommenderByFile(req, res, next, glam.connection);
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
     app.get('/api/wikidata/:ids', apicache("1 hour"), function (req, res, next) {
         let url = "https://www.wikidata.org/w/api.php?action=wbgetentities&props=labels|sitelinks/urls&languages=en|fr|de|it&sitefilter=enwiki|frwiki|dewiki|itwiki&format=json&ids="+req.params.ids;
         request(url,function (error, response, body){

@@ -1,10 +1,17 @@
 const glam = window.location.href.toString().split('/')[3];
 const db = window.location.href.toString().split('/')[3];
 const query = window.location.href.toString().split('/')[5];
-let page = 0;
 let limit = 5;
 let stopScroll = false;
 let category;
+
+Handlebars.registerHelper('btoa', function (value) {
+    return btoa(value);
+});
+
+Handlebars.registerHelper('md5', function (value) {
+    return CryptoJS.MD5(decodeURIComponent(value)).toString(CryptoJS.enc.Hex);
+});
 
 function getThumbnailUrl(file, size_in_px, callback) {
 	var base_url = "https://upload.wikimedia.org/wikipedia/commons/thumb";
@@ -30,13 +37,13 @@ function getWikiDataUrl(ids) {
 
 function getUrl() {
 	const urlSplit = window.location.href.toString().split('/');
-	let query = "?page="+page+"&limit="+limit;
+	let query = "?limit="+limit;
 	const db = urlSplit[3];
 	category = urlSplit[5];
 	if (category){
 		query = query + "&cat="+ category;
 	}
-	return "/api/"+db+"/recommender" + query;
+	return "/api/" + db + "/recommender" + query;
 }
 
 function getFiles() {
@@ -77,7 +84,7 @@ function getFiles() {
 							);
 						}
 						
-						for (let j = 0; j < files[i].wikis.length; j++) 		{
+						for (let j = 0; j < files[i].wikis.length; j++) {
 							let data = wikidata.entities[files[i].wikis[j].title];
 							if (data.labels && !isEmpty(data.labels)) {
 								if (data.labels.en) {
@@ -110,11 +117,20 @@ function getFiles() {
 
 function loadMore() {
 	if (!stopScroll) {
-		// if reached end of div and there are more elements to load
-		// calc new page number
-		page++;
 		getFiles();
 	}
+}
+
+function ignoreSuggestion(imageEncoded) {
+	let image = atob(imageEncoded);
+	let imageHash = CryptoJS.MD5(decodeURIComponent(image)).toString(CryptoJS.enc.Hex);
+	$.ajax({
+		url: "/api/" + db + "/recommender/" + image,
+		type: 'DELETE',
+		success: function(result) {
+			$("#" + imageHash).fadeOut();
+		}
+	});
 }
 
 function how_to_read(){

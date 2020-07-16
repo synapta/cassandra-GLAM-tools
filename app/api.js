@@ -1308,7 +1308,8 @@ var recommender = function (req, res, next, db) {
                     LEFT JOIN images i ON c.page_title = ANY(i.cl_to)
                     LEFT JOIN usages u ON i.img_name = u.gil_to
                     INNER JOIN recommendations r ON i.img_name = r.img_name
-                    WHERE (u.is_alive = FALSE
+                    WHERE r.hidden = FALSE AND
+                    (u.is_alive = FALSE
                     OR u.is_alive IS NULL)`;
 
     let parameters = [];
@@ -1375,6 +1376,20 @@ var recommenderByFile = function (req, res, next, db) {
     });
 }
 
+var hideRecommenderByFile = function (req, res, next, db) {
+    let query = `UPDATE recommendations
+                SET hidden = TRUE
+                WHERE img_name = $1`;
+
+    db.query(query, [req.params.file], (err, dbres) => {
+        if (!err) {
+            res.sendStatus(200);
+        } else {
+            next(new Error(err));
+        }
+    });
+}
+
 exports.glams = glams;
 exports.getAdminGlam = getAdminGlam;
 exports.createGlam = createGlam;
@@ -1405,3 +1420,4 @@ exports.fileDetails = fileDetails;
 exports.search = search;
 exports.recommender = recommender;
 exports.recommenderByFile = recommenderByFile;
+exports.hideRecommenderByFile = hideRecommenderByFile;
