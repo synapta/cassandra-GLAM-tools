@@ -321,13 +321,14 @@ body {
   margin-bottom: 1.5rem;
 }
 
-.file_details img {
+.file_details_div {
   width: 100%;
   margin: 1rem 0;
   padding: 1rem 0;
   border-top: 1px solid rgba(100, 100, 100, .5);
   border-bottom: 1px solid rgba(100, 100, 100, .5);
-  max-height: 650px;
+}
+.file_details img {
   object-fit: cover;
 }
 
