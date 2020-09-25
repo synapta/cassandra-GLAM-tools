@@ -69,6 +69,10 @@ function getUrlDataset() {
 	return "/api/" + db + "/usage/dataset"+subcatQ;
 }
 
+function getFileName(subcat) {
+	return subcat + ' - usage.csv';
+}
+
 function getUrlAll() {
 	const db = window.location.href.toString().split('/')[3];
 	const subcat = window.location.href.toString().split('/')[5];
@@ -269,8 +273,8 @@ function sorting_sidebar() {
 	});
 }
 
-function download(){
-	$('<a href="' + getUrlDataset() + '" download="' + "usage.csv" + '">Download dataset</a>').appendTo('#download_dataset');
+function download(category){
+	$('<a href="' + getUrlDataset() + '" download="' + getFileName(category) + '">Download dataset</a>').appendTo('#download_dataset');
 }
 
 function how_to_read() {
@@ -304,10 +308,9 @@ function drawStats(stats_data) {
 }
 
 $(function() {
-	setCategory();
+	setCategory(download);
 	how_to_read();
 	sidebar("by_num");
-	download();
 	switch_page();
 	sorting_sidebar();
 	drawUsageDataViz();

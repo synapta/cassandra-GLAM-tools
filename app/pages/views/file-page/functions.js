@@ -65,7 +65,7 @@ function getThumbnailUrl(size_in_px, callback) {
 	if (callback && typeof(callback) == "function") {
 		const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.tif|\.tiff|\.svg)$/i;
 		if(!allowedExtensions.exec(file)){
-			callback('');
+			callback('/assets/img/default_file_image.png');
 		} else {
 			const file_url = base_url + "/" + hash.substring(0, 1) + "/" + hash.substring(0, 2) + "/" + fixedEncodeURIComponent(file).replace(/%25C3%25/g, "%C3%") + "/" + size_in_px.toString() + "px-thumbnail.jpg";
 			callback(file_url);

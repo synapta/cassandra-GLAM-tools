@@ -17,7 +17,7 @@ function nFormatter(num) {
 	return formatter(num.toFixed(1).replace(/\.0$/, ''));
 }
 
-function setCategory() {
+function setCategory(cb) {
 	const db = window.location.href.toString().split('/')[3];
 	let subcat = window.location.href.toString().split('/')[5];
 	const page = window.location.href.toString().split('/')[4];
@@ -34,6 +34,9 @@ function setCategory() {
 		catUrl.attr("title", decodeURIComponent((subcat ? subcat :d.category)).replace(/[_-]/g," "));
 		$(".glamName").text(d.fullname);
 		$('#cover').css('background-image', 'url(' + d.image + ')');
+		if (cb && typeof cb === 'function'){
+			cb(decodeURIComponent(subcat ? subcat : d.category).replace("Category:",""));
+		}
 	});
 }
 
@@ -192,8 +195,8 @@ function sortNodes(d,order) {
 		d.nodes[i].name = d.nodes[i].id.replace(/_/g," ");
 		d.nodes[i].files = nFormatter(d.nodes[i].files);
 		d.nodes[i].id_encoded = d.nodes[i].id.hashCode();
-		d.nodes[i].url = '/'+glam+'/category-network/'+d.nodes[i].id;
-		d.nodes[i].urlUnused = '/'+glam+'/category-network/'+d.nodes[i].id+'/unused';
+		d.nodes[i].url = '/'+glam+'/category-network/'+encodeURIComponent(d.nodes[i].id.toString());
+		d.nodes[i].urlUnused = '/'+glam+'/category-network/'+encodeURIComponent(d.nodes[i].id.toString())+'/unused';
 	}
 	if (d.nodes[0]){
 		d.nodes[0].hideDetails = true;

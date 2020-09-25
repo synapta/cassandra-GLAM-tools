@@ -36,6 +36,10 @@ function getUrlDataset() {
     return "/api/"+db+"/category/dataset" + query;
 }
 
+function getFileName(subcat) {
+    return subcat + ' - category_network.csv';
+}
+
 function unusedFilesLink(category,size) {
     const db = window.location.href.toString().split('/')[3];
     const query = "?unused=true&limit="+size;
@@ -263,10 +267,10 @@ function sorting_sidebar(){
 }
 
 function showUnusedFilesItem() {
+	if (UNUSED_MODE){
 	let id = $('#' + ACTIVE_ITEM_ID).data("category");
 	let template_source = "/views/category-network/tpl/unused-file-list.tpl";
 	let target = '#category'+ACTIVE_ITEM_ID;
-	$('#files' + ACTIVE_ITEM_ID).show();
 	$.get( template_source , tpl => {
 		$.getJSON( unusedFilesLink(id,30) , d => {
 			let template = Handlebars.compile(tpl);
@@ -281,14 +285,16 @@ function showUnusedFilesItem() {
 			$(target).html(template({files : temp}));
 		});
 	});
+	}
+	$('#files' + ACTIVE_ITEM_ID).show();
 }
 
 function hideUnusedFilesItem() {
 	if (UNUSED_MODE){
 		let target = '#category'+ACTIVE_ITEM_ID;
 		$(target).html("");
-		$('#files' + ACTIVE_ITEM_ID).hide();
 	}
+	$('#files' + ACTIVE_ITEM_ID).hide();
 }
 
 function highlight() {
@@ -384,9 +390,9 @@ function sidebar(order) {
 	});
 }
 
-function download() {
+function download(category) {
     $('#download_dataset_link').remove();
-    $('<a id="download_dataset_link" href="' + getUrlDataset() + '" download="' + "category_network.csv" + '">Download dataset</a>').appendTo('#download_dataset');
+    $('<a id="download_dataset_link" href="' + getUrlDataset() + '" download="' + getFileName(category) + '">Download dataset</a>').appendTo('#download_dataset');
 }
 
 $("#how_to_read_button").click(function(){
@@ -433,6 +439,5 @@ $('#showUnused').click( () => {
 $(document).ready(function(){
     dataviz();
     switch_page();
-    download();
-    setCategory();
+    setCategory(download);
 });

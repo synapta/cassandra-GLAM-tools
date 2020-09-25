@@ -1,4 +1,5 @@
 let ACTIVE_ITEM_ID;
+let SUBCATEGORY;
 
 function getUrl() {
     let db = window.location.href.toString().split('/')[3];
@@ -14,6 +15,11 @@ function getUrlDataset() {
     let groupby = $('#groupby-select').val();
     let query = subcat ? ("?groupby=" + groupby + "&cat=" + subcat) : "?groupby=" + groupby;
     return "/api/"+db+"/file/upload-date/dataset"+query;
+}
+
+function getFileName(subcat) {
+	let groupby = $('#groupby-select').val();
+	return subcat + ' - user_contributions - ' + groupby + 'ly.csv';
 }
 
 function getUrlAll(){
@@ -98,11 +104,16 @@ function sorting_sidebar() {
     });
 }
 
-function download() {
+function setCategoryCb(category) {
+	SUBCATEGORY = category;
+	download(category);
+}
+
+function download(category) {
     // remove old link
     $("#download_dataset a").remove();
     // recreate download link based on timespan
-    $('<a href="' + getUrlDataset() + '" download="' + "user_contributions.csv" + '">Download dataset</a>').appendTo('#download_dataset');
+    $('<a href="' + getUrlDataset() + '" download="' + getFileName(category) + '">Download dataset</a>').appendTo('#download_dataset');
 }
 
 function highlight() {
@@ -130,15 +141,14 @@ function highlight() {
 }
 
 $(document).ready(function() {
-    setCategory();
+    setCategory(setCategoryCb);
     sidebar("by_num");
     dataviz();
     how_to_read();
-    download();
     switch_page();
     sorting_sidebar();
     $('#groupby-select').change(function() {
 	dataviz();
-	download();
+	download(SUBCATEGORY);
     });
 });
