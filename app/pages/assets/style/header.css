@@ -240,7 +240,7 @@
 }
 @media screen and (min-width: 1025px) {
     .select-items div, .select-selected {
-        width: 115px;
+        width: 130px;
     }
 
     .select-chart-large .select-items div, .select-chart-large .select-selected {
