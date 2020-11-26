@@ -54,6 +54,9 @@ site = mwclient.Site('commons.wikimedia.org')
 
 
 def get_description(image):
+    # XXX out of memory
+    return None, None
+
     wikipage = site.images[image]
     text = wikipage.text()
     wikicode = mwparserfromhell.parse(text)
