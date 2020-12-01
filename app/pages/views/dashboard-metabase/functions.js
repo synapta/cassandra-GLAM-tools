@@ -12,5 +12,6 @@ $(document).ready(function() {
 		const iframe = document.getElementById('dashboard-metabase');
 		console.log(res);
 		iframe.src = res.iframeUrl;
+		console.log(res.iframeUrl)
 	});
 });
