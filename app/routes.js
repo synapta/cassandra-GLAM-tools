@@ -2,8 +2,7 @@ var express = require('express');
 var request = require('request');
 var api = require('./api.js');
 var auth = require('http-auth');
-var jwt = require("jsonwebtoken");
-
+var metabase = require('./metabase.js');
 var config = require('../config/config.js');
 
 // Reload configuration every hour because MongoDB is also modified by run.py
@@ -187,7 +186,7 @@ module.exports = function (app, apicache) {
         }
     });
 
-    app.get('/:id/dashboard', function (req, res) {
+    app.get('/:id/dashboard/*', function (req, res) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             res.sendFile(__dirname + '/pages/views/dashboard-metabase/index.html');
@@ -197,19 +196,14 @@ module.exports = function (app, apicache) {
     });
     // API
     app.get('/api/metabase',function (req,res) {
-        const METABASE_SITE_URL = "https://metabase-wmch.synapta.io";
-        const METABASE_SECRET_KEY = "8c3242646342e6d1bc422bf709a6a82acbf7624ab83f980630b4b4e293c30ea9";
-
-        const payload = {
-            resource: {dashboard: 2},
-            params: {},
-            exp: Math.round(Date.now() / 1000) + (10 * 60) // 10 minute expiration
-        };
-        const token = jwt.sign(payload, METABASE_SECRET_KEY);
-        const iframeUrl = METABASE_SITE_URL + "/embed/dashboard/" + token + "#bordered=true&titled=true";
+        const iframeUrl = metabase.getDashboardUrl();
         res.json({
             iframeUrl: iframeUrl
         });
+    });
+
+    app.get('/api/metabase/screen',function (req,res) {
+        metabase.getPng(req,res);
     });
 
     app.get('/api/admin/auth', function (req, res) {
