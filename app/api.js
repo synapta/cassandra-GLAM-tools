@@ -1,5 +1,4 @@
 const stringify = require('csv-stringify');
-const jwt = require('jsonwebtoken');
 
 Date.prototype.toISODateString = function () {
     let offset = this.getTimezoneOffset() * 60 * 1000;
@@ -194,23 +193,6 @@ var getGlam = function (req, res, next, glam) {
         } else {
             next(new Error(err));
         }
-    });
-};
-
-var getDashboard = function (req, res, config, glam) {
-    if (!glam['dashboard_id']) {
-        res.sendStatus(404);
-        return;
-    }
-    const payload = {
-        resource: { dashboard: glam['dashboard_id'] },
-        params: {},
-        exp: Math.round(Date.now() / 1000) + (10 * 60) // 10 minute expiration
-    };
-    const token = jwt.sign(payload, config.metabase.secret);
-    const iframeUrl = config.metabase.url + "/embed/dashboard/" + token + "#bordered=true&titled=true";
-    res.json({
-        iframeUrl: iframeUrl
     });
 };
 
@@ -1424,7 +1406,6 @@ exports.modifyAnnotation = modifyAnnotation;
 exports.createAnnotation = createAnnotation;
 exports.deleteAnnotation = deleteAnnotation;
 exports.getGlam = getGlam;
-exports.getDashboard = getDashboard;
 exports.categoryGraph = categoryGraph;
 exports.categoryGraphDataset = categoryGraphDataset;
 exports.categoryFiles = categoryFiles;

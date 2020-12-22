@@ -7,9 +7,9 @@ function setCategoryCb(category) {
 
 $(document).ready(function() {
 	setCategory(setCategoryCb);
+	$('#download_dashboard_link').attr('href', '/api/' + glam + '/dashboard/download');
 	$.getJSON('/api/' + glam + '/dashboard', function (res) {
 		const iframe = document.getElementById('dashboard-metabase');
 		iframe.src = res.iframeUrl;
-		console.log(res.iframeUrl)
 	});
 });

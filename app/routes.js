@@ -1,10 +1,10 @@
-var express = require('express');
-var request = require('request');
-var api = require('./api.js');
-var auth = require('http-auth');
-var metabase = require('./metabase.js');
+const express = require('express');
+const request = require('request');
+const auth = require('http-auth');
 
-var config = require('../config/config.js');
+const api = require('./api.js');
+const metabase = require('./metabase.js');
+const config = require('../config/config.js');
 
 // Reload configuration every hour because MongoDB is also modified by run.py
 function loadGlams() {
@@ -53,8 +53,8 @@ module.exports = function (app, apicache) {
             let auth_basic = auth.basic({
                 realm: auth_config['realm']
             }, function (username, password, callback) {
-                for (let i=0; i<auth_config.users.length; i++){
-                    if (username === auth_config.users[i]['username'] && password === auth_config.users[i]['password']){
+                for (let i = 0; i < auth_config.users.length; i++) {
+                    if (username === auth_config.users[i]['username'] && password === auth_config.users[i]['password']) {
                         callback(true);
                         return;
                     }
@@ -187,7 +187,7 @@ module.exports = function (app, apicache) {
         }
     });
 
-    app.get('/:id/dashboard/*', function (req, res) {
+    app.get('/:id/dashboard', function (req, res) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             res.sendFile(__dirname + '/pages/views/dashboard-metabase/index.html');
@@ -197,17 +197,6 @@ module.exports = function (app, apicache) {
     });
 
     // API
-    app.get('/api/metabase',function (req,res) {
-        const iframeUrl = metabase.getDashboardUrl();
-        res.json({
-            iframeUrl: iframeUrl
-        });
-    });
-
-    app.get('/api/metabase/screen',function (req,res) {
-        metabase.getPng(req,res);
-    });
-
     app.get('/api/admin/auth', function (req, res) {
         res.sendStatus(200);
     });
@@ -327,10 +316,24 @@ module.exports = function (app, apicache) {
         }
     });
 
-    app.get('/api/:id/dashboard',function (req, res) {
+    app.get('/api/:id/dashboard', function (req, res) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
-            api.getDashboard(req, res, config, glam);
+            metabase.getDashboard(req, res, config, glam);
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
+    app.get('/api/:id/dashboard/download', function (req, res) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            try {
+                metabase.getPng(req, res, config, glam);
+            } catch (e) {
+                console.error(e);
+                res.sendStatus(500);
+            }
         } else {
             res.sendStatus(400);
         }
@@ -499,9 +502,9 @@ module.exports = function (app, apicache) {
     });
 
     app.get('/api/wikidata/:ids', apicache("1 hour"), function (req, res, next) {
-        let url = "https://www.wikidata.org/w/api.php?action=wbgetentities&props=labels|sitelinks/urls&languages=en|fr|de|it&sitefilter=enwiki|frwiki|dewiki|itwiki&format=json&ids="+req.params.ids;
-        request(url,function (error, response, body){
-            if (error){
+        let url = "https://www.wikidata.org/w/api.php?action=wbgetentities&props=labels|sitelinks/urls&languages=en|fr|de|it&sitefilter=enwiki|frwiki|dewiki|itwiki&format=json&ids=" + req.params.ids;
+        request(url, function (error, response, body) {
+            if (error) {
                 if (response && response.statusCode) {
                     res.error(error);
                     res.sendStatus(response.statusCode);
