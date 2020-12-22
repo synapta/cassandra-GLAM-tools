@@ -2,6 +2,7 @@ var express = require('express');
 var request = require('request');
 var api = require('./api.js');
 var auth = require('http-auth');
+var metabase = require('./metabase.js');
 
 var config = require('../config/config.js');
 
@@ -186,7 +187,7 @@ module.exports = function (app, apicache) {
         }
     });
 
-    app.get('/:id/dashboard', function (req, res) {
+    app.get('/:id/dashboard/*', function (req, res) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             res.sendFile(__dirname + '/pages/views/dashboard-metabase/index.html');
@@ -196,6 +197,17 @@ module.exports = function (app, apicache) {
     });
 
     // API
+    app.get('/api/metabase',function (req,res) {
+        const iframeUrl = metabase.getDashboardUrl();
+        res.json({
+            iframeUrl: iframeUrl
+        });
+    });
+
+    app.get('/api/metabase/screen',function (req,res) {
+        metabase.getPng(req,res);
+    });
+
     app.get('/api/admin/auth', function (req, res) {
         res.sendStatus(200);
     });

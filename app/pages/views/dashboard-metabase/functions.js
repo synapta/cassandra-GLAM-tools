@@ -10,5 +10,6 @@ $(document).ready(function() {
 	$.getJSON('/api/' + glam + '/dashboard', function (res) {
 		const iframe = document.getElementById('dashboard-metabase');
 		iframe.src = res.iframeUrl;
+		console.log(res.iframeUrl)
 	});
 });
