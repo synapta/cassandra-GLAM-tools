@@ -1,10 +1,10 @@
-var express = require('express');
-var request = require('request');
-var api = require('./api.js');
-var auth = require('http-auth');
-var jwt = require("jsonwebtoken");
+const express = require('express');
+const request = require('request');
+const auth = require('http-auth');
 
-var config = require('../config/config.js');
+const api = require('./api.js');
+const metabase = require('./metabase.js');
+const config = require('../config/config.js');
 
 // Reload configuration every hour because MongoDB is also modified by run.py
 function loadGlams() {
@@ -53,8 +53,8 @@ module.exports = function (app, apicache) {
             let auth_basic = auth.basic({
                 realm: auth_config['realm']
             }, function (username, password, callback) {
-                for (let i=0; i<auth_config.users.length; i++){
-                    if (username === auth_config.users[i]['username'] && password === auth_config.users[i]['password']){
+                for (let i = 0; i < auth_config.users.length; i++) {
+                    if (username === auth_config.users[i]['username'] && password === auth_config.users[i]['password']) {
                         callback(true);
                         return;
                     }
@@ -195,23 +195,8 @@ module.exports = function (app, apicache) {
             res.sendStatus(400);
         }
     });
+
     // API
-    app.get('/api/metabase',function (req,res) {
-        const METABASE_SITE_URL = "https://metabase-wmch.synapta.io";
-        const METABASE_SECRET_KEY = "8c3242646342e6d1bc422bf709a6a82acbf7624ab83f980630b4b4e293c30ea9";
-
-        const payload = {
-            resource: {dashboard: 2},
-            params: {},
-            exp: Math.round(Date.now() / 1000) + (10 * 60) // 10 minute expiration
-        };
-        const token = jwt.sign(payload, METABASE_SECRET_KEY);
-        const iframeUrl = METABASE_SITE_URL + "/embed/dashboard/" + token + "#bordered=true&titled=true";
-        res.json({
-            iframeUrl: iframeUrl
-        });
-    });
-
     app.get('/api/admin/auth', function (req, res) {
         res.sendStatus(200);
     });
@@ -326,6 +311,29 @@ module.exports = function (app, apicache) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             api.getGlam(req, res, next, glam);
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
+    app.get('/api/:id/dashboard', function (req, res) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            metabase.getDashboard(req, res, config, glam);
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
+    app.get('/api/:id/dashboard/download', function (req, res) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            try {
+                metabase.getPng(req, res, config, glam);
+            } catch (e) {
+                console.error(e);
+                res.sendStatus(500);
+            }
         } else {
             res.sendStatus(400);
         }
@@ -493,11 +501,10 @@ module.exports = function (app, apicache) {
         }
     });
 
-
     app.get('/api/wikidata/:ids', apicache("1 hour"), function (req, res, next) {
-        let url = "https://www.wikidata.org/w/api.php?action=wbgetentities&props=labels|sitelinks/urls&languages=en|fr|de|it&sitefilter=enwiki|frwiki|dewiki|itwiki&format=json&ids="+req.params.ids;
-        request(url,function (error, response, body){
-            if (error){
+        let url = "https://www.wikidata.org/w/api.php?action=wbgetentities&props=labels|sitelinks/urls&languages=en|fr|de|it&sitefilter=enwiki|frwiki|dewiki|itwiki&format=json&ids=" + req.params.ids;
+        request(url, function (error, response, body) {
+            if (error) {
                 if (response && response.statusCode) {
                     res.error(error);
                     res.sendStatus(response.statusCode);

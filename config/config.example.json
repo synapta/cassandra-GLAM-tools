@@ -5,6 +5,18 @@
         "host": "localhost",
         "port": 5432
     },
+    "metabase": {
+        "url": "http://example.com",
+        "username": "",
+        "password": "",
+        "database": {
+            "user": "metabase",
+            "password": "",
+            "host": "172.17.0.1",
+            "port": 5432
+        },
+        "secret": ""
+    },
     "mongodb": {
         "url": "mongodb://localhost:27017",
         "database": "cassandra",
