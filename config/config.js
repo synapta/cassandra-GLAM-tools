@@ -13,6 +13,7 @@ exports.admin = config.admin;
 exports.glamUser = glamUser;
 exports.limits = config.limits;
 exports.wmflabs = config.wmflabs;
+exports.metabase = config.metabase;
 
 const client = new MongoClient(config['mongodb']['url'], { useNewUrlParser: true });
 
@@ -52,6 +53,12 @@ function loadGlams(callback) {
           glam['status'] = element['status'];
         } else {
           glam['status'] = null;
+        }
+
+        if (element['dashboard_id']) {
+          glam['dashboard_id'] = element['dashboard_id'];
+        } else {
+          glam['dashboard_id'] = null;
         }
 
         if (element['http-auth']) {

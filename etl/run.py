@@ -43,6 +43,12 @@ def setup(name):
     logging.info('Subprocess setup.js completed')
 
 
+def dashboard(name):
+    logging.info('Running dashboard.py for %s', name)
+    subprocess.run(['python3', 'dashboard.py', name], check=True)
+    logging.info('Subprocess dashboard.py completed')
+
+
 def etl(name):
     logging.info('Running etl.js for %s', name)
     subprocess.run(['node', 'etl.js', name], check=True)
@@ -93,6 +99,7 @@ def create_database(config, database):
         curse.execute("CREATE DATABASE " + database + " WITH OWNER = postgres " +
                       "ENCODING = 'UTF8' TABLESPACE = pg_default " +
                       "CONNECTION LIMIT = -1 TEMPLATE template0;")
+        curse.execute("GRANT CONNECT ON DATABASE " + database + " TO metabase;")
     except ProgrammingError:
         # the database is already available
         pass
@@ -140,8 +147,9 @@ def main():
 
             try:
                 setup(glam['name'])
+                dashboard(glam['name'])
             except SubprocessError:
-                logging.error('Subprocess setup.py failed')
+                logging.error('Subprocess setup.js or dashboard.py failed')
                 continue
 
             process_glam(collection, glam)

@@ -3,6 +3,7 @@ var request = require('request');
 var api = require('./api.js');
 var auth = require('http-auth');
 var metabase = require('./metabase.js');
+
 var config = require('../config/config.js');
 
 // Reload configuration every hour because MongoDB is also modified by run.py
@@ -194,6 +195,7 @@ module.exports = function (app, apicache) {
             res.sendStatus(400);
         }
     });
+
     // API
     app.get('/api/metabase',function (req,res) {
         const iframeUrl = metabase.getDashboardUrl();
@@ -320,6 +322,15 @@ module.exports = function (app, apicache) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             api.getGlam(req, res, next, glam);
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
+    app.get('/api/:id/dashboard',function (req, res) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            api.getDashboard(req, res, config, glam);
         } else {
             res.sendStatus(400);
         }
@@ -486,7 +497,6 @@ module.exports = function (app, apicache) {
             res.sendStatus(400);
         }
     });
-
 
     app.get('/api/wikidata/:ids', apicache("1 hour"), function (req, res, next) {
         let url = "https://www.wikidata.org/w/api.php?action=wbgetentities&props=labels|sitelinks/urls&languages=en|fr|de|it&sitefilter=enwiki|frwiki|dewiki|itwiki&format=json&ids="+req.params.ids;
