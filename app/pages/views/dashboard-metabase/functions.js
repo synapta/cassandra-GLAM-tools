@@ -7,10 +7,8 @@ function setCategoryCb(category) {
 
 $(document).ready(function() {
 	setCategory(setCategoryCb);
-	let iframeUrl = "";
-	$.getJSON('/api/metabase', function (res) {
+	$.getJSON('/api/' + glam + '/dashboard', function (res) {
 		const iframe = document.getElementById('dashboard-metabase');
-		console.log(res);
 		iframe.src = res.iframeUrl;
 	});
 });

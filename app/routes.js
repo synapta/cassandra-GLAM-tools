@@ -2,7 +2,6 @@ var express = require('express');
 var request = require('request');
 var api = require('./api.js');
 var auth = require('http-auth');
-var jwt = require("jsonwebtoken");
 
 var config = require('../config/config.js');
 
@@ -195,23 +194,8 @@ module.exports = function (app, apicache) {
             res.sendStatus(400);
         }
     });
+
     // API
-    app.get('/api/metabase',function (req,res) {
-        const METABASE_SITE_URL = "https://metabase-wmch.synapta.io";
-        const METABASE_SECRET_KEY = "8c3242646342e6d1bc422bf709a6a82acbf7624ab83f980630b4b4e293c30ea9";
-
-        const payload = {
-            resource: {dashboard: 2},
-            params: {},
-            exp: Math.round(Date.now() / 1000) + (10 * 60) // 10 minute expiration
-        };
-        const token = jwt.sign(payload, METABASE_SECRET_KEY);
-        const iframeUrl = METABASE_SITE_URL + "/embed/dashboard/" + token + "#bordered=true&titled=true";
-        res.json({
-            iframeUrl: iframeUrl
-        });
-    });
-
     app.get('/api/admin/auth', function (req, res) {
         res.sendStatus(200);
     });
@@ -326,6 +310,15 @@ module.exports = function (app, apicache) {
         let glam = config.glams[req.params.id];
         if (isValidGlam(glam)) {
             api.getGlam(req, res, next, glam);
+        } else {
+            res.sendStatus(400);
+        }
+    });
+
+    app.get('/api/:id/dashboard',function (req, res) {
+        let glam = config.glams[req.params.id];
+        if (isValidGlam(glam)) {
+            api.getDashboard(req, res, config, glam);
         } else {
             res.sendStatus(400);
         }
@@ -492,7 +485,6 @@ module.exports = function (app, apicache) {
             res.sendStatus(400);
         }
     });
-
 
     app.get('/api/wikidata/:ids', apicache("1 hour"), function (req, res, next) {
         let url = "https://www.wikidata.org/w/api.php?action=wbgetentities&props=labels|sitelinks/urls&languages=en|fr|de|it&sitefilter=enwiki|frwiki|dewiki|itwiki&format=json&ids="+req.params.ids;
