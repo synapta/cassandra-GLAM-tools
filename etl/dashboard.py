@@ -13,12 +13,12 @@ except IndexError:
     print('Please provide a GLAM')
     sys.exit(1)
 
-client = pymongo.MongoClient(config['mongodb']['url'])
-db = client[config['mongodb']['database']]
-collection = db[config['mongodb']['collection']]
+mongo_client = pymongo.MongoClient(config['mongodb']['url'])
+mongo_db = mongo_client[config['mongodb']['database']]
+mongo_collection = mongo_db[config['mongodb']['collection']]
 
 # Find GLAM
-glam = collection.find_one({"name": sys.argv[1]})
+glam = mongo_collection.find_one({"name": sys.argv[1]})
 
 if glam is None:
     print('Cannot find GLAM', sys.argv[1])
@@ -109,5 +109,5 @@ requests.put(config['metabase']['url'] + '/api/dashboard/' + str(dashboard_id), 
 })
 
 # Save dashboard_id
-collection.update_one({'_id': glam['_id']}, {
+mongo_collection.update_one({'_id': glam['_id']}, {
     '$set': {'dashboard_id': dashboard_id}})
