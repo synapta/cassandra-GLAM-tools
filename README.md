@@ -3,6 +3,12 @@ their cooperation with Wikimedia projects. Starting from a Wikimedia Commons
 category this tool collects data about usage, views, contributors and topology
 of the files inside.
 
+The GLAM Statistical Tool "Cassandra" is a project of Wikimedia Switzerland (WMCH) and the result of a long-term collaboration with Swiss cultural institutions expressing their needs for measuring the impact of Wikimedia projects. Together with our GLAM Partner Network we went through the process of requirement engineering and the respective solution development with our IT-Partner Synapta. Since the first release in 2017, we have thoroughly and continuously enhanced Cassandra to the extraordinary tool it is today.
+
+In keeping the spirit of the Wikimedia movement alive and supporting the mission to make cultural knowledge freely accessible to the world, we aim to share Cassandra for the benefit of other GLAM institutions across the globe. We have already started to implement the strategy of a global roll-out and will foster the implementation in late 2021 and from 2022 onwards.
+
+If you are interested in adopting Cassandra in your country, please contact us at Wikimedia Switzerland.
+
 ## Installation
 
 Install Node.js project dependencies:
