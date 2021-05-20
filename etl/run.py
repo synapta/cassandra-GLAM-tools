@@ -97,7 +97,7 @@ def create_database(config, database):
     curse = conn.cursor()
     try:
         curse.execute("CREATE DATABASE " + database + " WITH OWNER = " + config['postgres']['user'] + " " +
-                      "ENCODING = 'UTF8' TABLESPACE = pg_default " +
+                      "ENCODING = 'UTF8' " +
                       "CONNECTION LIMIT = -1 TEMPLATE template0;")
         curse.execute("GRANT CONNECT ON DATABASE " + database + " TO metabase;")
     except ProgrammingError:
