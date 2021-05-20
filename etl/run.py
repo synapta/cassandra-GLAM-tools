@@ -147,7 +147,7 @@ def main():
 
             try:
                 setup(glam['name'])
-                dashboard(glam['name'])
+                #dashboard(glam['name'])
             except SubprocessError:
                 logging.error('Subprocess setup.js or dashboard.py failed')
                 continue
