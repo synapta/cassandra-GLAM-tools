@@ -96,7 +96,7 @@ def create_database(config, database):
     conn.autocommit = True
     curse = conn.cursor()
     try:
-        curse.execute("CREATE DATABASE " + database + " WITH OWNER = " + config['postgres']['user'] +
+        curse.execute("CREATE DATABASE " + database + " WITH OWNER = " + config['postgres']['user'] + " " +
                       "ENCODING = 'UTF8' TABLESPACE = pg_default " +
                       "CONNECTION LIMIT = -1 TEMPLATE template0;")
         curse.execute("GRANT CONNECT ON DATABASE " + database + " TO metabase;")
