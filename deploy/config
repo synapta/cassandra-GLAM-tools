@@ -1,0 +1,6 @@
+Host wmflabs
+   HostName      login.toolforge.org
+   User          MYWMFLOGIN
+   Port          22
+   IdentityFile  ~/.ssh/id_rsa_cassandra
+   LocalForward  3306 commonswiki.analytics.db.svc.wikimedia.cloud:3306

@@ -1,0 +1,4 @@
+# GLAM tool crontab
+*/5 * * * * root python3 MYINSTALLPATH/etl/run.py >> /var/log/cassandra/etl.log 2>&1
+#0 18 * * * root python3 MYINSTALLPATH/etl/run_views.py >> /var/log/cassandra/views.log 2>&1
+#30 3 * * 6 root python3 MYINSTALLPATH/recommender/run.py >> /var/log/cassandra/recommender.log 2>&1
