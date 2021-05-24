@@ -11,8 +11,8 @@
         "password": "",
         "database": {
             "user": "metabase",
-            "password": "",
-            "host": "172.17.0.1",
+            "password": "MYPOSTGRESPASSWORD",
+            "host": "localhost",
             "port": 5432
         },
         "secret": ""
