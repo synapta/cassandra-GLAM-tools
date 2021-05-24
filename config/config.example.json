@@ -6,7 +6,7 @@
         "port": 5432
     },
     "metabase": {
-        "url": "http://example.com",
+        "url": "http://localhost:3000",
         "username": "",
         "password": "",
         "database": {
