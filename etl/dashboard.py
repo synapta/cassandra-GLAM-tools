@@ -67,7 +67,7 @@ with open('dashboard.json', 'r') as f:
     dashboard = json.load(f)
 
 # For all the cards
-for card in dashboard.json()['ordered_cards']:
+for card in dashboard['ordered_cards']:
 
     # Create a new card
     if card['card_id'] is not None:
