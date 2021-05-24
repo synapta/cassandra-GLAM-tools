@@ -2,8 +2,8 @@
 Description=AutoSSH for Cassandra
  
 [Service]
-User=root
-Group=root
+User=glam
+Group=glam
 ExecStart=/usr/bin/autossh -N wmflabs
  
 [Install]
