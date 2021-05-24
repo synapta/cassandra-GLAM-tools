@@ -63,8 +63,8 @@ new_dashboard = requests.post(config['metabase']['url'] + '/api/dashboard', head
 dashboard_id = new_dashboard.json()['id']
 
 # Get reference dashboard
-dashboard = requests.get(
-    config['metabase']['url'] + '/api/dashboard/2', headers=headers)
+with open('dashboard.json', 'r') as f:
+    dashboard = json.load(f)
 
 # For all the cards
 for card in dashboard.json()['ordered_cards']:
