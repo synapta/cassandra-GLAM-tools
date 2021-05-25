@@ -1,7 +1,4 @@
-The purpose of this project is to Support GLAMs in monitoring and evaluating
-their cooperation with Wikimedia projects. Starting from a Wikimedia Commons
-category this tool collects data about usage, views, contributors and topology
-of the files inside.
+The purpose of this project is to support GLAMs in monitoring and evaluating their cooperation with Wikimedia projects. Starting from a Wikimedia Commons category this tool collects data about usage, views, contributors and topology of the files inside.
 
 The GLAM Statistical Tool "Cassandra" is a project of Wikimedia Switzerland (WMCH) and the result of a long-term collaboration with Swiss cultural institutions expressing their needs for measuring the impact of Wikimedia projects. Together with our GLAM Partner Network we went through the process of requirement engineering and the respective solution development with our IT-Partner Synapta. Since the first release in 2017, we have thoroughly and continuously enhanced Cassandra to the extraordinary tool it is today.
 
@@ -9,105 +6,64 @@ In keeping the spirit of the Wikimedia movement alive and supporting the mission
 
 If you are interested in adopting Cassandra in your country, please contact us at Wikimedia Switzerland.
 
+## Tool architecture
+
+This tool is based on a web application developed with Node.js (`app/`), a dashboarding system ([Metabase](https://www.metabase.com/)), a recommendation script written in Python (`recommender/`), and two ETL pipelines designed to extract file usage statistics and views (`etl/`). Statistical data is stored in a PostgreSQL server (every GLAM is associated with a different database), while GLAM metadata is stored in MongoDB. File usage statistics are obtained from the Wikimedia Commons database replica available on [Toolforge](https://wikitech.wikimedia.org/wiki/Portal:Toolforge). For this reason an SSH tunnel needs to be created between the server running Cassandra and Toolforge. File views are obtained by downloading and processing the [mediacounts dataset](https://dumps.wikimedia.org/other/mediacounts/daily/).
+
+## Requirements
+
+### Hardware requirements
+
+### Software requirements
+
+The installation procedure has been tested with Ubuntu 20.04, Node.js 12, Python 3.8, PostgreSQL 12, MongoDB 3.6, and Java 11. The only requirement is to have an empty (and disposable) Ubuntu 20.04 machine, as all the dependeces will be installed automatically. You should to able to login as `root` with SSH to initiate the installation. You should also have an active account on Toolforge configured to accept connections using a passwordless SSH key. Further details on how to obtain it are available in the [Toolforge Quickstart guide](https://wikitech.wikimedia.org/wiki/Portal:Toolforge/Quickstart).
+
 ## Installation
 
-Install Node.js project dependencies:
+The installation procedure has been scripted using the automation tool [Ansible](https://www.ansible.com/). For this reason you need to first install Ansible on *your* local machine (not on the remote machine were Cassandra will be installed). Please refer to the [Installing Ansible guide](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html).
 
+On *your* local machine clone this repository:
 ```
-npm install
-```
-
-Install Python dependencies:
-
-```
-pip3 install -r requirements.txt
+git clone https://github.com/synapta/cassandra-GLAM-tools.git
 ```
 
-Copy the file `config/config.example.json` to `config/config.json` and modify it as required.
-
-The provided MongoDB collection must contain documents with the following format:
-
+In the `deploy/` directory create an `inventory.ini` file similar to the following, where `host.example.com` is the hostname (or the IP address) of the remote machine:
 ```
-{
-   "name": "ETH",
-   "fullname": "ETH Library of Zurich",
-   "category": "Media contributed by the ETH-Bibliothek",
-   "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Aettenschwil_1953.jpg/640px-Aettenschwil_1953.jpg",
-   "database": "eth",
-   "http-auth": {
-      "username": "eth",
-      "password": "PASSWORD"
-   }
-}
+[cassandra]
+host.example.com
 ```
 
-The field `http-auth` is optional and may be omitted if no password is required.
+In the `deploy/` directory create an `id_rsa_cassandra` file with the SSH private key configured to login on Toolforge.
 
-## Get data
+Edit the file `deploy/ansible.yml` by setting approriate values for the following variables:
+- postgres_password: a password of your choice for PostgreSQL;
+- admin_password: a password of your choice for the admin user of Cassandra;
+- user_password: a password of your choice for the non-admin user of Cassandra;
+- wmf_login: the username associated with your Toolforge account;
+- wmf_user: the database user associated with your Toolforge account;
+- wmf_password: the database password associated with your Toolforge account.
 
-Create the file `.ssh/config`:
+Please note that the Toolforge database user and password are available in the file `replica.my.cnf` in your Toolforge home directory.
 
+From the `deploy/` directory, run the Ansible installation script:
 ```
-Host wmflabs
-   HostName      tools-dev.wmflabs.org
-   User          <user>
-   Port          22
-   IdentityFile  ~/.ssh/<key>
-   LocalForward  3306 itwiki.analytics.db.svc.eqiad.wmflabs:3306
-```
-
-Open the SSH tunnel to the WMF databases:
-
-```
-autossh -f -N wmflabs
+ansible-playbook ansible.yml -i inventory.ini
 ```
 
-Create a systemd service unit to auto-launch autossh (optional):
+This script will:
+- install the software requirements (e.g. Node.js, PostgreSQL, MongoDB);
+- create a passwordless `glam` user;
+- download the Cassandra tool;
+- install the required Node.js and Python packages;
+- setup the PostgreSQL server;
+- create an SSH tunnel to Toolforge;
+- install and start Metabase;
+- enable the periodic runs of the ETL pipelines and the recommender.
 
-```
-[Unit]
-Description=AutoSSH for stats.wikimedia.swiss database.
- 
-[Service]
-User=<user>
-Group=<user>
-ExecStart=/usr/bin/autossh -N wmflabs
- 
-[Install]
-WantedBy=multi-user.target
-```
+The tool will be available on port 8081, while Metabase on port 3000.
 
-Run the data gathering periodically (e.g., every 15 minutes).
+Create a Metabase administrator, following the guided procedure available at http://host.example.com:3000 (the host you set in the `inventory.ini` file). Edit on the remote machine the file `/home/glam/cassandra-GLAM-tools/config/config.json` by setting the Metabase username (the email of the Metabase administrator) and the associated password.
 
-```
-cd etl
-python3 run.py
-```
+On Metabase enable the sharing feature and copy the secret key provided by Metabase in the Cassandra configuration file. To enable the sharing feature...
 
-To process the dates from the views chart, you can run:
-
-```
-cd etl
-python3 run_views.py
-```
-
-To create the recommendation model, you need to download the Wikidata JSON dump and then run:
-
-```
-cd recommender
-python3 model.py
-```
-
-To create the recommendations, you can run:
-
-```
-cd recommender
-python3 run.py
-```
-
-## Run webservices
-
-```
-cd app
-node server
-```
+The Cassandra tool is now available at http://host.example.com:8081. For production use, it is strongly suggested to enable a firewall and to serve the external traffic with an encrypted connection, for example by install and properly configuring nginx. The Cassandra tool and Metabase must be associated with different domains. The Metabase URL should be set in the Cassandra configuration file.
