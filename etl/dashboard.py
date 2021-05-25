@@ -71,10 +71,9 @@ for card in dashboard['ordered_cards']:
 
     # Create a new card
     if card['card_id'] is not None:
-        old_card = requests.get(
-            config['metabase']['url'] + '/api/card/' + str(card['card_id']), headers=headers)
+        with open('cards/' + str(card['card_id']) + '.json', 'r') as f:
+            new_card_dict = json.load(f)
 
-        new_card_dict = old_card.json()
         new_card_dict['dataset_query']['database'] = database_id
 
         new_card = requests.post(config['metabase']['url'] + '/api/card', headers=headers, json={
