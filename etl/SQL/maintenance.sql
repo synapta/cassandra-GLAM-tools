@@ -1,4 +1,5 @@
 create table if not exists dailyImageUsage(img_name varchar(255),count_date date, count bigint, primary key (img_name, count_date));
+grant select on dailyimageusage to metabase;
 create index if not exists dailyimageusage_img_name_idx on dailyimageusage (img_name);
 create or replace function doMaintenance()
 returns void as $$
