@@ -14,6 +14,8 @@ This tool is based on a web application developed with Node.js (`app/`), a dashb
 
 ### Hardware requirements
 
+Cassandra should be installed on a server with at least 2 CPUs and 2 GB of RAM, even if 4 GB of RAM are strongly suggested. Disk space usage depends on multiple factors, but you can estimate on average 1 GB per 10k files. For example, for a Wikimedia Commons category with 100k files (or 10 GLAMs with 10k files each), a minimum disk space of 20 GB is suggested (10 GB for the database, 10 GB for Ubuntu, the tool, and temporary files).
+
 ### Software requirements
 
 The installation procedure has been tested with Ubuntu 20.04, Node.js 12, Python 3.8, PostgreSQL 12, MongoDB 3.6, and Java 11. The only requirement is to have an empty (and disposable) Ubuntu 20.04 machine, as all the dependencies will be installed automatically. You should be able to login as `root` with SSH to initiate the installation. You should also have an active account on Toolforge configured to accept connections using a passwordless SSH key. Further details on how to obtain it are available in the [Toolforge Quickstart guide](https://wikitech.wikimedia.org/wiki/Portal:Toolforge/Quickstart).
