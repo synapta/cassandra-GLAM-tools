@@ -32,10 +32,15 @@
         - postgresql-12
         - mongodb
         - autossh
-        - nginx
         - supervisor
         - default-jre
-      
+        - libatk-bridge2.0-0
+        - libxkbcommon0
+        - libxcomposite1
+        - libxrandr2
+        - libgtk-3-0
+        - libgbm1
+
     - name: Add NodeSource Node.js repository
       shell: "curl -fsSL https://deb.nodesource.com/setup_12.x | bash -"
 
@@ -51,7 +56,6 @@
       git:
         repo: "https://github.com/synapta/cassandra-GLAM-tools.git"
         dest: "{{ install_path }}"
-        version: ansible
       become: yes
       become_user: glam
         
