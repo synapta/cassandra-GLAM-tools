@@ -1235,12 +1235,12 @@ var viewsStats = function (req, res, next, db) {
 
 // FILE
 var fileDetails = function (req, res, next, db) {
-    let query = `select i.img_name, sum(v.accesses) as tot, avg(v.accesses) as avg,
-                PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER by v.accesses) as median,
+    let query = `select i.img_name, COALESCE(sum(v.accesses), 0) as tot, COALESCE(avg(v.accesses), 0) as avg,
+                COALESCE(PERCENTILE_CONT(0.5) WITHIN GROUP(ORDER by v.accesses), 0) as median,
                 i.cl_to as categories
-                from images as i, visualizations as v
-                where i.media_id = v.media_id
-                and i.img_name = $1
+                from images as i
+                LEFT JOIN visualizations as v on i.media_id = v.media_id
+                where i.img_name = $1
                 group by i.img_name, categories`;
 
     db.query(query, [req.params.file], (err, dbres) => {
