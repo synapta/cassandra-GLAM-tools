@@ -73,6 +73,8 @@ After editing the configuration file, it is necessary to restart the tool:
 supervisorctl restart cassandra
 ```
 
+It may be necessary to revise the maximum number of categories and files acceptable per GLAM that are provided in the configuration file. Default values are 1k categories and 500k files. If you add a GLAM breaking these limits, it will not be processed and displayed to users.
+
 The Cassandra tool is now available at http://host.example.com:8081. For production use, it is strongly suggested to enable a firewall and to serve the external traffic with an encrypted connection, for example by installing and properly configuring NGINX. The Cassandra tool and Metabase must be associated with different domains. The Metabase URL should be set in the Cassandra configuration file.
 
 ## Usage
