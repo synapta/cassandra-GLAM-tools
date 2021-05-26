@@ -7,3 +7,4 @@ unidecode
 langid
 gensim
 requests
+python-Levenshtein-wheels

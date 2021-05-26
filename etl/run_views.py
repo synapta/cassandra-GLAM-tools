@@ -4,13 +4,11 @@ import logging
 import os
 import subprocess
 import sys
-import time
 from datetime import date, datetime, timedelta
 from subprocess import SubprocessError
 
 import psycopg2
 import pymongo
-from psycopg2 import ProgrammingError
 
 import sentry_sdk
 from sentry_sdk.integrations.logging import LoggingIntegration
@@ -52,7 +50,7 @@ def add_missing_dates(config, glam):
     try:
         min_date = datetime.strptime(glam['min_date'], "%Y-%m-%d").date()
     except KeyError:
-        min_date = max([first_image, global_min_date])
+        min_date = max([first_image, date.today() - timedelta(days=10)])
 
     candidate_dates = [min_date + timedelta(days=x)
                        for x in range(0, (global_max_date - min_date).days)]

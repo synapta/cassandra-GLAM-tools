@@ -1,0 +1,10 @@
+[Unit]
+Description=AutoSSH for Cassandra
+ 
+[Service]
+User=glam
+Group=glam
+ExecStart=/usr/bin/autossh -N wmflabs
+ 
+[Install]
+WantedBy=multi-user.target

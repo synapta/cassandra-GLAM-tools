@@ -1,0 +1,206 @@
+---
+- hosts: cassandra
+  remote_user: root
+  vars:
+    install_path: /home/glam/cassandra-GLAM-tools
+    postgres_password: supersecret
+    admin_password: admin
+    user_password: glam
+    wmf_login:
+    wmf_user:
+    wmf_password:
+
+  tasks:
+    - name: Create user glam
+      user:
+        name: glam
+        shell: /bin/bash
+        password: '!'
+
+    - name: Update apt cache
+      apt: update_cache=yes
+ 
+    - name: Install dependencies
+      package:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - apt-transport-https
+        - gnupg2
+        - git
+        - python3-pip
+        - postgresql-12
+        - mongodb
+        - autossh
+        - supervisor
+        - default-jre
+        - libatk-bridge2.0-0
+        - libxkbcommon0
+        - libxcomposite1
+        - libxrandr2
+        - libgtk-3-0
+        - libgbm1
+
+    - name: Add NodeSource Node.js repository
+      shell: "curl -fsSL https://deb.nodesource.com/setup_12.x | bash -"
+
+    - name: Update apt cache
+      apt: update_cache=yes
+
+    - name: Install Node.js
+      package:
+        name: nodejs
+        state: present
+
+    - name: Download GLAM tools
+      git:
+        repo: "https://github.com/synapta/cassandra-GLAM-tools.git"
+        dest: "{{ install_path }}"
+      become: yes
+      become_user: glam
+        
+    - name: Install Node.js dependencies
+      command: "npm install"
+      args:
+        chdir: "{{ install_path }}"
+      become: yes
+      become_user: glam
+
+    - name: Create API documentation
+      command: "npm run postinstall"
+      args:
+        chdir: "{{ install_path }}"
+      become: yes
+      become_user: glam
+
+    - name: Install Python dependencies
+      command: "pip3 install -r requirements.txt"
+      args:
+        chdir: "{{ install_path }}"
+          
+    - name: Create PostgreSQL cassandra user
+      command: psql -c "CREATE USER cassandra WITH CREATEDB PASSWORD '{{ postgres_password }}';"
+      become: yes
+      become_user: postgres
+      
+    - name: Create PostgreSQL metabase user
+      command: psql -c "CREATE USER metabase WITH PASSWORD '{{ postgres_password }}';"
+      become: yes
+      become_user: postgres
+      
+    - name: Create config file
+      command: "cp config.example.json config.json"
+      args:
+        chdir: "{{ install_path }}/config"
+      become: yes
+      become_user: glam
+        
+    - name: Set PostgreSQL password
+      replace:
+        path: "{{ install_path }}/config/config.json"
+        regexp: 'MYPOSTGRESPASSWORD'
+        replace: "{{ postgres_password }}"
+        
+    - name: Set admin password
+      replace:
+        path: "{{ install_path }}/config/config.json"
+        regexp: 'MYADMINPASSWORD'
+        replace: "{{ admin_password }}"
+        
+    - name: Set user password
+      replace:
+        path: "{{ install_path }}/config/config.json"
+        regexp: 'MYUSERPASSWORD'
+        replace: "{{ user_password }}"
+
+    - name: Set WMF user
+      replace:
+        path: "{{ install_path }}/config/config.json"
+        regexp: 'MYWMFUSER'
+        replace: "{{ wmf_user }}"
+
+    - name: Set WMF password
+      replace:
+        path: "{{ install_path }}/config/config.json"
+        regexp: 'MYWMFPASSWORD'
+        replace: "{{ wmf_password }}"
+
+    - name: Create ssh directory
+      file:
+        path: /home/glam/.ssh
+        state: directory
+        owner: glam
+
+    - name: Copy ssh config
+      copy:
+        src: config
+        dest: /home/glam/.ssh/config
+      become: yes
+      become_user: glam
+    
+    - name: Copy ssh key
+      copy:
+        src: id_rsa_cassandra
+        dest: /home/glam/.ssh/id_rsa_cassandra
+        mode: '0600'
+      become: yes
+      become_user: glam
+
+    - name: Set ssh login
+      replace:
+        path: /home/glam/.ssh/config
+        regexp: 'MYWMFLOGIN'
+        replace: "{{ wmf_login }}"
+
+    - name: Copy autossh systemd unit
+      copy:
+        src: cassandra-autossh.service
+        dest: /etc/systemd/system/cassandra-autossh.service
+        
+    - name: Add ssh fingerprint
+      shell: "ssh-keyscan -H login.toolforge.org >> /home/glam/.ssh/known_hosts"
+      become: yes
+      become_user: glam
+
+    - name: Enable autossh service
+      systemd:
+        name: cassandra-autossh
+        enabled: yes
+        state: started
+
+    - name: Create log directory
+      file:
+        path: /var/log/cassandra
+        state: directory
+        owner: glam
+
+    - name: Copy crontab
+      copy:
+        src: crontab
+        dest: /etc/cron.d/cassandra
+
+    - name: Create metabase directory
+      file:
+        path: /home/glam/metabase
+        state: directory
+        owner: glam
+
+    - name: Download metabase
+      get_url:
+        url: https://downloads.metabase.com/latest/metabase.jar
+        dest: /home/glam/metabase/metabase.jar
+      become: yes
+      become_user: glam
+
+    - name: Copy supervisor cassandra config
+      copy:
+        src: cassandra.conf
+        dest: /etc/supervisor/conf.d/cassandra.conf
+
+    - name: Copy supervisor metabase config
+      copy:
+        src: metabase.conf
+        dest: /etc/supervisor/conf.d/metabase.conf
+
+    - name: Restart supervisor
+      shell: "supervisorctl reread && supervisorctl update"

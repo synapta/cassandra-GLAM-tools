@@ -1,0 +1,1495 @@
+{
+	"description": null,
+	"archived": false,
+	"collection_position": null,
+	"ordered_cards": [
+		{
+			"sizeX": 4,
+			"series": [],
+			"card": {
+				"query_average_duration": null
+			},
+			"updated_at": "2021-01-19T11:15:29.040551Z",
+			"col": 0,
+			"id": 16,
+			"parameter_mappings": [],
+			"card_id": null,
+			"visualization_settings": {
+				"virtual_card": {
+					"name": null,
+					"display": "text",
+					"visualization_settings": {},
+					"dataset_query": {},
+					"archived": false
+				},
+				"text": "# Views",
+				"dashcard.background": false
+			},
+			"dashboard_id": 2,
+			"created_at": "2020-11-22T12:08:54.397911Z",
+			"sizeY": 1,
+			"row": 0
+		},
+		{
+			"sizeX": 4,
+			"series": [],
+			"card": {
+				"query_average_duration": null
+			},
+			"updated_at": "2021-01-19T11:15:29.044702Z",
+			"col": 0,
+			"id": 18,
+			"parameter_mappings": [],
+			"card_id": null,
+			"visualization_settings": {
+				"virtual_card": {
+					"name": null,
+					"display": "text",
+					"visualization_settings": {},
+					"dataset_query": {},
+					"archived": false
+				},
+				"text": "# Upload",
+				"dashcard.background": false
+			},
+			"dashboard_id": 2,
+			"created_at": "2020-11-22T12:08:54.489322Z",
+			"sizeY": 1,
+			"row": 14
+		},
+		{
+			"sizeX": 4,
+			"series": [],
+			"card": {
+				"query_average_duration": null
+			},
+			"updated_at": "2021-01-19T11:15:29.048471Z",
+			"col": 0,
+			"id": 19,
+			"parameter_mappings": [],
+			"card_id": null,
+			"visualization_settings": {
+				"virtual_card": {
+					"name": null,
+					"display": "text",
+					"visualization_settings": {},
+					"dataset_query": {},
+					"archived": false
+				},
+				"text": "# Top",
+				"dashcard.background": false
+			},
+			"dashboard_id": 2,
+			"created_at": "2020-11-22T12:08:54.493624Z",
+			"sizeY": 1,
+			"row": 21
+		},
+		{
+			"sizeX": 4,
+			"series": [],
+			"card": {
+				"query_average_duration": null
+			},
+			"updated_at": "2021-01-19T11:15:29.05192Z",
+			"col": 0,
+			"id": 20,
+			"parameter_mappings": [],
+			"card_id": null,
+			"visualization_settings": {
+				"virtual_card": {
+					"name": null,
+					"display": "text",
+					"visualization_settings": {},
+					"dataset_query": {},
+					"archived": false
+				},
+				"text": "# Usage",
+				"dashcard.background": false
+			},
+			"dashboard_id": 2,
+			"created_at": "2020-11-22T12:08:54.495159Z",
+			"sizeY": 1,
+			"row": 7
+		},
+		{
+			"sizeX": 4,
+			"series": [],
+			"card": {
+				"query_average_duration": null
+			},
+			"updated_at": "2021-01-19T11:15:29.055645Z",
+			"col": 0,
+			"id": 23,
+			"parameter_mappings": [],
+			"card_id": null,
+			"visualization_settings": {
+				"virtual_card": {
+					"name": null,
+					"display": "text",
+					"visualization_settings": {},
+					"dataset_query": {},
+					"archived": false
+				},
+				"text": "# Correlations",
+				"dashcard.background": false
+			},
+			"dashboard_id": 2,
+			"created_at": "2020-11-24T16:16:24.354146Z",
+			"sizeY": 1,
+			"row": 28
+		},
+		{
+			"sizeX": 4,
+			"series": [],
+			"card": {
+				"description": "From -1 to 1. This number represent the correlation between number of views and media usage. Does high usage leads to more views? 1 yes, -1 no, 0 not relevant",
+				"archived": false,
+				"collection_position": null,
+				"table_id": null,
+				"result_metadata": [
+					{
+						"base_type": "type/Float",
+						"display_name": "Corr Coef Using PGSQL Func",
+						"name": "Corr Coef Using PGSQL Func",
+						"special_type": null,
+						"fingerprint": {
+							"global": {
+								"distinct-count": 1,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/Number": {
+									"min": 0.6663149842984744,
+									"max": 0.6663149842984744,
+									"avg": 0.6663149842984744,
+									"sd": null,
+									"q1": 0.6663149842984744,
+									"q3": 0.6663149842984744
+								}
+							}
+						}
+					}
+				],
+				"database_id": 3,
+				"enable_embedding": false,
+				"collection_id": 16,
+				"query_type": "native",
+				"name": "Correlation views / usage",
+				"read_permissions": null,
+				"query_average_duration": 131314,
+				"creator_id": 2,
+				"updated_at": "2021-05-23T06:14:31.679824Z",
+				"made_public_by_id": null,
+				"embedding_params": null,
+				"cache_ttl": null,
+				"dataset_query": {
+					"type": "native",
+					"native": {
+						"query": "SELECT corr(average, usage) as \"Corr Coef Using PGSQL Func\" FROM(\nSELECT AVG(accesses) as average, AVG(u.\"count\") as usage\nFROM images i, visualizations v, dailyimageusage u\nWHERE i.media_id = v.media_id\nand u.img_name = i.img_name\ngroup by i.img_name\n) as a\n\n    \n"
+					},
+					"database": 3
+				},
+				"id": 9,
+				"display": "scalar",
+				"visualization_settings": {
+					"graph.dimensions": [
+						"average"
+					],
+					"graph.metrics": [
+						"img_size"
+					],
+					"graph.x_axis.scale": "pow",
+					"graph.y_axis.scale": "pow"
+				},
+				"created_at": "2020-06-03T13:58:33.081456Z",
+				"public_uuid": null
+			},
+			"updated_at": "2021-01-19T11:15:29.059066Z",
+			"col": 8,
+			"id": 24,
+			"parameter_mappings": [],
+			"card_id": 9,
+			"visualization_settings": {},
+			"dashboard_id": 2,
+			"created_at": "2020-11-24T16:16:24.362869Z",
+			"sizeY": 3,
+			"row": 29
+		},
+		{
+			"sizeX": 4,
+			"series": [],
+			"card": {
+				"description": "From -1 to 1. This number represent the correlation between number of views and media size. Do bigger media lead to more views? 1 yes, -1 no, 0 not relevant",
+				"archived": false,
+				"collection_position": null,
+				"table_id": null,
+				"result_metadata": [
+					{
+						"base_type": "type/Float",
+						"display_name": "Corr Coef Using PGSQL Func",
+						"name": "Corr Coef Using PGSQL Func",
+						"special_type": null,
+						"fingerprint": {
+							"global": {
+								"distinct-count": 1,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/Number": {
+									"min": -0.03958996396310031,
+									"max": -0.03958996396310031,
+									"avg": -0.03958996396310031,
+									"sd": null,
+									"q1": -0.03958996396310031,
+									"q3": -0.03958996396310031
+								}
+							}
+						}
+					}
+				],
+				"database_id": 3,
+				"enable_embedding": false,
+				"collection_id": 16,
+				"query_type": "native",
+				"name": "Correlation views / size",
+				"read_permissions": null,
+				"query_average_duration": 2360,
+				"creator_id": 2,
+				"updated_at": "2021-05-23T06:12:44.61295Z",
+				"made_public_by_id": null,
+				"embedding_params": null,
+				"cache_ttl": null,
+				"dataset_query": {
+					"type": "native",
+					"native": {
+						"query": "SELECT corr(average, img_size) as \"Corr Coef Using PGSQL Func\" FROM(\nSELECT AVG(accesses) as average, img_size\nFROM images i, visualizations v\nWHERE i.media_id = v.media_id\ngroup by img_name\n) as a\n\n    \n"
+					},
+					"database": 3
+				},
+				"id": 7,
+				"display": "scalar",
+				"visualization_settings": {
+					"graph.dimensions": [
+						"average"
+					],
+					"graph.metrics": [
+						"img_size"
+					],
+					"graph.x_axis.scale": "pow",
+					"graph.y_axis.scale": "pow"
+				},
+				"created_at": "2020-06-03T13:51:16.813633Z",
+				"public_uuid": null
+			},
+			"updated_at": "2021-01-19T11:15:29.064277Z",
+			"col": 4,
+			"id": 25,
+			"parameter_mappings": [],
+			"card_id": 7,
+			"visualization_settings": {},
+			"dashboard_id": 2,
+			"created_at": "2020-11-24T16:16:24.374024Z",
+			"sizeY": 3,
+			"row": 29
+		},
+		{
+			"sizeX": 4,
+			"series": [],
+			"card": {
+				"description": "From -1 to 1. This number represent the correlation between number of views and media oldness. Do older media make more views? 1 yes, -1 no, 0 not relevant.",
+				"archived": false,
+				"collection_position": null,
+				"table_id": null,
+				"result_metadata": [
+					{
+						"base_type": "type/Float",
+						"display_name": "Corr Coef Using PGSQL Func",
+						"name": "Corr Coef Using PGSQL Func",
+						"special_type": null,
+						"fingerprint": {
+							"global": {
+								"distinct-count": 1,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/Number": {
+									"min": 0.0776270546580604,
+									"max": 0.0776270546580604,
+									"avg": 0.0776270546580604,
+									"sd": null,
+									"q1": 0.0776270546580604,
+									"q3": 0.0776270546580604
+								}
+							}
+						}
+					}
+				],
+				"database_id": 3,
+				"enable_embedding": false,
+				"collection_id": 16,
+				"query_type": "native",
+				"name": "Correlation views / oldness",
+				"read_permissions": null,
+				"query_average_duration": 2485,
+				"creator_id": 2,
+				"updated_at": "2021-05-23T06:12:44.313438Z",
+				"made_public_by_id": null,
+				"embedding_params": null,
+				"cache_ttl": null,
+				"dataset_query": {
+					"type": "native",
+					"native": {
+						"query": "SELECT corr(average, oldness) as \"Corr Coef Using PGSQL Func\" FROM(\nSELECT AVG(accesses) as average, EXTRACT(day from NOW()-img_timestamp) as oldness\nFROM images i, visualizations v\nWHERE i.media_id = v.media_id\ngroup by i.img_name\n) as a\n\n    \n"
+					},
+					"database": 3
+				},
+				"id": 10,
+				"display": "scalar",
+				"visualization_settings": {
+					"graph.dimensions": [
+						"average"
+					],
+					"graph.metrics": [
+						"img_size"
+					],
+					"graph.x_axis.scale": "pow",
+					"graph.y_axis.scale": "pow"
+				},
+				"created_at": "2020-06-03T14:04:18.236465Z",
+				"public_uuid": null
+			},
+			"updated_at": "2021-01-19T11:15:29.067621Z",
+			"col": 0,
+			"id": 26,
+			"parameter_mappings": [],
+			"card_id": 10,
+			"visualization_settings": {},
+			"dashboard_id": 2,
+			"created_at": "2020-11-24T16:16:24.438685Z",
+			"sizeY": 3,
+			"row": 29
+		},
+		{
+			"sizeX": 4,
+			"series": [],
+			"card": {
+				"description": "Percentage of new media uploaded last year (rolling).",
+				"archived": false,
+				"collection_position": null,
+				"table_id": null,
+				"result_metadata": [
+					{
+						"base_type": "type/Decimal",
+						"display_name": "?column?",
+						"name": "?column?",
+						"special_type": null,
+						"fingerprint": {
+							"global": {
+								"distinct-count": 1,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/Number": {
+									"min": 0.03210463733650416,
+									"max": 0.03210463733650416,
+									"avg": 0.03210463733650416,
+									"sd": null,
+									"q1": 0.03210463733650416,
+									"q3": 0.03210463733650416
+								}
+							}
+						}
+					}
+				],
+				"database_id": 3,
+				"enable_embedding": false,
+				"collection_id": 14,
+				"query_type": "native",
+				"name": "Uploaded last year increment",
+				"read_permissions": null,
+				"query_average_duration": 568,
+				"creator_id": 2,
+				"updated_at": "2021-05-23T06:12:41.572739Z",
+				"made_public_by_id": null,
+				"embedding_params": null,
+				"cache_ttl": null,
+				"dataset_query": {
+					"type": "native",
+					"native": {
+						"query": "SELECT (COUNT(*) FILTER(WHERE img_timestamp > (now() - interval '1 year')))/COUNT(*)::numeric\nFROM images"
+					},
+					"database": 3
+				},
+				"id": 18,
+				"display": "scalar",
+				"visualization_settings": {
+					"column_settings": {
+						"[\"name\",\"?column?\"]": {
+							"scale": 100,
+							"suffix": "%",
+							"prefix": "+"
+						}
+					}
+				},
+				"created_at": "2020-12-07T17:34:53.572179Z",
+				"public_uuid": null
+			},
+			"updated_at": "2021-01-19T11:15:29.071025Z",
+			"col": 0,
+			"id": 27,
+			"parameter_mappings": [],
+			"card_id": 18,
+			"visualization_settings": {},
+			"dashboard_id": 2,
+			"created_at": "2020-12-07T17:35:15.152801Z",
+			"sizeY": 3,
+			"row": 18
+		},
+		{
+			"sizeX": 4,
+			"series": [],
+			"card": {
+				"description": "Percentage of media used to enrich Wikimedia pages.",
+				"archived": false,
+				"collection_position": null,
+				"table_id": null,
+				"result_metadata": [
+					{
+						"base_type": "type/Decimal",
+						"display_name": "?column?",
+						"name": "?column?",
+						"special_type": null,
+						"fingerprint": {
+							"global": {
+								"distinct-count": 1,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/Number": {
+									"min": 0.45422116527942924,
+									"max": 0.45422116527942924,
+									"avg": 0.45422116527942924,
+									"sd": null,
+									"q1": 0.45422116527942924,
+									"q3": 0.45422116527942924
+								}
+							}
+						}
+					}
+				],
+				"database_id": 3,
+				"enable_embedding": false,
+				"collection_id": 13,
+				"query_type": "native",
+				"name": "Media used",
+				"read_permissions": null,
+				"query_average_duration": 615,
+				"creator_id": 2,
+				"updated_at": "2021-05-23T06:12:41.34413Z",
+				"made_public_by_id": null,
+				"embedding_params": null,
+				"cache_ttl": null,
+				"dataset_query": {
+					"type": "native",
+					"native": {
+						"query": "SELECT COUNT(DISTINCT gil_to)/(SELECT COUNT(*) from images)::numeric\nFROM usages"
+					},
+					"database": 3
+				},
+				"id": 19,
+				"display": "scalar",
+				"visualization_settings": {
+					"column_settings": {
+						"[\"name\",\"?column?\"]": {
+							"scale": 100,
+							"suffix": "%"
+						}
+					}
+				},
+				"created_at": "2020-12-07T17:38:52.198419Z",
+				"public_uuid": null
+			},
+			"updated_at": "2021-01-19T11:15:29.074998Z",
+			"col": 0,
+			"id": 28,
+			"parameter_mappings": [],
+			"card_id": 19,
+			"visualization_settings": {},
+			"dashboard_id": 2,
+			"created_at": "2020-12-07T17:39:31.070137Z",
+			"sizeY": 3,
+			"row": 11
+		},
+		{
+			"sizeX": 4,
+			"series": [],
+			"card": {
+				"description": "Percentage of last year's views compared to the previous one.",
+				"archived": false,
+				"collection_position": null,
+				"table_id": null,
+				"result_metadata": [
+					{
+						"base_type": "type/Decimal",
+						"display_name": "?column?",
+						"name": "?column?",
+						"special_type": null,
+						"fingerprint": {
+							"global": {
+								"distinct-count": 1,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/Number": {
+									"min": -0.006787059042099267,
+									"max": -0.006787059042099267,
+									"avg": -0.006787059042099267,
+									"sd": null,
+									"q1": -0.006787059042099267,
+									"q3": -0.006787059042099267
+								}
+							}
+						}
+					}
+				],
+				"database_id": 3,
+				"enable_embedding": false,
+				"collection_id": 12,
+				"query_type": "native",
+				"name": "Views change last year",
+				"read_permissions": null,
+				"query_average_duration": 5022,
+				"creator_id": 2,
+				"updated_at": "2021-05-23T06:12:46.273915Z",
+				"made_public_by_id": null,
+				"embedding_params": null,
+				"cache_ttl": null,
+				"dataset_query": {
+					"database": 3,
+					"native": {
+						"query": "with a as (\n    select sum(accesses) prev_year\n    from visualizations\n    where date_trunc('year', access_date) = date_trunc('year', now() - interval '2 year')\n    group by date_trunc('year', access_date)\n), b as (\n    select sum(accesses) as current_year\n    from visualizations\n    where date_trunc('year', access_date) = date_trunc('year', now()  - interval '1 year')\n    group by date_trunc('year', access_date)\n)\nselect (current_year- prev_year)/prev_year::numeric\nfrom a,b"
+					},
+					"type": "native"
+				},
+				"id": 20,
+				"display": "scalar",
+				"visualization_settings": {
+					"column_settings": {
+						"[\"name\",\"?column?\"]": {
+							"scale": 100,
+							"suffix": "%"
+						}
+					}
+				},
+				"created_at": "2020-12-07T17:54:02.190531Z",
+				"public_uuid": null
+			},
+			"updated_at": "2021-01-19T11:15:29.078184Z",
+			"col": 0,
+			"id": 29,
+			"parameter_mappings": [],
+			"card_id": 20,
+			"visualization_settings": {},
+			"dashboard_id": 2,
+			"created_at": "2020-12-07T17:54:21.816151Z",
+			"sizeY": 3,
+			"row": 4
+		},
+		{
+			"sizeX": 18,
+			"series": [],
+			"card": {
+				"query_average_duration": null
+			},
+			"updated_at": "2021-01-19T11:15:29.081182Z",
+			"col": 0,
+			"id": 30,
+			"parameter_mappings": [],
+			"card_id": null,
+			"visualization_settings": {
+				"virtual_card": {
+					"name": null,
+					"display": "text",
+					"visualization_settings": {},
+					"dataset_query": {},
+					"archived": false
+				},
+				"dashcard.background": false
+			},
+			"dashboard_id": 2,
+			"created_at": "2020-12-09T10:58:49.955708Z",
+			"sizeY": 3,
+			"row": 32
+		},
+		{
+			"sizeX": 4,
+			"series": [],
+			"card": {
+				"description": "List of the top 5 Wikimedia projects that most used media from this collection.",
+				"archived": false,
+				"collection_position": null,
+				"table_id": null,
+				"result_metadata": [
+					{
+						"base_type": "type/Text",
+						"display_name": "Wiki project",
+						"name": "Wiki project",
+						"special_type": null,
+						"fingerprint": {
+							"global": {
+								"distinct-count": 5,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/Text": {
+									"percent-json": 0.0,
+									"percent-url": 0.0,
+									"percent-email": 0.0,
+									"average-length": 7.4
+								}
+							}
+						}
+					},
+					{
+						"base_type": "type/BigInteger",
+						"display_name": "Media used",
+						"name": "Media used",
+						"special_type": null,
+						"fingerprint": {
+							"global": {
+								"distinct-count": 5,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/Number": {
+									"min": 20.0,
+									"max": 484.0,
+									"avg": 132.0,
+									"sd": 199.6684752283144,
+									"q1": 20.75,
+									"q3": 197.5
+								}
+							}
+						}
+					}
+				],
+				"database_id": 3,
+				"enable_embedding": false,
+				"collection_id": 15,
+				"query_type": "native",
+				"name": "Top 5 Wikimedia projects by media usage",
+				"read_permissions": null,
+				"query_average_duration": 117,
+				"creator_id": 2,
+				"updated_at": "2021-05-23T06:12:42.952604Z",
+				"made_public_by_id": null,
+				"embedding_params": null,
+				"cache_ttl": null,
+				"dataset_query": {
+					"type": "native",
+					"native": {
+						"query": "SELECT gil_wiki as \"Wiki project\", count(*) as \"Media used\"\nFROM usages\nWHERE is_alive = true\nGROUP BY gil_wiki\norder by count(*) desc\nlimit 5"
+					},
+					"database": 3
+				},
+				"id": 43,
+				"display": "table",
+				"visualization_settings": {
+					"table.pivot_column": "gil_wiki",
+					"table.cell_column": "count"
+				},
+				"created_at": "2021-01-19T09:47:25.770583Z",
+				"public_uuid": null
+			},
+			"updated_at": "2021-01-19T11:15:29.084245Z",
+			"col": 14,
+			"id": 147,
+			"parameter_mappings": [],
+			"card_id": 43,
+			"visualization_settings": {},
+			"dashboard_id": 2,
+			"created_at": "2021-01-19T09:50:01.421006Z",
+			"sizeY": 6,
+			"row": 22
+		},
+		{
+			"sizeX": 7,
+			"series": [],
+			"card": {
+				"description": "List of the top 5 media most used in wiki projects (Wikipedia, Wikidata, Wikisource, etc.).  To see media details, copy its name and paste in a URL like: https://stats.wikimedia.swiss/<glam-id>/file/<media-name>, for example: https://stats.wikimedia.swiss/ZU/file/Rennwegtor.jpg",
+				"archived": false,
+				"collection_position": null,
+				"table_id": null,
+				"result_metadata": [
+					{
+						"base_type": "type/Text",
+						"display_name": "Media",
+						"name": "Media",
+						"special_type": null,
+						"fingerprint": {
+							"global": {
+								"distinct-count": 5,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/Text": {
+									"percent-json": 0.0,
+									"percent-url": 0.0,
+									"percent-email": 0.0,
+									"average-length": 35.8
+								}
+							}
+						}
+					},
+					{
+						"base_type": "type/BigInteger",
+						"display_name": "Distinct usage count",
+						"name": "Distinct usage count",
+						"special_type": "type/Quantity",
+						"fingerprint": {
+							"global": {
+								"distinct-count": 5,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/Number": {
+									"min": 10.0,
+									"max": 28.0,
+									"avg": 18.6,
+									"sd": 6.618156843109719,
+									"q1": 14.5,
+									"q3": 22.75
+								}
+							}
+						}
+					}
+				],
+				"database_id": 3,
+				"enable_embedding": false,
+				"collection_id": 15,
+				"query_type": "native",
+				"name": "Top 5 media by usage",
+				"read_permissions": null,
+				"query_average_duration": 130,
+				"creator_id": 2,
+				"updated_at": "2021-05-23T06:12:41.745581Z",
+				"made_public_by_id": null,
+				"embedding_params": null,
+				"cache_ttl": null,
+				"dataset_query": {
+					"type": "native",
+					"native": {
+						"query": "SELECT gil_to as \"Media\", count(*) as \"Distinct usage count\"\nFROM usages\nGROUP BY gil_to\nORDER BY count(*) DESC\nLIMIT 5"
+					},
+					"database": 3
+				},
+				"id": 41,
+				"display": "table",
+				"visualization_settings": {
+					"table.pivot_column": "count",
+					"table.cell_column": "gil_to"
+				},
+				"created_at": "2021-01-18T15:57:48.01616Z",
+				"public_uuid": null
+			},
+			"updated_at": "2021-01-19T11:15:29.087362Z",
+			"col": 7,
+			"id": 146,
+			"parameter_mappings": [],
+			"card_id": 41,
+			"visualization_settings": {},
+			"dashboard_id": 2,
+			"created_at": "2021-01-19T09:50:01.421237Z",
+			"sizeY": 6,
+			"row": 22
+		},
+		{
+			"sizeX": 7,
+			"series": [],
+			"card": {
+				"description": "List of the top 5 most viewed media in the last year. To see media details, copy its name and paste in a URL like: https://stats.wikimedia.swiss/<glam-id>/file/<media-name>, for example: https://stats.wikimedia.swiss/ZU/file/Rennwegtor.jpg",
+				"archived": false,
+				"collection_position": null,
+				"table_id": null,
+				"result_metadata": [
+					{
+						"base_type": "type/Text",
+						"display_name": "Media",
+						"name": "Media",
+						"special_type": null,
+						"fingerprint": {
+							"global": {
+								"distinct-count": 5,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/Text": {
+									"percent-json": 0.0,
+									"percent-url": 0.0,
+									"percent-email": 0.0,
+									"average-length": 40.0
+								}
+							}
+						}
+					},
+					{
+						"base_type": "type/Decimal",
+						"display_name": "Views",
+						"name": "Views",
+						"special_type": null,
+						"fingerprint": {
+							"global": {
+								"distinct-count": 5,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/Number": {
+									"min": 241302.0,
+									"max": 753923.0,
+									"avg": 387337.4,
+									"sd": 211949.50206546843,
+									"q1": 257131.5,
+									"q3": 475817.75
+								}
+							}
+						}
+					}
+				],
+				"database_id": 3,
+				"enable_embedding": false,
+				"collection_id": 15,
+				"query_type": "native",
+				"name": "Top 5 media by views last year",
+				"read_permissions": null,
+				"query_average_duration": 1697,
+				"creator_id": 2,
+				"updated_at": "2021-05-23T06:12:43.642855Z",
+				"made_public_by_id": null,
+				"embedding_params": null,
+				"cache_ttl": null,
+				"dataset_query": {
+					"database": 3,
+					"native": {
+						"query": "SELECT img_name as \"Media\", sum(accesses) as \"Views\"\nFROM visualizations v, images i\nwhere v.media_id = i.media_id\nand access_date > NOW()-interval '1 year'\nGROUP BY img_name\norder by sum(accesses) desc\nlimit 5"
+					},
+					"type": "native"
+				},
+				"id": 42,
+				"display": "table",
+				"visualization_settings": {
+					"table.pivot_column": "sum",
+					"table.cell_column": "img_name"
+				},
+				"created_at": "2021-01-18T16:04:12.059993Z",
+				"public_uuid": null
+			},
+			"updated_at": "2021-01-19T11:15:29.090564Z",
+			"col": 0,
+			"id": 148,
+			"parameter_mappings": [],
+			"card_id": 42,
+			"visualization_settings": {},
+			"dashboard_id": 2,
+			"created_at": "2021-01-19T09:50:01.486386Z",
+			"sizeY": 6,
+			"row": 22
+		},
+		{
+			"sizeX": 4,
+			"series": [],
+			"card": {
+				"description": "Sum of all Wikimedia pages (in all languages) with at least one media inside.",
+				"archived": false,
+				"collection_position": null,
+				"table_id": null,
+				"result_metadata": [
+					{
+						"base_type": "type/BigInteger",
+						"display_name": "count",
+						"name": "count",
+						"special_type": "type/Quantity",
+						"fingerprint": {
+							"global": {
+								"distinct-count": 1,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/Number": {
+									"min": 814.0,
+									"max": 814.0,
+									"avg": 814.0,
+									"sd": null,
+									"q1": 814.0,
+									"q3": 814.0
+								}
+							}
+						}
+					}
+				],
+				"database_id": 3,
+				"enable_embedding": false,
+				"collection_id": 13,
+				"query_type": "native",
+				"name": "Total pages enanched",
+				"read_permissions": null,
+				"query_average_duration": 448,
+				"creator_id": 2,
+				"updated_at": "2021-05-23T06:12:41.32512Z",
+				"made_public_by_id": null,
+				"embedding_params": null,
+				"cache_ttl": null,
+				"dataset_query": {
+					"type": "native",
+					"native": {
+						"query": "select count(*)\nfrom usages\nwhere is_alive is true"
+					},
+					"database": 3
+				},
+				"id": 39,
+				"display": "scalar",
+				"visualization_settings": {},
+				"created_at": "2021-01-18T15:18:59.673031Z",
+				"public_uuid": null
+			},
+			"updated_at": "2021-01-19T11:15:29.093835Z",
+			"col": 0,
+			"id": 149,
+			"parameter_mappings": [],
+			"card_id": 39,
+			"visualization_settings": {},
+			"dashboard_id": 2,
+			"created_at": "2021-01-19T09:56:22.309677Z",
+			"sizeY": 3,
+			"row": 8
+		},
+		{
+			"sizeX": 4,
+			"series": [],
+			"card": {
+				"description": "Sum of all media views from 2015-01-01 (first data available). A view is recorded every time a device download a specific file from Wikimedia server. So it counts both punctual views, both views on pages where the media is present (but only if loaded on the device). Actually this is the most precise statistic released by Wikimedia servers.",
+				"archived": false,
+				"collection_position": null,
+				"table_id": null,
+				"result_metadata": [
+					{
+						"base_type": "type/Decimal",
+						"display_name": "sum",
+						"name": "sum",
+						"special_type": null,
+						"fingerprint": {
+							"global": {
+								"distinct-count": 1,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/Number": {
+									"min": 3.3151052E7,
+									"max": 3.3151052E7,
+									"avg": 3.3151052E7,
+									"sd": null,
+									"q1": 3.3151052E7,
+									"q3": 3.3151052E7
+								}
+							}
+						}
+					}
+				],
+				"database_id": 3,
+				"enable_embedding": false,
+				"collection_id": 12,
+				"query_type": "native",
+				"name": "Total views from 2015",
+				"read_permissions": null,
+				"query_average_duration": 2145,
+				"creator_id": 2,
+				"updated_at": "2021-05-23T06:12:44.09671Z",
+				"made_public_by_id": null,
+				"embedding_params": null,
+				"cache_ttl": null,
+				"dataset_query": {
+					"database": 3,
+					"native": {
+						"query": "SELECT SUM(accesses)\nFROM visualizations"
+					},
+					"type": "native"
+				},
+				"id": 37,
+				"display": "scalar",
+				"visualization_settings": {},
+				"created_at": "2021-01-13T09:40:38.895889Z",
+				"public_uuid": null
+			},
+			"updated_at": "2021-01-19T11:15:29.09714Z",
+			"col": 0,
+			"id": 150,
+			"parameter_mappings": [],
+			"card_id": 37,
+			"visualization_settings": {},
+			"dashboard_id": 2,
+			"created_at": "2021-01-19T09:56:22.354992Z",
+			"sizeY": 3,
+			"row": 1
+		},
+		{
+			"sizeX": 4,
+			"series": [],
+			"card": {
+				"description": "The number of all media tracked in the project.",
+				"archived": false,
+				"collection_position": null,
+				"table_id": null,
+				"result_metadata": [
+					{
+						"base_type": "type/BigInteger",
+						"display_name": "count",
+						"name": "count",
+						"special_type": "type/Quantity",
+						"fingerprint": {
+							"global": {
+								"distinct-count": 1,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/Number": {
+									"min": 841.0,
+									"max": 841.0,
+									"avg": 841.0,
+									"sd": null,
+									"q1": 841.0,
+									"q3": 841.0
+								}
+							}
+						}
+					}
+				],
+				"database_id": 3,
+				"enable_embedding": false,
+				"collection_id": 14,
+				"query_type": "native",
+				"name": "Total media uploaded",
+				"read_permissions": null,
+				"query_average_duration": 327,
+				"creator_id": 2,
+				"updated_at": "2021-05-23T06:12:41.564956Z",
+				"made_public_by_id": null,
+				"embedding_params": null,
+				"cache_ttl": null,
+				"dataset_query": {
+					"type": "native",
+					"native": {
+						"query": "SELECT COUNT(*)\nFROM images"
+					},
+					"database": 3
+				},
+				"id": 44,
+				"display": "scalar",
+				"visualization_settings": {},
+				"created_at": "2021-01-19T10:03:24.77234Z",
+				"public_uuid": null
+			},
+			"updated_at": "2021-01-19T11:15:29.100363Z",
+			"col": 0,
+			"id": 151,
+			"parameter_mappings": [],
+			"card_id": 44,
+			"visualization_settings": {},
+			"dashboard_id": 2,
+			"created_at": "2021-01-19T10:04:04.137221Z",
+			"sizeY": 3,
+			"row": 15
+		},
+		{
+			"sizeX": 14,
+			"series": [],
+			"card": {
+				"description": "Number of views per year, in purple cumulative visits, in blue year per year visits. Data starts from the oldest date in our system (the raw data starts from 2015).",
+				"archived": false,
+				"collection_position": null,
+				"table_id": null,
+				"result_metadata": [
+					{
+						"base_type": "type/DateTimeWithLocalTZ",
+						"display_name": "d_year",
+						"name": "d_year",
+						"special_type": null,
+						"fingerprint": {
+							"global": {
+								"distinct-count": 7,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/DateTime": {
+									"earliest": "2015-01-01T00:00:00+01:00",
+									"latest": "2021-01-01T00:00:00+01:00"
+								}
+							}
+						}
+					},
+					{
+						"base_type": "type/Decimal",
+						"display_name": "Visits per year",
+						"name": "Visits per year",
+						"special_type": null,
+						"fingerprint": {
+							"global": {
+								"distinct-count": 7,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/Number": {
+									"min": 1840097.0,
+									"max": 6792721.0,
+									"avg": 4735864.571428572,
+									"sd": 1504320.9550392781,
+									"q1": 4530486.5,
+									"q3": 5409653.5
+								}
+							}
+						}
+					},
+					{
+						"base_type": "type/Decimal",
+						"display_name": "Cumulative usage",
+						"name": "Cumulative usage",
+						"special_type": null,
+						"fingerprint": {
+							"global": {
+								"distinct-count": 7,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/Number": {
+									"min": 6792721.0,
+									"max": 3.3151052E7,
+									"avg": 2.143263385714286E7,
+									"sd": 9825542.78939938,
+									"q1": 1.351990825E7,
+									"q3": 3.0180265E7
+								}
+							}
+						}
+					}
+				],
+				"database_id": 3,
+				"enable_embedding": false,
+				"collection_id": 12,
+				"query_type": "native",
+				"name": "Media views per year",
+				"read_permissions": null,
+				"query_average_duration": 1923,
+				"creator_id": 2,
+				"updated_at": "2021-05-23T06:12:44.105668Z",
+				"made_public_by_id": null,
+				"embedding_params": null,
+				"cache_ttl": null,
+				"dataset_query": {
+					"database": 3,
+					"native": {
+						"query": "SELECT d_year, visits_per_year as \"Visits per year\", sum(visits_per_year) OVER (ORDER BY d_year) as \"Cumulative usage\"\nfrom (\nSELECT date_trunc('year', access_date) AS d_year, SUM(accesses) AS visits_per_year\nFROM visualizations\ngroup by d_year) as a\ngroup by d_year, visits_per_year"
+					},
+					"type": "native"
+				},
+				"id": 38,
+				"display": "line",
+				"visualization_settings": {
+					"graph.dimensions": [
+						"d_year"
+					],
+					"graph.metrics": [
+						"Visits per year",
+						"Cumulative usage"
+					],
+					"graph.show_values": false,
+					"series_settings": {
+						"Cumulative usage": {
+							"color": "#A989C5"
+						},
+						"Visits per year": {
+							"title": "Views per year"
+						}
+					}
+				},
+				"created_at": "2021-01-13T20:49:13.257604Z",
+				"public_uuid": null
+			},
+			"updated_at": "2021-01-19T11:15:29.103671Z",
+			"col": 4,
+			"id": 152,
+			"parameter_mappings": [],
+			"card_id": 38,
+			"visualization_settings": {},
+			"dashboard_id": 2,
+			"created_at": "2021-01-19T10:15:43.826145Z",
+			"sizeY": 6,
+			"row": 1
+		},
+		{
+			"sizeX": 14,
+			"series": [],
+			"card": {
+				"description": "Media used to enrich Wikimedia pages. In blue year per year addition (the peak in the first year is because no historical data were available before we start to collect it). In purple cumulative usage.",
+				"archived": false,
+				"collection_position": null,
+				"table_id": null,
+				"result_metadata": [
+					{
+						"base_type": "type/DateTimeWithLocalTZ",
+						"display_name": "d_year",
+						"name": "d_year",
+						"special_type": null,
+						"fingerprint": {
+							"global": {
+								"distinct-count": 4,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/DateTime": {
+									"earliest": "2017-01-01T00:00:00+01:00",
+									"latest": "2020-01-01T00:00:00+01:00"
+								}
+							}
+						}
+					},
+					{
+						"base_type": "type/BigInteger",
+						"display_name": "New usages",
+						"name": "New usages",
+						"special_type": null,
+						"fingerprint": {
+							"global": {
+								"distinct-count": 4,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/Number": {
+									"min": 5.0,
+									"max": 736.0,
+									"avg": 220.75,
+									"sd": 347.2188310945515,
+									"q1": 13.5,
+									"q3": 428.0
+								}
+							}
+						}
+					},
+					{
+						"base_type": "type/Decimal",
+						"display_name": "Cumulative usage",
+						"name": "Cumulative usage",
+						"special_type": null,
+						"fingerprint": {
+							"global": {
+								"distinct-count": 4,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/Number": {
+									"min": 736.0,
+									"max": 883.0,
+									"avg": 805.25,
+									"sd": 77.62463097067408,
+									"q1": 738.5,
+									"q3": 872.0
+								}
+							}
+						}
+					}
+				],
+				"database_id": 3,
+				"enable_embedding": false,
+				"collection_id": 13,
+				"query_type": "native",
+				"name": "Media used per year",
+				"read_permissions": null,
+				"query_average_duration": 15,
+				"creator_id": 2,
+				"updated_at": "2021-05-23T06:12:41.309301Z",
+				"made_public_by_id": null,
+				"embedding_params": null,
+				"cache_ttl": null,
+				"dataset_query": {
+					"database": 3,
+					"native": {
+						"query": "SELECT d_year, new_usage as \"New usages\", sum(new_usage) OVER (ORDER BY d_year) as \"Cumulative usage\"\nfrom (\nSELECT date_trunc('year', first_seen) AS d_year, COUNT(*) AS new_usage\nFROM usages\ngroup by d_year) as a\ngroup by d_year, new_usage"
+					},
+					"type": "native"
+				},
+				"id": 40,
+				"display": "line",
+				"visualization_settings": {
+					"graph.dimensions": [
+						"d_year"
+					],
+					"graph.metrics": [
+						"New usages",
+						"Cumulative usage"
+					],
+					"graph.show_values": false,
+					"series_settings": {
+						"New usages": {
+							"color": "#509EE3"
+						},
+						"Cumulative usage": {
+							"color": "#A989C5"
+						}
+					}
+				},
+				"created_at": "2021-01-18T15:32:16.244733Z",
+				"public_uuid": null
+			},
+			"updated_at": "2021-01-19T11:15:29.107312Z",
+			"col": 4,
+			"id": 153,
+			"parameter_mappings": [],
+			"card_id": 40,
+			"visualization_settings": {},
+			"dashboard_id": 2,
+			"created_at": "2021-01-19T10:27:44.073259Z",
+			"sizeY": 6,
+			"row": 8
+		},
+		{
+			"sizeX": 14,
+			"series": [],
+			"card": {
+				"description": "Track record of uploads. In blue year by year the number of new media uploaded. In purple the same but cumulative.",
+				"archived": false,
+				"collection_position": null,
+				"table_id": null,
+				"result_metadata": [
+					{
+						"base_type": "type/DateTime",
+						"display_name": "d_year",
+						"name": "d_year",
+						"special_type": null,
+						"fingerprint": {
+							"global": {
+								"distinct-count": 16,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/DateTime": {
+									"earliest": "2005-01-01T00:00:00+01:00",
+									"latest": "2020-01-01T00:00:00+01:00"
+								}
+							}
+						}
+					},
+					{
+						"base_type": "type/BigInteger",
+						"display_name": "Media per year",
+						"name": "Media per year",
+						"special_type": null,
+						"fingerprint": {
+							"global": {
+								"distinct-count": 16,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/Number": {
+									"min": 1.0,
+									"max": 233.0,
+									"avg": 52.5625,
+									"sd": 53.95920526966027,
+									"q1": 25.5,
+									"q3": 61.0
+								}
+							}
+						}
+					},
+					{
+						"base_type": "type/Decimal",
+						"display_name": "Media cumulated",
+						"name": "Media cumulated",
+						"special_type": null,
+						"fingerprint": {
+							"global": {
+								"distinct-count": 16,
+								"nil%": 0.0
+							},
+							"type": {
+								"type/Number": {
+									"min": 1.0,
+									"max": 841.0,
+									"avg": 471.4375,
+									"sd": 286.42066237150794,
+									"q1": 285.0,
+									"q3": 711.0
+								}
+							}
+						}
+					}
+				],
+				"database_id": 3,
+				"enable_embedding": false,
+				"collection_id": 14,
+				"query_type": "native",
+				"name": "Media added per year",
+				"read_permissions": null,
+				"query_average_duration": 12,
+				"creator_id": 2,
+				"updated_at": "2021-05-23T06:12:41.452581Z",
+				"made_public_by_id": null,
+				"embedding_params": null,
+				"cache_ttl": null,
+				"dataset_query": {
+					"database": 3,
+					"native": {
+						"query": "SELECT d_year, media_year as \"Media per year\", sum(media_year) OVER (ORDER BY d_year) as \"Media cumulated\"\nfrom (\nSELECT date_trunc('year', img_timestamp) AS d_year, COUNT(*) AS media_year\nFROM images\ngroup by d_year) as a\ngroup by d_year, media_year"
+					},
+					"type": "native"
+				},
+				"id": 45,
+				"display": "line",
+				"visualization_settings": {
+					"graph.dimensions": [
+						"d_year"
+					],
+					"graph.metrics": [
+						"Media per year",
+						"Media cumulated"
+					],
+					"graph.show_values": false,
+					"series_settings": {
+						"Media per year": {
+							"color": "#509EE3"
+						},
+						"Media cumulated": {
+							"color": "#A989C5"
+						}
+					}
+				},
+				"created_at": "2021-01-19T10:13:27.009467Z",
+				"public_uuid": null
+			},
+			"updated_at": "2021-01-19T11:15:29.11132Z",
+			"col": 4,
+			"id": 154,
+			"parameter_mappings": [],
+			"card_id": 45,
+			"visualization_settings": {},
+			"dashboard_id": 2,
+			"created_at": "2021-01-19T10:31:21.510049Z",
+			"sizeY": 6,
+			"row": 15
+		}
+	],
+	"param_values": null,
+	"can_write": true,
+	"enable_embedding": true,
+	"collection_id": 7,
+	"show_in_getting_started": false,
+	"name": "Canton of Zürich",
+	"caveats": null,
+	"creator_id": 2,
+	"updated_at": "2021-01-19T11:15:29.262002Z",
+	"made_public_by_id": null,
+	"embedding_params": {},
+	"id": 2,
+	"position": null,
+	"param_fields": null,
+	"parameters": [],
+	"created_at": "2020-06-03T14:43:59.831605Z",
+	"public_uuid": null,
+	"points_of_interest": null
+}

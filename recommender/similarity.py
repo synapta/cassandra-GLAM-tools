@@ -54,9 +54,6 @@ site = mwclient.Site('commons.wikimedia.org')
 
 
 def get_description(image):
-    # XXX out of memory
-    return None, None
-
     wikipage = site.images[image]
     text = wikipage.text()
     wikicode = mwparserfromhell.parse(text)
@@ -177,8 +174,8 @@ def process_entities(image, entities, scores):
             continue
 
 
-metamodel_en = load_model('en/model')
-metamodel_de = load_model('de/model')
+# metamodel_en = load_model('en/model')
+# metamodel_de = load_model('de/model')
 
 for image in images:
     logging.info('Processing image %s of %s: %s', image_counter, len(images), image[0])
@@ -191,15 +188,15 @@ for image in images:
         entities = compute_category(image[0])
         process_entities(image[0], entities, None)
 
-        language, description = get_description(image[0])
+        # language, description = get_description(image[0])
 
-        if description is not None:
-            if language == 'de':
-                entities, scores = compute_similarity(metamodel_de, image[0] + ' ' + description)
-            else:
-                entities, scores = compute_similarity(metamodel_en, image[0] + ' ' + description)
+        # if description is not None:
+        #     if language == 'de':
+        #         entities, scores = compute_similarity(metamodel_de, image[0] + ' ' + description)
+        #     else:
+        #         entities, scores = compute_similarity(metamodel_en, image[0] + ' ' + description)
 
-            process_entities(image[0], entities, scores)
+        #     process_entities(image[0], entities, scores)
 
     except ValueError:
         continue
