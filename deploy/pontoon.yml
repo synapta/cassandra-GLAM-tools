@@ -1,0 +1,139 @@
+---
+- hosts: pontoon
+  remote_user: root
+  vars:
+    install_path: /home/glam/pontoon
+    postgres_password: supersecret
+
+  tasks:
+    - name: Create user glam
+      user:
+        name: glam
+        shell: /bin/bash
+        password: '!'
+
+    - name: Update apt cache
+      apt: update_cache=yes
+ 
+    - name: Install dependencies
+      package:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - apt-transport-https
+        - gnupg2
+        - git
+        - python3-pip
+        - postgresql-12
+        - autossh
+        - supervisor
+        - libxml2-dev
+        - libxslt1-dev
+        - python3-dev
+        - libmemcached-dev
+        - build-essential
+        - libpq-dev
+
+    - name: Add NodeSource Node.js repository
+      shell: "curl -fsSL https://deb.nodesource.com/setup_12.x | bash -"
+
+    - name: Update apt cache
+      apt: update_cache=yes
+
+    - name: Install Node.js
+      package:
+        name: nodejs
+        state: present
+
+    - name: Install Pipenv
+      shell: "pip3 install pipenv"
+
+    - name: Download Pontoon
+      git:
+        repo: "https://github.com/mozilla/pontoon.git"
+        dest: "{{ install_path }}"
+      become: yes
+      become_user: glam
+
+    - name: Install Python dependencies
+      command: "pipenv run pip install -r requirements.txt"
+      args:
+        chdir: "{{ install_path }}"
+      become: yes
+      become_user: glam
+        
+    - name: Install Node.js dependencies
+      command: "npm install"
+      args:
+        chdir: "{{ install_path }}"
+      become: yes
+      become_user: glam
+
+    - name: Install Node.js frontend dependencies
+      command: "npm install"
+      args:
+        chdir: "{{ install_path }}/frontend"
+      become: yes
+      become_user: glam
+
+    - name: Run webpack
+      command: "./node_modules/.bin/webpack"
+      args:
+        chdir: "{{ install_path }}"
+      become: yes
+      become_user: glam
+
+    - name: Build Node.js frontend dependencies
+      command: "npm run build"
+      args:
+        chdir: "{{ install_path }}/frontend"
+      become: yes
+      become_user: glam
+          
+    - name: Create PostgreSQL user
+      command: psql -c "CREATE USER pontoon WITH PASSWORD '{{ postgres_password }}' SUPERUSER;"
+      become: yes
+      become_user: postgres
+
+    - name: Create PostgreSQL database
+      command: psql -c "CREATE DATABASE pontoon;"
+      become: yes
+      become_user: postgres
+
+    - name: Create PostgreSQL privileges
+      command: psql -c "GRANT ALL PRIVILEGES ON DATABASE pontoon to pontoon;"
+      become: yes
+      become_user: postgres
+
+    - name: Copy env file
+      copy:
+        src: pontoon.env
+        dest: "{{ install_path }}/.env"
+      become: yes
+      become_user: glam
+
+    - name: Set PostgreSQL password
+      replace:
+        path: "{{ install_path }}/.env"
+        regexp: 'MYPOSTGRESPASSWORD'
+        replace: "{{ postgres_password }}"
+
+    - name: Set random key
+      replace:
+        path: "{{ install_path }}/.env"
+        regexp: 'MYRANDOMKEY'
+        replace: "{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=32') }}"
+
+    - name: Move static files
+      command: "pipenv run python manage.py collectstatic --noinput"
+      args:
+        chdir: "{{ install_path }}"
+      become: yes
+      become_user: glam
+
+    - name: Run migrations
+      command: "pipenv run python manage.py migrate"
+      args:
+        chdir: "{{ install_path }}"
+      become: yes
+      become_user: glam
