@@ -137,3 +137,11 @@
         chdir: "{{ install_path }}"
       become: yes
       become_user: glam
+
+    - name: Copy supervisor config
+      copy:
+        src: pontoon.conf
+        dest: /etc/supervisor/conf.d/pontoon.conf
+
+    - name: Restart supervisor
+      shell: "supervisorctl reread && supervisorctl update"
