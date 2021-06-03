@@ -8,7 +8,9 @@ If you are interested in adopting Cassandra in your country, please contact us a
 
 ## Tool architecture
 
-This tool is based on a web application developed with Node.js (`app/`), a dashboarding system ([Metabase](https://www.metabase.com/)), a recommendation script written in Python (`recommender/`), and two ETL pipelines designed to extract file usage statistics and views (`etl/`). Statistical data is stored in a PostgreSQL server (every GLAM is associated with a different database), while GLAM metadata is stored in MongoDB. File usage statistics are obtained from the Wikimedia Commons database replica available on [Toolforge](https://wikitech.wikimedia.org/wiki/Portal:Toolforge). For this reason, an SSH tunnel needs to be created between the server running Cassandra and Toolforge. File views are obtained by downloading and processing the [mediacounts dataset](https://dumps.wikimedia.org/other/mediacounts/daily/).
+This tool is based on a web application developed with Node.js (`app/`), a dashboarding system ([Metabase](https://www.metabase.com/)), a recommendation script written in Python (`recommender/`), and two ETL pipelines designed to extract file usage statistics and views (`etl/`). Statistical data is stored in a PostgreSQL server (every GLAM is associated with a different database), while GLAM metadata is stored in MongoDB. File usage statistics are obtained from the Wikimedia Commons database replica available on [Toolforge](https://wikitech.wikimedia.org/wiki/Portal:Toolforge). For this reason, an SSH tunnel needs to be created between the server running Cassandra and Toolforge. File views are obtained by downloading and processing the [mediacounts dataset](https://dumps.wikimedia.org/other/mediacounts/daily/). The following diagram summarizes the whole architecture of the tool.
+
+![Cassandra architecture](/docs/architecture.png)
 
 ## Requirements
 
