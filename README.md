@@ -116,6 +116,12 @@ ansible-playbook pontoon.yml -i inventory.ini
 
 Edit the file `/home/glam/pontoon/.env` and update the *SITE_URL* to a real domain. Install and configure nginx to proxy that website to *http://localhost:8000*. You will need to obtain an HTTPS certificate, for example with [Certbot](https://certbot.eff.org/).
 
+Create the first Pontoon administrator in `/home/glam/pontoon`:
+
+```
+pipenv run python manage.py createsuperuser
+```
+
 Create a new GitHub user and associate it with an SSH key. Give to that user the write permissions on this repository. Save the SSH key in the directory `/home/glam/.ssh`. Finally, restart Pontoon:
 
 ```
