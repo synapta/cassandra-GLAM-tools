@@ -25,11 +25,13 @@ The installation procedure has been tested with Ubuntu 20.04, Node.js 12, Python
 The installation procedure has been scripted using the automation tool [Ansible](https://www.ansible.com/). For this reason, you need to first install Ansible on *your* local machine (not on the remote machine where Cassandra will be installed). Please refer to the [Installing Ansible guide](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html).
 
 On *your* local machine clone this repository:
+
 ```
 git clone https://github.com/synapta/cassandra-GLAM-tools.git
 ```
 
 In the `deploy/` directory create an `inventory.ini` file similar to the following, where `host.example.com` is the hostname (or the IP address) of the remote machine:
+
 ```
 [cassandra]
 host.example.com
@@ -48,6 +50,7 @@ Edit the file `deploy/ansible.yml` by setting appropriate values for the followi
 Please note that the Toolforge database user and password are available in the file `replica.my.cnf` in your Toolforge home directory.
 
 From the `deploy/` directory, run the Ansible installation script:
+
 ```
 ansible-playbook ansible.yml -i inventory.ini
 ```
@@ -69,6 +72,7 @@ Create a Metabase administrator, following the guided procedure available at htt
 Edit on the remote machine the file `/home/glam/cassandra-GLAM-tools/config/config.json` by setting the Metabase username (the email of the Metabase administrator), the associated password, and the embedding secret key.
 
 After editing the configuration file, it is necessary to restart the tool:
+
 ```
 supervisorctl restart cassandra
 ```
@@ -84,3 +88,36 @@ For the Cassandra main page, select "Control Panel" and login as the user "admin
 The pipeline extracting file usage statistics is set to run every 5 minutes. You can check its logs by reading the file `/var/log/cassandra/etl.log`. When this process is completed, the GLAM is ready to be shown to users. However, the list of available GLAMs is updated by the web application every hour. If you don't want to wait, you can manually restart the tool.
 
 The views and the suggestions are still empty at this point because they are populated by two processes that are set to run every night. You can customize the timings by editing the crontab available at `/etc/cron.d/cassandra`. They both write their logs in the directory `/var/log/cassandra`. If you want, you can also run them manually, but be advised that the view pipeline may be slow the first time. The default setting is to load the views of the last 10 days only. If needed, you can edit this value by modifying the GLAM metadata in MongoDB. You will need to create a field *min_date* associated with a string like "2015-01-01".
+
+## Localization
+
+The Cassandra tool can be localized in any language. Currently supported languages are available in the directory `app/locales`. An effective way to add a new language is to commit in this repository the corresponding file using the same format of the *en* language.
+
+For managing translations in a more user-friendly way, it is possible to rely on the [Pontoon tool](https://pontoon.mozilla.org) created by Mozilla Foundation. A public instance of Pontoon for translating Cassandra is available at ...
+
+New users can only be created by an administrator from the interface available at `/a/auth/user/`. A new language can be added by editing the project settings available at `/admin/projects/cassandra-glam-tools/`.
+
+### Pontoon installation
+
+An Ansible script to install Pontoon is available in the `deploy` directory.
+
+In the `deploy/` directory create an `inventory.ini` file similar to the following, where `host.example.com` is the hostname (or the IP address) of the remote machine:
+
+```
+[pontoon]
+host.example.com
+```
+
+This hostname could be the same machine where Cassandra is installed or another machine of your choice. Edit the file `pontoon.yml` and set the *postgres_password*. This will be the password of the PostgreSQL *pontoon* user. Then run the Ansible install script:
+
+```
+ansible-playbook pontoon.yml -i inventory.ini
+```
+
+Edit the file `/home/glam/pontoon/.env` and update the *SITE_URL* to a real domain. Install and configure nginx to proxy that website to *http://localhost:8000*. You will need to obtain an HTTPS certificate, for example with [Certbot](https://certbot.eff.org/).
+
+Create a new GitHub user and associate it with an SSH key. Give to that user the write permissions on this repository. Save the SSH key in the directory `/home/glam/.ssh`. Finally, restart Pontoon:
+
+```
+supervisorctl restart pontoon
+```
