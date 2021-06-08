@@ -57,6 +57,9 @@ def process(conn, date, folder):
             break
         arr = line.decode().split("\t")
         keysX = arr[0].split("/")
+        # count only files from commons
+        if keysX[2] != 'commons':
+            continue
         key = keysX[len(keysX) - 1]
         key = urllib.parse.unquote(key)
         if key in watched:
