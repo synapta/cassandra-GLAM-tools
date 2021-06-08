@@ -58,7 +58,7 @@ def process(conn, date, folder):
         arr = line.decode().split("\t")
         keysX = arr[0].split("/")
         # count only files from commons
-        if keysX[2] != 'commons':
+        if len(keysX) < 6 or keysX[2] != 'commons':
             continue
         key = keysX[len(keysX) - 1]
         key = urllib.parse.unquote(key)
