@@ -1,6 +1,7 @@
 const fs = require('fs');
 const ini = require('ini');
 const Mustache = require('mustache');
+Mustache.tags = ['§[', ']§'];
 
 const localesFolder = './locales';
 
