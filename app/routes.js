@@ -1,6 +1,7 @@
 const express = require('express');
 const request = require('request');
 const auth = require('http-auth');
+const { createProxyMiddleware, responseInterceptor } = require('http-proxy-middleware');
 
 const api = require('./api.js');
 const metabase = require('./metabase.js');
@@ -514,6 +515,20 @@ module.exports = function (app, apicache) {
             }
         });
     });
+
+    // Metabase proxy
+    app.use(['/metabase', '/app/dist'], createProxyMiddleware({
+        target: config.metabase.url,
+        changeOrigin: true,
+        pathRewrite: {
+            '^/metabase': '/'
+        },
+        selfHandleResponse: true,
+        onProxyRes: responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
+            const response = responseBuffer.toString('utf8'); // convert buffer to string
+            return response.replace('Views', 'Goodbye'); // manipulate response and return the result
+        })
+    }));
 
     // NOT FOUND
     app.get('*', function (req, res) {

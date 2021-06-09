@@ -14,7 +14,7 @@ function getDashboardUrl(dashboard_id, metabase) {
     exp: Math.round(Date.now() / 1000) + (10 * 60) // 10 minute expiration
   };
   const token = jwt.sign(payload, metabase.secret);
-  return metabase.url + "/embed/dashboard/" + token + "#bordered=true&titled=true";
+  return "/metabase/embed/dashboard/" + token + "#bordered=true&titled=true";
 };
 
 function getDashboard(req, res, config, glam) {
