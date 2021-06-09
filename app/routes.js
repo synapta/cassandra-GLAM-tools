@@ -4,6 +4,7 @@ const auth = require('http-auth');
 const { createProxyMiddleware, responseInterceptor } = require('http-proxy-middleware');
 
 const api = require('./api.js');
+const i18n = require('./i18n.js');
 const metabase = require('./metabase.js');
 const config = require('../config/config.js');
 
@@ -16,6 +17,14 @@ function loadGlams() {
 loadGlams();
 
 module.exports = function (app, apicache) {
+
+    app.get('/', function (req, res) {
+        i18n.sendFile(req, res, __dirname + '/pages/index.html');
+    });
+
+    app.get('/index.html', function (req, res) {
+        res.redirect('/');
+    });
 
     app.use('/', express.static(__dirname + '/pages'));
 
@@ -525,12 +534,15 @@ module.exports = function (app, apicache) {
         target: config.metabase.url,
         changeOrigin: true,
         pathRewrite: {
-            '^/metabase': '/'
+            '^/metabase': ''
         },
         selfHandleResponse: true,
         onProxyRes: responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
-            const response = responseBuffer.toString('utf8'); // convert buffer to string
-            return response.replace('Views', 'Goodbye'); // manipulate response and return the result
+            const response = responseBuffer.toString('utf8');
+            if (req.url.includes('/embed/dashboard/'))
+                return i18n.renderResponse(req, response);
+            else
+                return response;
         })
     }));
 

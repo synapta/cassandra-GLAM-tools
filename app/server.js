@@ -1,6 +1,7 @@
 var express = require('express');
 var apicache = require('apicache').options({ debug: false }).middleware;
 var morgan = require('morgan');
+var cookieParser = require('cookie-parser');
 var Sentry = require('@sentry/node');
 var config = require('../config/config.json');
 
@@ -13,6 +14,7 @@ if (typeof config.raven !== 'undefined') {
 
 app.use(morgan('common'));
 app.use(express.json());
+app.use(cookieParser());
 
 require('./routes.js')(app, apicache);
 
