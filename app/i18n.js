@@ -1,5 +1,7 @@
 const fs = require('fs');
 const ini = require('ini');
+const mime = require('mime-types');
+const path = require('path');
 const Mustache = require('mustache');
 Mustache.tags = ['§[', ']§'];
 
@@ -7,12 +9,13 @@ const localesFolder = './locales';
 
 const messages = {};
 
+// Load languages
 fs.readdirSync(localesFolder).forEach(language => {
-  messages[language] = {};
-  fs.readdirSync(localesFolder + '/' + language).forEach(namespace => {
-    const items = ini.parse(fs.readFileSync(localesFolder + '/' + language + '/' + namespace, 'utf-8'));
-    messages[language][namespace.replace('.ini', '')] = items
-  });
+    messages[language] = {};
+    fs.readdirSync(localesFolder + '/' + language).forEach(namespace => {
+        const items = ini.parse(fs.readFileSync(localesFolder + '/' + language + '/' + namespace, 'utf-8'));
+        messages[language][namespace.replace('.ini', '')] = items
+    });
 });
 
 function getLanguage(req, res) {
@@ -37,19 +40,40 @@ function getLanguage(req, res) {
     return 'en';
 }
 
-exports.sendFile = function (req, res, file) {
+exports.renderResponse = function (req, res, data) {
     const targetLanguage = getLanguage(req, res);
-    fs.readFile(file, 'utf8' , (err, data) => {
+    return Mustache.render(data, messages[targetLanguage]);
+};
+
+exports.sendFile = function (req, res, file) {
+    fs.readFile(file, 'utf8', (err, data) => {
         if (err) {
-          console.error(err);
-          res.redirect('/500');
-          return;
+            console.error(err);
+            res.sendStatus(500);
+            return;
         }
-        res.send(Mustache.render(data, messages[targetLanguage]));
+        res.send(exports.renderResponse(req, res, data));
     });
 };
 
-exports.renderResponse = function (req, response) {
-    const targetLanguage = getLanguage(req);
-    return Mustache.render(response, messages[targetLanguage]);
+exports.static = function (dir) {
+    return function (req, res, next) {
+        if (req.url === '/')
+            req.url = '/index.html';
+        const fileName = path.join(dir, req.url);
+        const fileType = mime.lookup(fileName) || 'application/octet-stream';
+        const enconding = fileType.startsWith('text') || fileType.startsWith('application') ? 'utf8' : null;
+        fs.readFile(fileName, enconding, (err, data) => {
+            if (err) {
+                next();
+                return;
+            }
+            res.setHeader('Content-Type', fileType);
+            if (enconding) {
+                res.send(exports.renderResponse(req, res, data));
+            } else {
+                res.send(data);
+            }
+        });
+    };
 };
