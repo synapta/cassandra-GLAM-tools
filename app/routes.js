@@ -18,15 +18,7 @@ loadGlams();
 
 module.exports = function (app, apicache) {
 
-    app.get('/', function (req, res) {
-        i18n.sendFile(req, res, __dirname + '/pages/index.html');
-    });
-
-    app.get('/index.html', function (req, res) {
-        res.redirect('/');
-    });
-
-    app.use('/', express.static(__dirname + '/pages'));
+    app.use('/', i18n.static(__dirname + '/pages'));
 
     app.get('/docs', function (req, res) {
         res.sendFile(__dirname + '/pages/docs.html');
@@ -536,7 +528,7 @@ module.exports = function (app, apicache) {
         onProxyRes: responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
             const response = responseBuffer.toString('utf8');
             if (req.url.includes('/embed/dashboard/'))
-                return i18n.renderResponse(req, response);
+                return i18n.renderResponse(req, res, response);
             else
                 return response;
         })
