@@ -6,12 +6,23 @@ const Mustache = require('mustache');
 Mustache.tags = ['§[', ']§'];
 
 const localesFolder = './locales';
+const defaultLanguage = 'en';
 
 const messages = {};
 
-// Load languages
+// Load default language
+messages[defaultLanguage] = {};
+fs.readdirSync(localesFolder + '/' + defaultLanguage).forEach(namespace => {
+    const items = ini.parse(fs.readFileSync(localesFolder + '/' + defaultLanguage + '/' + namespace, 'utf-8'));
+    messages[defaultLanguage][namespace.replace('.ini', '')] = items
+});
+
+// Load other languages
 fs.readdirSync(localesFolder).forEach(language => {
-    messages[language] = {};
+    if (language === defaultLanguage) {
+        return;
+    }
+    messages[language] = Object.assign({}, messages[defaultLanguage]);
     fs.readdirSync(localesFolder + '/' + language).forEach(namespace => {
         const items = ini.parse(fs.readFileSync(localesFolder + '/' + language + '/' + namespace, 'utf-8'));
         messages[language][namespace.replace('.ini', '')] = items
@@ -37,7 +48,7 @@ function getLanguage(req, res) {
             }
         }
     }
-    return 'en';
+    return defaultLanguage;
 }
 
 exports.renderResponse = function (req, res, data) {
