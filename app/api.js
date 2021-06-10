@@ -23,7 +23,7 @@ var glams = function (req, res, glams, admin) {
         if (!glams.hasOwnProperty(id))
             continue;
 
-        json = glamToJson(glams[id]);
+        let json = glamToJson(glams[id]);
 
         if (admin) {
             json['lastrun'] = glams[id]['lastrun'];
@@ -51,6 +51,31 @@ var glams = function (req, res, glams, admin) {
             }
             return b['lastrun'].getTime() - a['lastrun'].getTime();
         });
+    }
+
+    res.json(result);
+}
+
+var glamsHealth = function (req, res, glams) {
+    let result = [];
+
+    for (var id in glams) {
+        if (!glams.hasOwnProperty(id))
+            continue;
+
+        if (glams[id]['status'] === 'running') {
+            let name = glams[id]['name'];
+            let lastrun = glams[id]['lastrun'];
+            let interval = (new Date()).getTime() - lastrun.getTime();
+            if (interval > 259200000) {
+                res.status(500);
+            }
+            result.push({
+                name,
+                lastrun,
+                interval
+            });
+        }
     }
 
     res.json(result);
@@ -1397,6 +1422,7 @@ var hideRecommenderByFile = function (req, res, next, db) {
 }
 
 exports.glams = glams;
+exports.glamsHealth = glamsHealth;
 exports.getAdminGlam = getAdminGlam;
 exports.createGlam = createGlam;
 exports.updateGlam = updateGlam;

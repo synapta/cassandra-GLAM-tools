@@ -209,6 +209,10 @@ module.exports = function (app, apicache) {
         api.glams(req, res, config.glams);
     });
 
+    app.get('/api/glams/health', function (req, res) {
+        api.glamsHealth(req, res, config.glams);
+    });
+
     app.get('/api/admin/glams', function (request, response) {
         api.glams(request, response, config.glams, true);
     });
