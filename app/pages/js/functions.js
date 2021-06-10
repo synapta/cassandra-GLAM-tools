@@ -29,7 +29,7 @@ $(document).ready(function() {
         });
       });
     } else {
-      $('#photos-2').html('<div class="w-100 text-center my-5"><h1>No available GLAMs</h1></div>');
+      $('#photos-2').html('<div class="w-100 text-center my-5"><h1>§[messages.no-glams]§</h1></div>');
     }
   });
 });

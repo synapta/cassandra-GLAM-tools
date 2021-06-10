@@ -28,22 +28,22 @@ $(function() {
           switch (obj.status) {
             case "running":
               running++;
-              obj.command = "pause";
+              obj.command = "§[admin.pause]§";
               obj.paused = false;
               break;
             case "pending":
               pending++;
-              obj.command = "pause";
+              obj.command = "§[admin.pause]§";
               obj.paused = false;
               break;
             case "paused":
               paused++;
-              obj.command = "restart";
+              obj.command = "§[admin.restart]§";
               obj.paused = true;
               break;
             case "failed":
               failed++;
-              obj.command = "retry";
+              obj.command = "§[admin.retry]§";
               obj.paused = true;
               break;
           }
@@ -91,7 +91,7 @@ $(function() {
         });
       });
     } else {
-      $('#glams-list').html('<div class="w-100 text-center my-5"><h1>No available GLAMs</h1></div>');
+      $('#glams-list').html('<div class="w-100 text-center my-5"><h1>§[messages.no-glams]§</h1></div>');
     }
   });
   // filter functions
