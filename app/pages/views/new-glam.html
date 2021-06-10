@@ -26,7 +26,7 @@
 	<section id="admin-cover" class="cover">
 		<div class="row">
 			<div class="col-12">
-				<h2>Create a new GLAM stats monitor</h2>
+				<h2>§[admin.create-title]§</h2>
 			</div>
 		</div>
 	</section>
@@ -36,43 +36,43 @@
 			<div class="row">
 				<div class="col-12 col-xl-9 my-xl-5">
 					<div id="wrong-glam" class="error-message mb-4" style="display:none;">
-						<h3>OOPS! Something went wrong. Check the following things:</h3>
+						<h3>§[admin.save-error]§</h3>
 						<ul>
-							<li><b>GLAM ID</b> must be unique (there cannot be another GLAM with the same ID)</li>
-							<li><b>GLAM ID</b> cannot include spaces</li>
-							<li><b>Image URL</b> must be a valid URL (starts with <i>http://</i> or <i>https://</i>)</li>
+							<li>§[& admin.save-error-1]§</li>
+							<li>§[& admin.save-error-2]§</li>
+							<li>§[& admin.save-error-3]§</li>
 						</ul>
 					</div>
 					<div id="success-glam" class="mb-4" style="display:none;">
 						<div class="success-message mb-5">
-							<h3>New glam added correctly</h3>
+							<h3>§[admin.create-success]§</h3>
 						</div>
 						<div class="text-center">
-							<a href="/admin/panel">VIEW COMPLETE LIST</a>
+							<a href="/admin/panel">§[admin.view-list]§</a>
 						</div>
 					</div>
 					<form id="new-glam-form" name="new-glam" autocomplete="off">
 						<div class="form-group">
-							<label for="glamID">Unique GLAM ID*</label>
-							<input type="text" class="form-control" id="glamID" aria-describedby="emailHelp" placeholder="e.g. ZU, ETH or SNL" required />
+							<label for="glamID">§[admin.form-id]§</label>
+							<input type="text" class="form-control" id="glamID" placeholder="§[admin.form-id-desc]§" required />
 						</div>
 						<div class="form-group">
-							<label for="glamFullName">Full Name*</label>
-							<input type="text" class="form-control" id="glamFullName" placeholder="e.g. Canton of Zürich, ETH Library of Zurich or Swiss National Library" required />
+							<label for="glamFullName">§[admin.form-fullname]§</label>
+							<input type="text" class="form-control" id="glamFullName" placeholder="§[admin.form-fullname-desc]§" required />
 						</div>
 						<div class="form-group">
-							<label for="glamCategory">Category*</label>
-							<input type="text" class="form-control" id="glamCategory" placeholder="e.g. Historical images of buildings in the canton of Zürich" required />
+							<label for="glamCategory">§[admin.form-category]§</label>
+							<input type="text" class="form-control" id="glamCategory" placeholder="§[admin.form-category-desc]§" required />
 						</div>
 						<div class="form-group">
-							<label for="featuredImageURL">Featured image URL*</label>
-							<input type="text" class="form-control" id="featuredImageURL" placeholder="URL" required autocomplete="off" />
+							<label for="featuredImageURL">§[admin.form-image]§</label>
+							<input type="text" class="form-control" id="featuredImageURL" placeholder="§[admin.form-image-desc]§" required autocomplete="off" />
 						</div>
 						<div class="form-group">
-							<label for="glamPassword">Password (leave blank for public GLAMs)</label>
-							<input type="password" class="form-control" id="glamPassword" placeholder="Password" autocomplete="new-password" />
+							<label for="glamPassword">§[admin.form-password]§</label>
+							<input type="password" class="form-control" id="glamPassword" placeholder="§[admin.form-password-desc]§" autocomplete="new-password" />
 						</div>
-						<button id="create-new-glam-button" class="btn btn-primary">CREATE</button>
+						<button id="create-new-glam-button" class="btn btn-primary">§[admin.create]§</button>
 					</form>
 				</div>
 			</div>

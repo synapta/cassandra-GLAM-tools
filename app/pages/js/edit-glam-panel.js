@@ -50,11 +50,11 @@ $(function() {
     if ($('#password-field').is(':visible')) {
       $('#password-field').fadeOut(400);
       PWD_EDITED = false;
-      $(this).text('EDIT PASSWORD').removeClass('btn-warning').addClass('btn-danger');
+      $(this).text('§[admin.edit-password]§').removeClass('btn-warning').addClass('btn-danger');
     } else {
       $('#password-field').fadeIn(400);
       PWD_EDITED = true;
-      $(this).text('KEEP OLD PASSWORD').removeClass('btn-danger').addClass('btn-warning');
+      $(this).text('§[admin.keep-password]§').removeClass('btn-danger').addClass('btn-warning');
     }
   });
 });

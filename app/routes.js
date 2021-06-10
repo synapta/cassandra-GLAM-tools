@@ -91,17 +91,17 @@ module.exports = function (app, apicache) {
 
     // ADMIN PANEL
     app.get('/admin/panel', function (req, res) {
-        res.sendFile(__dirname + '/pages/views/admin-panel.html');
+        i18n.sendFile(req, res, __dirname + '/pages/views/admin-panel.html');
     });
 
     app.get('/admin/new-glam', function (req, res) {
-        res.sendFile(__dirname + '/pages/views/new-glam.html');
+        i18n.sendFile(req, res, __dirname + '/pages/views/new-glam.html');
     });
 
     app.get('/admin/edit-glam/:id', apicache("1 hour"), function (req, res) {
         let glam = config.glams[req.params.id];
         if (glam !== undefined) {
-            res.sendFile(__dirname + '/pages/views/edit-glam.html');
+            i18n.sendFile(req, res, __dirname + '/pages/views/edit-glam.html');
         } else {
             res.sendStatus(400);
         }
