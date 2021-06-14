@@ -2,6 +2,7 @@ const fs = require('fs');
 const ini = require('ini');
 const mime = require('mime-types');
 const path = require('path');
+const ISO6391 = require('iso-639-1');
 const Mustache = require('mustache');
 Mustache.tags = ['§[', ']§'];
 
@@ -89,4 +90,15 @@ exports.static = function (dir) {
             }
         });
     };
+};
+
+exports.languages = function (req, res) {
+    const targetLanguage = getLanguage(req, res);
+    const languages = [targetLanguage];
+    for (const key in messages) {
+        if (messages.hasOwnProperty(key) && targetLanguage !== key) {
+            languages.push(key);
+        }
+    }
+    res.send(ISO6391.getLanguages(languages));
 };
