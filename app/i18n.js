@@ -69,9 +69,11 @@ exports.sendFile = function (req, res, file) {
 
 exports.static = function (dir) {
     return function (req, res, next) {
-        if (req.url === '/')
-            req.url = '/index.html';
-        const fileName = path.join(dir, req.url);
+        // Remove query string
+        let pathname = decodeURIComponent(req.url.split('?').shift());
+        if (pathname === '/')
+            pathname = '/index.html';
+        const fileName = path.join(dir, pathname);
         const fileType = mime.lookup(fileName) || 'application/octet-stream';
         const enconding = fileType.startsWith('text') || fileType.startsWith('application') ? 'utf8' : null;
         fs.readFile(fileName, enconding, (err, data) => {
