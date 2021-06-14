@@ -207,6 +207,10 @@ module.exports = function (app, apicache) {
         res.sendStatus(200);
     });
 
+    app.get('/api/languages', function (req, res) {
+        i18n.languages(req, res);
+    });
+
     app.get('/api/glams', apicache("1 hour"), function (req, res) {
         api.glams(req, res, config.glams);
     });

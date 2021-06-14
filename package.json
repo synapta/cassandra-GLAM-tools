@@ -13,6 +13,7 @@
     "http-auth": "^3.2.4",
     "http-proxy-middleware": "^2.0.0",
     "ini": "^2.0.0",
+    "iso-639-1": "^2.1.9",
     "jsonwebtoken": "^8.5.1",
     "mariadb": "^2.1.1",
     "mime-types": "^2.1.31",
