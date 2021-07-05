@@ -92,6 +92,10 @@ h2 {
   text-decoration: underline;
 }
 
+.uppercase {
+  text-transform: uppercase;
+}
+
 .no-pointer-events {
   pointer-events: none;
 }

@@ -1,0 +1,42 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 2017,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "semi": "error",
+    "id-length": ["error", {
+      "min": 2,
+      "exceptions": ["e","h", "i", "j", "k", "d", "x", "y","q","n","w", "a", "b","g"]
+    }],
+    "indent": ["error", 2, {
+      "SwitchCase": 1,
+      "VariableDeclarator": {
+        "var": 2,
+        "let": 2,
+        "const": 3
+      },
+      "MemberExpression": 1,
+      "outerIIFEBody": 1,
+      "ObjectExpression": 1
+    }],
+    "object-curly-newline": [
+      "error",
+      {
+        "ImportDeclaration": {
+          "minProperties": 5,
+          "multiline": true
+        }
+      }
+    ],
+    "no-duplicate-imports": [
+      "error",
+      {
+        "includeExports": true
+      }
+    ]
+  }
+}
