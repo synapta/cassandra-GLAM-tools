@@ -135,7 +135,7 @@ module.exports = function (app, apicache) {
     }
   });
 
-  app.get('/:id/category-network/:name?', function (req, res) {
+  app.get("/:id/category-network/:name?", apicache("1 hour"), function (req, res) {
     let glam = config.glams[req.params.id];
     if (isValidGlam(glam)) {
       i18n.sendFile(req, res, __dirname + "/pages/views/category-network/index.html");
