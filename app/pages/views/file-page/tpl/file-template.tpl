@@ -10,7 +10,7 @@
 		<h1><a style="color: var(--main)" href="https://commons.wikimedia.org/wiki/File:{{image}}" target="_blank">{{image_name}}<a></h1>
 	</div>
 	<div class="file_details_projects file_details_section">
-		<h2>PART OF <span>{{cat_number}}</span> {{cat_title}}</h2>
+		<h2 class="uppercase">§[messages.part-of]§ <span>{{cat_number}}</span> {{cat_title}}</h2>
 		<table>
 			<tbody>
 				{{#each cats}}
@@ -25,7 +25,7 @@
 	</div>
 	{{#if usage}}
 	<div class="file_details_projects file_details_section">
-		<h2>USED IN <span>{{usage}}</span> PAGES OF <span>{{projects}}</span> PROJECTS</h2>
+		<h2 class="uppercase">§[messages.used-in]§ <span>{{usage}}</span> §[messages.pages-of]§ <span>{{projects}}</span> §[messages.projects]§</h2>
 		<table>
 			<tbody>
 				{{#each wikis}}
@@ -46,7 +46,7 @@
 	{{else}}
 	{{#if recommender.length}}
 	<div class="file_details_projects file_details_section">
-		<h2>RELATED WIKIDATA ENTITIES</h2>
+		<h2 class="uppercase">§[messages.related-wikidata-entities]§</h2>
 		<table>
 			<tbody>
 			{{#each recommender}}
@@ -67,19 +67,19 @@
 	{{/if}}
 	{{/if}}
 	<div class="file_details_views file_details_section">
-		<h2>VIEWS STATS</h2>
+		<h2 class="uppercase">§[messages.views-stats]§</h2>
 		<table>
 			<tbody>
 				<tr>
-					<td>TOTAL VIEWS</td>
+					<td class="uppercase">§[messages.views-total]§</td>
 					<td style="padding-left:2em"><span>{{tot}}</span></td>
 				</tr>
 				<tr>
-					<td>DAILY AVERAGE</td>
+					<td class="uppercase">§[messages.daily-average]§</td>
 					<td style="padding-left:2em"><span>{{av}}</span></td>
 				</tr>
 				<tr>
-					<td>DAILY MEDIAN</td>
+					<td class="uppercase">§[messages.daily-median]§</td>
 					<td style="padding-left:2em"><span>{{median}}</span></td>
 				</tr>
 			</tbody>
