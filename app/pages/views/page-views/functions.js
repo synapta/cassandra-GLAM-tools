@@ -159,7 +159,7 @@ function loadMoreOnScroll(sort_type) {
 	    });
 	} else {
 	    // show "no more elements"
-	    $('#right_sidebar_list').append('<div class="mt-4 text-center">No more elements to load</div>');
+	    $("#right_sidebar_list").append('<div class="mt-4 text-center">§[messages.no-more]§</div>');
 	    // remove handler
 	    $('#right_sidebar_list').off('scroll', loadMoreOnScroll);
 	}
@@ -219,7 +219,13 @@ function download(category){
     // remove old link
     $("#download_dataset a").remove();
     // recreate download link based on timespan
-    $('<a href="' + getUrlDataset() + '" download="' + getFileName(category) + '">Download dataset</a>').appendTo('#download_dataset');
+    $(
+      '<a href="' +
+        getUrlDataset() +
+        '" download="' +
+        getFileName(category) +
+        '">§[messages.download-dataset]§</a>'
+    ).appendTo("#download_dataset");
 }
 
 function how_to_read(){
@@ -260,11 +266,11 @@ function statDraw() {
     d3.json(getUrlAll(), function (error, data) {
 	if (error) { window.location.href('/500'); }
 	$("#usage_stat").append("<br><br>");
-	$("#usage_stat").append("Distinct media used: <b>" + data.totalImagesUsed + "</b>");
+	$("#usage_stat").append("§[messages.distinct-media]§: <b>" + data.totalImagesUsed + "</b>");
 	$("#usage_stat").append("<br><br>");
-	$("#usage_stat").append("Total projects touched: <b>" + data.totalProjects + "</b>");
+	$("#usage_stat").append("§[messages.total-projects-touched]§: <b>" + data.totalProjects + "</b>");
 	$("#usage_stat").append("<br><br>");
-	$("#usage_stat").append("Total pages enhanced: <b>" + data.totalPages + "</b>");
+	$("#usage_stat").append("§[messages.total-pages-enhanced]§: <b>" + data.totalPages + "</b>");
     });
 }
 
