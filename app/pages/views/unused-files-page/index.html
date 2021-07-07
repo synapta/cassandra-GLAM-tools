@@ -1,83 +1,103 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>§[messages.file-overview]§ | §[messages.glam-tool]§ (Cassandra)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <link
+      rel="stylesheet"
+      href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-select/1.13.12/css/bootstrap-select.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.css"
+    />
+    <link rel="stylesheet" href="/assets/style/style.css" />
+    <link rel="stylesheet" href="/assets/style/header.css" />
+    <link rel="stylesheet" href="/assets/style/unused-page.css" />
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" />
+    <base id="basebase" href="" />
+  </head>
 
-<head>
-  <title>File Overview | GLAM stat tool (Cassandra)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta charset="utf-8">
-  <meta http-equiv="Access-Control-Allow-Origin" content="*" />
-  <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-select/1.13.12/css/bootstrap-select.min.css" />
-  <link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.css" />
-  <link rel="stylesheet" href="/assets/style/style.css" />
-  <link rel="stylesheet" href="/assets/style/header.css" />
-  <link rel="stylesheet" href="/assets/style/unused-page.css" />
-  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-  <base id="basebase" href="" />
-</head>
+  <body>
+    <div id="mobile-sidebar" class="ui left sidebar"></div>
+    <div class="pusher">
+      <header id="mobile-header-bar"></header>
 
-<body>
-<div id="mobile-sidebar" class="ui left sidebar"></div>
-<div class="pusher">
+      <header id="topbar" class="top_bar">
+        <a id="white-logo" href="/">
+          <img src="/assets/img/glam-logo-white.svg" alt="§[messages.glam-tool]§" />
+        </a>
+        <div id="breadcrumbs">
+          <h6 class="uppercase">§[messages.institution]§</h6>
+          <h2><a id="institutionId" class="glamName" href=""></a></h2>
+          <span class="breadcrumb-separator"> > </span>
+          <select class="autocomplete-categories mr-2 col-5" data-live-search="true"></select>
+        </div>
+      </header>
 
-  <header id="mobile-header-bar"></header>
+      <main id="visualizations">
+        <div class="col-12 text-center m-3">
+          <h1 class="uppercase">§[messages.unused-files]§</h1>
+        </div>
+        <div class="searchResults row">
+          <div id="sorting_options" class="row w-100">
+            <span class="col-10 uppercase">§[messages.categories]§</span>
+            <span id="by_level" class="active_order"> §[messages.by-level]§ </span>
+            <span style="cursor: pointer" id="by_total"> §[messages.by-total]§ </span>
+          </div>
+          <div id="resultsSearch" class="w-100"></div>
+        </div>
+      </main>
 
-  <header id="topbar" class="top_bar">
-    <a id="white-logo" href="/">
-      <img src="/assets/img/glam-logo-white.svg" alt="GLAM stat tool">
-    </a>
-    <div id="breadcrumbs">
-      <h6>INSTITUTION</h6>
-      <h2><a id="institutionId" class="glamName" href=""></a></h2>
-      <span class="breadcrumb-separator"> > </span>
-      <select class="autocomplete-categories mr-2 col-5" data-live-search="true"></select>
+      <footer id="chart-page-footer">
+        <div>
+          <div class="file-name">
+            <h6 class="uppercase">§[messages.file-search]§</h6>
+          </div>
+          <div class="commons-category">
+            <h6 class="uppercase">§[messages.category-in-commons]§</h6>
+            <h2>
+              <a id="cat_url" href="" title="§[messages.category-mediawiki]§" target="_blank"></a>
+              <img class="link-out-big" src="/assets/img/link-out.svg" alt="§[messages.go]§" />
+            </h2>
+          </div>
+        </div>
+      </footer>
     </div>
-  </header>
-
-  <main id="visualizations">
-    <div class="col-12 text-center m-3">
-      <h1>UNUSED FILES</h1>
-    </div>
-    <div class="searchResults row">
-      <div id="sorting_options" class="row w-100">
-        <span class="col-10">CATEGORIES</span>
-        <span id="by_level" class="active_order">
-            by level
-          </span>
-        <span style="cursor:pointer;" id="by_total">
-            by total
-          </span>
-      </div>
-      <div id="resultsSearch" class="w-100"></div>
-    </div>
-  </main>
-
-  <footer id="chart-page-footer">
-    <div>
-      <div class="file-name">
-        <h6>FILE SEARCH</h6>
-      </div>
-      <div class="commons-category">
-        <h6>CATEGORY IN COMMONS</h6>
-        <h2>
-          <a id="cat_url" href="" title="Mediawiki category" target="_blank"></a>
-          <img class="link-out-big" src="/assets/img/link-out.svg" alt="go">
-        </h2>
-      </div>
-    </div>
-  </footer>
-</div>
-<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-select/1.13.12/js/bootstrap-select.min.js"></script>
-<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/d3/4.4.0/d3.min.js"></script>
-<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
-<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.js"></script>
-<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
-<script type="text/javascript" src="/assets/scripts/utils.js"></script>
-<script type="text/javascript" src="/assets/scripts/custom-selector.js"></script>
-<script type="text/javascript" src="/views/unused-files-page/functions.js"></script>
-</body>
-
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.1.1/jquery.min.js"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/bootstrap-select/1.13.12/js/bootstrap-select.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/d3/4.4.0/d3.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"
+    ></script>
+    <script type="text/javascript" src="/assets/scripts/utils.js"></script>
+    <script type="text/javascript" src="/assets/scripts/custom-selector.js"></script>
+    <script type="text/javascript" src="/views/unused-files-page/functions.js"></script>
+  </body>
 </html>

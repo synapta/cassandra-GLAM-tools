@@ -22,7 +22,7 @@
 					"dataset_query": {},
 					"archived": false
 				},
-				"text": "# Views",
+				"text": "# §[metabase.views]§",
 				"dashcard.background": false
 			},
 			"dashboard_id": 2,
@@ -49,7 +49,7 @@
 					"dataset_query": {},
 					"archived": false
 				},
-				"text": "# Upload",
+				"text": "# §[metabase.upload]§",
 				"dashcard.background": false
 			},
 			"dashboard_id": 2,
@@ -76,7 +76,7 @@
 					"dataset_query": {},
 					"archived": false
 				},
-				"text": "# Top",
+				"text": "# §[metabase.top]§",
 				"dashcard.background": false
 			},
 			"dashboard_id": 2,
@@ -103,7 +103,7 @@
 					"dataset_query": {},
 					"archived": false
 				},
-				"text": "# Usage",
+				"text": "# §[metabase.usage]§",
 				"dashcard.background": false
 			},
 			"dashboard_id": 2,
@@ -130,7 +130,7 @@
 					"dataset_query": {},
 					"archived": false
 				},
-				"text": "# Correlations",
+				"text": "# §[metabase.corr]§",
 				"dashcard.background": false
 			},
 			"dashboard_id": 2,
@@ -142,7 +142,7 @@
 			"sizeX": 4,
 			"series": [],
 			"card": {
-				"description": "From -1 to 1. This number represent the correlation between number of views and media usage. Does high usage leads to more views? 1 yes, -1 no, 0 not relevant",
+				"description": "§[metabase.corr-usage-desc]§",
 				"archived": false,
 				"collection_position": null,
 				"table_id": null,
@@ -174,7 +174,7 @@
 				"enable_embedding": false,
 				"collection_id": 16,
 				"query_type": "native",
-				"name": "Correlation views / usage",
+				"name": "§[& metabase.corr-usage]§",
 				"read_permissions": null,
 				"query_average_duration": 131314,
 				"creator_id": 2,
@@ -219,7 +219,7 @@
 			"sizeX": 4,
 			"series": [],
 			"card": {
-				"description": "From -1 to 1. This number represent the correlation between number of views and media size. Do bigger media lead to more views? 1 yes, -1 no, 0 not relevant",
+				"description": "§[metabase.corr-size-desc]§",
 				"archived": false,
 				"collection_position": null,
 				"table_id": null,
@@ -251,7 +251,7 @@
 				"enable_embedding": false,
 				"collection_id": 16,
 				"query_type": "native",
-				"name": "Correlation views / size",
+				"name": "§[& metabase.corr-size]§",
 				"read_permissions": null,
 				"query_average_duration": 2360,
 				"creator_id": 2,
@@ -296,7 +296,7 @@
 			"sizeX": 4,
 			"series": [],
 			"card": {
-				"description": "From -1 to 1. This number represent the correlation between number of views and media oldness. Do older media make more views? 1 yes, -1 no, 0 not relevant.",
+				"description": "§[metabase.corr-old-desc]§",
 				"archived": false,
 				"collection_position": null,
 				"table_id": null,
@@ -328,7 +328,7 @@
 				"enable_embedding": false,
 				"collection_id": 16,
 				"query_type": "native",
-				"name": "Correlation views / oldness",
+				"name": "§[& metabase.corr-old]§",
 				"read_permissions": null,
 				"query_average_duration": 2485,
 				"creator_id": 2,
@@ -373,7 +373,7 @@
 			"sizeX": 4,
 			"series": [],
 			"card": {
-				"description": "Percentage of new media uploaded last year (rolling).",
+				"description": "§[metabase.uploaded-last-desc]§",
 				"archived": false,
 				"collection_position": null,
 				"table_id": null,
@@ -405,7 +405,7 @@
 				"enable_embedding": false,
 				"collection_id": 14,
 				"query_type": "native",
-				"name": "Uploaded last year increment",
+				"name": "§[metabase.uploaded-last]§",
 				"read_permissions": null,
 				"query_average_duration": 568,
 				"creator_id": 2,
@@ -449,7 +449,7 @@
 			"sizeX": 4,
 			"series": [],
 			"card": {
-				"description": "Percentage of media used to enrich Wikimedia pages.",
+				"description": "§[metabase.perc-used-desc]§",
 				"archived": false,
 				"collection_position": null,
 				"table_id": null,
@@ -481,7 +481,7 @@
 				"enable_embedding": false,
 				"collection_id": 13,
 				"query_type": "native",
-				"name": "Media used",
+				"name": "§[metabase.perc-used]§",
 				"read_permissions": null,
 				"query_average_duration": 615,
 				"creator_id": 2,
@@ -524,7 +524,7 @@
 			"sizeX": 4,
 			"series": [],
 			"card": {
-				"description": "Percentage of last year's views compared to the previous one.",
+				"description": "§[metabase.views-change-desc]§",
 				"archived": false,
 				"collection_position": null,
 				"table_id": null,
@@ -556,7 +556,7 @@
 				"enable_embedding": false,
 				"collection_id": 12,
 				"query_type": "native",
-				"name": "Views change last year",
+				"name": "§[metabase.views-change]§",
 				"read_permissions": null,
 				"query_average_duration": 5022,
 				"creator_id": 2,
@@ -625,15 +625,15 @@
 			"sizeX": 4,
 			"series": [],
 			"card": {
-				"description": "List of the top 5 Wikimedia projects that most used media from this collection.",
+				"description": "§[metabase.top-projects-desc]§",
 				"archived": false,
 				"collection_position": null,
 				"table_id": null,
 				"result_metadata": [
 					{
 						"base_type": "type/Text",
-						"display_name": "Wiki project",
-						"name": "Wiki project",
+						"display_name": "§[metabase.wiki-project]§",
+						"name": "§[metabase.wiki-project]§",
 						"special_type": null,
 						"fingerprint": {
 							"global": {
@@ -652,8 +652,8 @@
 					},
 					{
 						"base_type": "type/BigInteger",
-						"display_name": "Media used",
-						"name": "Media used",
+						"display_name": "§[metabase.media-used]§",
+						"name": "§[metabase.media-used]§",
 						"special_type": null,
 						"fingerprint": {
 							"global": {
@@ -677,7 +677,7 @@
 				"enable_embedding": false,
 				"collection_id": 15,
 				"query_type": "native",
-				"name": "Top 5 Wikimedia projects by media usage",
+				"name": "§[metabase.top-projects]§",
 				"read_permissions": null,
 				"query_average_duration": 117,
 				"creator_id": 2,
@@ -688,7 +688,7 @@
 				"dataset_query": {
 					"type": "native",
 					"native": {
-						"query": "SELECT gil_wiki as \"Wiki project\", count(*) as \"Media used\"\nFROM usages\nWHERE is_alive = true\nGROUP BY gil_wiki\norder by count(*) desc\nlimit 5"
+						"query": "SELECT gil_wiki as \"§[metabase.wiki-project]§\", count(*) as \"§[metabase.media-used]§\"\nFROM usages\nWHERE is_alive = true\nGROUP BY gil_wiki\norder by count(*) desc\nlimit 5"
 					},
 					"database": 3
 				},
@@ -716,15 +716,15 @@
 			"sizeX": 7,
 			"series": [],
 			"card": {
-				"description": "List of the top 5 media most used in wiki projects (Wikipedia, Wikidata, Wikisource, etc.).  To see media details, copy its name and paste in a URL like: https://stats.wikimedia.swiss/<glam-id>/file/<media-name>, for example: https://stats.wikimedia.swiss/ZU/file/Rennwegtor.jpg",
+				"description": "§[& metabase.top-usage-desc]§",
 				"archived": false,
 				"collection_position": null,
 				"table_id": null,
 				"result_metadata": [
 					{
 						"base_type": "type/Text",
-						"display_name": "Media",
-						"name": "Media",
+						"display_name": "§[metabase.media]§",
+						"name": "§[metabase.media]§",
 						"special_type": null,
 						"fingerprint": {
 							"global": {
@@ -743,8 +743,8 @@
 					},
 					{
 						"base_type": "type/BigInteger",
-						"display_name": "Distinct usage count",
-						"name": "Distinct usage count",
+						"display_name": "§[metabase.usage-count]§",
+						"name": "§[metabase.usage-count]§",
 						"special_type": "type/Quantity",
 						"fingerprint": {
 							"global": {
@@ -768,7 +768,7 @@
 				"enable_embedding": false,
 				"collection_id": 15,
 				"query_type": "native",
-				"name": "Top 5 media by usage",
+				"name": "§[metabase.top-usage]§",
 				"read_permissions": null,
 				"query_average_duration": 130,
 				"creator_id": 2,
@@ -779,7 +779,7 @@
 				"dataset_query": {
 					"type": "native",
 					"native": {
-						"query": "SELECT gil_to as \"Media\", count(*) as \"Distinct usage count\"\nFROM usages\nGROUP BY gil_to\nORDER BY count(*) DESC\nLIMIT 5"
+						"query": "SELECT gil_to as \"§[metabase.media]§\", count(*) as \"§[metabase.usage-count]§\"\nFROM usages\nGROUP BY gil_to\nORDER BY count(*) DESC\nLIMIT 5"
 					},
 					"database": 3
 				},
@@ -807,15 +807,15 @@
 			"sizeX": 7,
 			"series": [],
 			"card": {
-				"description": "List of the top 5 most viewed media in the last year. To see media details, copy its name and paste in a URL like: https://stats.wikimedia.swiss/<glam-id>/file/<media-name>, for example: https://stats.wikimedia.swiss/ZU/file/Rennwegtor.jpg",
+				"description": "§[& metabase.top-views-desc]§",
 				"archived": false,
 				"collection_position": null,
 				"table_id": null,
 				"result_metadata": [
 					{
 						"base_type": "type/Text",
-						"display_name": "Media",
-						"name": "Media",
+						"display_name": "§[metabase.media]§",
+						"name": "§[metabase.media]§",
 						"special_type": null,
 						"fingerprint": {
 							"global": {
@@ -834,8 +834,8 @@
 					},
 					{
 						"base_type": "type/Decimal",
-						"display_name": "Views",
-						"name": "Views",
+						"display_name": "§[metabase.views]§",
+						"name": "§[metabase.views]§",
 						"special_type": null,
 						"fingerprint": {
 							"global": {
@@ -859,7 +859,7 @@
 				"enable_embedding": false,
 				"collection_id": 15,
 				"query_type": "native",
-				"name": "Top 5 media by views last year",
+				"name": "§[metabase.top-views]§",
 				"read_permissions": null,
 				"query_average_duration": 1697,
 				"creator_id": 2,
@@ -870,7 +870,7 @@
 				"dataset_query": {
 					"database": 3,
 					"native": {
-						"query": "SELECT img_name as \"Media\", sum(accesses) as \"Views\"\nFROM visualizations v, images i\nwhere v.media_id = i.media_id\nand access_date > NOW()-interval '1 year'\nGROUP BY img_name\norder by sum(accesses) desc\nlimit 5"
+						"query": "SELECT img_name as \"§[metabase.media]§\", sum(accesses) as \"§[metabase.views]§\"\nFROM visualizations v, images i\nwhere v.media_id = i.media_id\nand access_date > NOW()-interval '1 year'\nGROUP BY img_name\norder by sum(accesses) desc\nlimit 5"
 					},
 					"type": "native"
 				},
@@ -898,7 +898,7 @@
 			"sizeX": 4,
 			"series": [],
 			"card": {
-				"description": "Sum of all Wikimedia pages (in all languages) with at least one media inside.",
+				"description": "§[metabase.enanched-desc]§",
 				"archived": false,
 				"collection_position": null,
 				"table_id": null,
@@ -930,7 +930,7 @@
 				"enable_embedding": false,
 				"collection_id": 13,
 				"query_type": "native",
-				"name": "Total pages enanched",
+				"name": "§[metabase.enanched]§",
 				"read_permissions": null,
 				"query_average_duration": 448,
 				"creator_id": 2,
@@ -966,7 +966,7 @@
 			"sizeX": 4,
 			"series": [],
 			"card": {
-				"description": "Sum of all media views from 2015-01-01 (first data available). A view is recorded every time a device download a specific file from Wikimedia server. So it counts both punctual views, both views on pages where the media is present (but only if loaded on the device). Actually this is the most precise statistic released by Wikimedia servers.",
+				"description": "§[metabase.total-views-desc]§",
 				"archived": false,
 				"collection_position": null,
 				"table_id": null,
@@ -998,7 +998,7 @@
 				"enable_embedding": false,
 				"collection_id": 12,
 				"query_type": "native",
-				"name": "Total views from 2015",
+				"name": "§[metabase.total-views]§",
 				"read_permissions": null,
 				"query_average_duration": 2145,
 				"creator_id": 2,
@@ -1034,7 +1034,7 @@
 			"sizeX": 4,
 			"series": [],
 			"card": {
-				"description": "The number of all media tracked in the project.",
+				"description": "§[metabase.total-media-desc]§",
 				"archived": false,
 				"collection_position": null,
 				"table_id": null,
@@ -1066,7 +1066,7 @@
 				"enable_embedding": false,
 				"collection_id": 14,
 				"query_type": "native",
-				"name": "Total media uploaded",
+				"name": "§[metabase.total-media]§",
 				"read_permissions": null,
 				"query_average_duration": 327,
 				"creator_id": 2,
@@ -1102,15 +1102,15 @@
 			"sizeX": 14,
 			"series": [],
 			"card": {
-				"description": "Number of views per year, in purple cumulative visits, in blue year per year visits. Data starts from the oldest date in our system (the raw data starts from 2015).",
+				"description": "§[metabase.views-year-desc]§",
 				"archived": false,
 				"collection_position": null,
 				"table_id": null,
 				"result_metadata": [
 					{
 						"base_type": "type/DateTimeWithLocalTZ",
-						"display_name": "d_year",
-						"name": "d_year",
+						"display_name": "§[metabase.views]§",
+						"name": "§[metabase.views]§",
 						"special_type": null,
 						"fingerprint": {
 							"global": {
@@ -1127,8 +1127,8 @@
 					},
 					{
 						"base_type": "type/Decimal",
-						"display_name": "Visits per year",
-						"name": "Visits per year",
+						"display_name": "§[metabase.visits-per-year]§",
+						"name": "§[metabase.visits-per-year]§",
 						"special_type": null,
 						"fingerprint": {
 							"global": {
@@ -1149,8 +1149,8 @@
 					},
 					{
 						"base_type": "type/Decimal",
-						"display_name": "Cumulative usage",
-						"name": "Cumulative usage",
+						"display_name": "§[metabase.cumulative-usage]§",
+						"name": "§[metabase.cumulative-usage]§",
 						"special_type": null,
 						"fingerprint": {
 							"global": {
@@ -1174,7 +1174,7 @@
 				"enable_embedding": false,
 				"collection_id": 12,
 				"query_type": "native",
-				"name": "Media views per year",
+				"name": "§[metabase.views-year]§",
 				"read_permissions": null,
 				"query_average_duration": 1923,
 				"creator_id": 2,
@@ -1185,7 +1185,7 @@
 				"dataset_query": {
 					"database": 3,
 					"native": {
-						"query": "SELECT d_year, visits_per_year as \"Visits per year\", sum(visits_per_year) OVER (ORDER BY d_year) as \"Cumulative usage\"\nfrom (\nSELECT date_trunc('year', access_date) AS d_year, SUM(accesses) AS visits_per_year\nFROM visualizations\ngroup by d_year) as a\ngroup by d_year, visits_per_year"
+						"query": "SELECT d_year as \"§[metabase.year]§\", visits_per_year as \"§[metabase.visits-per-year]§\", sum(visits_per_year) OVER (ORDER BY d_year) as \"§[metabase.cumulative-usage]§\"\nfrom (\nSELECT date_trunc('year', access_date) AS d_year, SUM(accesses) AS visits_per_year\nFROM visualizations\ngroup by d_year) as a\ngroup by d_year, visits_per_year"
 					},
 					"type": "native"
 				},
@@ -1193,19 +1193,19 @@
 				"display": "line",
 				"visualization_settings": {
 					"graph.dimensions": [
-						"d_year"
+						"§[metabase.year]§"
 					],
 					"graph.metrics": [
-						"Visits per year",
-						"Cumulative usage"
+						"§[metabase.visits-per-year]§",
+						"§[metabase.cumulative-usage]§"
 					],
 					"graph.show_values": false,
 					"series_settings": {
-						"Cumulative usage": {
+						"§[metabase.cumulative-usage]§": {
 							"color": "#A989C5"
 						},
-						"Visits per year": {
-							"title": "Views per year"
+						"§[metabase.visits-per-year]§": {
+							"color": "#509EE3"
 						}
 					}
 				},
@@ -1227,15 +1227,15 @@
 			"sizeX": 14,
 			"series": [],
 			"card": {
-				"description": "Media used to enrich Wikimedia pages. In blue year per year addition (the peak in the first year is because no historical data were available before we start to collect it). In purple cumulative usage.",
+				"description": "§[metabase.media-used-desc]§",
 				"archived": false,
 				"collection_position": null,
 				"table_id": null,
 				"result_metadata": [
 					{
 						"base_type": "type/DateTimeWithLocalTZ",
-						"display_name": "d_year",
-						"name": "d_year",
+						"display_name": "§[metabase.year]§",
+						"name": "§[metabase.year]§",
 						"special_type": null,
 						"fingerprint": {
 							"global": {
@@ -1252,8 +1252,8 @@
 					},
 					{
 						"base_type": "type/BigInteger",
-						"display_name": "New usages",
-						"name": "New usages",
+						"display_name": "§[metabase.new-usages]§",
+						"name": "§[metabase.new-usages]§",
 						"special_type": null,
 						"fingerprint": {
 							"global": {
@@ -1274,8 +1274,8 @@
 					},
 					{
 						"base_type": "type/Decimal",
-						"display_name": "Cumulative usage",
-						"name": "Cumulative usage",
+						"display_name": "§[metabase.cumulative-usage]§",
+						"name": "§[metabase.cumulative-usage]§",
 						"special_type": null,
 						"fingerprint": {
 							"global": {
@@ -1299,7 +1299,7 @@
 				"enable_embedding": false,
 				"collection_id": 13,
 				"query_type": "native",
-				"name": "Media used per year",
+				"name": "§[metabase.media-used-year]§",
 				"read_permissions": null,
 				"query_average_duration": 15,
 				"creator_id": 2,
@@ -1310,7 +1310,7 @@
 				"dataset_query": {
 					"database": 3,
 					"native": {
-						"query": "SELECT d_year, new_usage as \"New usages\", sum(new_usage) OVER (ORDER BY d_year) as \"Cumulative usage\"\nfrom (\nSELECT date_trunc('year', first_seen) AS d_year, COUNT(*) AS new_usage\nFROM usages\ngroup by d_year) as a\ngroup by d_year, new_usage"
+						"query": "SELECT d_year as \"§[metabase.year]§\", new_usage as \"§[metabase.new-usages]§\", sum(new_usage) OVER (ORDER BY d_year) as \"§[metabase.cumulative-usage]§\"\nfrom (\nSELECT date_trunc('year', first_seen) AS d_year, COUNT(*) AS new_usage\nFROM usages\ngroup by d_year) as a\ngroup by d_year, new_usage"
 					},
 					"type": "native"
 				},
@@ -1318,18 +1318,18 @@
 				"display": "line",
 				"visualization_settings": {
 					"graph.dimensions": [
-						"d_year"
+						"§[metabase.year]§"
 					],
 					"graph.metrics": [
-						"New usages",
-						"Cumulative usage"
+						"§[metabase.new-usages]§",
+						"§[metabase.cumulative-usage]§"
 					],
 					"graph.show_values": false,
 					"series_settings": {
-						"New usages": {
+						"§[metabase.new-usages]§": {
 							"color": "#509EE3"
 						},
-						"Cumulative usage": {
+						"§[metabase.cumulative-usage]§": {
 							"color": "#A989C5"
 						}
 					}
@@ -1352,15 +1352,15 @@
 			"sizeX": 14,
 			"series": [],
 			"card": {
-				"description": "Track record of uploads. In blue year by year the number of new media uploaded. In purple the same but cumulative.",
+				"description": "§[metabase.media-added-desc]§",
 				"archived": false,
 				"collection_position": null,
 				"table_id": null,
 				"result_metadata": [
 					{
 						"base_type": "type/DateTime",
-						"display_name": "d_year",
-						"name": "d_year",
+						"display_name": "§[metabase.year]§",
+						"name": "§[metabase.year]§",
 						"special_type": null,
 						"fingerprint": {
 							"global": {
@@ -1377,8 +1377,8 @@
 					},
 					{
 						"base_type": "type/BigInteger",
-						"display_name": "Media per year",
-						"name": "Media per year",
+						"display_name": "§[metabase.media-per-year]§",
+						"name": "§[metabase.media-per-year]§",
 						"special_type": null,
 						"fingerprint": {
 							"global": {
@@ -1399,8 +1399,8 @@
 					},
 					{
 						"base_type": "type/Decimal",
-						"display_name": "Media cumulated",
-						"name": "Media cumulated",
+						"display_name": "§[metabase.media-cumulated]§",
+						"name": "§[metabase.media-cumulated]§",
 						"special_type": null,
 						"fingerprint": {
 							"global": {
@@ -1424,7 +1424,7 @@
 				"enable_embedding": false,
 				"collection_id": 14,
 				"query_type": "native",
-				"name": "Media added per year",
+				"name": "§[metabase.media-added]§",
 				"read_permissions": null,
 				"query_average_duration": 12,
 				"creator_id": 2,
@@ -1435,7 +1435,7 @@
 				"dataset_query": {
 					"database": 3,
 					"native": {
-						"query": "SELECT d_year, media_year as \"Media per year\", sum(media_year) OVER (ORDER BY d_year) as \"Media cumulated\"\nfrom (\nSELECT date_trunc('year', img_timestamp) AS d_year, COUNT(*) AS media_year\nFROM images\ngroup by d_year) as a\ngroup by d_year, media_year"
+						"query": "SELECT d_year as \"§[metabase.year]§\", media_year as \"§[metabase.media-per-year]§\", sum(media_year) OVER (ORDER BY d_year) as \"§[metabase.media-cumulated]§\"\nfrom (\nSELECT date_trunc('year', img_timestamp) AS d_year, COUNT(*) AS media_year\nFROM images\ngroup by d_year) as a\ngroup by d_year, media_year"
 					},
 					"type": "native"
 				},
@@ -1443,18 +1443,18 @@
 				"display": "line",
 				"visualization_settings": {
 					"graph.dimensions": [
-						"d_year"
+						"§[metabase.year]§"
 					],
 					"graph.metrics": [
-						"Media per year",
-						"Media cumulated"
+						"§[metabase.media-per-year]§",
+						"§[metabase.media-cumulated]§"
 					],
 					"graph.show_values": false,
 					"series_settings": {
-						"Media per year": {
+						"§[metabase.media-per-year]§": {
 							"color": "#509EE3"
 						},
-						"Media cumulated": {
+						"§[metabase.media-cumulated]§": {
 							"color": "#A989C5"
 						}
 					}

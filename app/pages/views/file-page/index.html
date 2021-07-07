@@ -1,99 +1,119 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>§[messages.file-overview]§ | §[messages.glam-tool]§ (Cassandra)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <link
+      rel="stylesheet"
+      href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.css"
+    />
+    <link rel="stylesheet" href="/assets/style/style.css" />
+    <link rel="stylesheet" href="/assets/style/header.css" />
+    <link rel="stylesheet" href="/assets/style/file-page.css" />
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" />
+    <base id="basebase" href="" />
+  </head>
 
-<head>
-	<title>File Overview | GLAM stat tool (Cassandra)</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta charset="utf-8">
-	<meta http-equiv="Access-Control-Allow-Origin" content="*" />
-	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.css" />
-	<link rel="stylesheet" href="/assets/style/style.css" />
-	 <link rel="stylesheet" href="/assets/style/header.css" />
-	<link rel="stylesheet" href="/assets/style/file-page.css" />
-	<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-	<base id="basebase" href="" />
-</head>
+  <body class="overflow_hidden">
+    <div id="mobile-sidebar" class="ui left sidebar"></div>
+    <div class="pusher">
+      <header id="mobile-header-bar"></header>
 
-<body class="overflow_hidden">
-	<div id="mobile-sidebar" class="ui left sidebar"></div>
-	<div class="pusher">
-
-		<header id="mobile-header-bar"></header>
-
-		<header id="topbar" class="top_bar">
-			<a id="white-logo" href="/">
-				<img src="/assets/img/glam-logo-white.svg" alt="GLAM stat tool">
-			</a>
-			<div id="breadcrumbs">
-				<h6>INSTITUTION</h6>
-				<h2><a class="glamName" href=""></a></h2>
-				<!-- <span class="breadcrumb-separator"> > </span>
+      <header id="topbar" class="top_bar">
+        <a id="white-logo" href="/">
+          <img src="/assets/img/glam-logo-white.svg" alt="GLAM stat tool" />
+        </a>
+        <div id="breadcrumbs">
+          <h6 class="uppercase">§[messages.institution]§</h6>
+          <h2><a class="glamName" href=""></a></h2>
+          <!-- <span class="breadcrumb-separator"> > </span>
 				<h6>FILE</h6> -->
-			</div>
-		</header>
+        </div>
+      </header>
 
-		<main id="visualizations">
-			<div class="row w-100">
-				<!-- data visaulization -->
-				<div id="file-dataviz" class="col-12 col-lg-8 mt-4 mt-md-0">
-					<div class="row w-100">
-						<!-- usage -->
-						<div class="col-12 text-center">
-							<h1>USAGE</h1>
-							<div class="file-dataviz-container">
-								<div id="file_usage_horiz_bars" class="file-dataviz-chart"></div>
-							</div>
-						</div>
-						<!-- views -->
-						<div class="col-12 text-center">
-							<h1>VIEWS</h1>
-							<div class="file-dataviz-container">
-								<div id="file_main_views_container" class="file-dataviz-chart"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div id="right-column" class="col-12 col-lg-4">
-				</div>
-			</div>
-		</main>
+      <main id="visualizations">
+        <div class="row w-100">
+          <!-- data visaulization -->
+          <div id="file-dataviz" class="col-12 col-lg-8 mt-4 mt-md-0">
+            <div class="row w-100">
+              <!-- usage -->
+              <div class="col-12 text-center">
+                <h1 class="uppercase">§[messages.usage]§</h1>
+                <div class="file-dataviz-container">
+                  <div id="file_usage_horiz_bars" class="file-dataviz-chart"></div>
+                </div>
+              </div>
+              <!-- views -->
+              <div class="col-12 text-center">
+                <h1 class="uppercase">§[messages.views]§</h1>
+                <div class="file-dataviz-container">
+                  <div id="file_main_views_container" class="file-dataviz-chart"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="right-column" class="col-12 col-lg-4"></div>
+        </div>
+      </main>
 
-		<footer id="chart-page-footer">
-			<div>
-				<div class="chart-title">
-					<h5>FILE DETAILS</h5>
-				</div>
-				<div class="file-name">
-					<h6>FILE</h6>
-					<h2>
-						<a id="file_url" href="" title="File name" target="_blank"></a>
-						<img class="link-out-big" src="/assets/img/link-out.svg" alt="go">
-					</h2>
-				</div>
-				<div class="commons-category">
-					<h6>CATEGORY IN COMMONS</h6>
-					<h2>
-						<a id="cat_url" href="" title="Mediawiki category" target="_blank"></a>
-						<img class="link-out-big" src="/assets/img/link-out.svg" alt="go">
-					</h2>
-				</div>
-			</div>
-		</footer>
-	</div>
+      <footer id="chart-page-footer">
+        <div>
+          <div class="chart-title">
+            <h5 class="uppercase">§[messages.file-details]§</h5>
+          </div>
+          <div class="file-name">
+            <h6 class="uppercase">§[messages.file]§</h6>
+            <h2>
+              <a id="file_url" href="" title="§[messages.file-name]§" target="_blank"></a>
+              <img class="link-out-big" src="/assets/img/link-out.svg" alt="§[messages.go]§" />
+            </h2>
+          </div>
+          <div class="commons-category">
+            <h6 class="uppercase">§[messages.category-in-commons]§</h6>
+            <h2>
+              <a id="cat_url" href="" title="§[messages.category-mediawiki]§" target="_blank"></a>
+              <img class="link-out-big" src="/assets/img/link-out.svg" alt="§[messages.go]§" />
+            </h2>
+          </div>
+        </div>
+      </footer>
+    </div>
 
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/d3/4.4.0/d3.min.js"></script>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.js"></script>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
-	<script type="text/javascript" src="/js/loader.js"></script>
-	<script type="text/javascript" src="/assets/scripts/utils.js"></script>
-	<!-- <script type="text/javascript" src="/assets/scripts/custom-selector.js"></script> -->
-	<!-- <script type="text/javascript" src="/assets/scripts/horiz-bar-chart.js"></script> -->
-	<script type="text/javascript" src="/views/file-page/file-dataviz.js"></script>
-	<script type="text/javascript" src="/views/file-page/functions.js"></script>
-</body>
-
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.1.1/jquery.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/d3/4.4.0/d3.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"
+    ></script>
+    <script type="text/javascript" src="/js/loader.js"></script>
+    <script type="text/javascript" src="/assets/scripts/utils.js"></script>
+    <!-- <script type="text/javascript" src="/assets/scripts/custom-selector.js"></script> -->
+    <!-- <script type="text/javascript" src="/assets/scripts/horiz-bar-chart.js"></script> -->
+    <script type="text/javascript" src="/views/file-page/file-dataviz.js"></script>
+    <script type="text/javascript" src="/views/file-page/functions.js"></script>
+  </body>
 </html>

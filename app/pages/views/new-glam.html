@@ -1,89 +1,136 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-	<title>GLAM stat tool (Cassandra)</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta charset="utf-8">
-	<meta http-equiv="Access-Control-Allow-Origin" content="*" />
-	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.css" />
-	<link rel="stylesheet" href="/assets/style/style.css" />
-	<link rel="stylesheet" href="/assets/style/homepage.css" />
-	<link href="https://tools-static.wmflabs.org/fontcdn/css?family=Raleway" rel="stylesheet">
-</head>
-<body>
-	<!-- Mobile sidebar -->
-	<div id="mobile-sidebar" class="ui left sidebar"></div>
-	<div class="pusher">
-		<!-- Mobile header bar -->
-		<header id="mobile-header-bar"></header>
-		<!-- Sidebar -->
-		<aside id="main-sidebar"></aside>
-		<aside id="secondary-sidebar"></aside>
-	<!-- MAIN -->
-	<!-- Title -->
-	<section id="admin-cover" class="cover">
-		<div class="row">
-			<div class="col-12">
-				<h2>Create a new GLAM stats monitor</h2>
-			</div>
-		</div>
-	</section>
-	<!-- Main Content -->
-	<main id="main-container">
-		<section>
-			<div class="row">
-				<div class="col-12 col-xl-9 my-xl-5">
-					<div id="wrong-glam" class="error-message mb-4" style="display:none;">
-						<h3>OOPS! Something went wrong. Check the following things:</h3>
-						<ul>
-							<li><b>GLAM ID</b> must be unique (there cannot be another GLAM with the same ID)</li>
-							<li><b>GLAM ID</b> cannot include spaces</li>
-							<li><b>Image URL</b> must be a valid URL (starts with <i>http://</i> or <i>https://</i>)</li>
-						</ul>
-					</div>
-					<div id="success-glam" class="mb-4" style="display:none;">
-						<div class="success-message mb-5">
-							<h3>New glam added correctly</h3>
-						</div>
-						<div class="text-center">
-							<a href="/admin/panel">VIEW COMPLETE LIST</a>
-						</div>
-					</div>
-					<form id="new-glam-form" name="new-glam" autocomplete="off">
-						<div class="form-group">
-							<label for="glamID">Unique GLAM ID*</label>
-							<input type="text" class="form-control" id="glamID" aria-describedby="emailHelp" placeholder="e.g. ZU, ETH or SNL" required />
-						</div>
-						<div class="form-group">
-							<label for="glamFullName">Full Name*</label>
-							<input type="text" class="form-control" id="glamFullName" placeholder="e.g. Canton of Zürich, ETH Library of Zurich or Swiss National Library" required />
-						</div>
-						<div class="form-group">
-							<label for="glamCategory">Category*</label>
-							<input type="text" class="form-control" id="glamCategory" placeholder="e.g. Historical images of buildings in the canton of Zürich" required />
-						</div>
-						<div class="form-group">
-							<label for="featuredImageURL">Featured image URL*</label>
-							<input type="text" class="form-control" id="featuredImageURL" placeholder="URL" required autocomplete="off" />
-						</div>
-						<div class="form-group">
-							<label for="glamPassword">Password (leave blank for public GLAMs)</label>
-							<input type="password" class="form-control" id="glamPassword" placeholder="Password" autocomplete="new-password" />
-						</div>
-						<button id="create-new-glam-button" class="btn btn-primary">CREATE</button>
-					</form>
-				</div>
-			</div>
-		</section>
-	</main>
-</div>
-	<!-- SCRIPTS -->
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.js"></script>
-	<script type="text/javascript" src="/js/loader.js"></script>
-	<script type="text/javascript" src="/js/new-glam-panel.js"></script>
-</body>
+  <head>
+    <title>§[messages.glam-tool]§ (Cassandra)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <link
+      rel="stylesheet"
+      href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.css"
+    />
+    <link rel="stylesheet" href="/assets/style/style.css" />
+    <link rel="stylesheet" href="/assets/style/homepage.css" />
+    <link href="https://tools-static.wmflabs.org/fontcdn/css?family=Raleway" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Mobile sidebar -->
+    <div id="mobile-sidebar" class="ui left sidebar"></div>
+    <div class="pusher">
+      <!-- Mobile header bar -->
+      <header id="mobile-header-bar"></header>
+      <!-- Sidebar -->
+      <aside id="main-sidebar"></aside>
+      <aside id="secondary-sidebar"></aside>
+      <!-- MAIN -->
+      <!-- Title -->
+      <section id="admin-cover" class="cover">
+        <div class="row">
+          <div class="col-12">
+            <h2>§[admin.create-title]§</h2>
+          </div>
+        </div>
+      </section>
+      <!-- Main Content -->
+      <main id="main-container">
+        <section>
+          <div class="row">
+            <div class="col-12 col-xl-9 my-xl-5">
+              <div id="wrong-glam" class="error-message mb-4" style="display: none">
+                <h3>§[admin.save-error]§</h3>
+                <ul>
+                  <li>§[& admin.save-error-1]§</li>
+                  <li>§[& admin.save-error-2]§</li>
+                  <li>§[& admin.save-error-3]§</li>
+                </ul>
+              </div>
+              <div id="success-glam" class="mb-4" style="display: none">
+                <div class="success-message mb-5">
+                  <h3>§[admin.create-success]§</h3>
+                </div>
+                <div class="text-center">
+                  <a href="/admin/panel">§[admin.view-list]§</a>
+                </div>
+              </div>
+              <form id="new-glam-form" name="new-glam" autocomplete="off">
+                <div class="form-group">
+                  <label for="glamID">§[admin.form-id]§</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="glamID"
+                    placeholder="§[admin.form-id-desc]§"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="glamFullName">§[admin.form-fullname]§</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="glamFullName"
+                    placeholder="§[admin.form-fullname-desc]§"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="glamCategory">§[admin.form-category]§</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="glamCategory"
+                    placeholder="§[admin.form-category-desc]§"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="featuredImageURL">§[admin.form-image]§</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="featuredImageURL"
+                    placeholder="§[admin.form-image-desc]§"
+                    required
+                    autocomplete="off"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="glamPassword">§[admin.form-password]§</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="glamPassword"
+                    placeholder="§[admin.form-password-desc]§"
+                    autocomplete="new-password"
+                  />
+                </div>
+                <button id="create-new-glam-button" class="btn btn-primary">
+                  §[admin.create]§
+                </button>
+              </form>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <!-- SCRIPTS -->
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.1.1/jquery.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.bundle.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.js"
+    ></script>
+    <script type="text/javascript" src="/js/loader.js"></script>
+    <script type="text/javascript" src="/js/new-glam-panel.js"></script>
+  </body>
 </html>

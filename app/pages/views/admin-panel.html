@@ -1,83 +1,124 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>§[messages.glam-tool]§ (Cassandra)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <link
+      rel="stylesheet"
+      href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.css"
+    />
+    <link rel="stylesheet" href="/assets/style/style.css" />
+    <link rel="stylesheet" href="/assets/style/admin-panel.css" />
+  </head>
 
-<head>
-	<title>GLAM stat tool (Cassandra)</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta charset="utf-8">
-	<meta http-equiv="Access-Control-Allow-Origin" content="*" />
-	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.css" />
-	<link rel="stylesheet" href="/assets/style/style.css" />
-	<link rel="stylesheet" href="/assets/style/admin-panel.css" />
-</head>
-
-<body>
-	<!-- Mobile sidebar -->
-	<div id="mobile-sidebar" class="ui left sidebar"></div>
-	<div class="pusher">
-		<!-- Mobile header bar -->
-		<header id="mobile-header-bar"></header>
-		<!-- Sidebar -->
-		<aside id="main-sidebar"></aside>
-		<aside id="secondary-sidebar"></aside>
-		<!-- MAIN -->
-		<!-- Title -->
-		<section id="admin-cover" class="cover">
-			<div class="row">
-				<div class="col-12">
-					<h2>Admin Control Panel</h2>
-				</div>
-			</div>
-		</section>
-		<!-- Main Content -->
-		<main id="main-container">
-			<section>
-				<div class="row">
-					<div class="col-12 mx-auto mt-xl-5 mb-3">
-						<div class="row align-items-center">
-							<div class="col-12 col-lg-8">
-								<h1>List of Glams available in the system</h1>
-								<h6 class="glams-count mt-2">
-									<ul>
-										<li id="total-btn" class="filt-btn active-btn">All (<span class="glam-filter" id="total-glams"></span>)</li> |
-										<li id="running-btn" class="filt-btn">Running (<span class="glam-filter" id="running-glams"></span>)</li> |
-										<li id="pending-btn" class="filt-btn">Pending (<span class="glam-filter" id="pending-glams"></span>)</li> |
-										<li id="paused-btn" class="filt-btn">Paused (<span class="glam-filter" id="paused-glams"></span>)</li> |
-										<li id="failed-btn" class="filt-btn">Failed (<span class="glam-filter" id="failed-glams"></span>)</li>
-									</ul>
-									<span id="admin-help">&#63;</span>
-								</h6>
-								<div id="glam-legend" style="display:none;">
-									<ul>
-										<li><b style="color:#40798C;">RUNNING</b> - tool is collecting data. Everything is fine!</li>
-										<li><b style="color:#5B5B5B;">PENDING</b> - tool is not started yet. It will soon!</li>
-										<li><b style="color:#F7B32B;">PAUSED</b> - tool has been paused from collecting data</li>
-										<li><b style="color:#8C271E;">FAILED</b> - tool tried to collect data, but failed</li>
-									</ul>
-								</div>
-							</div>
-							<div class="col-12 mt-4 mt-xl-0 col-lg-4 text-lg-right">
-								<a id="new-glam-button" href="/admin/new-glam">ADD NEW GLAM</a>
-							</div>
-						</div>
-					</div>
-					<div class="col-12 mx-auto">
-						<div class="row" id="glams-list">
-							<div class="col-12" id="glams-list-unique"></div>
-						</div>
-					</div>
-				</div>
-			</section>
-		</main>
-	</div>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.js"></script>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
-	<script type="text/javascript" src="/js/loader.js"></script>
-	<script type="text/javascript" src="/js/admin-panel.js"></script>
-</body>
-
+  <body>
+    <!-- Mobile sidebar -->
+    <div id="mobile-sidebar" class="ui left sidebar"></div>
+    <div class="pusher">
+      <!-- Mobile header bar -->
+      <header id="mobile-header-bar"></header>
+      <!-- Sidebar -->
+      <aside id="main-sidebar"></aside>
+      <aside id="secondary-sidebar"></aside>
+      <!-- MAIN -->
+      <!-- Title -->
+      <section id="admin-cover" class="cover">
+        <div class="row">
+          <div class="col-12">
+            <h2>§[admin.title]§</h2>
+          </div>
+        </div>
+      </section>
+      <!-- Main Content -->
+      <main id="main-container">
+        <section>
+          <div class="row">
+            <div class="col-12 mx-auto mt-xl-5 mb-3">
+              <div class="row align-items-center">
+                <div class="col-12 col-lg-8">
+                  <h1>§[admin.list]§</h1>
+                  <h6 class="glams-count mt-2">
+                    <ul>
+                      <li id="total-btn" class="filt-btn active-btn">
+                        §[admin.all]§ (<span class="glam-filter" id="total-glams"></span>)
+                      </li>
+                      |
+                      <li id="running-btn" class="filt-btn">
+                        §[admin.running]§ (<span class="glam-filter" id="running-glams"></span>)
+                      </li>
+                      |
+                      <li id="pending-btn" class="filt-btn">
+                        §[admin.pending]§ (<span class="glam-filter" id="pending-glams"></span>)
+                      </li>
+                      |
+                      <li id="paused-btn" class="filt-btn">
+                        §[admin.paused]§ (<span class="glam-filter" id="paused-glams"></span>)
+                      </li>
+                      |
+                      <li id="failed-btn" class="filt-btn">
+                        §[admin.failed]§ (<span class="glam-filter" id="failed-glams"></span>)
+                      </li>
+                    </ul>
+                    <span id="admin-help">&#63;</span>
+                  </h6>
+                  <div id="glam-legend" style="display: none">
+                    <ul>
+                      <li>
+                        <b style="color: #40798c">§[admin.running-cap]§</b> - §[admin.running-desc]§
+                      </li>
+                      <li>
+                        <b style="color: #5b5b5b">§[admin.pending-cap]§</b> - §[admin.pending-desc]§
+                      </li>
+                      <li>
+                        <b style="color: #f7b32b">§[admin.paused-cap]§</b> - §[admin.paused-desc]§
+                      </li>
+                      <li>
+                        <b style="color: #8c271e">§[admin.failed-cap]§</b> - §[admin.failed-desc]§
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-12 mt-4 mt-xl-0 col-lg-4 text-lg-right">
+                  <a id="new-glam-button" href="/admin/new-glam">§[admin.add-new]§</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 mx-auto">
+              <div class="row" id="glams-list">
+                <div class="col-12" id="glams-list-unique"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.1.1/jquery.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.bundle.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"
+    ></script>
+    <script type="text/javascript" src="/js/loader.js"></script>
+    <script type="text/javascript" src="/js/admin-panel.js"></script>
+  </body>
 </html>
