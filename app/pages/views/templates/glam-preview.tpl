@@ -2,7 +2,7 @@
   <div class="info">
     <div class="glam-controls-container">
       <h3 class="status">
-        {{status}}
+        {{statusLoc}}
       </h3>
       <a class="glam-controls edit" href="/admin/edit-glam/{{glamID}}">
         §[admin.edit]§
