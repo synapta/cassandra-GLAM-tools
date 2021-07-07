@@ -25,26 +25,31 @@ $(function() {
             obj.lastrun = moment(el.lastrun).format("MMM Do YY");
           }
           obj.status = el.status;
+
           switch (obj.status) {
             case "running":
               running++;
               obj.command = "§[admin.pause]§";
+              obj.statusLoc = "§[admin.running]§";
               obj.paused = false;
               break;
             case "pending":
               pending++;
               obj.command = "§[admin.pause]§";
+              obj.statusLoc = "§[admin.pending]§";
               obj.paused = false;
               break;
             case "paused":
               paused++;
               obj.command = "§[admin.restart]§";
               obj.paused = true;
+              obj.statusLoc = "§[admin.paused]§";
               break;
             case "failed":
               failed++;
               obj.command = "§[admin.retry]§";
               obj.paused = true;
+              obj.statusLoc = "§[admin.failed]§";
               break;
           }
           // if (isEven(idx)) {
