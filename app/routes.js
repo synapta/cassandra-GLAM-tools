@@ -98,7 +98,7 @@ module.exports = function (app, apicache) {
     i18n.sendFile(req, res, __dirname + '/pages/views/new-glam.html');
   });
 
-  app.get('/admin/edit-glam/:id', apicache("1 hour"), function (req, res) {
+  app.get('/admin/edit-glam/:id', function (req, res) {
     let glam = config.glams[req.params.id];
     if (glam !== undefined) {
       i18n.sendFile(req, res, __dirname + '/pages/views/edit-glam.html');
@@ -135,7 +135,7 @@ module.exports = function (app, apicache) {
     }
   });
 
-  app.get("/:id/category-network/:name?", apicache("1 hour"), function (req, res) {
+  app.get("/:id/category-network/:name?", function (req, res) {
     let glam = config.glams[req.params.id];
     if (isValidGlam(glam)) {
       i18n.sendFile(req, res, __dirname + "/pages/views/category-network/index.html");
