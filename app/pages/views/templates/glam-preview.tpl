@@ -22,7 +22,7 @@
       )
     </h2>
     <h2>
-      <span class="bold-span">
+      <span class="bold-span uppercase">
         §[admin.cat]§:
       </span>
       <i>
@@ -31,7 +31,7 @@
     </h2>
     {{#if lastrun}}
       <h2>
-        <span class="bold-span">
+        <span class="bold-span uppercase">
           §[admin.lastrun]§:
         </span>
         {{lastrun}}
