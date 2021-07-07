@@ -1,258 +1,325 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>§[messages.glam-tool]§ (Cassandra)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <link
+      rel="stylesheet"
+      href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.css"
+    />
+    <link rel="stylesheet" href="/assets/style/style.css" />
+    <base id="basebase" href="" />
+    <style>
+      body {
+        height: 100%;
+        flex-direction: column;
+        min-height: 100vh;
+        display: flex;
+      }
+    </style>
+  </head>
 
-<head>
-	<title>GLAM stat tool (Cassandra)</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta charset="utf-8">
-	<meta http-equiv="Access-Control-Allow-Origin" content="*" />
-	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.css" />
-	<link rel="stylesheet" href="/assets/style/style.css" />
-	<base id="basebase" href="" />
-	<style>
-		body {
-				height: 100%;
-				flex-direction: column;
-				min-height: 100vh;
-				display: flex;
-			}
-		</style>
-</head>
-
-<body>
-	<!-- Mobile sidebar -->
-	<div id="mobile-sidebar" class="ui left sidebar"></div>
-	<div class="pusher">
-		<!-- Mobile header bar -->
-		<header id="mobile-header-bar"></header>
-		<!-- Sidebar -->
-		<aside id="main-sidebar"></aside>
-		<aside id="secondary-sidebar"></aside>
-		<!-- MAIN -->
-		<!-- Title -->
-		<section id="cover" class="cover">
-			<div id="cover-overlay"></div>
-			<div class="row w-100 py-4 glam-title-container">
-				<div class="col-12 col-lg-7 glam-title-section">
-					<h5>INSTITUTION</h5>
-					<div class="glam-title-desc">
-						<h1 class="glamName"></h1>
-					</div>
-				</div>
-				<div class="col-12 col-lg-3 glam-title-section">
-					<h5>Category in Commons</h5>
-					<div class="glam-title-desc">
-						<a id="cat_url" target="_blank"></a>
-					</div>
-				</div>
-				<div class="col-12 col-lg-2 glam-title-section">
-					<h5>Total media</h5>
-					<div class="glam-title-desc">
-						<h2 id="totalMediaNum"></h2>
-					</div>
-				</div>
-			</div>
-		</section>
-		<!-- Content -->
-		<main id="main-container">
-			<section>
-				<div class="row">
-					<div class="col-12">
-						<div class="row justify-content-center">
-							<div class="col-xs-4 col-sm-3">
-								<div class="chart-preview">
-									<div class="chart-preview-inner">
-										<div class="chart-preview-front">
-											<a style="width:80px;" href="category-network"><img class="chart-logo"src="/assets/img/category-network.svg" alt="Categroy Network"></a>
-											<div class="chart-separator">
-												<hr>
-												<h5>CHART
-													<span class="get-chart-info">&#8505;</span>
-												</h5>
-											</div>
-											<h1 class="chart-name">CATEGORY NETWORK</h1>
-											<div class="chart-buttons">
-												<a class="chart-link" href="category-network">VIEW</a>
-											</div>
-										</div>
-										<div class="chart-preview-back">
-											<span class="close-chart-info">&times</span>
-											<div class="chart-info">
-												<p><i>Category network</i> is a <b>GRAPH CHART</b> that shows the subcategories' topology
-													belonging to the main category. Each node represents a
-													category, while the edges are the relations.</p>
-													<a style="color:#fff" class="chart-link" href="category-network">VIEW</a>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-xs-4 col-sm-3">
-								<div class="chart-preview">
-									<div class="chart-preview-inner">
-										<div class="chart-preview-front">
-											<a style="width:80px;" href="user-contributions"><img class="chart-logo"src="/assets/img/user-contribution.svg" alt="User Contribution"></a>
-											<div class="chart-separator">
-												<hr>
-												<h5>CHART
-													<span class="get-chart-info">&#8505;</span>
-												</h5>
-											</div>
-											<h1 class="chart-name">USER CONTRIBUTION</h1>
-											<div class="chart-buttons">
-												<a class="chart-link" href="user-contributions">VIEW</a>
-											</div>
-										</div>
-										<div class="chart-preview-back">
-											<span class="close-chart-info">&times</span>
-											<div class="chart-info">
-												<p><i>Users contribution</i> is a <b>BAR CHART</b> that
-													shows the number of uploads during time. Here you can
-													study if the contribution pattern is well
-													distributed or if it's composed by spikes.</p>
-													<a style="color:#fff" class="chart-link" href="user-contributions">VIEW</a>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-xs-4 col-sm-3">
-								<div class="chart-preview">
-									<div class="chart-preview-inner">
-										<div class="chart-preview-front">
-											<a style="width:80px;" href="usage"><img class="chart-logo"src="/assets/img/usage.svg" alt="Usage"></a>
-											<div class="chart-separator">
-												<hr>
-												<h5>CHART
-													<span class="get-chart-info">&#8505;</span>
-												</h5>
-											</div>
-											<h1 class="chart-name">USAGE</h1>
-											<div class="chart-buttons">
-												<a class="chart-link" href="usage">VIEW</a>
-											</div>
-										</div>
-										<div class="chart-preview-back">
-											<span class="close-chart-info">&times</span>
-											<div class="chart-info">
-												<p>This chart shows the <i>usage</i> of the media of the
-													main category in Wikimedia projects.</p>
-													<a style="color:#fff" class="chart-link" href="usage">VIEW</a>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="row justify-content-center">
-							<div class="col-xs-4 col-sm-3">
-								<div class="chart-preview">
-									<div class="chart-preview-inner">
-										<div class="chart-preview-front">
-											<a style="width:80px;" href="page-views"><img class="chart-logo"src="/assets/img/page-views.svg" alt="Page Views"></a>
-											<div class="chart-separator">
-												<hr>
-												<h5>CHART
-													<span class="get-chart-info">&#8505;</span>
-												</h5>
-											</div>
-											<h1 class="chart-name">VIEWS</h1>
-											<div class="chart-buttons">
-												<a class="chart-link" href="page-views">VIEW</a>
-											</div>
-										</div>
-										<div class="chart-preview-back">
-											<span class="close-chart-info">&times</span>
-											<div class="chart-info">
-												<p><i>Views</i> is a <b>LINE CHART</b> that
-													shows the sum of the views for the files thats belong
-													to the main category with a 24h span.</p>
-													<a style="color:#fff" class="chart-link" href="page-views">VIEW</a>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-xs-4 col-sm-3">
-								<div class="chart-preview">
-									<div class="chart-preview-inner">
-										<div class="chart-preview-front">
-											<a style="width:80px;" href="recommender"><img class="chart-logo"src="/assets/img/suggestion.svg" alt="SUGGESTIONS"></a>
-											<div class="chart-separator">
-												<hr>
-												<h5>CHART
-													<span class="get-chart-info">&#8505;</span>
-												</h5>
-											</div>
-											<h1 class="chart-name">SUGGESTIONS</h1>
-											<div class="chart-buttons">
-												<a class="chart-link" href="recommender">VIEW</a>
-											</div>
-										</div>
-										<div class="chart-preview-back">
-											<span class="close-chart-info">&times</span>
-											<div class="chart-info">
-												<p>This page shows some unused files with links to Wikidata and Wikipedia pages where they can be used.</p>
-													<a style="color:#fff" class="chart-link" href="recommender">VIEW</a>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-xs-4 col-sm-3">
-								<div class="chart-preview">
-									<div class="chart-preview-inner">
-										<div class="chart-preview-front">
-											<a style="width:80px;" href="dashboard"><img class="chart-logo"src="/assets/img/metabase.svg" alt="DASHBOARD"></a>
-											<div class="chart-separator">
-												<hr>
-												<h5>CHART
-													<span class="get-chart-info">&#8505;</span>
-												</h5>
-											</div>
-											<h1 class="chart-name">DASHBOARD</h1>
-											<div class="chart-buttons">
-												<a class="chart-link" href="dashboard">VIEW</a>
-											</div>
-										</div>
-										<div class="chart-preview-back">
-											<span class="close-chart-info">&times</span>
-											<div class="chart-info">
-												<p>This page shows a dashboard with different metrics summarizing the impact of the images.</p>
-													<a style="color:#fff" class="chart-link" href="dashboard">VIEW</a>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-12 col-xl-3 mt-5"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-<!--				<form class="form-inline search-form" onsubmit="searchFiles()">-->
-				<div id="searchFilesInputForm" class="search-form"
-						 data-container="body" data-toggle="popover" data-placement="top"
-						 data-content="Enter at least 3 characters">
-					<label for="searchFilesInput">Search files</label>
-					<input id="searchFilesInput" class="form-control" type="text" placeholder="Search" aria-label="Search" onkeypress="searchFiles()" >
-					<button class="btn btn-rounded search-btn" type="submit" onclick="searchFiles(true)">
-						<img src="/assets/img/search-24px.svg"/>
-					</button>
-				</div>
-			</section>
-		</main>
-	</div>
-	<div class="futovac"></div>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.js"></script>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
-	<script type="text/javascript" src="/js/loader.js"></script>
-	<script type="text/javascript" src="/assets/scripts/utils.js"></script>
-	<script>
-		setCategory();
-		fixBaseUrl();
-	</script>
-</body>
-
+  <body>
+    <!-- Mobile sidebar -->
+    <div id="mobile-sidebar" class="ui left sidebar"></div>
+    <div class="pusher">
+      <!-- Mobile header bar -->
+      <header id="mobile-header-bar"></header>
+      <!-- Sidebar -->
+      <aside id="main-sidebar"></aside>
+      <aside id="secondary-sidebar"></aside>
+      <!-- MAIN -->
+      <!-- Title -->
+      <section id="cover" class="cover">
+        <div id="cover-overlay"></div>
+        <div class="row w-100 py-4 glam-title-container">
+          <div class="col-12 col-lg-7 glam-title-section">
+            <h5 class="uppercase">§[messages.institution]§</h5>
+            <div class="glam-title-desc">
+              <h1 class="glamName"></h1>
+            </div>
+          </div>
+          <div class="col-12 col-lg-3 glam-title-section">
+            <h5>§[messages.category-in-commons]§</h5>
+            <div class="glam-title-desc">
+              <a id="cat_url" target="_blank"></a>
+            </div>
+          </div>
+          <div class="col-12 col-lg-2 glam-title-section">
+            <h5>§[messages.total-media]§</h5>
+            <div class="glam-title-desc">
+              <h2 id="totalMediaNum"></h2>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Content -->
+      <main id="main-container">
+        <section>
+          <div class="row">
+            <div class="col-12">
+              <div class="row justify-content-center">
+                <div class="col-xs-4 col-sm-3">
+                  <div class="chart-preview">
+                    <div class="chart-preview-inner">
+                      <div class="chart-preview-front">
+                        <a style="width: 80px" href="category-network"
+                          ><img
+                            class="chart-logo"
+                            src="/assets/img/category-network.svg"
+                            alt="§[messages.category-network]§"
+                        /></a>
+                        <div class="chart-separator">
+                          <hr />
+                          <h5 class="uppercase">
+                            §[messages.chart]§
+                            <span class="get-chart-info">&#8505;</span>
+                          </h5>
+                        </div>
+                        <h1 class="chart-name uppercase">§[messages.category-network]§</h1>
+                        <div class="chart-buttons">
+                          <a class="chart-link uppercase" href="category-network"
+                            >§[messages.view]§</a
+                          >
+                        </div>
+                      </div>
+                      <div class="chart-preview-back">
+                        <span class="close-chart-info">&times</span>
+                        <div class="chart-info">
+                          <p>§[&messages.chart-info-category-network]§</p>
+                          <a style="color: #fff" class="chart-link uppercase" href="category-network"
+                            >§[messages.view]§</a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-4 col-sm-3">
+                  <div class="chart-preview">
+                    <div class="chart-preview-inner">
+                      <div class="chart-preview-front">
+                        <a style="width: 80px" href="user-contributions"
+                          ><img
+                            class="chart-logo"
+                            src="/assets/img/user-contribution.svg"
+                            alt="§[messages.user-contributions]§"
+                        /></a>
+                        <div class="chart-separator">
+                          <hr />
+                          <h5 class="uppercase">
+                            §[messages.chart]§
+                            <span class="get-chart-info">&#8505;</span>
+                          </h5>
+                        </div>
+                        <h1 class="chart-name uppercase">§[messages.user-contributions]§</h1>
+                        <div class="chart-buttons">
+                          <a class="chart-link" href="user-contributions">§[messages.view]§</a>
+                        </div>
+                      </div>
+                      <div class="chart-preview-back">
+                        <span class="close-chart-info">&times</span>
+                        <div class="chart-info">
+                          <p>§[&messages.chart-info-user-contributions]§</p>
+                          <a
+                            style="color: #fff"
+                            class="chart-link uppercase"
+                            href="user-contributions"
+                            >§[messages.view]§</a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-4 col-sm-3">
+                  <div class="chart-preview">
+                    <div class="chart-preview-inner">
+                      <div class="chart-preview-front">
+                        <a style="width: 80px" href="usage">
+                          <img class="chart-logo" src="/assets/img/usage.svg" alt="Usage"
+                        /></a>
+                        <div class="chart-separator">
+                          <hr />
+                          <h5 class="uppercase">
+                            §[messages.chart]§
+                            <span class="get-chart-info">&#8505;</span>
+                          </h5>
+                        </div>
+                        <h1 class="chart-name uppercase">§[messages.usage]§</h1>
+                        <div class="chart-buttons">
+                          <a class="chart-link uppercase" href="usage">§[messages.view]§</a>
+                        </div>
+                      </div>
+                      <div class="chart-preview-back">
+                        <span class="close-chart-info">&times</span>
+                        <div class="chart-info">
+                          <p>§[&messages.chart-info-usage]§</p>
+                          <a style="color: #fff" class="chart-link uppercase" href="usage"
+                            >§[messages.view]§</a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row justify-content-center">
+                <div class="col-xs-4 col-sm-3">
+                  <div class="chart-preview">
+                    <div class="chart-preview-inner">
+                      <div class="chart-preview-front">
+                        <a style="width: 80px" href="page-views"
+                          ><img
+                            class="chart-logo"
+                            src="/assets/img/page-views.svg"
+                            alt="§[messages.views]§"
+                        /></a>
+                        <div class="chart-separator">
+                          <hr />
+                          <h5 class="uppercase">
+                            §[messages.chart]§
+                            <span class="get-chart-info">&#8505;</span>
+                          </h5>
+                        </div>
+                        <h1 class="chart-name">VIEWS</h1>
+                        <div class="chart-buttons">
+                          <a class="chart-link uppercase" href="page-views">§[messages.view]§</a>
+                        </div>
+                      </div>
+                      <div class="chart-preview-back">
+                        <span class="close-chart-info">&times</span>
+                        <div class="chart-info">
+                          <p>§[&messages.chart-info-views]§</p>
+                          <a style="color: #fff" class="chart-link uppercase" href="page-views">
+                            §[messages.view]§
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-4 col-sm-3">
+                  <div class="chart-preview">
+                    <div class="chart-preview-inner">
+                      <div class="chart-preview-front">
+                        <a style="width: 80px" href="recommender"
+                          ><img
+                            class="chart-logo"
+                            src="/assets/img/suggestion.svg"
+                            alt="§[messages.recommender]§"
+                        /></a>
+                        <div class="chart-separator">
+                          <hr />
+                          <h5 class="uppercase">
+                            §[messages.chart]§
+                            <span class="get-chart-info">&#8505;</span>
+                          </h5>
+                        </div>
+                        <h1 class="chart-name uppercase">§[messages.recommender]§</h1>
+                        <div class="chart-buttons">
+                          <a class="chart-link uppercase" href="recommender">§[messages.view]§</a>
+                        </div>
+                      </div>
+                      <div class="chart-preview-back">
+                        <span class="close-chart-info">&times</span>
+                        <div class="chart-info">
+                          <p>§[&messages.chart-info-recommender]§</p>
+                          <a style="color: #fff" class="chart-link uppercase" href="recommender">
+                            §[messages.view]§
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-4 col-sm-3">
+                  <div class="chart-preview">
+                    <div class="chart-preview-inner">
+                      <div class="chart-preview-front">
+                        <a style="width: 80px" href="dashboard"
+                          ><img
+                            class="chart-logo"
+                            src="/assets/img/metabase.svg"
+                            alt="§[messages.dashboard]§"
+                        /></a>
+                        <div class="chart-separator">
+                          <hr />
+                          <h5 class="uppercase">
+                            §[messages.chart]§
+                            <span class="get-chart-info">&#8505;</span>
+                          </h5>
+                        </div>
+                        <h1 class="chart-name uppercase">§[messages.dashboard]§</h1>
+                        <div class="chart-buttons">
+                          <a class="chart-link uppercase" href="dashboard">§[messages.view]§</a>
+                        </div>
+                      </div>
+                      <div class="chart-preview-back">
+                        <span class="close-chart-info">&times</span>
+                        <div class="chart-info">
+                          <p>§[&messages.chart-info-dashboard]§</p>
+                          <a style="color: #fff" class="chart-link uppercase" href="dashboard">
+                            §[messages.view]§
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-xl-3 mt-5"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--				<form class="form-inline search-form" onsubmit="searchFiles()">-->
+          <div
+            id="searchFilesInputForm"
+            class="search-form"
+            data-container="body"
+            data-toggle="popover"
+            data-placement="top"
+            data-content="Enter at least 3 characters"
+          >
+            <label for="searchFilesInput">§[messages.search-files]§</label>
+            <input
+              id="searchFilesInput"
+              class="form-control"
+              type="text"
+              placeholder="§[messages.search]§"
+              aria-label="§[messages.search]§"
+              onkeypress="searchFiles()"
+            />
+            <button class="btn btn-rounded search-btn" type="submit" onclick="searchFiles(true)">
+              <img src="/assets/img/search-24px.svg" />
+            </button>
+          </div>
+        </section>
+      </main>
+    </div>
+    <div class="futovac"></div>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.1.1/jquery.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.bundle.min.js"
+    ></script>
+    <script type="text/javascript" src="/js/loader.js"></script>
+    <script type="text/javascript" src="/assets/scripts/utils.js"></script>
+    <script>
+      setCategory();
+      fixBaseUrl();
+    </script>
+  </body>
 </html>
