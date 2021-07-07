@@ -10,7 +10,7 @@
     "semi": "error",
     "id-length": ["error", {
       "min": 2,
-      "exceptions": ["e","h", "i", "j", "k", "l", "d", "x", "y","q","p","t","s","n","w", "a", "b", "c", "g"]
+      "exceptions": ["e","h", "i", "j", "k", "l","m", "d", "x", "y","q","p","t","s","n","w", "a", "b", "c", "g"]
     }],
     "indent": ["error", 2, {
       "SwitchCase": 1,
