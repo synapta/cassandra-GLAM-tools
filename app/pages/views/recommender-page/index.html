@@ -70,20 +70,25 @@
           <br /><br />
           <h5>§[messages.recommendation-approaches]§</h5>
           §[&messages.recommendation-approaches-body]§
-          <br/><br />
+          <br /><br />
           <h5>§[messages.how-to-read]§</h5>
           §[&messages.how-to-read-recommender]§
         </div>
         <div id="resultsSearch" class="w-100"></div>
         <div class="w-100 mt-3">
-          <button id="loadMore" class="btn uppercase" onclick="loadMore()">§[messages.load-more]§</button>
+          <button id="loadMore" class="btn uppercase" onclick="loadMore()">
+            §[messages.load-more]§
+          </button>
         </div>
       </main>
 
       <footer id="chart-page-footer">
         <div>
           <div class="chart-title">
-            <img src="/assets/img/category-network.svg" alt="§[messages.unused-files-suggestions]§" />
+            <img
+              src="/assets/img/category-network.svg"
+              alt="§[messages.unused-files-suggestions]§"
+            />
             <h5 class="uppercase">§[messages.unused-files-suggestions]§</h5>
           </div>
           <div class="commons-category">
@@ -99,6 +104,13 @@
             <h6 id="how_to_read_button" class="uppercase">
               <img src="/assets/img/question-icon.svg" alt="help" />§[messages.help]§
             </h6>
+          </div>
+          <div class="admin-panel">
+            <select
+              name="change-lang"
+              onchange="changeLang(event)"
+              id="change-lang-select"
+            ></select>
           </div>
         </div>
       </footer>
@@ -133,6 +145,7 @@
       type="text/javascript"
       src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"
     ></script>
+    <script type="text/javascript" src="/js/language.js"></script>
     <script type="text/javascript" src="/assets/scripts/utils.js"></script>
     <script type="text/javascript" src="/assets/scripts/custom-selector.js"></script>
     <script type="text/javascript" src="/views/recommender-page/functions.js"></script>

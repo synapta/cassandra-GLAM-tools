@@ -1,47 +1,61 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>GLAM stat tool (Cassandra)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <link
+      rel="stylesheet"
+      href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.css"
+    />
+    <link rel="stylesheet" href="/assets/style/style.css" />
+    <link rel="stylesheet" href="/assets/style/homepage.css" />
+  </head>
 
-<head>
-	<title>GLAM stat tool (Cassandra)</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta charset="utf-8">
-	<meta http-equiv="Access-Control-Allow-Origin" content="*" />
-	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.css" />
-	<link rel="stylesheet" href="/assets/style/style.css" />
-	<link rel="stylesheet" href="/assets/style/homepage.css" />
-</head>
-
-<body>
-	<div id="mobile-sidebar" class="ui left sidebar"></div>
-	<div class="pusher">
-		<header id="mobile-header-bar"></header>
-		<aside id="main-sidebar"></aside>
-		<aside id="secondary-sidebar"></aside>
-		<!-- Title -->
-		<section id="home-cover" class="cover">
-			<div class="row">
-				<div class="col-12 col-xl-7">
-					<h2>§[messages.home-slogan]§</h2>
-				</div>
-			</div>
-		</section>
-		<main id="main-container">
-			<!-- Main Content -->
-			<section>
-				<div class="row">
-					<div id="photos-1" class="col-12 col-xl-4"></div>
-					<div id="photos-2" class="col-12 col-xl-4"></div>
-					<div id="photos-3" class="col-12 col-xl-4"></div>
-				</div>
-			</section>
-		</main>
-	</div>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.js"></script>
-	<script type="text/javascript" src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
-	<script type="text/javascript" src="/js/loader.js"></script>
-	<script type="text/javascript" src="/js/functions.js"></script>
-</body>
-
+  <body>
+    <div id="mobile-sidebar" class="ui left sidebar"></div>
+    <div class="pusher">
+      <header id="mobile-header-bar"></header>
+      <aside id="main-sidebar"></aside>
+      <aside id="secondary-sidebar"></aside>
+      <!-- Title -->
+      <section id="home-cover" class="cover">
+        <div class="row">
+          <div class="col-12 col-xl-7">
+            <h2>§[messages.home-slogan]§</h2>
+          </div>
+        </div>
+      </section>
+      <main id="main-container">
+        <!-- Main Content -->
+        <section>
+          <div class="row">
+            <div id="photos-1" class="col-12 col-xl-4"></div>
+            <div id="photos-2" class="col-12 col-xl-4"></div>
+            <div id="photos-3" class="col-12 col-xl-4"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.1.1/jquery.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"
+    ></script>
+    <script type="text/javascript" src="/js/language.js"></script>
+    <script type="text/javascript" src="/js/loader.js"></script>
+    <script type="text/javascript" src="/js/functions.js"></script>
+  </body>
 </html>

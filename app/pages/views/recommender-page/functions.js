@@ -1,6 +1,8 @@
+const url = window.location.href.toString();
+const urlSplit = url.split("/");
 const glam = window.location.href.toString().split("/")[3];
 const db = window.location.href.toString().split("/")[3];
-const query = window.location.href.toString().split("/")[5];
+const query = urlSplit[5] && !urlSplit[5].includes("?lang") ? urlSplit[5] : "";
 let limit = 5;
 let stopScroll = false;
 let category;
@@ -45,10 +47,12 @@ function getWikiDataUrl(ids) {
 }
 
 function getUrl() {
-  const urlSplit = window.location.href.toString().split("/");
-  let query = "?limit=" + limit;
+  const url = window.location.href.toString();
+  const urlSplit = url.split("/");
   const db = urlSplit[3];
-  category = urlSplit[5];
+  const category = urlSplit[5] && !urlSplit[5].includes("?lang") ? urlSplit[5] : "";
+  let query = "?limit=" + limit;
+
   if (category) {
     query = query + "&cat=" + category;
   }

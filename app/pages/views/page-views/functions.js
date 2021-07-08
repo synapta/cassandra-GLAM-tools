@@ -7,17 +7,18 @@ let ACTIVE_ITEM_ID;
 let SUBCATEGORY;
 
 function getUrlAll() {
-  const db = window.location.href.toString().split("/")[3];
-  const groupby = $("#groupby-select").val();
-  const subcat = window.location.href.toString().split("/")[5];
+  const url = window.location.href.toString();
+  const urlSplit = url.split("/");
+  const db = urlSplit[3];
+  const subcat = urlSplit[5] && !urlSplit[5].includes("?lang") ? urlSplit[5] : "";
   const subcatQ = subcat ? "&cat=" + subcat : "";
-  return "/api/" + db + "/views?groupby=" + groupby + subcatQ;
+  const groupBy = $("#groupby-select").val();
+  return "/api/" + db + "/views?groupby=" + groupBy + subcatQ;
 }
 
 function getUrlDataset() {
   const groupby = $("#groupby-select").val();
   const db = window.location.href.toString().split("/")[3];
-  // console.log(groupby);
   return "/api/" + db + "/views/dataset/" + groupby;
 }
 
@@ -27,8 +28,10 @@ function getFileName(subcat) {
 }
 
 function getUrlStats() {
-  var db = window.location.href.toString().split("/")[3];
-  const subcat = window.location.href.toString().split("/")[5];
+  const url = window.location.href.toString();
+  const urlSplit = url.split("/");
+  const db = urlSplit[3];
+  const subcat = urlSplit[5] && !urlSplit[5].includes("?lang") ? urlSplit[5] : "";
   const subcatQ = subcat ? "?cat=" + subcat : "";
   return "/api/" + db + "/views/stats" + subcatQ;
 }
@@ -38,20 +41,27 @@ function getUrlFiles() {
   return "/api/" + db + "/views/files";
 }
 
-function getUrlSidebar() {
-  var db = window.location.href.toString().split("/")[3];
-  return "/api/" + db + "/views/sidebar";
-}
+// function getUrlSidebar() {
+//   var db = window.location.href.toString().split("/")[3];
+//   return "/api/" + db + "/views/sidebar";
+// }
 
 function getUrlSidebarLimit(limit) {
   let l = Number.isInteger(limit) ? "?limit=" + limit : "";
-  const db = window.location.href.toString().split("/")[3];
-  const subcat = window.location.href.toString().split("/")[5];
+  const url = window.location.href.toString();
+  const urlSplit = url.split("/");
+  const db = urlSplit[3];
+  const subcat = urlSplit[5] && !urlSplit[5].includes("?lang") ? urlSplit[5] : "";
   let query = subcat ? (l ? l + "&cat=" + subcat : "?cat=" + subcat) : l;
   return "/api/" + db + "/views/sidebar" + query;
 }
 
 function getUrlSidebar(limit, sort) {
+  const url = window.location.href.toString();
+  const urlSplit = url.split("/");
+  const db = urlSplit[3];
+  const subcat = urlSplit[5] && !urlSplit[5].includes("?lang") ? urlSplit[5] : "";
+
   let l = Number.isInteger(limit) ? "?limit=" + limit : "";
   let s;
   if (sort === "views" || sort === "median" || sort === "name") {
@@ -59,8 +69,7 @@ function getUrlSidebar(limit, sort) {
   } else {
     s = "";
   }
-  const db = window.location.href.toString().split("/")[3];
-  const subcat = window.location.href.toString().split("/")[5];
+
   let query = subcat ? (l + s ? l + s + "&cat=" + subcat : "?cat=" + subcat) : l + s;
   query = query ? query + "&page=0" : "?page=0";
   return "/api/" + db + "/views/sidebar" + query;
@@ -76,9 +85,11 @@ function getUrlSidebarPaginated(page, sort) {
   if (!Number.isInteger(page)) {
     console.error("Invalid page number", page);
   } else {
-    const db = window.location.href.toString().split("/")[3];
-    const subcat = window.location.href.toString().split("/")[5];
-    let subcatQ = subcat ? "&cat=" + subcat : "";
+    const url = window.location.href.toString();
+    const urlSplit = url.split("/");
+    const db = urlSplit[3];
+    const subcat = urlSplit[5] && !urlSplit[5].includes("?lang") ? urlSplit[5] : "";
+    const subcatQ = subcat ? "&cat=" + subcat : "";
     return "/api/" + db + "/views/sidebar?page=" + page + s + subcatQ;
   }
 }
@@ -89,7 +100,7 @@ function sidebar(type) {
     RENDERING = true;
     // save total
     TOTAL_IMAGES = stats.total;
-    // get tempalte
+    // get template
     $.get("/views/page-views/tpl/views.tpl", function (tpl) {
       $.getJSON(getUrlSidebar(FIRST_CALL_LIMIT, type), function (data) {
         // scroll up

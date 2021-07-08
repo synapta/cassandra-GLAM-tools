@@ -92,7 +92,11 @@ $(function () {
 
   function getCategories() {
     let categories = [];
-    const urlSplit = window.location.href.toString().split("/");
+    const currentUrl = window.location.href.toString();
+    const urlSplit = currentUrl.split("/");
+    if (currentUrl.includes("?lang=")) {
+      urlSplit.pop();
+    }
     const db = urlSplit[3];
     let url = "/api/" + db + "/category";
 

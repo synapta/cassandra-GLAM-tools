@@ -18,9 +18,11 @@ function nFormatter(num) {
 }
 
 function setCategory(cb) {
-  const db = window.location.href.toString().split("/")[3];
-  let subcat = window.location.href.toString().split("/")[5];
-  const page = window.location.href.toString().split("/")[4];
+  const url = window.location.href.toString();
+  const urlSplit = url.split("/");
+  const db = urlSplit[3];
+  let subcat = urlSplit[5] && !urlSplit[5].includes("?lang") ? urlSplit[5] : "";
+  const page = urlSplit[4];
   const jsonUrl = "/api/" + db;
   const catUrl = $("#cat_url");
 
@@ -54,9 +56,9 @@ function how_to_read() {
 function switch_page() {
   const baseurl = document.location.href;
   const h = baseurl.split("/");
-  const h_1 = h[h.length - 1];
-  const home = baseurl.replace(h_1, "");
-
+  const h_1 = baseurl.includes("?lang") ? h[h.length - 2] : h[h.length - 1];
+  const home = h.splice(0,4).join("/");
+  console.log(baseurl,home);
   $("#switch_page").change(function () {
     const page = $(this).val();
     const url = home + page;

@@ -2,16 +2,20 @@ let ACTIVE_ITEM_ID;
 let SUBCATEGORY;
 
 function getUrl() {
-  let db = window.location.href.toString().split("/")[3];
-  let subcat = window.location.href.toString().split("/")[5];
+  const url = window.location.href.toString();
+  const urlSplit = url.split("/");
+  const db = urlSplit[3];
+  const subcat = urlSplit[5] && !urlSplit[5].includes("?lang") ? urlSplit[5] : "";
   let groupby = $("#groupby-select").val();
   let query = subcat ? "?groupby=" + groupby + "&cat=" + subcat : "?groupby=" + groupby;
   return "/api/" + db + "/file/upload-date" + query;
 }
 
 function getUrlDataset() {
-  let db = window.location.href.toString().split("/")[3];
-  let subcat = window.location.href.toString().split("/")[5];
+  const url = window.location.href.toString();
+  const urlSplit = url.split("/");
+  const db = urlSplit[3];
+  const subcat = urlSplit[5] && !urlSplit[5].includes("?lang") ? urlSplit[5] : "";
   let groupby = $("#groupby-select").val();
   let query = subcat ? "?groupby=" + groupby + "&cat=" + subcat : "?groupby=" + groupby;
   return "/api/" + db + "/file/upload-date/dataset" + query;
@@ -23,8 +27,11 @@ function getFileName(subcat) {
 }
 
 function getUrlAll() {
-  let db = window.location.href.toString().split("/")[3];
-  let subcat = window.location.href.toString().split("/")[5];
+  const url = window.location.href.toString();
+  const urlSplit = url.split("/");
+  const db = urlSplit[3];
+  const subcat = urlSplit[5] && !urlSplit[5].includes("?lang") ? urlSplit[5] : "";
+
   let groupby = $("#groupby-select").val();
   let query = subcat ? "?groupby=" + groupby + "&cat=" + subcat : "?groupby=" + groupby;
   return "/api/" + db + "/file/upload-date-all" + query;

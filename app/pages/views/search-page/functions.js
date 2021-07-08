@@ -1,8 +1,11 @@
 let page = 0;
 let limit = false;
 function search(append) {
-  const db = window.location.href.toString().split("/")[3];
-  const query = window.location.href.toString().split("/")[5];
+  const baseUrl = window.location.href.toString();
+  const urlSplit = baseUrl.split("/");
+  const db = urlSplit[3];
+  const query = urlSplit[5] && !urlSplit[5].includes("?lang") ? urlSplit[5] : "";
+
   const params = "?page=" + page + "&limit=100";
   const url = "/api/" + db + "/search/%25" + query + "%25" + params;
   if (page === 0) {

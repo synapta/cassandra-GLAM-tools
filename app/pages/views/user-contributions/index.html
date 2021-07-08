@@ -131,6 +131,13 @@
               <img src="/assets/img/download-icon.svg" alt="§[messages.download]§" />
             </h6>
           </div>
+          <div class="admin-panel">
+            <select
+              name="change-lang"
+              onchange="changeLang(event)"
+              id="change-lang-select"
+            ></select>
+          </div>
         </div>
       </footer>
     </div>
@@ -161,6 +168,7 @@
       type="text/javascript"
       src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.js"
     ></script>
+    <script type="text/javascript" src="/js/language.js"></script>
     <script type="text/javascript" src="/js/loader.js"></script>
     <script type="text/javascript" src="/assets/scripts/utils.js"></script>
     <script type="text/javascript" src="/assets/scripts/custom-selector.js"></script>

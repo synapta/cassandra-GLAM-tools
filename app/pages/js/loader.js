@@ -13,18 +13,12 @@ function is_touch_device() {
   var query = ["(", prefixes.join("touch-enabled),("), "heartz", ")"].join("");
   return mq(query);
 }
-function changeLang(ev) {
-  console.log(window.location);
-  const selected = ev.currentTarget.value;
-  const url = window.location.href.split("?lang=")[0];
-  const loc = `?lang=${selected}`;
-  console.log(url, loc);
-  window.location = url.endsWith("/") ? `${url}${loc}` : `${url}/${loc}`;
-}
 // Load main sidebar
 $("#main-sidebar").load("/views/templates/sidebar.html", function () {
   // Load secondary sidebar
   $("#secondary-sidebar").load("/views/templates/secondary-sidebar.html", function () {
+    renderChangeLang();
+
     // Fill GLAMS list
     $.get("/api/glams", function (glams) {
       if (glams.length > 0) {
@@ -41,18 +35,6 @@ $("#main-sidebar").load("/views/templates/sidebar.html", function () {
           $("#secondary-sidebar > .institutions-list").append(list_element);
         });
       }
-    });
-
-    console.log("aaaaaaaaaaaa");
-    $.getJSON("/api/languages", function (langs) {
-      const selectLang = $("#change-lang");
-      console.log(selectLang);
-
-      langs.forEach(lang => {
-        const opt = `<option value="${lang.code}" onclick="changeLang(event)">${lang.name}</option>`;
-        console.log(opt);
-        selectLang.append(opt);
-      });
     });
     // Set mouse handler
     $(".institutions-menu")

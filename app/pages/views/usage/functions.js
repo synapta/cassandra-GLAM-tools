@@ -30,8 +30,10 @@ function getSubcategoryTotal() {
 }
 
 function getUrl(limit, sort) {
-  const db = window.location.href.toString().split("/")[3];
-  const subcat = window.location.href.toString().split("/")[5];
+  const url = window.location.href.toString();
+  const urlSplit = url.split("/");
+  const db = urlSplit[3];
+  const subcat = urlSplit[5] && !urlSplit[5].includes("?lang") ? urlSplit[5] : "";
   let l = Number.isInteger(limit) ? "?limit=" + limit : "";
   let s;
   if (sort === "usage" || sort === "projects" || sort === "name") {
@@ -54,17 +56,21 @@ function getUrlPaginated(page, sort) {
   if (!Number.isInteger(page)) {
     console.error("Invalid page number", page);
   } else {
-    const db = window.location.href.toString().split("/")[3];
-    const subcat = window.location.href.toString().split("/")[5];
-    let subcatQ = subcat ? "&cat=" + subcat : "";
+    const url = window.location.href.toString();
+    const urlSplit = url.split("/");
+    const db = urlSplit[3];
+    const subcat = urlSplit[5] && !urlSplit[5].includes("?lang") ? urlSplit[5] : "";
+    const subcatQ = subcat ? "&cat=" + subcat : "";
     return "/api/" + db + "/usage?page=" + page + s + subcatQ;
   }
 }
 
 function getUrlDataset() {
-  const db = window.location.href.toString().split("/")[3];
-  const subcat = window.location.href.toString().split("/")[5];
-  let subcatQ = subcat ? "?cat=" + subcat : "";
+  const url = window.location.href.toString();
+  const urlSplit = url.split("/");
+  const db = urlSplit[3];
+  const subcat = urlSplit[5] && !urlSplit[5].includes("?lang") ? urlSplit[5] : "";
+  const subcatQ = subcat ? "?cat=" + subcat : "";
   return "/api/" + db + "/usage/dataset" + subcatQ;
 }
 
@@ -73,15 +79,19 @@ function getFileName(subcat) {
 }
 
 function getUrlAll() {
-  const db = window.location.href.toString().split("/")[3];
-  const subcat = window.location.href.toString().split("/")[5];
-  let subcatQ = subcat ? "?cat=" + subcat : "";
+  const url = window.location.href.toString();
+  const urlSplit = url.split("/");
+  const db = urlSplit[3];
+  const subcat = urlSplit[5] && !urlSplit[5].includes("?lang") ? urlSplit[5] : "";
+  const subcatQ = subcat ? "?cat=" + subcat : "";
   return "/api/" + db + "/usage/stats" + subcatQ;
 }
 
 function getUrlTop20() {
-  const db = window.location.href.toString().split("/")[3];
-  const subcat = window.location.href.toString().split("/")[5];
+  const url = window.location.href.toString();
+  const urlSplit = url.split("/");
+  const db = urlSplit[3];
+  const subcat = urlSplit[5] && !urlSplit[5].includes("?lang") ? urlSplit[5] : "";
   let subcatQ = subcat ? "?cat=" + subcat : "";
   return "/api/" + db + "/usage/top" + subcatQ;
 }

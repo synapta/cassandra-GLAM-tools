@@ -19,12 +19,12 @@ let h_1 = h[h.length - 2];
 let home = baseurl.replace(h_1 + "/", "");
 
 function getUrl() {
-  const urlSplit = window.location.href.toString().split("/");
+  const url = window.location.href.toString();
+  const urlSplit = url.split("/");
   let query = UNUSED_MODE ? "?unused=true" : "";
   const db = urlSplit[3];
-  let category = urlSplit[urlSplit.length - 1]
-    ? urlSplit[urlSplit.length - 1]
-    : urlSplit[urlSplit.length - 2];
+  const pos = url.includes("?lang") ? urlSplit.length - 2 : urlSplit.length - 1;
+  let category = urlSplit[pos];
   if (category && category !== "category-network") {
     subcategoryName = decodeURI(category);
     query = UNUSED_MODE ? "?unused=true&cat=" + subcategoryName : "?cat=" + subcategoryName;
