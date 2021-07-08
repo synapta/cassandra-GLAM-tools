@@ -25,9 +25,22 @@
       <aside id="secondary-sidebar"></aside>
       <!-- Title -->
       <section id="home-cover" class="cover">
-        <div class="row">
-          <div class="col-12 col-xl-7">
+        <div class="row justify-content-between">
+          <div class="col-11 col-xl-7">
             <h2>§[messages.home-slogan]§</h2>
+          </div>
+          <div class="col-1 col-xl-2">
+            <div class="language-selector">
+              <!-- <div > -->
+                <select
+								class="language-selector-toggle"
+                  name="change-lang"
+                  onchange="changeLang(event)"
+                  id="change-lang-select"
+                >
+								</select>
+              <!-- </div> -->
+            </div>
           </div>
         </div>
       </section>
