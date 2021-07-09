@@ -82,6 +82,14 @@
             </div>
           </div>
         </div>
+        <div class="language-selector">
+          <select
+            class="language-selector-toggle"
+            name="change-lang"
+            onchange="changeLang(event)"
+            id="change-lang-select"
+          ></select>
+        </div>
       </header>
 
       <main id="visualizations">
@@ -185,13 +193,6 @@
               <h6 id="download_dataset" class="uppercase">
                 <img src="/assets/img/download-icon.svg" alt="§[messages.download]§" />
               </h6>
-            </div>
-            <div class="admin-panel">
-              <select
-                name="change-lang"
-                onchange="changeLang(event)"
-                id="change-lang-select"
-              ></select>
             </div>
           </div>
         </footer>

@@ -56,6 +56,14 @@
             <img src="/assets/img/search-24px.svg" />
           </button>
         </div>
+        <div class="language-selector">
+          <select
+            class="language-selector-toggle"
+            name="change-lang"
+            onchange="changeLang(event)"
+            id="change-lang-select"
+          ></select>
+        </div>
       </header>
 
       <main id="visualizations">
@@ -79,9 +87,6 @@
               <img class="link-out-big" src="/assets/img/link-out.svg" alt="§[messages.go]§" />
             </h2>
           </div>
-        </div>
-        <div class="admin-panel">
-          <select name="change-lang" onchange="changeLang(event)" id="change-lang-select"></select>
         </div>
       </footer>
     </div>

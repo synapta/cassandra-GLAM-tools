@@ -56,6 +56,14 @@
             </div>
           </div>
         </div>
+        <div class="language-selector">
+          <select
+            class="language-selector-toggle"
+            name="change-lang"
+            onchange="changeLang(event)"
+            id="change-lang-select"
+          ></select>
+        </div>
       </header>
 
       <main id="visualizations">
@@ -104,13 +112,6 @@
             <h6 id="how_to_read_button" class="uppercase">
               <img src="/assets/img/question-icon.svg" alt="help" />§[messages.help]§
             </h6>
-          </div>
-          <div class="admin-panel">
-            <select
-              name="change-lang"
-              onchange="changeLang(event)"
-              id="change-lang-select"
-            ></select>
           </div>
         </div>
       </footer>

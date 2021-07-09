@@ -29,9 +29,17 @@
       <!-- MAIN -->
       <!-- Title -->
       <section id="admin-cover" class="cover">
-        <div class="row">
-          <div class="col-12">
+        <div class="justify-content-between row w-100">
+          <div class="col-11">
             <h2>§[admin.title]§</h2>
+          </div>
+          <div class="language-selector col-1">
+            <select
+              class="language-selector-toggle"
+              name="change-lang"
+              onchange="changeLang(event)"
+              id="change-lang-select"
+            ></select>
           </div>
         </div>
       </section>

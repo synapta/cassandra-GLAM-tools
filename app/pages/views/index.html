@@ -58,21 +58,18 @@
             </div>
           </div>
         </div>
-        <div class="language-selector">
-            <!-- <div > -->
-              <select
-              class="language-selector-toggle"
-                name="change-lang"
-                onchange="changeLang(event)"
-                id="change-lang-select"
-              >
-              </select>
-            <!-- </div> -->
-          </div>
       </section>
       <!-- Content -->
       <main id="main-container">
         <section>
+          <div class="language-selector offset-lg-10 offset-xl-11">
+            <select
+              class="language-selector-toggle"
+              name="change-lang"
+              onchange="changeLang(event)"
+              id="change-lang-select"
+            ></select>
+          </div>
           <div class="row">
             <div class="col-12">
               <div class="row justify-content-center">
@@ -157,7 +154,10 @@
                     <div class="chart-preview-inner">
                       <div class="chart-preview-front">
                         <a style="width: 80px" href="usage">
-                          <img class="chart-logo" src="/assets/img/usage.svg" alt="§[messages.usage]§"
+                          <img
+                            class="chart-logo"
+                            src="/assets/img/usage.svg"
+                            alt="§[messages.usage]§"
                         /></a>
                         <div class="chart-separator">
                           <hr />

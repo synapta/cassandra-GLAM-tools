@@ -32,15 +32,14 @@
 
 #topbar {
     background-color: var(--main);
-    font-size: 1em;
+    font-size: 0.9em;
     line-height: 1 !important;
-
 }
 
 #topbar .breadcrumb-separator {
     color: #fff;
     margin: 0 1rem;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 100;
 }
 
@@ -57,11 +56,11 @@
     margin: 0 .5rem 0 0;
     color: #fff;
     font-weight: 100;
-    font-size: 0.8rem;
+    font-size: 0.8em;
 }
 
 #topbar h2 {
-    font-size: 1em;
+    font-size: 0.9em;
     margin: 0;
 }
 

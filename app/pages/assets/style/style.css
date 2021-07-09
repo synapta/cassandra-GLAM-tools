@@ -244,50 +244,50 @@ h2 {
 }
 
 .language-selector {
-  /* color: var(--main);
-  border: none;
-  transition: all 0.5s;
-  background: var(--bg-gray);
-  font-size: 1rem;
-  padding: 0.3rem;
-  /* appearance: none; */
-  /* -webkit-appearance: unset; */
-  /* padding: 0 1rem; */
-
-  /* cursor: pointer;  */
-  display: inline-flex;
+  /* display: inline-flex;
   justify-content: space-between;
-  vertical-align: baseline;
+  vertical-align: baseline; */
+  background: var(--bg-gray);
+  border: 1px solid var(--bg-gray);
+  border-radius: 5px;
+  padding: 0;
+  min-width: 100px;
 }
 
 .language-selector select:focus {
   outline-color: var(--main);
   background-color: white;
+  border: 1px solid var(--main);
+  border-radius: 3px;
+  transition: all 0.5s;
 }
 
 .language-selector select {
   color: var(--main);
-  border: none;
+  border: 1px solid var(--bg-gray);
+  border-radius: 5px;
   transition: all 0.5s;
   background: var(--bg-gray);
   font-size: 1rem;
   padding: 0.3rem;
-  /* appearance: none; */
-  /* -webkit-appearance: unset; */
-  /* padding: 0 1rem; */
-
   cursor: pointer;
-  border: none;
-  appearance: none;
   z-index: 2;
-  width: 180px;
+  width: 100%;
   height: 40px;
 }
 
-.language-selector-toggle div::after{
-  content: aaaa;
-  /* content: \25BC; */
+/* .language-selector-toggle:focus option {
+  background-color: var(--main);
+  color: white;
 }
+
+.language-selector-toggle option:hover,
+.language-selector-toggle option:focus,
+.language-selector-toggle option:active,
+.language-selector-toggle option:checked {
+  background: linear-gradient(white, white);
+  color: var(--main);
+} */
 
 #admin-panel-link {
   padding: 0.3rem 0.8rem;

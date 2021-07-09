@@ -29,11 +29,19 @@
         <a id="white-logo" href="/">
           <img src="/assets/img/glam-logo-white.svg" alt="GLAM stat tool" />
         </a>
-        <div id="breadcrumbs">
+        <div id="breadcrumbs" class="row align-items-center w-100">
           <h6 class="uppercase">§[messages.institution]§</h6>
           <h2><a class="glamName" href=""></a></h2>
           <!-- <span class="breadcrumb-separator"> > </span>
 				<h6>FILE</h6> -->
+        </div>
+        <div class="language-selector">
+          <select
+            class="language-selector-toggle"
+            name="change-lang"
+            onchange="changeLang(event)"
+            id="change-lang-select"
+          ></select>
         </div>
       </header>
 
@@ -81,9 +89,6 @@
               <img class="link-out-big" src="/assets/img/link-out.svg" alt="§[messages.go]§" />
             </h2>
           </div>
-        </div>
-        <div class="admin-panel">
-          <select name="change-lang" onchange="changeLang(event)" id="change-lang-select"></select>
         </div>
       </footer>
     </div>
