@@ -42,11 +42,11 @@ function getFileName(subcat) {
   return subcat + " - category_network.csv";
 }
 
-function unusedFilesLink(category, size) {
-  const db = window.location.href.toString().split("/")[3];
-  const query = "?unused=true&limit=" + size;
-  return "/api/" + db + "/category/" + category + "/" + query;
-}
+// function unusedFilesLink(category, size) {
+//   const db = window.location.href.toString().split("/")[3];
+//   const query = "?unused=true&limit=" + size;
+//   return "/api/" + db + "/category/" + category + "/" + query;
+// }
 
 function dataviz() {
   let categoryNetworkContainer = $("#category_network_container");
@@ -286,34 +286,36 @@ function sorting_sidebar() {
 }
 
 function showUnusedFilesItem() {
-  if (UNUSED_MODE) {
-    let id = $("#" + ACTIVE_ITEM_ID).data("category");
-    let template_source = "/views/category-network/tpl/unused-file-list.tpl";
-    let target = "#category" + ACTIVE_ITEM_ID;
-    $.get(template_source, tpl => {
-      $.getJSON(unusedFilesLink(id, 30), d => {
-        let template = Handlebars.compile(tpl);
-        let temp = [];
-        d.forEach(file => {
-          let url = "/" + glam + "/file/" + file;
-          temp.push({
-            url: url,
-            file: cleanImageName(file.replace(/_/g, " "))
-          });
-        });
-        $(target).html(template({ files: temp }));
-      });
-    });
-  }
-  $("#files" + ACTIVE_ITEM_ID).show();
+  // if (UNUSED_MODE) {
+  //   let id = $("#" + ACTIVE_ITEM_ID).data("category");
+  //   let template_source = "/views/category-network/tpl/unused-file-list.tpl";
+  //   let target = "#category" + ACTIVE_ITEM_ID;
+  //   $.get(template_source, tpl => {
+  //     $.getJSON(unusedFilesLink(id, 30), d => {
+  //       let template = Handlebars.compile(tpl);
+  //       let temp = [];
+  //       d.forEach(file => {
+  //         let url = "/" + glam + "/file/" + file;
+  //         temp.push({
+  //           url: url,
+  //           file: cleanImageName(file.replace(/_/g, " "))
+  //         });
+  //       });
+  //       $(target).html(template({ files: temp }));
+  //     });
+  //   });
+  // }
+  // $("#files" + ACTIVE_ITEM_ID).show();
 }
 
 function hideUnusedFilesItem() {
   if (UNUSED_MODE) {
     let target = "#category" + ACTIVE_ITEM_ID;
     $(target).html("");
+    $(".unused-files-link").show();
+  } else {
+    $(".unused-files-link").hide();
   }
-  $("#files" + ACTIVE_ITEM_ID).hide();
 }
 
 function highlight() {
@@ -325,7 +327,7 @@ function highlight() {
       .find("." + ACTIVE_ITEM_ID)
       .children(".circle")
       .addClass("selected_circle");
-    showUnusedFilesItem();
+    // showUnusedFilesItem();
   }
   // from Sidebar to Graph
   $(".list_item").on("click", function () {
@@ -345,7 +347,7 @@ function highlight() {
         .children(".circle");
       node_selected.toggleClass("selected_circle");
       ACTIVE_ITEM_ID = element;
-      showUnusedFilesItem();
+      // showUnusedFilesItem();
     }
   });
 
@@ -367,13 +369,18 @@ function highlight() {
     ACTIVE_ITEM_ID = element;
     // selected.toggleClass("selected_list_item");
     selected.closest(".list_item").addClass("list_item_active");
-    showUnusedFilesItem();
+    // showUnusedFilesItem();
     document.getElementById(element).scrollIntoView({
       // behavior: "smooth",
       block: "center"
     });
     document.getElementById("topbar").scrollIntoView();
   });
+  if (UNUSED_MODE) {
+    $(".unused-files-link").show();
+  } else {
+    $(".unused-files-link").hide();
+  }
 }
 
 function resetHighlighted() {
@@ -444,31 +451,36 @@ $("#unusedModeCheckbox").click(function () {
     dataviz();
     download();
   }
-});
-
-$("#showUnused").click(() => {
-  let template_source = "/views/category-network/tpl/unused-file-list-dropdown.tpl";
-  let target = "#unusedList";
-  if ($(target).is(":hidden")) {
-    $.get(template_source, tpl => {
-      $.getJSON(unusedFilesLink(subcategoryName, 100), d => {
-        let template = Handlebars.compile(tpl);
-        let temp = [];
-        d.forEach(file => {
-          let url = "/" + glam + "/file/" + file;
-          temp.push({
-            url: url,
-            file: cleanImageName(file.replace(/_/g, " "))
-          });
-        });
-        $(target).html(template({ files: temp }));
-      });
-    });
-    $(target).show();
+  if (UNUSED_MODE) {
+    $(".unused-files-link").show();
   } else {
-    $(target).hide();
+    $(".unused-files-link").hide();
   }
 });
+
+// $("#showUnused").click(() => {
+//   // let template_source = "/views/category-network/tpl/unused-file-list-dropdown.tpl";
+//   // let target = "#unusedList";
+//   // if ($(target).is(":hidden")) {
+//   //   $.get(template_source, tpl => {
+//   //     $.getJSON(unusedFilesLink(subcategoryName, 100), d => {
+//   //       let template = Handlebars.compile(tpl);
+//   //       let temp = [];
+//   //       d.forEach(file => {
+//   //         let url = "/" + glam + "/file/" + file;
+//   //         temp.push({
+//   //           url: url,
+//   //           file: cleanImageName(file.replace(/_/g, " "))
+//   //         });
+//   //       });
+//   //       $(target).html(template({ files: temp }));
+//   //     });
+//   //   });
+//   //   $(target).show();
+//   // } else {
+//   //   $(target).hide();
+//   // }
+// });
 
 $(document).ready(function () {
   dataviz();

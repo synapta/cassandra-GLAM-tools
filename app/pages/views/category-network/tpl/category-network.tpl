@@ -25,6 +25,17 @@
               §[messages.drilldown]§
             </a>
           {{/unless}}
+          {{!-- <div id="files{{id_encoded}}" class="link" style="display: none"> --}}
+            <a
+            id="files{{id_encoded}}"
+              class="view-details-link unused-files-link"
+              style="text-decoration:underline; margin-left:1rem;display: none;"
+              href="{{urlUnused}}"
+              title="{{name}}"
+            >
+              §[messages.view-files]§
+            </a>
+          {{!-- </div> --}}
         </div>
       </div>
       <div class="item col-3">
@@ -53,16 +64,6 @@
       </div>
     </div>
     <div id="category{{id_encoded}}" class="list_item_panel"></div>
-    <div id="files{{id_encoded}}" class="link" style="display: none">
-      <a
-        class="view-details-link"
-        style="text-decoration:underline; margin-left:1rem;"
-        href="{{urlUnused}}"
-        title="{{name}}"
-      >
-        §[messages.view-files]§
-      </a>
-    </div>
     <div class="clear"></div>
   </div>
 {{/each}}
