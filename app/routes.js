@@ -532,13 +532,19 @@ module.exports = function (app, apicache) {
     pathRewrite: {
       '^/metabase': ''
     },
+    timeout: 600000,
+    proxyTimeout: 600000,
     selfHandleResponse: true,
     onProxyRes: responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
+      if (proxyRes.headers['content-disposition']) {
+        return responseBuffer;
+      }
       const response = responseBuffer.toString('utf8');
-      if (req.url.includes('/embed/dashboard/'))
+      if (req.url.includes('/embed/dashboard/')) {
         return i18n.renderResponse(req, res, response);
-      else
+      } else {
         return response;
+      }
     })
   }));
 
