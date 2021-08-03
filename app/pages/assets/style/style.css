@@ -189,7 +189,7 @@ h2 {
   left: var(--sidebar-items-left);
 }
 
-#main-sidebar > .institutions-menu {
+#main-sidebar > .institutions-menu, #main-sidebar > #aboutProject {
   position: absolute;
   top: 15rem;
   left: 0;
@@ -200,7 +200,11 @@ h2 {
   transition: opacity 0.5s;
 }
 
-#main-sidebar > .institutions-menu > h6 {
+#main-sidebar > #aboutProject {
+  top: 18rem;
+}
+
+#main-sidebar > .institutions-menu > h6, #aboutProject {
   margin: 0;
   padding: 0.5rem 0 0.5rem var(--sidebar-items-left);
   font-weight: 600;
