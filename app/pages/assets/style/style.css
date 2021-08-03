@@ -189,7 +189,8 @@ h2 {
   left: var(--sidebar-items-left);
 }
 
-#main-sidebar > .institutions-menu, #main-sidebar > #aboutProject {
+#main-sidebar > .institutions-menu, #main-sidebar > #aboutProject,
+#main-sidebar > #partecipate {
   position: absolute;
   top: 15rem;
   left: 0;
@@ -203,8 +204,11 @@ h2 {
 #main-sidebar > #aboutProject {
   top: 18rem;
 }
+#main-sidebar > #partecipate {
+  top: 21rem;
+}
 
-#main-sidebar > .institutions-menu > h6, #aboutProject {
+#main-sidebar > .institutions-menu > h6, #aboutProject, #partecipate {
   margin: 0;
   padding: 0.5rem 0 0.5rem var(--sidebar-items-left);
   font-weight: 600;
