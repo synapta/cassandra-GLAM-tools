@@ -98,6 +98,10 @@ module.exports = function (app, apicache) {
     i18n.sendFile(req, res, __dirname + '/pages/views/new-glam.html');
   });
 
+  app.get('/admin/customize-tool', function (req, res) {
+    i18n.sendFile(req, res, __dirname + "/pages/views/customize-tool.html");
+  });
+
   app.get('/admin/edit-glam/:id', function (req, res) {
     let glam = config.glams[req.params.id];
     if (glam !== undefined) {
@@ -226,7 +230,6 @@ module.exports = function (app, apicache) {
   app.post('/api/admin/glams', function (req, res) {
     api.createGlam(req, res, config);
   });
-
   app.get('/api/admin/glams/:id', function (req, res) {
     let glam = config.glams[req.params.id];
     if (glam !== undefined) {
@@ -523,6 +526,21 @@ module.exports = function (app, apicache) {
         res.json(JSON.parse(response.body));
       }
     });
+  });
+
+  app.post("/api/admin/settings", function (req, res) {
+    console.log("receive settings!");
+    res.sendStatus(200);
+  });
+
+  app.get("/api/admin/update-tool", function (req, res) {
+    console.log("request update!");
+    res.sendStatus(200);
+  });
+
+  app.post("/api/admin/owner-logo", function (req, res) {
+    console.log("receive logo!");
+    res.sendStatus(200);
   });
 
   // Metabase proxy

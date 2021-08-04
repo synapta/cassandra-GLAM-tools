@@ -32,16 +32,18 @@
   padding: 0.5rem 0;
 }
 
-#new-glam-button {
+.glam-button {
   padding: 0.5rem 1rem;
   border: 1px solid;
   border-radius: 3px;
   margin: 0;
   transition: all .5s;
+  text-transform: uppercase
 }
 
-#new-glam-button:hover {
+.glam-button:hover {
   background-color: rgba(6, 69, 173, 0.2);
+  text-transform: uppercase
 }
 
 .glam-block {

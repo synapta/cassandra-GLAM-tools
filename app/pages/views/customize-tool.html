@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>§[messages.tool-settings-title]§ (Cassandra)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <link
+      rel="stylesheet"
+      href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.css"
+    />
+    <link rel="stylesheet" href="/assets/style/style.css" />
+    <link rel="stylesheet" href="/assets/style/homepage.css" />
+    <link href="https://tools-static.wmflabs.org/fontcdn/css?family=Raleway" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Mobile sidebar -->
+    <div id="mobile-sidebar" class="ui left sidebar"></div>
+    <div class="pusher">
+      <!-- Mobile header bar -->
+      <header id="mobile-header-bar"></header>
+      <!-- Sidebar -->
+      <aside id="main-sidebar"></aside>
+      <aside id="secondary-sidebar"></aside>
+      <!-- MAIN -->
+      <!-- Title -->
+      <section id="admin-cover" class="cover">
+        <div class="justify-content-between row w-100">
+          <div class="col-11">
+            <h2>§[admin.tool-settings-title]§</h2>
+          </div>
+          <div class="language-selector col-1">
+            <select
+              class="language-selector-toggle"
+              name="change-lang"
+              onchange="changeLang(event)"
+              id="change-lang-select"
+            ></select>
+          </div>
+        </div>
+      </section>
+      <!-- Main Content -->
+      <main id="main-container">
+        <section>
+          <div class="row">
+            <div class="col-12 col-xl-9 my-xl-5">
+              <form id="uploadForm" action="" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                  <label for="logoFile">§[admin.logo-id]§</label>
+                  <input
+                    type="file"
+                    class="form-control"
+                    id="logoFile"
+                    accept="image/svg+xml"
+                    placeholder="§[admin.logo-id-desc]§"
+                  />
+                </div>
+                <div id="upload-error" class="error-message" style="display: none">
+                  <h4>§[admin.upload-error]§</h4>
+                </div>
+                <div id="upload-success" style="display: none">
+                  <div class="success-message">
+                    <h4>§[admin.upload-success]§</h4>
+                  </div>
+                </div>
+                <button class="btn btn-primary uppercase" id="uploadLogo">§[admin.upload]§</button>
+              </form>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 col-xl-9 my-xl-5">
+              <form>
+                <div class="form-group">
+                  <label for="setHomeTitle">§[admin.set-title]§</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="setHomeTitle"
+                    placeholder="§[admin.set-title-placeholder]§"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="defaultLang">§[admin.default-lang]§</label>
+                  <select class="form-control" name="change-lang" id="defaultLang"></select>
+                </div>
+                <div id="settings-error" class="error-message" style="display: none">
+                  <h4>§[admin.save-error]§</h4>
+                </div>
+                <div id="settings-success" style="display: none">
+                  <div class="success-message">
+                    <h4>§[admin.save-success]§</h4>
+                  </div>
+                </div>
+                <button id="save-settings" class="btn btn-primary uppercase">
+                  §[admin.save]§
+                </button>
+              </form>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 mt-4 mt-xl-0 col-lg-2">
+              <button id="update-button" class="btn btn-default border-dark uppercase">
+                §[admin.refresh]§</button>
+               <div id="refresh-error" class="error-message" style="display: none">
+                  <h4>§[admin.refresh-error]§</h4>
+                </div>
+                <div id="refresh-success" style="display: none">
+                  <div class="success-message">
+                    <h4>§[admin.refresh-success]§</h4>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <!-- SCRIPTS -->
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/jquery/3.1.1/jquery.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.bundle.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tools-static.wmflabs.org/cdnjs/ajax/libs/semantic-ui/2.4.1/components/sidebar.min.js"
+    ></script>
+    <script type="text/javascript" src="/js/language.js"></script>
+    <script type="text/javascript" src="/js/loader.js"></script>
+    <script type="text/javascript" src="/js/customize-tool.js"></script>
+  </body>
+</html>
