@@ -223,7 +223,7 @@ h2 {
 
 #main-sidebar > .sidebar-links {
   position: absolute;
-  bottom: 4rem;
+  bottom: 3rem;
   left: var(--sidebar-items-left);
 }
 
