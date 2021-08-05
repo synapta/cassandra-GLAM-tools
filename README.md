@@ -91,6 +91,10 @@ The Cassandra tool is now available at http://host.example.com:8081. For product
 
 ### Pontoon installation
 
+**Note: you do not need to install Pontoon, instead use: [https://pontoon-wmch.synapta.io](https://pontoon-wmch.synapta.io)**
+
+This is the guide we followed to install that instance.
+
 An Ansible script to install Pontoon is available in the `deploy` directory.
 
 In the `deploy/` directory create an `inventory.ini` file similar to the following, where `host.example.com` is the hostname (or the IP address) of the remote machine:
@@ -121,6 +125,7 @@ supervisorctl restart pontoon
 ```
 
 ## Update
+
 To update Cassandra to the latest version available in its repository, for example after the release of a new version or the creation of a new translation, it is necessary to login into the machine that hosts the tool. Then, it is recommended to become the glam user:
 
 ```
