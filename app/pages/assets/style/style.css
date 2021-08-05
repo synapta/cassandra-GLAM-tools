@@ -153,11 +153,11 @@ h2 {
 
 #mobile-sidebar > .mobile-sidebar-links > ul {
   list-style-type: none;
-  padding: 1rem 0 0;
+  padding: 5px 0 0;
 }
 
 #mobile-sidebar > .mobile-sidebar-links > ul > li {
-  padding: 1.5rem 1rem;
+  padding: 1rem;
 }
 
 #mobile-sidebar > .mobile-sidebar-links > ul > li a {
@@ -238,7 +238,7 @@ h2 {
 }
 
 #main-sidebar > .sidebar-links > ul > li {
-  padding: 1rem 0 0;
+  padding: 5px 0 0;
 }
 
 #main-sidebar > .sidebar-links #github {
