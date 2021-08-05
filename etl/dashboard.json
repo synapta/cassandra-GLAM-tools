@@ -9,9 +9,9 @@
 			"card": {
 				"query_average_duration": null
 			},
-			"updated_at": "2021-01-19T11:15:29.040551Z",
+			"updated_at": "2021-08-05T11:11:00.401",
 			"col": 0,
-			"id": 16,
+			"id": 22,
 			"parameter_mappings": [],
 			"card_id": null,
 			"visualization_settings": {
@@ -26,7 +26,7 @@
 				"dashcard.background": false
 			},
 			"dashboard_id": 2,
-			"created_at": "2020-11-22T12:08:54.397911Z",
+			"created_at": "2021-06-28T16:19:43.551",
 			"sizeY": 1,
 			"row": 0
 		},
@@ -36,9 +36,9 @@
 			"card": {
 				"query_average_duration": null
 			},
-			"updated_at": "2021-01-19T11:15:29.044702Z",
+			"updated_at": "2021-08-05T11:11:00.414",
 			"col": 0,
-			"id": 18,
+			"id": 23,
 			"parameter_mappings": [],
 			"card_id": null,
 			"visualization_settings": {
@@ -53,7 +53,7 @@
 				"dashcard.background": false
 			},
 			"dashboard_id": 2,
-			"created_at": "2020-11-22T12:08:54.489322Z",
+			"created_at": "2021-06-28T16:19:43.587",
 			"sizeY": 1,
 			"row": 14
 		},
@@ -63,36 +63,9 @@
 			"card": {
 				"query_average_duration": null
 			},
-			"updated_at": "2021-01-19T11:15:29.048471Z",
+			"updated_at": "2021-08-05T11:11:00.427",
 			"col": 0,
-			"id": 19,
-			"parameter_mappings": [],
-			"card_id": null,
-			"visualization_settings": {
-				"virtual_card": {
-					"name": null,
-					"display": "text",
-					"visualization_settings": {},
-					"dataset_query": {},
-					"archived": false
-				},
-				"text": "# §[metabase.top]§",
-				"dashcard.background": false
-			},
-			"dashboard_id": 2,
-			"created_at": "2020-11-22T12:08:54.493624Z",
-			"sizeY": 1,
-			"row": 21
-		},
-		{
-			"sizeX": 4,
-			"series": [],
-			"card": {
-				"query_average_duration": null
-			},
-			"updated_at": "2021-01-19T11:15:29.05192Z",
-			"col": 0,
-			"id": 20,
+			"id": 25,
 			"parameter_mappings": [],
 			"card_id": null,
 			"visualization_settings": {
@@ -107,7 +80,7 @@
 				"dashcard.background": false
 			},
 			"dashboard_id": 2,
-			"created_at": "2020-11-22T12:08:54.495159Z",
+			"created_at": "2021-06-28T16:19:43.67",
 			"sizeY": 1,
 			"row": 7
 		},
@@ -117,9 +90,9 @@
 			"card": {
 				"query_average_duration": null
 			},
-			"updated_at": "2021-01-19T11:15:29.055645Z",
+			"updated_at": "2021-08-05T11:11:00.436",
 			"col": 0,
-			"id": 23,
+			"id": 26,
 			"parameter_mappings": [],
 			"card_id": null,
 			"visualization_settings": {
@@ -134,9 +107,9 @@
 				"dashcard.background": false
 			},
 			"dashboard_id": 2,
-			"created_at": "2020-11-24T16:16:24.354146Z",
+			"created_at": "2021-06-28T16:19:43.699",
 			"sizeY": 1,
-			"row": 28
+			"row": 21
 		},
 		{
 			"sizeX": 4,
@@ -148,10 +121,17 @@
 				"table_id": null,
 				"result_metadata": [
 					{
-						"base_type": "type/Float",
-						"display_name": "Corr Coef Using PGSQL Func",
 						"name": "Corr Coef Using PGSQL Func",
-						"special_type": null,
+						"display_name": "Corr Coef Using PGSQL Func",
+						"base_type": "type/Float",
+						"field_ref": [
+							"field",
+							"Corr Coef Using PGSQL Func",
+							{
+								"base-type": "type/Float"
+							}
+						],
+						"semantic_type": null,
 						"fingerprint": {
 							"global": {
 								"distinct-count": 1,
@@ -159,12 +139,12 @@
 							},
 							"type": {
 								"type/Number": {
-									"min": 0.6663149842984744,
-									"max": 0.6663149842984744,
-									"avg": 0.6663149842984744,
+									"min": 0.4110286428044264,
+									"q1": 0.4110286428044264,
+									"q3": 0.4110286428044264,
+									"max": 0.4110286428044264,
 									"sd": null,
-									"q1": 0.6663149842984744,
-									"q3": 0.6663149842984744
+									"avg": 0.4110286428044264
 								}
 							}
 						}
@@ -172,13 +152,12 @@
 				],
 				"database_id": 3,
 				"enable_embedding": false,
-				"collection_id": 16,
+				"collection_id": 4,
 				"query_type": "native",
 				"name": "§[& metabase.corr-usage]§",
-				"read_permissions": null,
-				"query_average_duration": 131314,
+				"query_average_duration": 75847,
 				"creator_id": 2,
-				"updated_at": "2021-05-23T06:14:31.679824Z",
+				"updated_at": "2021-06-28T16:27:49.533",
 				"made_public_by_id": null,
 				"embedding_params": null,
 				"cache_ttl": null,
@@ -189,7 +168,7 @@
 					},
 					"database": 3
 				},
-				"id": 9,
+				"id": 16,
 				"display": "scalar",
 				"visualization_settings": {
 					"graph.dimensions": [
@@ -201,19 +180,19 @@
 					"graph.x_axis.scale": "pow",
 					"graph.y_axis.scale": "pow"
 				},
-				"created_at": "2020-06-03T13:58:33.081456Z",
+				"created_at": "2021-06-28T16:27:49.533",
 				"public_uuid": null
 			},
-			"updated_at": "2021-01-19T11:15:29.059066Z",
+			"updated_at": "2021-08-05T11:11:00.445",
 			"col": 8,
-			"id": 24,
+			"id": 27,
 			"parameter_mappings": [],
 			"card_id": 9,
 			"visualization_settings": {},
 			"dashboard_id": 2,
-			"created_at": "2020-11-24T16:16:24.362869Z",
+			"created_at": "2021-06-28T16:27:49.567",
 			"sizeY": 3,
-			"row": 29
+			"row": 22
 		},
 		{
 			"sizeX": 4,
@@ -225,10 +204,17 @@
 				"table_id": null,
 				"result_metadata": [
 					{
-						"base_type": "type/Float",
-						"display_name": "Corr Coef Using PGSQL Func",
 						"name": "Corr Coef Using PGSQL Func",
-						"special_type": null,
+						"display_name": "Corr Coef Using PGSQL Func",
+						"base_type": "type/Float",
+						"field_ref": [
+							"field",
+							"Corr Coef Using PGSQL Func",
+							{
+								"base-type": "type/Float"
+							}
+						],
+						"semantic_type": null,
 						"fingerprint": {
 							"global": {
 								"distinct-count": 1,
@@ -236,12 +222,12 @@
 							},
 							"type": {
 								"type/Number": {
-									"min": -0.03958996396310031,
-									"max": -0.03958996396310031,
-									"avg": -0.03958996396310031,
+									"min": -0.02164093034170724,
+									"q1": -0.02164093034170724,
+									"q3": -0.02164093034170724,
+									"max": -0.02164093034170724,
 									"sd": null,
-									"q1": -0.03958996396310031,
-									"q3": -0.03958996396310031
+									"avg": -0.02164093034170724
 								}
 							}
 						}
@@ -249,13 +235,12 @@
 				],
 				"database_id": 3,
 				"enable_embedding": false,
-				"collection_id": 16,
+				"collection_id": 4,
 				"query_type": "native",
 				"name": "§[& metabase.corr-size]§",
-				"read_permissions": null,
-				"query_average_duration": 2360,
+				"query_average_duration": 39455,
 				"creator_id": 2,
-				"updated_at": "2021-05-23T06:12:44.61295Z",
+				"updated_at": "2021-08-05T11:10:21.411",
 				"made_public_by_id": null,
 				"embedding_params": null,
 				"cache_ttl": null,
@@ -266,7 +251,7 @@
 					},
 					"database": 3
 				},
-				"id": 7,
+				"id": 17,
 				"display": "scalar",
 				"visualization_settings": {
 					"graph.dimensions": [
@@ -278,19 +263,19 @@
 					"graph.x_axis.scale": "pow",
 					"graph.y_axis.scale": "pow"
 				},
-				"created_at": "2020-06-03T13:51:16.813633Z",
+				"created_at": "2021-06-28T16:29:29.276",
 				"public_uuid": null
 			},
-			"updated_at": "2021-01-19T11:15:29.064277Z",
+			"updated_at": "2021-08-05T11:11:00.452",
 			"col": 4,
-			"id": 25,
+			"id": 28,
 			"parameter_mappings": [],
 			"card_id": 7,
 			"visualization_settings": {},
 			"dashboard_id": 2,
-			"created_at": "2020-11-24T16:16:24.374024Z",
+			"created_at": "2021-06-28T16:29:29.309",
 			"sizeY": 3,
-			"row": 29
+			"row": 22
 		},
 		{
 			"sizeX": 4,
@@ -302,10 +287,17 @@
 				"table_id": null,
 				"result_metadata": [
 					{
-						"base_type": "type/Float",
-						"display_name": "Corr Coef Using PGSQL Func",
 						"name": "Corr Coef Using PGSQL Func",
-						"special_type": null,
+						"display_name": "Corr Coef Using PGSQL Func",
+						"base_type": "type/Float",
+						"field_ref": [
+							"field",
+							"Corr Coef Using PGSQL Func",
+							{
+								"base-type": "type/Float"
+							}
+						],
+						"semantic_type": null,
 						"fingerprint": {
 							"global": {
 								"distinct-count": 1,
@@ -313,12 +305,12 @@
 							},
 							"type": {
 								"type/Number": {
-									"min": 0.0776270546580604,
-									"max": 0.0776270546580604,
-									"avg": 0.0776270546580604,
+									"min": -0.03408086905119359,
+									"q1": -0.03408086905119359,
+									"q3": -0.03408086905119359,
+									"max": -0.03408086905119359,
 									"sd": null,
-									"q1": 0.0776270546580604,
-									"q3": 0.0776270546580604
+									"avg": -0.03408086905119359
 								}
 							}
 						}
@@ -326,13 +318,12 @@
 				],
 				"database_id": 3,
 				"enable_embedding": false,
-				"collection_id": 16,
+				"collection_id": 4,
 				"query_type": "native",
 				"name": "§[& metabase.corr-old]§",
-				"read_permissions": null,
-				"query_average_duration": 2485,
+				"query_average_duration": 39432,
 				"creator_id": 2,
-				"updated_at": "2021-05-23T06:12:44.313438Z",
+				"updated_at": "2021-08-05T11:10:21.442",
 				"made_public_by_id": null,
 				"embedding_params": null,
 				"cache_ttl": null,
@@ -343,7 +334,7 @@
 					},
 					"database": 3
 				},
-				"id": 10,
+				"id": 18,
 				"display": "scalar",
 				"visualization_settings": {
 					"graph.dimensions": [
@@ -355,19 +346,19 @@
 					"graph.x_axis.scale": "pow",
 					"graph.y_axis.scale": "pow"
 				},
-				"created_at": "2020-06-03T14:04:18.236465Z",
+				"created_at": "2021-06-28T16:31:10.026",
 				"public_uuid": null
 			},
-			"updated_at": "2021-01-19T11:15:29.067621Z",
+			"updated_at": "2021-08-05T11:11:00.463",
 			"col": 0,
-			"id": 26,
+			"id": 29,
 			"parameter_mappings": [],
 			"card_id": 10,
 			"visualization_settings": {},
 			"dashboard_id": 2,
-			"created_at": "2020-11-24T16:16:24.438685Z",
+			"created_at": "2021-06-28T16:31:10.065",
 			"sizeY": 3,
-			"row": 29
+			"row": 22
 		},
 		{
 			"sizeX": 4,
@@ -379,10 +370,17 @@
 				"table_id": null,
 				"result_metadata": [
 					{
-						"base_type": "type/Decimal",
-						"display_name": "?column?",
 						"name": "?column?",
-						"special_type": null,
+						"display_name": "?column?",
+						"base_type": "type/Decimal",
+						"field_ref": [
+							"field",
+							"?column?",
+							{
+								"base-type": "type/Decimal"
+							}
+						],
+						"semantic_type": null,
 						"fingerprint": {
 							"global": {
 								"distinct-count": 1,
@@ -390,12 +388,12 @@
 							},
 							"type": {
 								"type/Number": {
-									"min": 0.03210463733650416,
-									"max": 0.03210463733650416,
-									"avg": 0.03210463733650416,
+									"min": 0.07653533587079518,
+									"q1": 0.07653533587079518,
+									"q3": 0.07653533587079518,
+									"max": 0.07653533587079518,
 									"sd": null,
-									"q1": 0.03210463733650416,
-									"q3": 0.03210463733650416
+									"avg": 0.07653533587079518
 								}
 							}
 						}
@@ -403,13 +401,12 @@
 				],
 				"database_id": 3,
 				"enable_embedding": false,
-				"collection_id": 14,
+				"collection_id": 4,
 				"query_type": "native",
 				"name": "§[metabase.uploaded-last]§",
-				"read_permissions": null,
-				"query_average_duration": 568,
+				"query_average_duration": 477,
 				"creator_id": 2,
-				"updated_at": "2021-05-23T06:12:41.572739Z",
+				"updated_at": "2021-08-05T11:10:21.866",
 				"made_public_by_id": null,
 				"embedding_params": null,
 				"cache_ttl": null,
@@ -420,7 +417,7 @@
 					},
 					"database": 3
 				},
-				"id": 18,
+				"id": 19,
 				"display": "scalar",
 				"visualization_settings": {
 					"column_settings": {
@@ -431,17 +428,17 @@
 						}
 					}
 				},
-				"created_at": "2020-12-07T17:34:53.572179Z",
+				"created_at": "2021-06-28T16:31:10.148",
 				"public_uuid": null
 			},
-			"updated_at": "2021-01-19T11:15:29.071025Z",
+			"updated_at": "2021-08-05T11:11:00.468",
 			"col": 0,
-			"id": 27,
+			"id": 30,
 			"parameter_mappings": [],
 			"card_id": 18,
 			"visualization_settings": {},
 			"dashboard_id": 2,
-			"created_at": "2020-12-07T17:35:15.152801Z",
+			"created_at": "2021-06-28T16:31:10.178",
 			"sizeY": 3,
 			"row": 18
 		},
@@ -455,10 +452,17 @@
 				"table_id": null,
 				"result_metadata": [
 					{
-						"base_type": "type/Decimal",
-						"display_name": "?column?",
 						"name": "?column?",
-						"special_type": null,
+						"display_name": "?column?",
+						"base_type": "type/Decimal",
+						"field_ref": [
+							"field",
+							"?column?",
+							{
+								"base-type": "type/Decimal"
+							}
+						],
+						"semantic_type": null,
 						"fingerprint": {
 							"global": {
 								"distinct-count": 1,
@@ -466,12 +470,12 @@
 							},
 							"type": {
 								"type/Number": {
-									"min": 0.45422116527942924,
-									"max": 0.45422116527942924,
-									"avg": 0.45422116527942924,
+									"min": 0.08887974488221377,
+									"q1": 0.08887974488221377,
+									"q3": 0.08887974488221377,
+									"max": 0.08887974488221377,
 									"sd": null,
-									"q1": 0.45422116527942924,
-									"q3": 0.45422116527942924
+									"avg": 0.08887974488221377
 								}
 							}
 						}
@@ -479,13 +483,12 @@
 				],
 				"database_id": 3,
 				"enable_embedding": false,
-				"collection_id": 13,
+				"collection_id": 4,
 				"query_type": "native",
 				"name": "§[metabase.perc-used]§",
-				"read_permissions": null,
-				"query_average_duration": 615,
+				"query_average_duration": 413,
 				"creator_id": 2,
-				"updated_at": "2021-05-23T06:12:41.34413Z",
+				"updated_at": "2021-08-05T11:10:21.822",
 				"made_public_by_id": null,
 				"embedding_params": null,
 				"cache_ttl": null,
@@ -496,7 +499,7 @@
 					},
 					"database": 3
 				},
-				"id": 19,
+				"id": 20,
 				"display": "scalar",
 				"visualization_settings": {
 					"column_settings": {
@@ -506,17 +509,17 @@
 						}
 					}
 				},
-				"created_at": "2020-12-07T17:38:52.198419Z",
+				"created_at": "2021-06-28T16:31:10.262",
 				"public_uuid": null
 			},
-			"updated_at": "2021-01-19T11:15:29.074998Z",
+			"updated_at": "2021-08-05T11:11:00.474",
 			"col": 0,
-			"id": 28,
+			"id": 31,
 			"parameter_mappings": [],
 			"card_id": 19,
 			"visualization_settings": {},
 			"dashboard_id": 2,
-			"created_at": "2020-12-07T17:39:31.070137Z",
+			"created_at": "2021-06-28T16:31:10.295",
 			"sizeY": 3,
 			"row": 11
 		},
@@ -530,10 +533,17 @@
 				"table_id": null,
 				"result_metadata": [
 					{
-						"base_type": "type/Decimal",
-						"display_name": "?column?",
 						"name": "?column?",
-						"special_type": null,
+						"display_name": "?column?",
+						"base_type": "type/Decimal",
+						"field_ref": [
+							"field",
+							"?column?",
+							{
+								"base-type": "type/Decimal"
+							}
+						],
+						"semantic_type": null,
 						"fingerprint": {
 							"global": {
 								"distinct-count": 1,
@@ -541,12 +551,12 @@
 							},
 							"type": {
 								"type/Number": {
-									"min": -0.006787059042099267,
-									"max": -0.006787059042099267,
-									"avg": -0.006787059042099267,
+									"min": 0.5008777209439743,
+									"q1": 0.5008777209439743,
+									"q3": 0.5008777209439743,
+									"max": 0.5008777209439743,
 									"sd": null,
-									"q1": -0.006787059042099267,
-									"q3": -0.006787059042099267
+									"avg": 0.5008777209439743
 								}
 							}
 						}
@@ -554,13 +564,12 @@
 				],
 				"database_id": 3,
 				"enable_embedding": false,
-				"collection_id": 12,
+				"collection_id": 4,
 				"query_type": "native",
 				"name": "§[metabase.views-change]§",
-				"read_permissions": null,
-				"query_average_duration": 5022,
+				"query_average_duration": 22073,
 				"creator_id": 2,
-				"updated_at": "2021-05-23T06:12:46.273915Z",
+				"updated_at": "2021-08-05T11:10:21.554",
 				"made_public_by_id": null,
 				"embedding_params": null,
 				"cache_ttl": null,
@@ -571,7 +580,7 @@
 					},
 					"type": "native"
 				},
-				"id": 20,
+				"id": 21,
 				"display": "scalar",
 				"visualization_settings": {
 					"column_settings": {
@@ -581,17 +590,17 @@
 						}
 					}
 				},
-				"created_at": "2020-12-07T17:54:02.190531Z",
+				"created_at": "2021-06-28T16:31:39.572",
 				"public_uuid": null
 			},
-			"updated_at": "2021-01-19T11:15:29.078184Z",
+			"updated_at": "2021-08-05T11:11:00.479",
 			"col": 0,
-			"id": 29,
+			"id": 32,
 			"parameter_mappings": [],
 			"card_id": 20,
 			"visualization_settings": {},
 			"dashboard_id": 2,
-			"created_at": "2020-12-07T17:54:21.816151Z",
+			"created_at": "2021-06-28T16:31:39.603",
 			"sizeY": 3,
 			"row": 4
 		},
@@ -601,9 +610,9 @@
 			"card": {
 				"query_average_duration": null
 			},
-			"updated_at": "2021-01-19T11:15:29.081182Z",
+			"updated_at": "2021-08-05T11:11:00.484",
 			"col": 0,
-			"id": 30,
+			"id": 33,
 			"parameter_mappings": [],
 			"card_id": null,
 			"visualization_settings": {
@@ -617,282 +626,9 @@
 				"dashcard.background": false
 			},
 			"dashboard_id": 2,
-			"created_at": "2020-12-09T10:58:49.955708Z",
+			"created_at": "2021-06-28T16:31:39.647",
 			"sizeY": 3,
 			"row": 32
-		},
-		{
-			"sizeX": 4,
-			"series": [],
-			"card": {
-				"description": "§[metabase.top-projects-desc]§",
-				"archived": false,
-				"collection_position": null,
-				"table_id": null,
-				"result_metadata": [
-					{
-						"base_type": "type/Text",
-						"display_name": "§[metabase.wiki-project]§",
-						"name": "§[metabase.wiki-project]§",
-						"special_type": null,
-						"fingerprint": {
-							"global": {
-								"distinct-count": 5,
-								"nil%": 0.0
-							},
-							"type": {
-								"type/Text": {
-									"percent-json": 0.0,
-									"percent-url": 0.0,
-									"percent-email": 0.0,
-									"average-length": 7.4
-								}
-							}
-						}
-					},
-					{
-						"base_type": "type/BigInteger",
-						"display_name": "§[metabase.media-used]§",
-						"name": "§[metabase.media-used]§",
-						"special_type": null,
-						"fingerprint": {
-							"global": {
-								"distinct-count": 5,
-								"nil%": 0.0
-							},
-							"type": {
-								"type/Number": {
-									"min": 20.0,
-									"max": 484.0,
-									"avg": 132.0,
-									"sd": 199.6684752283144,
-									"q1": 20.75,
-									"q3": 197.5
-								}
-							}
-						}
-					}
-				],
-				"database_id": 3,
-				"enable_embedding": false,
-				"collection_id": 15,
-				"query_type": "native",
-				"name": "§[metabase.top-projects]§",
-				"read_permissions": null,
-				"query_average_duration": 117,
-				"creator_id": 2,
-				"updated_at": "2021-05-23T06:12:42.952604Z",
-				"made_public_by_id": null,
-				"embedding_params": null,
-				"cache_ttl": null,
-				"dataset_query": {
-					"type": "native",
-					"native": {
-						"query": "SELECT gil_wiki as \"§[metabase.wiki-project]§\", count(*) as \"§[metabase.media-used]§\"\nFROM usages\nWHERE is_alive = true\nGROUP BY gil_wiki\norder by count(*) desc\nlimit 5"
-					},
-					"database": 3
-				},
-				"id": 43,
-				"display": "table",
-				"visualization_settings": {
-					"table.pivot_column": "gil_wiki",
-					"table.cell_column": "count"
-				},
-				"created_at": "2021-01-19T09:47:25.770583Z",
-				"public_uuid": null
-			},
-			"updated_at": "2021-01-19T11:15:29.084245Z",
-			"col": 14,
-			"id": 147,
-			"parameter_mappings": [],
-			"card_id": 43,
-			"visualization_settings": {},
-			"dashboard_id": 2,
-			"created_at": "2021-01-19T09:50:01.421006Z",
-			"sizeY": 6,
-			"row": 22
-		},
-		{
-			"sizeX": 7,
-			"series": [],
-			"card": {
-				"description": "§[& metabase.top-usage-desc]§",
-				"archived": false,
-				"collection_position": null,
-				"table_id": null,
-				"result_metadata": [
-					{
-						"base_type": "type/Text",
-						"display_name": "§[metabase.media]§",
-						"name": "§[metabase.media]§",
-						"special_type": null,
-						"fingerprint": {
-							"global": {
-								"distinct-count": 5,
-								"nil%": 0.0
-							},
-							"type": {
-								"type/Text": {
-									"percent-json": 0.0,
-									"percent-url": 0.0,
-									"percent-email": 0.0,
-									"average-length": 35.8
-								}
-							}
-						}
-					},
-					{
-						"base_type": "type/BigInteger",
-						"display_name": "§[metabase.usage-count]§",
-						"name": "§[metabase.usage-count]§",
-						"special_type": "type/Quantity",
-						"fingerprint": {
-							"global": {
-								"distinct-count": 5,
-								"nil%": 0.0
-							},
-							"type": {
-								"type/Number": {
-									"min": 10.0,
-									"max": 28.0,
-									"avg": 18.6,
-									"sd": 6.618156843109719,
-									"q1": 14.5,
-									"q3": 22.75
-								}
-							}
-						}
-					}
-				],
-				"database_id": 3,
-				"enable_embedding": false,
-				"collection_id": 15,
-				"query_type": "native",
-				"name": "§[metabase.top-usage]§",
-				"read_permissions": null,
-				"query_average_duration": 130,
-				"creator_id": 2,
-				"updated_at": "2021-05-23T06:12:41.745581Z",
-				"made_public_by_id": null,
-				"embedding_params": null,
-				"cache_ttl": null,
-				"dataset_query": {
-					"type": "native",
-					"native": {
-						"query": "SELECT gil_to as \"§[metabase.media]§\", count(*) as \"§[metabase.usage-count]§\"\nFROM usages\nGROUP BY gil_to\nORDER BY count(*) DESC\nLIMIT 5"
-					},
-					"database": 3
-				},
-				"id": 41,
-				"display": "table",
-				"visualization_settings": {
-					"table.pivot_column": "count",
-					"table.cell_column": "gil_to"
-				},
-				"created_at": "2021-01-18T15:57:48.01616Z",
-				"public_uuid": null
-			},
-			"updated_at": "2021-01-19T11:15:29.087362Z",
-			"col": 7,
-			"id": 146,
-			"parameter_mappings": [],
-			"card_id": 41,
-			"visualization_settings": {},
-			"dashboard_id": 2,
-			"created_at": "2021-01-19T09:50:01.421237Z",
-			"sizeY": 6,
-			"row": 22
-		},
-		{
-			"sizeX": 7,
-			"series": [],
-			"card": {
-				"description": "§[& metabase.top-views-desc]§",
-				"archived": false,
-				"collection_position": null,
-				"table_id": null,
-				"result_metadata": [
-					{
-						"base_type": "type/Text",
-						"display_name": "§[metabase.media]§",
-						"name": "§[metabase.media]§",
-						"special_type": null,
-						"fingerprint": {
-							"global": {
-								"distinct-count": 5,
-								"nil%": 0.0
-							},
-							"type": {
-								"type/Text": {
-									"percent-json": 0.0,
-									"percent-url": 0.0,
-									"percent-email": 0.0,
-									"average-length": 40.0
-								}
-							}
-						}
-					},
-					{
-						"base_type": "type/Decimal",
-						"display_name": "§[metabase.views]§",
-						"name": "§[metabase.views]§",
-						"special_type": null,
-						"fingerprint": {
-							"global": {
-								"distinct-count": 5,
-								"nil%": 0.0
-							},
-							"type": {
-								"type/Number": {
-									"min": 241302.0,
-									"max": 753923.0,
-									"avg": 387337.4,
-									"sd": 211949.50206546843,
-									"q1": 257131.5,
-									"q3": 475817.75
-								}
-							}
-						}
-					}
-				],
-				"database_id": 3,
-				"enable_embedding": false,
-				"collection_id": 15,
-				"query_type": "native",
-				"name": "§[metabase.top-views]§",
-				"read_permissions": null,
-				"query_average_duration": 1697,
-				"creator_id": 2,
-				"updated_at": "2021-05-23T06:12:43.642855Z",
-				"made_public_by_id": null,
-				"embedding_params": null,
-				"cache_ttl": null,
-				"dataset_query": {
-					"database": 3,
-					"native": {
-						"query": "SELECT img_name as \"§[metabase.media]§\", sum(accesses) as \"§[metabase.views]§\"\nFROM visualizations v, images i\nwhere v.media_id = i.media_id\nand access_date > NOW()-interval '1 year'\nGROUP BY img_name\norder by sum(accesses) desc\nlimit 5"
-					},
-					"type": "native"
-				},
-				"id": 42,
-				"display": "table",
-				"visualization_settings": {
-					"table.pivot_column": "sum",
-					"table.cell_column": "img_name"
-				},
-				"created_at": "2021-01-18T16:04:12.059993Z",
-				"public_uuid": null
-			},
-			"updated_at": "2021-01-19T11:15:29.090564Z",
-			"col": 0,
-			"id": 148,
-			"parameter_mappings": [],
-			"card_id": 42,
-			"visualization_settings": {},
-			"dashboard_id": 2,
-			"created_at": "2021-01-19T09:50:01.486386Z",
-			"sizeY": 6,
-			"row": 22
 		},
 		{
 			"sizeX": 4,
@@ -904,10 +640,17 @@
 				"table_id": null,
 				"result_metadata": [
 					{
-						"base_type": "type/BigInteger",
-						"display_name": "count",
 						"name": "count",
-						"special_type": "type/Quantity",
+						"display_name": "count",
+						"base_type": "type/BigInteger",
+						"field_ref": [
+							"field",
+							"count",
+							{
+								"base-type": "type/BigInteger"
+							}
+						],
+						"semantic_type": "type/Quantity",
 						"fingerprint": {
 							"global": {
 								"distinct-count": 1,
@@ -915,12 +658,12 @@
 							},
 							"type": {
 								"type/Number": {
-									"min": 814.0,
-									"max": 814.0,
-									"avg": 814.0,
+									"min": 12304.0,
+									"q1": 12304.0,
+									"q3": 12304.0,
+									"max": 12304.0,
 									"sd": null,
-									"q1": 814.0,
-									"q3": 814.0
+									"avg": 12304.0
 								}
 							}
 						}
@@ -928,13 +671,12 @@
 				],
 				"database_id": 3,
 				"enable_embedding": false,
-				"collection_id": 13,
+				"collection_id": 4,
 				"query_type": "native",
 				"name": "§[metabase.enanched]§",
-				"read_permissions": null,
-				"query_average_duration": 448,
+				"query_average_duration": 137,
 				"creator_id": 2,
-				"updated_at": "2021-05-23T06:12:41.32512Z",
+				"updated_at": "2021-08-05T11:10:21.653",
 				"made_public_by_id": null,
 				"embedding_params": null,
 				"cache_ttl": null,
@@ -945,20 +687,20 @@
 					},
 					"database": 3
 				},
-				"id": 39,
+				"id": 25,
 				"display": "scalar",
 				"visualization_settings": {},
-				"created_at": "2021-01-18T15:18:59.673031Z",
+				"created_at": "2021-06-28T16:32:06.734",
 				"public_uuid": null
 			},
-			"updated_at": "2021-01-19T11:15:29.093835Z",
+			"updated_at": "2021-08-05T11:11:00.49",
 			"col": 0,
-			"id": 149,
+			"id": 37,
 			"parameter_mappings": [],
 			"card_id": 39,
 			"visualization_settings": {},
 			"dashboard_id": 2,
-			"created_at": "2021-01-19T09:56:22.309677Z",
+			"created_at": "2021-06-28T16:32:06.78",
 			"sizeY": 3,
 			"row": 8
 		},
@@ -972,10 +714,17 @@
 				"table_id": null,
 				"result_metadata": [
 					{
-						"base_type": "type/Decimal",
-						"display_name": "sum",
 						"name": "sum",
-						"special_type": null,
+						"display_name": "sum",
+						"base_type": "type/Decimal",
+						"field_ref": [
+							"field",
+							"sum",
+							{
+								"base-type": "type/Decimal"
+							}
+						],
+						"semantic_type": null,
 						"fingerprint": {
 							"global": {
 								"distinct-count": 1,
@@ -983,12 +732,12 @@
 							},
 							"type": {
 								"type/Number": {
-									"min": 3.3151052E7,
-									"max": 3.3151052E7,
-									"avg": 3.3151052E7,
+									"min": 1.66204717E8,
+									"q1": 1.66204717E8,
+									"q3": 1.66204717E8,
+									"max": 1.66204717E8,
 									"sd": null,
-									"q1": 3.3151052E7,
-									"q3": 3.3151052E7
+									"avg": 1.66204717E8
 								}
 							}
 						}
@@ -996,13 +745,12 @@
 				],
 				"database_id": 3,
 				"enable_embedding": false,
-				"collection_id": 12,
+				"collection_id": 4,
 				"query_type": "native",
 				"name": "§[metabase.total-views]§",
-				"read_permissions": null,
-				"query_average_duration": 2145,
+				"query_average_duration": 4221,
 				"creator_id": 2,
-				"updated_at": "2021-05-23T06:12:44.09671Z",
+				"updated_at": "2021-08-05T11:10:21.603",
 				"made_public_by_id": null,
 				"embedding_params": null,
 				"cache_ttl": null,
@@ -1013,20 +761,20 @@
 					},
 					"type": "native"
 				},
-				"id": 37,
+				"id": 26,
 				"display": "scalar",
 				"visualization_settings": {},
-				"created_at": "2021-01-13T09:40:38.895889Z",
+				"created_at": "2021-06-28T16:32:09.234",
 				"public_uuid": null
 			},
-			"updated_at": "2021-01-19T11:15:29.09714Z",
+			"updated_at": "2021-08-05T11:11:00.496",
 			"col": 0,
-			"id": 150,
+			"id": 38,
 			"parameter_mappings": [],
 			"card_id": 37,
 			"visualization_settings": {},
 			"dashboard_id": 2,
-			"created_at": "2021-01-19T09:56:22.354992Z",
+			"created_at": "2021-06-28T16:32:09.26",
 			"sizeY": 3,
 			"row": 1
 		},
@@ -1040,10 +788,17 @@
 				"table_id": null,
 				"result_metadata": [
 					{
-						"base_type": "type/BigInteger",
-						"display_name": "count",
 						"name": "count",
-						"special_type": "type/Quantity",
+						"display_name": "count",
+						"base_type": "type/BigInteger",
+						"field_ref": [
+							"field",
+							"count",
+							{
+								"base-type": "type/BigInteger"
+							}
+						],
+						"semantic_type": "type/Quantity",
 						"fingerprint": {
 							"global": {
 								"distinct-count": 1,
@@ -1051,12 +806,12 @@
 							},
 							"type": {
 								"type/Number": {
-									"min": 841.0,
-									"max": 841.0,
-									"avg": 841.0,
+									"min": 58326.0,
+									"q1": 58326.0,
+									"q3": 58326.0,
+									"max": 58326.0,
 									"sd": null,
-									"q1": 841.0,
-									"q3": 841.0
+									"avg": 58326.0
 								}
 							}
 						}
@@ -1064,13 +819,12 @@
 				],
 				"database_id": 3,
 				"enable_embedding": false,
-				"collection_id": 14,
+				"collection_id": 4,
 				"query_type": "native",
 				"name": "§[metabase.total-media]§",
-				"read_permissions": null,
-				"query_average_duration": 327,
+				"query_average_duration": 169,
 				"creator_id": 2,
-				"updated_at": "2021-05-23T06:12:41.564956Z",
+				"updated_at": "2021-08-05T11:10:21.855",
 				"made_public_by_id": null,
 				"embedding_params": null,
 				"cache_ttl": null,
@@ -1081,20 +835,20 @@
 					},
 					"database": 3
 				},
-				"id": 44,
+				"id": 27,
 				"display": "scalar",
 				"visualization_settings": {},
-				"created_at": "2021-01-19T10:03:24.77234Z",
+				"created_at": "2021-06-28T16:32:09.321",
 				"public_uuid": null
 			},
-			"updated_at": "2021-01-19T11:15:29.100363Z",
+			"updated_at": "2021-08-05T11:11:00.501",
 			"col": 0,
-			"id": 151,
+			"id": 39,
 			"parameter_mappings": [],
 			"card_id": 44,
 			"visualization_settings": {},
 			"dashboard_id": 2,
-			"created_at": "2021-01-19T10:04:04.137221Z",
+			"created_at": "2021-06-28T16:32:09.354",
 			"sizeY": 3,
 			"row": 15
 		},
@@ -1108,10 +862,17 @@
 				"table_id": null,
 				"result_metadata": [
 					{
+						"name": "§[metabase.year]§",
+						"display_name": "§[metabase.year]§",
 						"base_type": "type/DateTimeWithLocalTZ",
-						"display_name": "§[metabase.views]§",
-						"name": "§[metabase.views]§",
-						"special_type": null,
+						"field_ref": [
+							"field",
+							"§[metabase.year]§",
+							{
+								"base-type": "type/DateTimeWithLocalTZ"
+							}
+						],
+						"semantic_type": null,
 						"fingerprint": {
 							"global": {
 								"distinct-count": 7,
@@ -1126,10 +887,17 @@
 						}
 					},
 					{
-						"base_type": "type/Decimal",
-						"display_name": "§[metabase.visits-per-year]§",
 						"name": "§[metabase.visits-per-year]§",
-						"special_type": null,
+						"display_name": "§[metabase.visits-per-year]§",
+						"base_type": "type/Decimal",
+						"field_ref": [
+							"field",
+							"§[metabase.visits-per-year]§",
+							{
+								"base-type": "type/Decimal"
+							}
+						],
+						"semantic_type": null,
 						"fingerprint": {
 							"global": {
 								"distinct-count": 7,
@@ -1137,21 +905,28 @@
 							},
 							"type": {
 								"type/Number": {
-									"min": 1840097.0,
-									"max": 6792721.0,
-									"avg": 4735864.571428572,
-									"sd": 1504320.9550392781,
-									"q1": 4530486.5,
-									"q3": 5409653.5
+									"min": 4462.0,
+									"q1": 6119551.75,
+									"q3": 3.73618695E7,
+									"max": 4.9763588E7,
+									"sd": 1.8517478375475578E7,
+									"avg": 2.3743531E7
 								}
 							}
 						}
 					},
 					{
-						"base_type": "type/Decimal",
-						"display_name": "§[metabase.cumulative-usage]§",
 						"name": "§[metabase.cumulative-usage]§",
-						"special_type": null,
+						"display_name": "§[metabase.cumulative-usage]§",
+						"base_type": "type/Decimal",
+						"field_ref": [
+							"field",
+							"§[metabase.cumulative-usage]§",
+							{
+								"base-type": "type/Decimal"
+							}
+						],
+						"semantic_type": null,
 						"fingerprint": {
 							"global": {
 								"distinct-count": 7,
@@ -1159,12 +934,12 @@
 							},
 							"type": {
 								"type/Number": {
-									"min": 6792721.0,
-									"max": 3.3151052E7,
-									"avg": 2.143263385714286E7,
-									"sd": 9825542.78939938,
-									"q1": 1.351990825E7,
-									"q3": 3.0180265E7
+									"min": 4462.0,
+									"q1": 6854106.25,
+									"q3": 1.15000102E8,
+									"max": 1.66204717E8,
+									"sd": 6.442569244087073E7,
+									"avg": 6.2487919571428575E7
 								}
 							}
 						}
@@ -1172,13 +947,12 @@
 				],
 				"database_id": 3,
 				"enable_embedding": false,
-				"collection_id": 12,
+				"collection_id": 4,
 				"query_type": "native",
 				"name": "§[metabase.views-year]§",
-				"read_permissions": null,
-				"query_average_duration": 1923,
+				"query_average_duration": 14609,
 				"creator_id": 2,
-				"updated_at": "2021-05-23T06:12:44.105668Z",
+				"updated_at": "2021-08-05T11:10:21.708",
 				"made_public_by_id": null,
 				"embedding_params": null,
 				"cache_ttl": null,
@@ -1189,7 +963,7 @@
 					},
 					"type": "native"
 				},
-				"id": 38,
+				"id": 28,
 				"display": "line",
 				"visualization_settings": {
 					"graph.dimensions": [
@@ -1209,17 +983,17 @@
 						}
 					}
 				},
-				"created_at": "2021-01-13T20:49:13.257604Z",
+				"created_at": "2021-06-28T16:32:19.286",
 				"public_uuid": null
 			},
-			"updated_at": "2021-01-19T11:15:29.103671Z",
+			"updated_at": "2021-08-05T11:11:00.504",
 			"col": 4,
-			"id": 152,
+			"id": 40,
 			"parameter_mappings": [],
 			"card_id": 38,
 			"visualization_settings": {},
 			"dashboard_id": 2,
-			"created_at": "2021-01-19T10:15:43.826145Z",
+			"created_at": "2021-06-28T16:32:19.319",
 			"sizeY": 6,
 			"row": 1
 		},
@@ -1233,10 +1007,17 @@
 				"table_id": null,
 				"result_metadata": [
 					{
-						"base_type": "type/DateTimeWithLocalTZ",
-						"display_name": "§[metabase.year]§",
 						"name": "§[metabase.year]§",
-						"special_type": null,
+						"display_name": "§[metabase.year]§",
+						"base_type": "type/DateTimeWithLocalTZ",
+						"field_ref": [
+							"field",
+							"§[metabase.year]§",
+							{
+								"base-type": "type/DateTimeWithLocalTZ"
+							}
+						],
+						"semantic_type": null,
 						"fingerprint": {
 							"global": {
 								"distinct-count": 4,
@@ -1244,17 +1025,24 @@
 							},
 							"type": {
 								"type/DateTime": {
-									"earliest": "2017-01-01T00:00:00+01:00",
-									"latest": "2020-01-01T00:00:00+01:00"
+									"earliest": "2018-01-01T00:00:00+01:00",
+									"latest": "2021-01-01T00:00:00+01:00"
 								}
 							}
 						}
 					},
 					{
-						"base_type": "type/BigInteger",
-						"display_name": "§[metabase.new-usages]§",
 						"name": "§[metabase.new-usages]§",
-						"special_type": null,
+						"display_name": "§[metabase.new-usages]§",
+						"base_type": "type/BigInteger",
+						"field_ref": [
+							"field",
+							"§[metabase.new-usages]§",
+							{
+								"base-type": "type/BigInteger"
+							}
+						],
+						"semantic_type": null,
 						"fingerprint": {
 							"global": {
 								"distinct-count": 4,
@@ -1262,21 +1050,28 @@
 							},
 							"type": {
 								"type/Number": {
-									"min": 5.0,
-									"max": 736.0,
-									"avg": 220.75,
-									"sd": 347.2188310945515,
-									"q1": 13.5,
-									"q3": 428.0
+									"min": 1389.0,
+									"q1": 2137.5,
+									"q3": 4291.5,
+									"max": 5463.0,
+									"sd": 1683.7502783964135,
+									"avg": 3214.5
 								}
 							}
 						}
 					},
 					{
-						"base_type": "type/Decimal",
-						"display_name": "§[metabase.cumulative-usage]§",
 						"name": "§[metabase.cumulative-usage]§",
-						"special_type": null,
+						"display_name": "§[metabase.cumulative-usage]§",
+						"base_type": "type/Decimal",
+						"field_ref": [
+							"field",
+							"§[metabase.cumulative-usage]§",
+							{
+								"base-type": "type/Decimal"
+							}
+						],
+						"semantic_type": null,
 						"fingerprint": {
 							"global": {
 								"distinct-count": 4,
@@ -1284,12 +1079,12 @@
 							},
 							"type": {
 								"type/Number": {
-									"min": 736.0,
-									"max": 883.0,
-									"avg": 805.25,
-									"sd": 77.62463097067408,
-									"q1": 738.5,
-									"q3": 872.0
+									"min": 1389.0,
+									"q1": 2832.0,
+									"q3": 11298.0,
+									"max": 12858.0,
+									"sd": 5186.676970855232,
+									"avg": 7065.0
 								}
 							}
 						}
@@ -1297,13 +1092,12 @@
 				],
 				"database_id": 3,
 				"enable_embedding": false,
-				"collection_id": 13,
+				"collection_id": 4,
 				"query_type": "native",
 				"name": "§[metabase.media-used-year]§",
-				"read_permissions": null,
-				"query_average_duration": 15,
+				"query_average_duration": 185,
 				"creator_id": 2,
-				"updated_at": "2021-05-23T06:12:41.309301Z",
+				"updated_at": "2021-08-05T11:10:21.944",
 				"made_public_by_id": null,
 				"embedding_params": null,
 				"cache_ttl": null,
@@ -1314,7 +1108,7 @@
 					},
 					"type": "native"
 				},
-				"id": 40,
+				"id": 29,
 				"display": "line",
 				"visualization_settings": {
 					"graph.dimensions": [
@@ -1334,17 +1128,17 @@
 						}
 					}
 				},
-				"created_at": "2021-01-18T15:32:16.244733Z",
+				"created_at": "2021-06-28T16:32:19.373",
 				"public_uuid": null
 			},
-			"updated_at": "2021-01-19T11:15:29.107312Z",
+			"updated_at": "2021-08-05T11:11:00.507",
 			"col": 4,
-			"id": 153,
+			"id": 41,
 			"parameter_mappings": [],
 			"card_id": 40,
 			"visualization_settings": {},
 			"dashboard_id": 2,
-			"created_at": "2021-01-19T10:27:44.073259Z",
+			"created_at": "2021-06-28T16:32:19.4",
 			"sizeY": 6,
 			"row": 8
 		},
@@ -1358,63 +1152,84 @@
 				"table_id": null,
 				"result_metadata": [
 					{
-						"base_type": "type/DateTime",
-						"display_name": "§[metabase.year]§",
 						"name": "§[metabase.year]§",
-						"special_type": null,
+						"display_name": "§[metabase.year]§",
+						"base_type": "type/DateTime",
+						"field_ref": [
+							"field",
+							"§[metabase.year]§",
+							{
+								"base-type": "type/DateTime"
+							}
+						],
+						"semantic_type": null,
 						"fingerprint": {
 							"global": {
-								"distinct-count": 16,
+								"distinct-count": 9,
 								"nil%": 0.0
 							},
 							"type": {
 								"type/DateTime": {
-									"earliest": "2005-01-01T00:00:00+01:00",
-									"latest": "2020-01-01T00:00:00+01:00"
+									"earliest": "2009-01-01T00:00:00+01:00",
+									"latest": "2021-01-01T00:00:00+01:00"
 								}
 							}
 						}
 					},
 					{
-						"base_type": "type/BigInteger",
-						"display_name": "§[metabase.media-per-year]§",
 						"name": "§[metabase.media-per-year]§",
-						"special_type": null,
+						"display_name": "§[metabase.media-per-year]§",
+						"base_type": "type/BigInteger",
+						"field_ref": [
+							"field",
+							"§[metabase.media-per-year]§",
+							{
+								"base-type": "type/BigInteger"
+							}
+						],
+						"semantic_type": null,
 						"fingerprint": {
 							"global": {
-								"distinct-count": 16,
+								"distinct-count": 9,
 								"nil%": 0.0
 							},
 							"type": {
 								"type/Number": {
 									"min": 1.0,
-									"max": 233.0,
-									"avg": 52.5625,
-									"sd": 53.95920526966027,
-									"q1": 25.5,
-									"q3": 61.0
+									"q1": 10.25,
+									"q3": 10214.25,
+									"max": 30589.0,
+									"sd": 10056.711602208747,
+									"avg": 6480.666666666667
 								}
 							}
 						}
 					},
 					{
-						"base_type": "type/Decimal",
-						"display_name": "§[metabase.media-cumulated]§",
 						"name": "§[metabase.media-cumulated]§",
-						"special_type": null,
+						"display_name": "§[metabase.media-cumulated]§",
+						"base_type": "type/Decimal",
+						"field_ref": [
+							"field",
+							"§[metabase.media-cumulated]§",
+							{
+								"base-type": "type/Decimal"
+							}
+						],
+						"semantic_type": null,
 						"fingerprint": {
 							"global": {
-								"distinct-count": 16,
+								"distinct-count": 9,
 								"nil%": 0.0
 							},
 							"type": {
 								"type/Number": {
-									"min": 1.0,
-									"max": 841.0,
-									"avg": 471.4375,
-									"sd": 286.42066237150794,
-									"q1": 285.0,
-									"q3": 711.0
+									"min": 2.0,
+									"q1": 15.75,
+									"q3": 54232.25,
+									"max": 58326.0,
+									"sd": 26815.55929296356,
+									"avg": 30008.777777777777
 								}
 							}
 						}
@@ -1422,13 +1237,12 @@
 				],
 				"database_id": 3,
 				"enable_embedding": false,
-				"collection_id": 14,
+				"collection_id": 4,
 				"query_type": "native",
 				"name": "§[metabase.media-added]§",
-				"read_permissions": null,
-				"query_average_duration": 12,
+				"query_average_duration": 451,
 				"creator_id": 2,
-				"updated_at": "2021-05-23T06:12:41.452581Z",
+				"updated_at": "2021-08-05T11:10:22.026",
 				"made_public_by_id": null,
 				"embedding_params": null,
 				"cache_ttl": null,
@@ -1439,7 +1253,7 @@
 					},
 					"type": "native"
 				},
-				"id": 45,
+				"id": 30,
 				"display": "line",
 				"visualization_settings": {
 					"graph.dimensions": [
@@ -1459,17 +1273,17 @@
 						}
 					}
 				},
-				"created_at": "2021-01-19T10:13:27.009467Z",
+				"created_at": "2021-06-28T16:32:19.479",
 				"public_uuid": null
 			},
-			"updated_at": "2021-01-19T11:15:29.11132Z",
+			"updated_at": "2021-08-05T11:11:00.51",
 			"col": 4,
-			"id": 154,
+			"id": 42,
 			"parameter_mappings": [],
 			"card_id": 45,
 			"visualization_settings": {},
 			"dashboard_id": 2,
-			"created_at": "2021-01-19T10:31:21.510049Z",
+			"created_at": "2021-06-28T16:32:19.537",
 			"sizeY": 6,
 			"row": 15
 		}
@@ -1477,19 +1291,19 @@
 	"param_values": null,
 	"can_write": true,
 	"enable_embedding": true,
-	"collection_id": 7,
+	"collection_id": 4,
 	"show_in_getting_started": false,
-	"name": "Canton of Zürich",
+	"name": "ETH Library of Zurich",
 	"caveats": null,
 	"creator_id": 2,
-	"updated_at": "2021-01-19T11:15:29.262002Z",
+	"updated_at": "2021-08-05T11:11:00.657",
 	"made_public_by_id": null,
-	"embedding_params": {},
+	"embedding_params": null,
 	"id": 2,
 	"position": null,
 	"param_fields": null,
 	"parameters": [],
-	"created_at": "2020-06-03T14:43:59.831605Z",
+	"created_at": "2021-06-28T16:19:43.501",
 	"public_uuid": null,
 	"points_of_interest": null
 }
