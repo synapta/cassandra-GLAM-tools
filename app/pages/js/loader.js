@@ -95,6 +95,8 @@ $("#mobile-header-bar").load("/views/templates/mobile-header.html", function () 
 // Load mobile sidebar
 $("#mobile-sidebar").load("/views/templates/mobile-sidebar.html");
 
+$("#main-footer").load("/views/templates/footer.html");
+
 $(function () {
   $(".get-chart-info").click(function () {
     $(this).closest(".chart-preview-inner").css("transform", "rotateY(180deg)");
