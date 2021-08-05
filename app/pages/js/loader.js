@@ -15,6 +15,21 @@ function is_touch_device() {
 }
 // Load main sidebar
 $("#main-sidebar").load("/views/templates/sidebar.html", function () {
+  $.getJSON("/api/admin/settings", function (res) {
+    if (res) {
+      if (res.ownerUrl) {
+        document.getElementById("owner-logo-url").href = res.ownerUrl;
+      } else {
+        document.getElementById("owner-logo-url").href = "https://www.wikimedia.ch/";
+      }
+      if (res.ownerName) {
+        document.getElementById("owner-logo-url").title = res.ownerName;
+      } else {
+        document.getElementById("owner-logo-url").title = "Wikimedia";
+      }
+    }
+  });
+
   // Load secondary sidebar
   $("#secondary-sidebar").load("/views/templates/secondary-sidebar.html", function () {
     renderChangeLang();
@@ -56,6 +71,12 @@ $("#main-sidebar").load("/views/templates/sidebar.html", function () {
       }
     });
   });
+
+  document.getElementById("owner-logo-image").src = "/assets/owner-logo.svg";
+
+  document.getElementById("owner-logo-image").onerror = function () {
+    document.getElementById("owner-logo-image").src = "/assets/img/owner-logo-default.svg";
+  };
 });
 
 // Load mobile header bar

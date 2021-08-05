@@ -20,6 +20,14 @@ $(function () {
         } else {
           $("#setHomeTitle").val("§[admin.set-title-placeholder]§");
         }
+
+        if (res.ownerUrl) {
+          $("#ownerUrl").val(res.ownerUrl);
+        }
+
+        if (res.ownerName) {
+          $("#ownerName").val(res.ownerName);
+        }
       }
     });
   });
@@ -51,7 +59,9 @@ $(function () {
     e.preventDefault();
     let settings = {
       homeTitle: $("#setHomeTitle").val(),
-      defaultLanguage: $("#defaultLang").val()
+      defaultLanguage: $("#defaultLang").val(),
+      ownerUrl: $("#ownerUrl").val(),
+      ownerName: $("#ownerName").val()
     };
 
     $.ajax({

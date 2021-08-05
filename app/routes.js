@@ -562,7 +562,7 @@ module.exports = function (app, apicache) {
 
   app.post("/api/admin/owner-logo", function (req, res) {
     try {
-      fs.writeFileSync('../config/owner-logo.svg', req.body)
+      fs.writeFileSync('./pages/assets/owner-logo.svg', req.body)
       res.sendStatus(200);
     } catch {
       res.sendStatus(500);
