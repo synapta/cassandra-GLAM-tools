@@ -79,25 +79,15 @@ After editing the configuration file, it is necessary to restart the tool:
 supervisorctl restart cassandra
 ```
 
+To enable the update and restart of the tool from the administrative area, it is necessary to add the following line at the end of the file that you can open with `sudo visudo`:
+
+```
+glam ALL=(ALL) NOPASSWD: /usr/bin/supervisorctl
+```
+
 It may be necessary to revise the maximum number of categories and files acceptable per GLAM that are provided in the configuration file. Default values are 1k categories and 500k files. If you add a GLAM breaking these limits, it will not be processed and displayed to users.
 
 The Cassandra tool is now available at http://host.example.com:8081. For production use, it is strongly suggested to enable a firewall and to serve the external traffic with an encrypted connection, for example by installing and properly configuring NGINX. The Cassandra tool and Metabase must be associated with different domains. The Metabase URL should be set in the Cassandra configuration file.
-
-## Usage
-
-For the Cassandra main page, select "Control Panel" and login as the user "admin" with the *admin_password* of your choice. To create a new GLAM, select "Add new GLAM". You will need to provide a GLAM ID (this will be the name of the PostgreSQL database), a GLAM full name, the corresponding Wikimedia Commons category, and the URL of an image representing the GLAM.
-
-The pipeline extracting file usage statistics is set to run every 5 minutes. You can check its logs by reading the file `/var/log/cassandra/etl.log`. When this process is completed, the GLAM is ready to be shown to users. However, the list of available GLAMs is updated by the web application every hour. If you don't want to wait, you can manually restart the tool.
-
-The views and the suggestions are still empty at this point because they are populated by two processes that are set to run every night. You can customize the timings by editing the crontab available at `/etc/cron.d/cassandra`. They both write their logs in the directory `/var/log/cassandra`. If you want, you can also run them manually, but be advised that the view pipeline may be slow the first time. The default setting is to load the views of the last 10 days only. If needed, you can edit this value by modifying the GLAM metadata in MongoDB. You will need to create a field *min_date* associated with a string like "2015-01-01".
-
-## Localization
-
-The Cassandra tool can be localized in any language. Currently supported languages are available in the directory `app/locales`. An effective way to add a new language is to commit in this repository the corresponding file using the same format of the *en* language.
-
-For managing translations in a more user-friendly way, it is possible to rely on the [Pontoon tool](https://pontoon.mozilla.org) created by Mozilla Foundation. A public instance of Pontoon for translating Cassandra is available at ...
-
-New users can only be created by an administrator from the interface available at `/a/auth/user/`. A new language can be added by editing the project settings available at `/admin/projects/cassandra-glam-tools/`.
 
 ### Pontoon installation
 
@@ -129,3 +119,52 @@ Create a new GitHub user and associate it with an SSH key. Give to that user the
 ```
 supervisorctl restart pontoon
 ```
+
+## Update
+To update Cassandra to the latest version available in its repository, for example after the release of a new version or the creation of a new translation, it is necessary to login into the machine that hosts the tool. Then, it is recommended to become the glam user:
+
+```
+sudo su glam
+```
+
+Change the current directory to the directory where the tool is located and update the codebase from GitHub:
+
+```
+cd /home/glam/cassandra-GLAM-tools && git pull
+```
+
+Finally, it is necessary to restart the tool:
+
+```
+supervisorctl restart cassandra
+```
+
+An easier way of updating the tool is to click the "update tool" button available in Cassandra "Control Panel" (see below).
+
+## Usage
+
+To enter into the "Control Panel" use the path `/admin/panel`. Login as the user "admin" with the *admin_password* of your choice. To create a new GLAM, select "Add new GLAM". You will need to provide a GLAM ID (this will be the name of the PostgreSQL database), a GLAM full name, the corresponding Wikimedia Commons category, and the URL of an image representing the GLAM.
+
+The pipeline extracting file usage statistics is set to run every 5 minutes. You can check its logs by reading the file `/var/log/cassandra/etl.log`. When this process is completed, the GLAM is ready to be shown to users. However, the list of available GLAMs is updated by the web application every hour. If you don't want to wait, you can manually restart the tool.
+
+The views and the suggestions are still empty at this point because they are populated by two processes that are set to run every night. You can customize the timings by editing the crontab available at `/etc/cron.d/cassandra`. They both write their logs in the directory `/var/log/cassandra`. If you want, you can also run them manually, but be advised that the view pipeline may be slow the first time. The default setting is to load the views of the last 10 days only. If needed, you can edit this value by modifying the GLAM metadata in MongoDB. You will need to create a field *min_date* associated with a string like "2015-01-01".
+
+From the "Control Panel" in the "settings" page, it is possible to upload a new owner logo, set a custom home slogan and change the default language. To apply these settings it is necessary to restart the tool with the "update tool" button.
+
+## Localization
+
+The Cassandra tool can be localized in any language. Currently supported languages are available in the directory `app/locales`. An effective way to add a new language is to commit in this repository the corresponding file using the same format of the *en* language.
+
+For managing translations in a more user-friendly way, it is possible to rely on the [Pontoon tool](https://pontoon.mozilla.org) created by Mozilla Foundation. A public instance of Pontoon for translating Cassandra is available at [https://pontoon-wmch.synapta.io](https://pontoon-wmch.synapta.io).
+
+### Create a new translation user
+
+New users can only be created by an administrator from the interface available at `/a/auth/user/`.
+
+### Add a brand new language
+
+A new language can be added by editing the project settings available at `/admin/projects/cassandra-glam-tools/`. Move the desired language from “Available” to “Localizable”, then save the project. Finally, it is necessary to synchronize the project as described in the following section.
+
+### Translation into production
+
+As an admin user you can decide to send the current translation corpus into production by clicking on the "sync" grey button at the end of the project settings page. If everything went well, you will see a new commit on the [GitHub repository](https://github.com/synapta/cassandra-GLAM-tools/commits/master), like [this](https://github.com/synapta/cassandra-GLAM-tools/commit/18631d649634e8e1ea96c398bfcb9bfd4d03a817). The translation is published, now you need to eventually update your Cassandra installation. You can update the Cassandra tool with the "update tool" button in Cassandra "Control Panel" or follow the steps described in the "Update" section. 
