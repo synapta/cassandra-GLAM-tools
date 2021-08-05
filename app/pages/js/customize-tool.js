@@ -8,7 +8,22 @@ $(function () {
       const opt = `<option value="${lang.code}">${lang.nativeName}</option>`;
       selectLang.append(opt);
     });
+  }).done(() => {
+    $.getJSON("/api/admin/settings", function (res) {
+      if (res) {
+        if (res.defaultLanguage) {
+          const selectLang = $("#defaultLang");
+          selectLang.val(res.defaultLanguage);
+        }
+        if (res.homeTitle) {
+          $("#setHomeTitle").val(res.homeTitle);
+        } else {
+          $("#setHomeTitle").val("§[admin.set-title-placeholder]§");
+        }
+      }
+    });
   });
+
   $("#uploadForm").submit(async function (e) {
     e.preventDefault();
     const logoFile = document.getElementById("logoFile");
@@ -19,7 +34,7 @@ $(function () {
         url: "/api/admin/owner-logo",
         data: buffer,
         processData: false,
-        contentType: 'image/svg+xml',
+        contentType: "image/svg+xml",
         success: function (data) {
           $("#upload-error").fadeOut(200);
           $("#upload-success").fadeIn(200);
