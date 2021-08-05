@@ -29,7 +29,7 @@
       <!-- MAIN -->
       <!-- Title -->
       <section id="admin-cover" class="cover">
-        <div class="justify-content-between row w-100"  style="flex-wrap: nowrap;">
+        <div class="justify-content-between row w-100" style="flex-wrap: nowrap">
           <div>
             <h2>§[admin.tool-settings-title]§</h2>
           </div>
@@ -95,12 +95,7 @@
                 </div>
                 <div class="form-group">
                   <label for="ownerName">§[admin.owner-name]§</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="ownerName"
-                    placeholder="Wikimedia"
-                  />
+                  <input type="text" class="form-control" id="ownerName" placeholder="Wikimedia" />
                 </div>
                 <div class="form-group">
                   <label for="defaultLang">§[admin.default-lang]§</label>
@@ -114,24 +109,30 @@
                     <h4>§[admin.save-success]§</h4>
                   </div>
                 </div>
-                <button id="save-settings" class="btn btn-primary uppercase">
-                  §[admin.save]§
-                </button>
+                <button id="save-settings" class="btn btn-primary uppercase">§[admin.save]§</button>
               </form>
             </div>
           </div>
           <div class="row">
             <div class="col-12 mt-4 mt-xl-0 col-lg-2">
+              <div>
+                <p style="margin: 1rem 0">
+                  <a target="blank" href="https://github.com/synapta/cassandra-GLAM-tools/commits/master"
+                    >Codebase history on GitHub
+                  </a>
+                </p>
+              </div>
               <button id="update-button" class="btn btn-default border-dark uppercase">
-                §[admin.refresh]§</button>
-               <div id="refresh-error" class="error-message" style="display: none">
-                  <h4>§[admin.refresh-error]§</h4>
+                §[admin.refresh]§
+              </button>
+              <div id="refresh-error" class="error-message" style="display: none">
+                <h4>§[admin.refresh-error]§</h4>
+              </div>
+              <div id="refresh-success" style="display: none">
+                <div class="success-message">
+                  <h4>§[admin.refresh-success]§</h4>
                 </div>
-                <div id="refresh-success" style="display: none">
-                  <div class="success-message">
-                    <h4>§[admin.refresh-success]§</h4>
-                  </div>
-                </div>
+              </div>
             </div>
           </div>
         </section>
