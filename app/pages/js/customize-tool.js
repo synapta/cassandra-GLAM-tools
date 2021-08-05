@@ -9,17 +9,17 @@ $(function () {
       selectLang.append(opt);
     });
   });
-  $("#uploadForm").submit(function (e) {
-    console.log("uploadLogo clicked");
+  $("#uploadForm").submit(async function (e) {
     e.preventDefault();
-    const formData = new FormData(this);
-    if (document.getElementById("logoFile").files.length) {
+    const logoFile = document.getElementById("logoFile");
+    if (logoFile.files.length) {
+      const buffer = await logoFile.files[0].arrayBuffer();
       $.ajax({
         type: "POST",
         url: "/api/admin/owner-logo",
-        data: formData,
+        data: buffer,
         processData: false,
-        contentType: false,
+        contentType: 'image/svg+xml',
         success: function (data) {
           $("#upload-error").fadeOut(200);
           $("#upload-success").fadeIn(200);

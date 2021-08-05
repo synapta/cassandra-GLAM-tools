@@ -3,6 +3,8 @@ package-lock.json
 /app/pages/docs.html
 *.log
 /config/config.json
+/config/i18n.json
+/config/owner-logo.svg
 .vscode
 venv
 *.csv

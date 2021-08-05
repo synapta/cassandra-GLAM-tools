@@ -1,4 +1,5 @@
-const express = require('express');
+const fs = require('fs');
+const { exec } = require('child_process');
 const request = require('request');
 const auth = require('http-auth');
 const { createProxyMiddleware, responseInterceptor } = require('http-proxy-middleware');
@@ -528,19 +529,44 @@ module.exports = function (app, apicache) {
     });
   });
 
+  app.get("/api/admin/settings", function (req, res) {
+    try {
+      const data = fs.readFileSync('../config/i18n.json');
+      const settings = JSON.parse(data);
+      res.json(settings);
+    } catch {
+      res.sendStatus(404);
+    }
+  });
+
   app.post("/api/admin/settings", function (req, res) {
-    console.log("receive settings!");
-    res.sendStatus(200);
+    try {
+      const data = JSON.stringify(req.body);
+      fs.writeFileSync('../config/i18n.json', data)
+      res.sendStatus(200);
+    } catch {
+      res.sendStatus(500);
+    }
   });
 
   app.get("/api/admin/update-tool", function (req, res) {
-    console.log("request update!");
+    setImmediate(() => {
+      exec('git pull', (err) => {
+        if (!err) {
+          exec('sudo supervisorctl restart cassandra');
+        }
+      });
+    });
     res.sendStatus(200);
   });
 
   app.post("/api/admin/owner-logo", function (req, res) {
-    console.log("receive logo!");
-    res.sendStatus(200);
+    try {
+      fs.writeFileSync('../config/owner-logo.svg', req.body)
+      res.sendStatus(200);
+    } catch {
+      res.sendStatus(500);
+    }
   });
 
   // Metabase proxy

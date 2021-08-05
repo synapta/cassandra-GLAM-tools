@@ -7,7 +7,33 @@ const Mustache = require('mustache');
 Mustache.tags = ['§[', ']§'];
 
 const localesFolder = './locales';
-const defaultLanguage = 'en';
+
+let defaultLanguage = 'en';
+let homeTitle = null;
+let ownerLogo = null;
+
+// Load owner logo if any
+try {
+    ownerLogo = fs.readFileSync('../config/owner-logo.svg');
+} catch {
+    // pass
+}
+
+// Load config if any
+try {
+    const i18nFile = fs.readFileSync('../config/i18n.json');
+    if (i18nFile) {
+        const i18nConfig = JSON.parse(i18nFile);
+        if (i18nConfig.defaultLanguage) {
+            defaultLanguage = i18nConfig.defaultLanguage
+        }
+        if (i18nConfig.homeTitle) {
+            homeTitle = i18nConfig.homeTitle;
+        }
+    }
+} catch {
+    // pass
+}
 
 const messages = {};
 
@@ -17,6 +43,9 @@ fs.readdirSync(localesFolder + '/' + defaultLanguage).forEach(namespace => {
     const items = ini.parse(fs.readFileSync(localesFolder + '/' + defaultLanguage + '/' + namespace, 'utf-8'));
     messages[defaultLanguage][namespace.replace('.ini', '')] = items
 });
+if (homeTitle) {
+    messages[defaultLanguage]['messages']['home-slogan'] = homeTitle;
+}
 
 // Load other languages
 fs.readdirSync(localesFolder).forEach(language => {
@@ -28,6 +57,9 @@ fs.readdirSync(localesFolder).forEach(language => {
         const items = ini.parse(fs.readFileSync(localesFolder + '/' + language + '/' + namespace, 'utf-8'));
         messages[language][namespace.replace('.ini', '')] = items
     });
+    if (homeTitle) {
+        messages[language]['messages']['home-slogan'] = homeTitle;
+    }
 });
 
 function getLanguage(req, res) {
@@ -72,8 +104,15 @@ exports.static = function (dir) {
     return function (req, res, next) {
         // Remove query string
         let pathname = decodeURIComponent(req.url.split('?').shift());
+        // Redirect homepage
         if (pathname === '/')
             pathname = '/index.html';
+        // Manage owner logo
+        if (pathname === '/assets/img/owner-logo.svg' && ownerLogo) {
+            res.setHeader('Content-Type', 'image/svg+xml');
+            res.send(ownerLogo);
+            return;
+        }
         const fileName = path.join(dir, pathname);
         const fileType = mime.lookup(fileName) || 'application/octet-stream';
         const enconding = fileType.startsWith('text') || fileType.startsWith('application') ? 'utf8' : null;

@@ -13,6 +13,7 @@ if (typeof config.raven !== 'undefined') {
 }
 
 app.use(morgan('common'));
+app.use(express.raw({type: 'image/svg+xml', limit: '1mb'}));
 app.use(express.json());
 app.use(cookieParser());
 
