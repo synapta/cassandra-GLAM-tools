@@ -38,7 +38,8 @@
   border-radius: 3px;
   margin: 0;
   transition: all .5s;
-  text-transform: uppercase
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .glam-button:hover {
