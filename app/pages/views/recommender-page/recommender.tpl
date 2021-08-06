@@ -39,6 +39,7 @@
               <a href="{{url}}" title="{{label}}" target="_blank">{{label}}</a>
             </div>
             {{#each media}}
+            {{#if lang}}
               <div class="col-2 text-truncate">
                 <span>{{lang}} : </span>
                 <a
@@ -47,6 +48,7 @@
                   style="font-size:0.9em;margin-right:2em"
                 >{{label}}</a>
               </div>
+              {{/if}}
             {{/each}}
           </div>
         {{/each}}

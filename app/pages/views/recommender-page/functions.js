@@ -68,60 +68,81 @@ function getFiles() {
         stopScroll = true;
         // remove handler
       }
-      // get image thumbnail
-      for (let i = 0; i < files.length; i++) {
-        getThumbnailUrl(files[i].img_name, 500, function (thumbnail_url) {
-          // console.log(thumbnail_url);
-          files[i].thumbnail_url = thumbnail_url;
-          // add views and category;
-          files[i].image_name = files[i].img_name ? files[i].img_name.replace(/_/g, " ") : "";
-          files[i].image_id = files[i].img_name ? cleanImageName(files[i].img_name) : "";
-          const distinctFiles = [];
-          files[i].titles.forEach(title => {
-            if (!distinctFiles.includes(title)) {
-              distinctFiles.push(title);
-            }
-          });
 
-          // recommender
-          //get data from wiki
-          $.getJSON(getWikiDataUrl(distinctFiles), function (wikidata) {
-            let base = "https://www.wikidata.org/wiki/";
-            files[i].wikis = [];
-            for (let j = 0; j < distinctFiles.length; j++) {
-              files[i].wikis.push({
-                title: distinctFiles[j],
-                url: base + distinctFiles[j]
-              });
-            }
+      let langOrderStr = "";
+      const langOrderStrDef = "de, en, fr, it";
 
-            for (let j = 0; j < files[i].wikis.length; j++) {
-              let data = wikidata.entities[files[i].wikis[j].title];
-              if (data.labels && !isEmpty(data.labels)) {
-                if (data.labels.en) {
-                  files[i].wikis[j].label = data.labels.en.value;
-                } else {
-                  files[i].wikis[j].label = data.labels[Object.keys(data.labels)[0]].value;
-                }
+      $.getJSON("/api/settings", function (res) {
+        if (res && res.recommenderLangs) {
+          langOrderStr = res.recommenderLangs;
+        } else {
+          langOrderStr = langOrderStrDef;
+        }
+      }).always(() => {
+        langOrderStr = langOrderStr ? langOrderStr : langOrderStrDef;
+        for (let i = 0; i < files.length; i++) {
+          getThumbnailUrl(files[i].img_name, 500, function (thumbnail_url) {
+            // console.log(thumbnail_url);
+            files[i].thumbnail_url = thumbnail_url;
+            // add views and category;
+            files[i].image_name = files[i].img_name ? files[i].img_name.replace(/_/g, " ") : "";
+            files[i].image_id = files[i].img_name ? cleanImageName(files[i].img_name) : "";
+            const distinctFiles = [];
+            files[i].titles.forEach(title => {
+              if (!distinctFiles.includes(title)) {
+                distinctFiles.push(title);
               }
-              files[i].wikis[j].media = [];
-              for (const prop in data.sitelinks) {
-                if (data.sitelinks.hasOwnProperty(prop)) {
-                  let lang = prop.split("wiki")[0];
-                  let wiki = {};
-                  wiki.url = data.sitelinks[prop].url;
-                  wiki.lang = lang;
-                  wiki.label = data.sitelinks[prop].title;
-                  files[i].wikis[j].media.push(wiki);
-                }
+            });
+
+            // recommender
+            //get data from wiki
+            $.getJSON(getWikiDataUrl(distinctFiles), function (wikidata) {
+              let base = "https://www.wikidata.org/wiki/";
+              files[i].wikis = [];
+              for (let j = 0; j < distinctFiles.length; j++) {
+                files[i].wikis.push({
+                  title: distinctFiles[j],
+                  url: base + distinctFiles[j]
+                });
               }
-            }
-            // compile template
-            let template = Handlebars.compile(tpl);
-            $("#resultsSearch").append(template(files[i]));
+
+              for (let j = 0; j < files[i].wikis.length; j++) {
+                let data = wikidata.entities[files[i].wikis[j].title];
+                if (data.labels && !isEmpty(data.labels)) {
+                  if (data.labels.en) {
+                    files[i].wikis[j].label = data.labels.en.value;
+                  } else {
+                    files[i].wikis[j].label = data.labels[Object.keys(data.labels)[0]].value;
+                  }
+                }
+                files[i].wikis[j].media = [];
+                const order = langOrderStr
+                  .toLowerCase()
+                  .split(",")
+                  .map(s => s.trim());
+                const map = {};
+                order.forEach(el => (map[el] = {}));
+
+                for (const prop in data.sitelinks) {
+                  if (data.sitelinks.hasOwnProperty(prop)) {
+                    let lang = prop.split("wiki")[0];
+                    let wiki = {};
+                    wiki.url = data.sitelinks[prop].url;
+                    wiki.lang = lang;
+                    wiki.label = data.sitelinks[prop].title;
+                    map[lang] = wiki;
+                  }
+                }
+                console.log(Object.values(map));
+                files[i].wikis[j].media = Object.values(map);
+              }
+              // compile template
+              let template = Handlebars.compile(tpl);
+              $("#resultsSearch").append(template(files[i]));
+            });
           });
-        });
-      }
+        }
+      });
     });
   });
 }

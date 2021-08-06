@@ -28,6 +28,10 @@ $(function () {
         if (res.ownerName) {
           $("#ownerName").val(res.ownerName);
         }
+
+        if (res.recommenderLangs) {
+          $("#recommenderLangs").val(res.recommenderLangs);
+        }
       }
     });
   });
@@ -61,7 +65,8 @@ $(function () {
       homeTitle: $("#setHomeTitle").val(),
       defaultLanguage: $("#defaultLang").val(),
       ownerUrl: $("#ownerUrl").val(),
-      ownerName: $("#ownerName").val()
+      ownerName: $("#ownerName").val(),
+      recommenderLangs: $("#recommenderLangs").val()
     };
 
     $.ajax({
