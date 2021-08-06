@@ -252,14 +252,15 @@ h2 {
 }
 
 .language-selector {
-  /* display: inline-flex;
-  justify-content: space-between;
+  display: inline-block;
+ /* justify-content: space-between;
   vertical-align: baseline; */
   background: var(--bg-gray);
   border: 1px solid var(--bg-gray);
   border-radius: 5px;
   padding: 0;
   min-width: 100px;
+  position: relative;
 }
 
 .language-selector select:focus {
@@ -282,11 +283,23 @@ h2 {
   z-index: 2;
   width: 100%;
   height: 40px;
-  -moz-appearance: caret;
-  -webkit-appearance: caret;
-  appearance: caret;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
+.language-selector::after{
+  content: url("/assets/img/arrow_drop_down.svg");
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 5px;
+}
+/* .language-selector::after{
+  content: url("/assets/img/arrow_drop_down.svg");
+  padding: 5px;
+  cursor: pointer;
+} */
 /* .language-selector-toggle:focus option {
   background-color: var(--main);
   color: white;

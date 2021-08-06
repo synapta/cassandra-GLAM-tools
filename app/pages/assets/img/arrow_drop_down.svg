@@ -1,1 +1,67 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="12.537656"
+   height="6.6083751"
+   viewBox="0 0 12.537655 6.608375"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="arrow_drop_down.svg"
+   inkscape:export-filename="/home/loredana/IdeaProjects/cassandra-GLAM-tools/app/pages/assets/img/arrow_drop_down.png"
+   inkscape:export-xdpi="160"
+   inkscape:export-ydpi="160"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
+  <metadata
+     id="metadata12">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs10" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1848"
+     inkscape:window-height="1016"
+     id="namedview8"
+     showgrid="false"
+     inkscape:zoom="45.254834"
+     inkscape:cx="12.162117"
+     inkscape:cy="2.8888941"
+     inkscape:window-x="72"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6" />
+  <path
+     d="M 1.5168906,1.5131798 6.1360362,5.1084129 11.020348,1.5573741"
+     id="path2"
+     inkscape:export-xdpi="192"
+     inkscape:export-ydpi="192"
+     inkscape:connector-curvature="0"
+     style="fill:none;stroke:#080d5a;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1"
+     sodipodi:nodetypes="ccc" />
+  <path
+     d="M -3.7619679,-12.753124 H 20.238034 V 11.246877 H -3.7619679 Z"
+     id="path4"
+     inkscape:connector-curvature="0"
+     style="fill:none" />
+</svg>
