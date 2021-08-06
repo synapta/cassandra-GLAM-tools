@@ -9,7 +9,7 @@ $(function () {
       selectLang.append(opt);
     });
   }).done(() => {
-    $.getJSON("/api/admin/settings", function (res) {
+    $.getJSON("/api/settings", function (res) {
       if (res) {
         if (res.defaultLanguage) {
           const selectLang = $("#defaultLang");

@@ -529,7 +529,7 @@ module.exports = function (app, apicache) {
     });
   });
 
-  app.get("/api/admin/settings", function (req, res) {
+  app.get("/api/settings", function (req, res) {
     try {
       const data = fs.readFileSync('../config/i18n.json');
       const settings = JSON.parse(data);

@@ -15,7 +15,7 @@ function is_touch_device() {
 }
 // Load main sidebar
 $("#main-sidebar").load("/views/templates/sidebar.html", function () {
-  $.getJSON("/api/admin/settings", function (res) {
+  $.getJSON("/api/settings", function (res) {
     if (res) {
       if (res.ownerUrl) {
         document.getElementById("owner-logo-url").href = res.ownerUrl;
