@@ -125,7 +125,7 @@ module.exports = function (app, apicache) {
   app.get('/:id/file/:file', function (req, res) {
     let glam = config.glams[req.params.id];
     if (isValidGlam(glam)) {
-      i18n.sendFile(req, res,__dirname + "/pages/views/file-page/index.html");
+      i18n.sendFile(req, res, __dirname + "/pages/views/file-page/index.html");
     } else {
       res.sendStatus(400);
     }
@@ -216,6 +216,16 @@ module.exports = function (app, apicache) {
     i18n.languages(req, res);
   });
 
+  app.get('/api/settings', function (req, res) {
+    try {
+      const data = fs.readFileSync('../config/i18n.json');
+      const settings = JSON.parse(data);
+      res.json(settings);
+    } catch {
+      res.sendStatus(404);
+    }
+  });
+
   app.get('/api/glams', apicache("1 hour"), function (req, res) {
     api.glams(req, res, config.glams);
   });
@@ -231,6 +241,7 @@ module.exports = function (app, apicache) {
   app.post('/api/admin/glams', function (req, res) {
     api.createGlam(req, res, config);
   });
+
   app.get('/api/admin/glams/:id', function (req, res) {
     let glam = config.glams[req.params.id];
     if (glam !== undefined) {
@@ -291,6 +302,36 @@ module.exports = function (app, apicache) {
       api.deleteAnnotation(req, res, next, glam);
     } else {
       res.sendStatus(404);
+    }
+  });
+
+  app.post('/api/admin/settings', function (req, res) {
+    try {
+      const data = JSON.stringify(req.body);
+      fs.writeFileSync('../config/i18n.json', data)
+      res.sendStatus(200);
+    } catch {
+      res.sendStatus(500);
+    }
+  });
+
+  app.get('/api/admin/update-tool', function (req, res) {
+    setImmediate(() => {
+      exec('git pull', (err) => {
+        if (!err) {
+          exec('sudo supervisorctl restart cassandra');
+        }
+      });
+    });
+    res.sendStatus(200);
+  });
+
+  app.post('/api/admin/owner-logo', function (req, res) {
+    try {
+      fs.writeFileSync('./pages/assets/owner-logo.svg', req.body)
+      res.sendStatus(200);
+    } catch {
+      res.sendStatus(500);
     }
   });
 
@@ -527,46 +568,6 @@ module.exports = function (app, apicache) {
         res.json(JSON.parse(response.body));
       }
     });
-  });
-
-  app.get("/api/settings", function (req, res) {
-    try {
-      const data = fs.readFileSync('../config/i18n.json');
-      const settings = JSON.parse(data);
-      res.json(settings);
-    } catch {
-      res.sendStatus(404);
-    }
-  });
-
-  app.post("/api/admin/settings", function (req, res) {
-    try {
-      const data = JSON.stringify(req.body);
-      fs.writeFileSync('../config/i18n.json', data)
-      res.sendStatus(200);
-    } catch {
-      res.sendStatus(500);
-    }
-  });
-
-  app.get("/api/admin/update-tool", function (req, res) {
-    setImmediate(() => {
-      exec('git pull', (err) => {
-        if (!err) {
-          exec('sudo supervisorctl restart cassandra');
-        }
-      });
-    });
-    res.sendStatus(200);
-  });
-
-  app.post("/api/admin/owner-logo", function (req, res) {
-    try {
-      fs.writeFileSync('./pages/assets/owner-logo.svg', req.body)
-      res.sendStatus(200);
-    } catch {
-      res.sendStatus(500);
-    }
   });
 
   // Metabase proxy
