@@ -189,7 +189,8 @@ h2 {
   left: var(--sidebar-items-left);
 }
 
-#main-sidebar > .institutions-menu, #main-sidebar > #aboutProject,
+#main-sidebar > .institutions-menu,
+#main-sidebar > #aboutProject,
 #main-sidebar > #partecipate {
   position: absolute;
   top: 15rem;
@@ -208,7 +209,9 @@ h2 {
   top: 21rem;
 }
 
-#main-sidebar > .institutions-menu > h6, #aboutProject, #partecipate {
+#main-sidebar > .institutions-menu > h6,
+#aboutProject,
+#partecipate {
   margin: 0;
   padding: 0.5rem 0 0.5rem var(--sidebar-items-left);
   font-weight: 600;
@@ -253,7 +256,7 @@ h2 {
 
 .language-selector {
   display: inline-block;
- /* justify-content: space-between;
+  /* justify-content: space-between;
   vertical-align: baseline; */
   background: var(--bg-gray);
   border: 1px solid var(--bg-gray);
@@ -288,12 +291,12 @@ h2 {
   appearance: none;
 }
 
-.language-selector::after{
+.language-selector::after {
   content: url("/assets/img/arrow_drop_down.svg");
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 5px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 5px;
 }
 /* .language-selector::after{
   content: url("/assets/img/arrow_drop_down.svg");
@@ -725,6 +728,17 @@ footer {
 
 .search-form input {
   width: 90% !important;
+}
+
+#owner-logo-image {
+  width: 80%;
+  height: auto;
+}
+
+#owner-logo-url {
+  position: absolute;
+  bottom: 1rem;
+  text-align: center;
 }
 
 @media screen and (max-width: 768px) {
