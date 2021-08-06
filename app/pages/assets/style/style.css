@@ -730,10 +730,10 @@ footer {
   width: 90% !important;
 }
 
-#owner-logo-image {
+/* #owner-logo-image {
   width: 100px;
   height: auto;
-}
+} */
 
 #owner-logo-url {
   position: absolute;
