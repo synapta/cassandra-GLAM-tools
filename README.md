@@ -91,7 +91,7 @@ The Cassandra tool is now available at http://host.example.com:8081. For product
 
 ### Pontoon installation
 
-**Note: you do not need to install Pontoon, instead use: [https://pontoon-wmch.synapta.io](https://pontoon-wmch.synapta.io)**
+**Note: you do not need to install Pontoon, instead use: [https://pontoon.wikimedia.swiss](https://pontoon.wikimedia.swiss)**
 
 This is the guide we followed to install that instance.
 
@@ -160,7 +160,7 @@ From the "Control Panel" in the "settings" page, it is possible to upload a new 
 
 The Cassandra tool can be localized in any language. Currently supported languages are available in the directory `app/locales`. An effective way to add a new language is to commit in this repository the corresponding file using the same format of the *en* language.
 
-For managing translations in a more user-friendly way, it is possible to rely on the [Pontoon tool](https://pontoon.mozilla.org) created by Mozilla Foundation. A public instance of Pontoon for translating Cassandra is available at [https://pontoon-wmch.synapta.io](https://pontoon-wmch.synapta.io).
+For managing translations in a more user-friendly way, it is possible to rely on the [Pontoon tool](https://pontoon.mozilla.org) created by Mozilla Foundation. A public instance of Pontoon for translating Cassandra is available at [https://pontoon.wikimedia.swiss](https://pontoon.wikimedia.swiss).
 
 ### Create a new translation user
 
