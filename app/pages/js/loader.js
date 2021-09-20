@@ -27,6 +27,12 @@ $("#main-sidebar").load("/views/templates/sidebar.html", function () {
       } else {
         document.getElementById("owner-logo-url").title = "Wikimedia";
       }
+      if (res.introBody) {
+        const intro = document.getElementById("custom-intro");
+        if (intro) {
+          intro.innerHTML = res.introBody;
+        }
+      }
     }
   });
 

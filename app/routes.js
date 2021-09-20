@@ -33,6 +33,10 @@ module.exports = function (app, apicache) {
     res.sendStatus(500);
   });
 
+  app.get('/introduction', function (req, res) {
+    i18n.sendFile(req, res, __dirname + '/pages/views/introduction.html');
+  });
+
   app.use(function (req, res, next) {
     function getId(path) {
       let exploded = path.split('/');

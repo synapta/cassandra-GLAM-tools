@@ -66,6 +66,7 @@ $(function () {
       defaultLanguage: $("#defaultLang").val(),
       ownerUrl: $("#ownerUrl").val(),
       ownerName: $("#ownerName").val(),
+      introBody: $("#introBody").val(),
       recommenderLangs: $("#recommenderLangs").val()
     };
 
