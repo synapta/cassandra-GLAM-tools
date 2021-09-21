@@ -38,8 +38,6 @@ $("#main-sidebar").load("/views/templates/sidebar.html", function () {
 
   // Load secondary sidebar
   $("#secondary-sidebar").load("/views/templates/secondary-sidebar.html", function () {
-    renderChangeLang();
-
     // Fill GLAMS list
     $.get("/api/glams", function (glams) {
       if (glams.length > 0) {

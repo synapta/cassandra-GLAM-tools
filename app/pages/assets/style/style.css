@@ -258,67 +258,78 @@ h2 {
   bottom: 2rem;
 }
 
-.language-selector {
-  display: inline-block;
-  /* justify-content: space-between;
-  vertical-align: baseline; */
-  background: var(--bg-gray);
-  border: 1px solid var(--bg-gray);
+.lang-selected {
+  background-color: var(--bg-gray);;
+  border: 2px solid var(--bg-gray);
   border-radius: 5px;
-  padding: 0;
-  min-width: 100px;
-  position: relative;
+  width: 130px;
+  transition: all 0.35s linear;
 }
 
-.language-selector select:focus {
+/*style the arrow inside the select element:*/
+.lang-selected:after {
+  content: url("/assets/img/arrow_drop_down.svg");
+  position: relative;
+  display: inline-block;
+  top: 0px;
+  left: 20px;
+}
+
+/*point the arrow upwards when the select box is open (active):*/
+.lang-selected.select-arrow-active:after {
+  content: url("/assets/img/arrow_drop_down.svg");
+  position: relative;
+  display: inline-block;
+  top: 2px;
+  left: 20px;
+  transform: rotate(180deg);
+}
+
+/*style the items (options), including the selected item:*/
+.select-langs div,.lang-selected {
+  padding: .5rem 2rem .5rem 1.2rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.select-langs {
+  width: 130px;
+  position: absolute;
+  border: 2px solid var(--main-dark);
+  border-top: 0;
+  border-radius: 0 0 5px 5px;
+  opacity: 1;
+  height: auto;
+  transition: opacity 0.35s ease-in;
+}
+
+.select-langs div:not(:last-child){
+  border-bottom: 1px solid var(--main-dark);
+}
+
+/*hide the items when the select box is closed:*/
+#change-lang-select {
+  display: none;
+}
+
+.select-langs.lang-hide{
+  transition: opacity 0.35s ease-out;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.select-langs div:hover, .same-as-selected {
+  background-color: var(--bg-gray);;
+}
+
+.lang-selected.select-arrow-active {
   outline-color: var(--main);
   background-color: white;
-  border: 1px solid var(--main);
-  border-radius: 3px;
-  transition: all 0.5s;
+  border: 2px solid var(--main);
+  border-radius: 5px 5px 0 0 ;
+  transition: all 0.35s linear;
 }
-
-.language-selector select {
-  color: var(--main);
-  border: 1px solid var(--bg-gray);
-  border-radius: 5px;
-  transition: all 0.5s;
-  background: var(--bg-gray);
-  font-size: 1rem;
-  padding: 0.3rem;
-  cursor: pointer;
-  z-index: 2;
-  width: 100%;
-  height: 40px;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  appearance: none;
-}
-
-.language-selector::after {
-  content: url("/assets/img/arrow_drop_down.svg");
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 5px;
-}
-/* .language-selector::after{
-  content: url("/assets/img/arrow_drop_down.svg");
-  padding: 5px;
-  cursor: pointer;
-} */
-/* .language-selector-toggle:focus option {
-  background-color: var(--main);
-  color: white;
-}
-
-.language-selector-toggle option:hover,
-.language-selector-toggle option:focus,
-.language-selector-toggle option:active,
-.language-selector-toggle option:checked {
-  background: linear-gradient(white, white);
-  color: var(--main);
-} */
 
 #admin-panel-link {
   padding: 0.3rem 0.8rem;
