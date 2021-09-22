@@ -4,7 +4,7 @@
     top: 0;
     width: 100%;
     z-index: 1;
-    padding: 1rem 1.5rem;
+    padding: 1rem;
     display: flex;
     align-items: center;
 }
@@ -12,11 +12,11 @@
 #breadcrumbs {
     display: flex;
     align-items: center;
-    margin-left: 2rem;
+    margin-left: 1rem;
 }
 
 #white-logo {
-    padding-right: 2rem;
+    margin-right: 1rem;
     border-right: 1px solid rgba(255, 255, 255, .5);
     transition: opacity .5s;
 }
@@ -232,14 +232,25 @@
     }
 }
 
+@media screen and (max-width: 1281px) {
+    .filter-option-inner-inner {
+        text-overflow: ellipsis;
+    }
+
+    .autocomplete-categories.page-views {
+        max-width: 470px;
+    }
+}
+
 @media screen and (max-width: 1024px) {
     .autocomplete-categories {
         margin-bottom: .5rem!important;
     }
 }
+
 @media screen and (min-width: 1025px) {
     .select-items div, .select-selected {
-        width: 130px;
+        width: 120px;
     }
 
     .select-chart-large .select-items div, .select-chart-large .select-selected {

@@ -1,4 +1,4 @@
-<div class="file_details" id="{{image_id}}" data-wikilist="{{wiki_array}}">
+<div class="file_details mt-4" id="{{image_id}}" data-wikilist="{{wiki_array}}">
   <div class="file_details_intro">
     {{image}}
     <!-- <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/{{image}}/640px-" alt="{{image_name}}"> -->
