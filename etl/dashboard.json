@@ -164,7 +164,7 @@
 				"dataset_query": {
 					"type": "native",
 					"native": {
-						"query": "SELECT corr(average, usage) as \"Corr Coef Using PGSQL Func\" FROM(\nSELECT AVG(accesses) as average, AVG(u.\"count\") as usage\nFROM images i, visualizations v, dailyimageusage u\nWHERE i.media_id = v.media_id\nand u.img_name = i.img_name\ngroup by i.img_name\n) as a\n\n    \n"
+						"query": "SELECT corr(average, usage) as \"Corr Coef Using PGSQL Func\" FROM(\nSELECT MIN(\"avg\") as average, AVG(u.\"count\") as usage\nFROM visualizations_stats v, dailyimageusage u\nWHERE u.img_name = v.img_name\ngroup by u.img_name\n) as a\n"
 					},
 					"database": 3
 				},
