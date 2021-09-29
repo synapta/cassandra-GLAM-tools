@@ -4,6 +4,9 @@ $(function () {
 
   function populateSelectLang() {
     const selectLang = $("#change-lang-select");
+    if (!selectLang.length) {
+      return;
+    }
     selectLang.html("");
     availableLanguages.forEach(lang => {
       const opt = `<option value="${lang.code}">${lang.nativeName}</option>`;

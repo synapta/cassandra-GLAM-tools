@@ -25,11 +25,20 @@
               §[messages.drilldown]§
             </a>
           {{/unless}}
+            <a
+            id="files-used-{{id_encoded}}"
+              class="view-details-link used-files-link"
+              style="text-decoration: underline; margin-left: 1rem;"
+              href="{{urlUsed}}"
+              title="{{name}}"
+            >
+              §[messages.view-used-files]§
+            </a>
           {{!-- <div id="files{{id_encoded}}" class="link" style="display: none"> --}}
             <a
-            id="files{{id_encoded}}"
+            id="files-unused-{{id_encoded}}"
               class="view-details-link unused-files-link"
-              style="text-decoration:underline; margin-left:1rem;display: none;"
+              style="text-decoration: underline; margin-left: 1rem; display: none;"
               href="{{urlUnused}}"
               title="{{name}}"
             >

@@ -336,9 +336,16 @@ function categoryGraphQuery(unused, filter) {
                 LEFT JOIN usages u ON i.img_name = u.gil_to
                 WHERE (i.is_alive = TRUE OR i.is_alive IS NULL)
                 AND u.is_alive IS NULL`;
+    } else if (unused === false) {
+        query = `SELECT c.page_title, COUNT(DISTINCT i.img_name) AS cat_files, c.cl_to[0:10], c.cat_level[0:10]
+                FROM categories c
+                LEFT JOIN images i ON c.page_title = ANY(i.cl_to)
+                LEFT JOIN usages u ON i.img_name = u.gil_to
+                WHERE (i.is_alive = TRUE OR i.is_alive IS NULL)
+                AND u.is_alive IS TRUE`;      
     }
     if (filter === true) {
-        if (unused === true) {
+        if (unused !== undefined) {
             query += `
                 AND c.page_title `;
         } else {
@@ -359,7 +366,7 @@ function categoryGraphQuery(unused, filter) {
                             from subcategories)`;
     }
 
-    if (unused === true) {
+    if (unused !== undefined) {
         query += `
             GROUP BY page_title`;
     }
@@ -371,12 +378,14 @@ function categoryGraphQuery(unused, filter) {
 }
 
 var categoryGraph = function (req, res, next, db) {
-    let unused = false;
+    let unused = undefined;
     let cat = false;
     let parameters = [];
 
     if (req.query.unused === 'true') {
         unused = true;
+    } else if (req.query.unused === 'false') {
+        unused = false;
     }
 
     if (req.query.cat !== undefined) {
@@ -454,6 +463,16 @@ var categoryFiles = function (req, res, next, db) {
                 LEFT JOIN usages u ON i.img_name = u.gil_to
                 WHERE (u.is_alive = FALSE
                 OR u.is_alive IS NULL)
+                AND c.page_title = $1
+                ORDER BY img_name`;
+    }
+
+    if (req.query.unused === 'false') {
+        query = `SELECT DISTINCT img_name
+                FROM categories c
+                LEFT JOIN images i ON c.page_title = ANY(i.cl_to)
+                LEFT JOIN usages u ON i.img_name = u.gil_to
+                WHERE u.is_alive = TRUE
                 AND c.page_title = $1
                 ORDER BY img_name`;
     }
