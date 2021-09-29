@@ -312,8 +312,10 @@ function hideUnusedFilesItem() {
   if (UNUSED_MODE) {
     let target = "#category" + ACTIVE_ITEM_ID;
     $(target).html("");
+    $(".used-files-link").hide();
     $(".unused-files-link").show();
   } else {
+    $(".used-files-link").show();
     $(".unused-files-link").hide();
   }
 }
@@ -377,8 +379,10 @@ function highlight() {
     document.getElementById("topbar").scrollIntoView();
   });
   if (UNUSED_MODE) {
+    $(".used-files-link").hide();
     $(".unused-files-link").show();
   } else {
+    $(".used-files-link").show();
     $(".unused-files-link").hide();
   }
 }
@@ -452,8 +456,10 @@ $("#unusedModeCheckbox").click(function () {
     download();
   }
   if (UNUSED_MODE) {
+    $(".used-files-link").hide();
     $(".unused-files-link").show();
   } else {
+    $(".used-files-link").show();
     $(".unused-files-link").hide();
   }
 });

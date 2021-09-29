@@ -133,7 +133,7 @@ function getFiles() {
                     map[lang] = wiki;
                   }
                 }
-                console.log(Object.values(map));
+                // console.log(Object.values(map));
                 files[i].wikis[j].media = Object.values(map);
               }
               // compile template

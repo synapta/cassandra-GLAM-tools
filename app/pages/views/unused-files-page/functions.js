@@ -1,15 +1,20 @@
 const glam = window.location.href.toString().split("/")[3];
 const db = window.location.href.toString().split("/")[3];
 const query = window.location.href.toString().split("/")[5];
+const unused = window.location.href.toString().split("/")[6] === 'unused' ? 'true' : 'false';
 let page = 0;
 let ACTIVE_ITEM_ID;
 let SORT_BY = "by_name";
 let limit = true;
 
+if (unused === 'false') {
+  $('#page-title').text('§[messages.used-files]§');
+}
+
 function getUnusedUrl() {
-  let queryS = "?unused=true";
+  let queryS = `?unused=${unused}`;
   if (query) {
-    queryS = "?unused=true&cat=" + query;
+    queryS = `?unused=${unused}&cat=${query}`;
   }
   return "/api/" + db + "/category" + queryS;
 }
@@ -48,7 +53,7 @@ function resetHighlighted() {
 function sorting_table() {
   $("#by_total").on("click", function () {
     if ($("#by_total").hasClass("active_order")) {
-      console.log("già selezionato");
+      //console.log("già selezionato");
     } else {
       $("#by_level").toggleClass("active_order");
       $("#by_total").toggleClass("active_order");
@@ -72,7 +77,7 @@ function sorting_table() {
 }
 
 function unusedFilesLink(id, size, pageSel) {
-  const queryS = "?unused=true&limit=" + size + "&page=" + pageSel;
+  const queryS = `?unused=${unused}&limit=${size}&page=${pageSel}`;
   return "/api/" + db + "/category/" + encodeURIComponent(id) + "/" + queryS;
 }
 function getFiles(id, target, templateSource, total) {

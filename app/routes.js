@@ -162,6 +162,15 @@ module.exports = function (app, apicache) {
     }
   });
 
+  app.get('/:id/category-network/:name/used', function (req, res) {
+    let glam = config.glams[req.params.id];
+    if (isValidGlam(glam)) {
+      i18n.sendFile(req, res, __dirname + "/pages/views/unused-files-page/index.html");
+    } else {
+      res.sendStatus(400);
+    }
+  });
+
   app.get('/:id/recommender/:name?', function (req, res) {
     let glam = config.glams[req.params.id];
     if (isValidGlam(glam)) {

@@ -58,7 +58,7 @@ function switch_page() {
   const h = baseurl.split("/");
   const h_1 = baseurl.includes("?lang") ? h[h.length - 2] : h[h.length - 1];
   const home = h.splice(0,4).join("/");
-  console.log(baseurl,home);
+  // console.log(baseurl,home);
   $("#switch_page").change(function () {
     const page = $(this).val();
     const url = home + page;
@@ -217,6 +217,8 @@ function sortNodes(d, order) {
       "/" + glam + "/category-network/" + encodeURIComponent(d.nodes[i].id.toString());
     d.nodes[i].urlUnused =
       "/" + glam + "/category-network/" + encodeURIComponent(d.nodes[i].id.toString()) + "/unused";
+    d.nodes[i].urlUsed =
+      "/" + glam + "/category-network/" + encodeURIComponent(d.nodes[i].id.toString()) + "/used";
   }
   if (d.nodes[0]) {
     d.nodes[0].hideDetails = true;
