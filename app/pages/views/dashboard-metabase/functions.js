@@ -6,6 +6,15 @@ function setCategoryCb(category) {
 }
 
 $(document).ready(function () {
+  const baseurl = document.location.href;
+  let h = baseurl.split("/");
+  let cat = h[5];
+  if (cat) {
+    const newUrl = h.slice(0, 5).join("/");
+    if (newUrl) {
+      window.location = newUrl;
+    }
+  }
   setCategory(setCategoryCb);
   $("#download_dashboard_link").attr("href", "/api/" + glam + "/dashboard/download");
   $.getJSON("/api/" + glam + "/dashboard", function (res) {
