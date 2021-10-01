@@ -67,6 +67,8 @@ $(function () {
       ownerUrl: $("#ownerUrl").val(),
       ownerName: $("#ownerName").val(),
       introBody: $("#introBody").val(),
+      contactsBody: $("#contractsBody").val(),
+      contactsMail: $("#contractsMail").val(),
       recommenderLangs: $("#recommenderLangs").val()
     };
 

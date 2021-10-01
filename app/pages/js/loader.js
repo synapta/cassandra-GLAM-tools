@@ -33,6 +33,12 @@ $("#main-sidebar").load("/views/templates/sidebar.html", function () {
           intro.innerHTML = res.introBody;
         }
       }
+      if (res.contactsIntro) {
+        const intro = document.getElementById("contacts-intro");
+        if (intro) {
+          intro.innerHTML = res.contactsIntro;
+        }
+      }
     }
   });
 

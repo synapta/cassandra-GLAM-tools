@@ -37,6 +37,10 @@ module.exports = function (app, apicache) {
     i18n.sendFile(req, res, __dirname + '/pages/views/introduction.html');
   });
 
+  app.get('/contacts', function (req, res) {
+    i18n.sendFile(req, res, __dirname + '/pages/views/contacts.html');
+  });
+
   app.use(function (req, res, next) {
     function getId(path) {
       let exploded = path.split('/');
@@ -279,6 +283,16 @@ module.exports = function (app, apicache) {
       api.getAnnotations(req, res, next, glam);
     } else {
       res.sendStatus(404);
+    }
+  });
+
+  app.post('/api/sendMail', function (req, res) {
+    try {
+      const data = req.body;
+      console.log("user want to send a mail",data);
+      res.sendStatus(200);
+    } catch {
+      res.sendStatus(500);
     }
   });
 
