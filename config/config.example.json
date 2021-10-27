@@ -45,5 +45,14 @@
     "limits": {
         "categories": 1000,
         "images": 500000
+    },
+    "mailgun": {
+        "auth": {
+            "api_key": "",
+            "domain": ""
+        },
+        "host": "api.eu.mailgun.net",
+        "mailFrom": "",
+        "mailTo": ""
     }
 }

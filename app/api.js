@@ -1,4 +1,13 @@
+const nodemailer = require('nodemailer');
+const mg = require('nodemailer-mailgun-transport');
 const stringify = require('csv-stringify');
+
+const config = require('../config/config.json');
+
+let mailTransporter;
+if (config.mailgun) {
+    mailTransporter = nodemailer.createTransport(mg(config.mailgun));
+}
 
 Date.prototype.toISODateString = function () {
     let offset = this.getTimezoneOffset() * 60 * 1000;
@@ -1440,6 +1449,18 @@ var hideRecommenderByFile = function (req, res, next, db) {
     });
 }
 
+// MAIL
+var sendMail = function (data) {
+    const message = {
+        from: `${data.firstName} ${data.lastName} <${config.mailgun.mailFrom}>`,
+        'h:Reply-To': `${data.firstName} ${data.lastName} <${data.userMail}>`,
+        to: config.mailgun.mailTo,
+        subject: `[Cassandra] Message from ${data.firstName} ${data.lastName}`,
+        text: data.contactsBody
+    };
+    return mailTransporter.sendMail(message);
+}
+
 exports.glams = glams;
 exports.glamsHealth = glamsHealth;
 exports.getAdminGlam = getAdminGlam;
@@ -1472,3 +1493,4 @@ exports.search = search;
 exports.recommender = recommender;
 exports.recommenderByFile = recommenderByFile;
 exports.hideRecommenderByFile = hideRecommenderByFile;
+exports.sendMail = sendMail;

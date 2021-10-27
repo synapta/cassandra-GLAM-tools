@@ -286,12 +286,12 @@ module.exports = function (app, apicache) {
     }
   });
 
-  app.post('/api/sendMail', function (req, res) {
+  app.post('/api/sendMail', async function (req, res) {
     try {
-      const data = req.body;
-      console.log("user want to send a mail",data);
+      await api.sendMail(req.body);
       res.sendStatus(200);
-    } catch {
+    } catch (e) {
+      console.log(e);
       res.sendStatus(500);
     }
   });
