@@ -86,6 +86,9 @@ function getLanguage(req, res) {
 
 exports.renderResponse = function (req, res, data) {
     const targetLanguage = getLanguage(req, res);
+    if (res.recaptcha) {
+        data = data.replace("<!-- RECAPTCHA -->", res.recaptcha);
+    }
     return Mustache.render(data, messages[targetLanguage]);
 };
 

@@ -1,3 +1,5 @@
+let recaptchaToken;
+
 $(function () {
   $("#send-message").click(function (e) {
     const firstName = $("#firstname").val();
@@ -15,15 +17,12 @@ $(function () {
       return;
     }
 
-
     $("#validation-error").fadeOut(200);
     $("#save-error").fadeOut(200);
 
     let mailFields = {
-      firstName, lastName, userMail, contactsBody
+      firstName, lastName, userMail, contactsBody, 'g-recaptcha-response': recaptchaToken
     };
-
-    console.log(mailFields);
 
     $.ajax({
       type: "POST",
@@ -42,3 +41,7 @@ $(function () {
     });
   });
 });
+
+function setRecaptchaToken(token) {
+  recaptchaToken = token;
+}

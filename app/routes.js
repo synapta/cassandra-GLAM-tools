@@ -9,6 +9,9 @@ const i18n = require('./i18n.js');
 const metabase = require('./metabase.js');
 const config = require('../config/config.js');
 
+const Recaptcha = require('express-recaptcha').RecaptchaV2;
+const recaptcha = new Recaptcha(config.recaptcha.siteKey, config.recaptcha.secretKey, { callback: 'setRecaptchaToken' });
+
 // Reload configuration every hour because MongoDB is also modified by run.py
 function loadGlams() {
   config.loadGlams();
@@ -37,7 +40,7 @@ module.exports = function (app, apicache) {
     i18n.sendFile(req, res, __dirname + '/pages/views/introduction.html');
   });
 
-  app.get('/contacts', function (req, res) {
+  app.get('/contacts', recaptcha.middleware.render, function (req, res) {
     i18n.sendFile(req, res, __dirname + '/pages/views/contacts.html');
   });
 
@@ -286,10 +289,15 @@ module.exports = function (app, apicache) {
     }
   });
 
-  app.post('/api/sendMail', async function (req, res) {
+  app.post('/api/sendMail', recaptcha.middleware.verify, async function (req, res) {
     try {
-      await api.sendMail(req.body);
-      res.sendStatus(200);
+      if (!req.recaptcha.error) {
+        await api.sendMail(req.body);
+        res.sendStatus(200);
+      } else {
+        console.log(req.recaptcha);
+        res.sendStatus(400);
+      }
     } catch (e) {
       console.log(e);
       res.sendStatus(500);

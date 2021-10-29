@@ -14,6 +14,7 @@ exports.glamUser = glamUser;
 exports.limits = config.limits;
 exports.wmflabs = config.wmflabs;
 exports.metabase = config.metabase;
+exports.recaptcha = config.recaptcha;
 
 const client = new MongoClient(config['mongodb']['url'], { useNewUrlParser: true });
 
