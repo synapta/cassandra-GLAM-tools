@@ -36,8 +36,8 @@ module.exports = function (app, apicache) {
     res.sendStatus(500);
   });
 
-  app.get('/introduction', function (req, res) {
-    i18n.sendFile(req, res, __dirname + '/pages/views/introduction.html');
+  app.get('/about', function (req, res) {
+    i18n.sendFile(req, res, __dirname + '/pages/views/about.html');
   });
 
   app.get('/contacts', recaptcha.middleware.render, function (req, res) {
